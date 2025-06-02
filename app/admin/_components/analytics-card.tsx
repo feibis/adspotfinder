@@ -1,3 +1,4 @@
+import { eachDayOfInterval, format, startOfDay, subDays } from "date-fns"
 import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
 import type { ComponentProps } from "react"
 import wretch from "wretch"
@@ -32,10 +33,25 @@ const getAnalytics = async () => {
       .get()
       .json<AnalyticsResponse>()
 
-    const totalVisitors = results.reduce((acc, curr) => acc + curr.visitors, 0)
-    const averageVisitors = totalVisitors / results.length
+    // Group visitors by date
+    const visitorsByDate = results.reduce<Record<string, number>>((acc, curr) => {
+      acc[curr.date] = curr.visitors
+      return acc
+    }, {})
 
-    return { results, totalVisitors, averageVisitors }
+    // Fill in missing dates with 0
+    const chartResults = eachDayOfInterval({
+      start: startOfDay(subDays(new Date(), 30)),
+      end: new Date(),
+    }).map(day => ({
+      date: format(day, "yyyy-MM-dd"),
+      value: visitorsByDate[format(day, "yyyy-MM-dd")] || 0,
+    }))
+
+    const totalVisitors = chartResults.reduce((acc, curr) => acc + curr.value, 0)
+    const averageVisitors = totalVisitors / chartResults.length
+
+    return { results: chartResults, totalVisitors, averageVisitors }
   } catch (error) {
     console.error("Analytics error:", error)
     return { results: [], totalVisitors: 0, averageVisitors: 0 }
@@ -54,7 +70,7 @@ const AnalyticsCard = async ({ ...props }: ComponentProps<typeof Card>) => {
       </CardHeader>
 
       <Chart
-        data={results.map(({ date, visitors }) => ({ date, value: visitors }))}
+        data={results}
         average={averageVisitors}
         className="w-full"
         cellClassName="bg-chart-4"
