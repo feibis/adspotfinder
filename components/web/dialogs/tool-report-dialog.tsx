@@ -5,7 +5,6 @@ import type { Dispatch, SetStateAction } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { useServerAction } from "zsa-react"
-import { reportTool } from "~/actions/report"
 import { Button } from "~/components/common/button"
 import {
   Dialog,
@@ -27,6 +26,7 @@ import { RadioGroup, RadioGroupItem } from "~/components/common/radio-group"
 import { TextArea } from "~/components/common/textarea"
 import { LoginDialog } from "~/components/web/auth/login-dialog"
 import { useSession } from "~/lib/auth-client"
+import { reportTool } from "~/server/web/actions/report"
 import { type ReportSchema, reportSchema } from "~/server/web/shared/schema"
 import type { ToolOne } from "~/server/web/tools/payloads"
 

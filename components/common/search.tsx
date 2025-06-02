@@ -8,7 +8,6 @@ import posthog from "posthog-js"
 import { type ReactNode, useEffect, useRef, useState } from "react"
 import type { inferServerActionReturnData } from "zsa"
 import { useServerAction } from "zsa-react"
-import { searchItems } from "~/actions/search"
 import {
   CommandDialog,
   CommandEmpty,
@@ -21,6 +20,7 @@ import {
 import { Kbd } from "~/components/common/kbd"
 import { useSearch } from "~/contexts/search-context"
 import { useSession } from "~/lib/auth-client"
+import { searchItems } from "~/server/web/actions/search"
 
 type SearchResultsProps<T> = {
   name: string

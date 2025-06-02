@@ -3,7 +3,6 @@
 import plur from "plur"
 import { type ComponentProps, useEffect } from "react"
 import { useServerAction } from "zsa-react"
-import { findFilterOptions } from "~/actions/filters"
 import {
   Select,
   SelectContent,
@@ -12,6 +11,7 @@ import {
   SelectValue,
 } from "~/components/common/select"
 import { useFilters } from "~/contexts/filter-context"
+import { findFilterOptions } from "~/server/web/actions/filters"
 
 export const ToolFilters = ({ ...props }: ComponentProps<typeof Select>) => {
   const { filters, updateFilters } = useFilters()

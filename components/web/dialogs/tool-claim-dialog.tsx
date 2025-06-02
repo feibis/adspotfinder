@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
 import { useServerAction } from "zsa-react"
-import { sendToolClaimOtp, verifyToolClaimOtp } from "~/actions/claim"
 import { Button } from "~/components/common/button"
 import {
   Dialog,
@@ -29,6 +28,7 @@ import { LoginDialog } from "~/components/web/auth/login-dialog"
 import { claimsConfig } from "~/config/claims"
 import { siteConfig } from "~/config/site"
 import { useSession } from "~/lib/auth-client"
+import { sendToolClaimOtp, verifyToolClaimOtp } from "~/server/web/actions/claim"
 import type { ToolOne } from "~/server/web/tools/payloads"
 
 type ToolClaimDialogProps = {
