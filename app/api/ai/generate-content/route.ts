@@ -16,7 +16,7 @@ export const POST = withAdminAuth(async req => {
   const scrapedData = await scrapeWebsiteData(url)
 
   const result = streamObject({
-    model: google("gemini-2.0-pro-exp-02-05"),
+    model: google("gemini-2.5-pro-preview-03-25"),
     schema: contentSchema,
     system: `
       You are an expert content creator specializing in reasearching and writing about tools.
