@@ -1,15 +1,9 @@
-import { eachDayOfInterval, format, startOfDay, subDays } from "date-fns"
 import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
 import type { ComponentProps } from "react"
-import wretch from "wretch"
 import { Chart } from "~/app/admin/_components/chart"
 import { Card, CardDescription, CardHeader } from "~/components/common/card"
 import { H2 } from "~/components/common/heading"
-import { env } from "~/env"
-
-type AnalyticsResponse = {
-  results: { date: string; visitors: number }[]
-}
+import { getTotalAnalytics } from "~/lib/analytics"
 
 const getAnalytics = async () => {
   "use cache"
@@ -17,45 +11,7 @@ const getAnalytics = async () => {
   cacheTag("analytics")
   cacheLife("minutes")
 
-  try {
-    const domain = env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN
-    const host = env.NEXT_PUBLIC_PLAUSIBLE_URL
-    const apiKey = env.PLAUSIBLE_API_KEY
-
-    const queryOptions = new URLSearchParams({
-      metrics: "visitors",
-      period: "30d",
-      site_id: domain,
-    })
-
-    const { results } = await wretch(`${host}/api/v1/stats/timeseries?${queryOptions.toString()}`)
-      .auth(`Bearer ${apiKey}`)
-      .get()
-      .json<AnalyticsResponse>()
-
-    // Group visitors by date
-    const visitorsByDate = results.reduce<Record<string, number>>((acc, curr) => {
-      acc[curr.date] = curr.visitors
-      return acc
-    }, {})
-
-    // Fill in missing dates with 0
-    const chartResults = eachDayOfInterval({
-      start: startOfDay(subDays(new Date(), 30)),
-      end: new Date(),
-    }).map(day => ({
-      date: format(day, "yyyy-MM-dd"),
-      value: visitorsByDate[format(day, "yyyy-MM-dd")] || 0,
-    }))
-
-    const totalVisitors = chartResults.reduce((acc, curr) => acc + curr.value, 0)
-    const averageVisitors = totalVisitors / chartResults.length
-
-    return { results: chartResults, totalVisitors, averageVisitors }
-  } catch (error) {
-    console.error("Analytics error:", error)
-    return { results: [], totalVisitors: 0, averageVisitors: 0 }
-  }
+  return await getTotalAnalytics()
 }
 
 const AnalyticsCard = async ({ ...props }: ComponentProps<typeof Card>) => {
