@@ -423,7 +423,7 @@
 
     "@pkgjs/parseargs": ["@pkgjs/parseargs@0.11.0", "", {}, "sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg=="],
 
-    "@primoui/utils": ["@primoui/utils@1.1.7", "", { "dependencies": { "@sindresorhus/slugify": "^2.2.1" } }, "sha512-zHhWBanMfh/WxHOJ07A7dtNKM8ivv4tMzWBPc4E15ezBVj7+zrOJGnje7hLfLp/1BcC9mz0YUZ961OpDX8o0CQ=="],
+    "@primoui/utils": ["@primoui/utils@1.1.8", "", { "dependencies": { "@sindresorhus/slugify": "^2.2.1" } }, "sha512-5bB7G+okQawLtZz60a5/U83xROwecDfkDL1ZoHodte66ScVP/0kjSDmwAYBu3n1SRDgqAkKO0+Qgsq+fOW5IgQ=="],
 
     "@prisma/client": ["@prisma/client@6.8.2", "", { "peerDependencies": { "prisma": "*", "typescript": ">=5.1.0" }, "optionalPeers": ["prisma", "typescript"] }, "sha512-5II+vbyzv4si6Yunwgkj0qT/iY0zyspttoDrL3R4BYgLdp42/d2C8xdi9vqkrYtKt9H32oFIukvyw3Koz5JoDg=="],
 

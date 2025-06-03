@@ -1,8 +1,7 @@
 "use client"
 
-import { isTruthy } from "@primoui/utils"
+import { getElementPosition, isTruthy } from "@primoui/utils"
 import { useCallback, useEffect, useState } from "react"
-import { getElementPosition } from "~/utils/helpers"
 
 export type InlineMenuItem = {
   id: string
