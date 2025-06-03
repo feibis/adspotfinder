@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { auth } from "~/lib/auth"
+import { type Session, auth } from "~/lib/auth"
 
-type Session = typeof auth.$Infer.Session
 type WithAuthHandler = (req: NextRequest, session: Session) => Promise<Response>
 
 /**

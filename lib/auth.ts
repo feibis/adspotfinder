@@ -62,3 +62,5 @@ export const getServerSession = cache(async () => {
     headers: await headers(),
   })
 })
+
+export type Session = typeof auth.$Infer.Session

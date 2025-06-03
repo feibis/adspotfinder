@@ -16,11 +16,11 @@ import {
 import { Link } from "~/components/common/link"
 import { NavLink } from "~/components/web/ui/nav-link"
 import { UserLogout } from "~/components/web/user-logout"
-import type { auth } from "~/lib/auth"
+import type { Session } from "~/lib/auth"
 import { useSession } from "~/lib/auth-client"
 
 type UserMenuProps = {
-  session: typeof auth.$Infer.Session | null
+  session: Session | null
 }
 
 const UserMenu = (props: UserMenuProps) => {
