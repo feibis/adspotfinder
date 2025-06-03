@@ -1,8 +1,8 @@
 import { Geist } from "next/font/google"
 import type { FontWeight } from "satori"
 
-export const geist = Geist({
-  variable: "--font-geist",
+export const fontSans = Geist({
+  variable: "--font-sans",
   display: "swap",
   subsets: ["latin"],
   weight: "variable",
