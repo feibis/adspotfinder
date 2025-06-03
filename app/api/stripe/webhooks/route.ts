@@ -1,4 +1,4 @@
-import { getUrlHostname } from "@curiousleaf/utils"
+import { getUrlHostname } from "@primoui/utils"
 import { AdType } from "@prisma/client"
 import { revalidateTag } from "next/cache"
 import { after } from "next/server"

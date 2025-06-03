@@ -1,6 +1,6 @@
 "use client"
 
-import { getInitials } from "@curiousleaf/utils"
+import { getInitials } from "@primoui/utils"
 import { ShieldHalfIcon, UserIcon } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/common/avatar"
 import { Box } from "~/components/common/box"

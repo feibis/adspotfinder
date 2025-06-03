@@ -1,5 +1,5 @@
 import { useCompletion } from "@ai-sdk/react"
-import { isTruthy } from "@curiousleaf/utils"
+import { isTruthy } from "@primoui/utils"
 import { MousePointerClickIcon, SparklesIcon } from "lucide-react"
 import { type ReactNode, use, useEffect, useState } from "react"
 import { AnimatedContainer } from "~/components/common/animated-container"

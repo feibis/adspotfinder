@@ -1,6 +1,6 @@
 "use client"
 
-import { formatDate, formatDateRange } from "@curiousleaf/utils"
+import { formatDate, formatDateRange } from "@primoui/utils"
 import { parseISO } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import { parseAsString, useQueryStates } from "nuqs"

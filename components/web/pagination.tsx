@@ -1,6 +1,6 @@
 "use client"
 
-import { getCurrentPage, getPageLink } from "@curiousleaf/utils"
+import { getCurrentPage, getPageLink } from "@primoui/utils"
 import { MoveLeftIcon, MoveRightIcon } from "lucide-react"
 import { usePathname, useSearchParams } from "next/navigation"
 import { type ComponentProps, useMemo } from "react"

@@ -1,6 +1,6 @@
 "use server"
 
-import { slugify } from "@curiousleaf/utils"
+import { slugify } from "@primoui/utils"
 import { revalidatePath, revalidateTag } from "next/cache"
 import { z } from "zod"
 import { adminProcedure } from "~/lib/safe-actions"

@@ -1,4 +1,4 @@
-import { isExternalUrl } from "@curiousleaf/utils"
+import { isExternalUrl } from "@primoui/utils"
 import type { AdType, Prisma } from "@prisma/client"
 import { ArrowUpRightIcon } from "lucide-react"
 import type { ComponentProps } from "react"

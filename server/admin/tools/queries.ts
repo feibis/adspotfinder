@@ -1,4 +1,4 @@
-import { isTruthy } from "@curiousleaf/utils"
+import { isTruthy } from "@primoui/utils"
 import { type Prisma, ToolStatus } from "@prisma/client"
 import { endOfDay, startOfDay } from "date-fns"
 import type { ToolsTableSchema } from "~/server/admin/tools/schema"

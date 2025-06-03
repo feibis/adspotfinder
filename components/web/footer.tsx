@@ -1,6 +1,6 @@
 "use client"
 
-import { formatNumber } from "@curiousleaf/utils"
+import { formatNumber } from "@primoui/utils"
 import { AtSignIcon, RssIcon } from "lucide-react"
 import type { ComponentProps } from "react"
 import { H5, H6 } from "~/components/common/heading"

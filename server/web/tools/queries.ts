@@ -1,5 +1,5 @@
 import { performance } from "node:perf_hooks"
-import { getRandomElement } from "@curiousleaf/utils"
+import { getRandomElement } from "@primoui/utils"
 import { type Prisma, ToolStatus } from "@prisma/client"
 import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
 import type { FilterSchema } from "~/server/web/shared/schema"

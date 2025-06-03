@@ -1,6 +1,6 @@
 import { experimental_useObject as useObject } from "@ai-sdk/react"
-import { isValidUrl } from "@curiousleaf/utils"
 import { useLocalStorage } from "@mantine/hooks"
+import { isValidUrl } from "@primoui/utils"
 import { LoaderIcon, SparklesIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"

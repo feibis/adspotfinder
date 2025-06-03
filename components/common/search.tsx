@@ -1,7 +1,7 @@
 "use client"
 
-import { getUrlHostname } from "@curiousleaf/utils"
 import { type HotkeyItem, useDebouncedState, useHotkeys } from "@mantine/hooks"
+import { getUrlHostname } from "@primoui/utils"
 import { LoaderIcon } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import posthog from "posthog-js"

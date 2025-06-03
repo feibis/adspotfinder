@@ -1,4 +1,4 @@
-import { formatDate } from "@curiousleaf/utils"
+import { formatDate } from "@primoui/utils"
 import { ArrowUpRightIcon, ClockIcon, HashIcon } from "lucide-react"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"

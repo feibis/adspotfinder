@@ -1,6 +1,6 @@
 "use client"
 
-import { getUrlHostname } from "@curiousleaf/utils"
+import { getUrlHostname } from "@primoui/utils"
 import { type Properties, posthog } from "posthog-js"
 import type { ComponentProps } from "react"
 import { siteConfig } from "~/config/site"

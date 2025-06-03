@@ -1,6 +1,6 @@
 "use client"
 
-import { isValidUrl } from "@curiousleaf/utils"
+import { isValidUrl } from "@primoui/utils"
 import type { Tool } from "@prisma/client"
 import { EllipsisIcon } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"

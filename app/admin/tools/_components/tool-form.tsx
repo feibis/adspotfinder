@@ -1,7 +1,7 @@
 "use client"
 
-import { formatDateTime, getRandomString, isValidUrl, slugify } from "@curiousleaf/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { formatDateTime, getRandomString, isValidUrl, slugify } from "@primoui/utils"
 import { type Tool, ToolStatus } from "@prisma/client"
 import { EyeIcon, PencilIcon, RefreshCwIcon } from "lucide-react"
 import Link from "next/link"
