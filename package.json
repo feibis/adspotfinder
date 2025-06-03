@@ -51,7 +51,7 @@
     "nuqs": "^2.4.3",
     "plur": "^5.1.0",
     "posthog-js": "^1.249.2",
-    "radix-ui": "1.4.1",
+    "radix-ui": "1.4.2",
     "react": "^19.1.0",
     "react-day-picker": "^9.7.0",
     "react-dom": "^19.1.0",
