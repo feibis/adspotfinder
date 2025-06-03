@@ -11,7 +11,7 @@ type CategoryListProps = ComponentProps<typeof Grid> & {
 
 const CategoryList = ({ categories, className, ...props }: CategoryListProps) => {
   return (
-    <Grid className={cx("md:gap-8", className)} {...props}>
+    <Grid className={cx("gap-x-8", className)} {...props}>
       {categories.map(category => (
         <CategoryCard key={category.slug} category={category} />
       ))}
@@ -23,7 +23,7 @@ const CategoryList = ({ categories, className, ...props }: CategoryListProps) =>
 
 const CategoryListSkeleton = () => {
   return (
-    <Grid className="md:gap-8">
+    <Grid className="gap-x-8">
       {[...Array(24)].map((_, index) => (
         <CategoryCardSkeleton key={index} />
       ))}

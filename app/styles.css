@@ -131,7 +131,8 @@
     @apply ease-out;
     @apply duration-100;
     @apply not-disabled:cursor-pointer;
-    @apply underline-offset-[0.25em];
+    @apply underline-offset-[3px];
+    @apply decoration-[0.075em];
   }
 
   svg.lucide:not([class*="stroke"]) {

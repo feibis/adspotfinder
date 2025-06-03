@@ -32,7 +32,7 @@ export const Listing = ({
               size="md"
               variant="secondary"
               suffix={<ArrowRightIcon />}
-              className="-my-0.5"
+              className="-my-1"
               asChild
             >
               {button}
