@@ -8,6 +8,7 @@ import { H6 } from "~/components/common/heading"
 import { Note } from "~/components/common/note"
 import { Stack } from "~/components/common/stack"
 import { AdCard, AdCardSkeleton } from "~/components/web/ads/ad-card"
+import { ExternalLink } from "~/components/web/external-link"
 import { MDX } from "~/components/web/mdx"
 import { ShareButtons } from "~/components/web/share-buttons"
 import { Author } from "~/components/web/ui/author"
@@ -112,10 +113,8 @@ export default async function BlogPostPage(props: PageProps) {
                   Written by
                 </H6>
 
-                <a
+                <ExternalLink
                   href={`https://twitter.com/${post.author.twitterHandle}`}
-                  target="_blank"
-                  rel="noopener noreferrer nofollow"
                   className="group"
                 >
                   <Author
@@ -123,7 +122,7 @@ export default async function BlogPostPage(props: PageProps) {
                     image={post.author.image}
                     title={`@${post.author.twitterHandle}`}
                   />
-                </a>
+                </ExternalLink>
               </Stack>
             )}
 

@@ -10,7 +10,8 @@ import { Stack } from "~/components/common/stack"
 import { Tooltip } from "~/components/common/tooltip"
 import { BuiltWith } from "~/components/web/built-with"
 import { CTAForm } from "~/components/web/cta-form"
-import { NavLink } from "~/components/web/ui/nav-link"
+import { ExternalLink } from "~/components/web/external-link"
+import { NavLink, navLinkVariants } from "~/components/web/ui/nav-link"
 import { config } from "~/config"
 import { cx } from "~/utils/cva"
 
@@ -42,38 +43,28 @@ export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) 
             <CTAForm />
           </Stack>
 
-          <Stack className="text-sm/normal">
+          <Stack className="text-xl opacity-75">
             <Tooltip tooltip="RSS Feed">
-              <NavLink
-                href={config.links.feed}
-                target="_blank"
-                rel="nofollow noreferrer"
-                aria-label="RSS Feed"
-              >
-                <RssIcon className="size-[1.44em]" />
-              </NavLink>
+              <ExternalLink href={config.links.feed} className={navLinkVariants()}>
+                <RssIcon />
+              </ExternalLink>
             </Tooltip>
 
             <Tooltip tooltip="Contact us">
-              <NavLink
-                href={`mailto:${config.site.email}`}
-                target="_blank"
-                rel="nofollow noreferrer"
-                aria-label="Contact us"
-              >
-                <AtSignIcon className="size-[1.44em] stroke-[1.25]" />
-              </NavLink>
+              <ExternalLink href={`mailto:${config.site.email}`} className={navLinkVariants()}>
+                <AtSignIcon />
+              </ExternalLink>
             </Tooltip>
 
             <Tooltip tooltip="View source code">
-              <NavLink href={config.links.github} target="_blank" rel="nofollow noreferrer">
-                <BrandGitHubIcon className="size-[1.44em] stroke-[1.25]" />
-              </NavLink>
+              <ExternalLink href={config.links.github} className={navLinkVariants()}>
+                <BrandGitHubIcon />
+              </ExternalLink>
             </Tooltip>
           </Stack>
         </Stack>
 
-        <Stack direction="column" className="text-sm/normal md:col-span-3 md:col-start-8">
+        <Stack direction="column" className="text-sm md:col-span-3 md:col-start-8">
           <H6 as="strong">Browse:</H6>
 
           <NavLink href="/">Tools</NavLink>
@@ -82,7 +73,7 @@ export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) 
           <NavLink href="/blog">Blog</NavLink>
         </Stack>
 
-        <Stack direction="column" className="text-sm/normal md:col-span-3">
+        <Stack direction="column" className="text-sm md:col-span-3">
           <H6 as="strong">Quick Links:</H6>
 
           <NavLink href="/submit">Submit</NavLink>

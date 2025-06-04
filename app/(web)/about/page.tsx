@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Link } from "~/components/common/link"
 import { Prose } from "~/components/common/prose"
+import { ExternalLink } from "~/components/web/external-link"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { config } from "~/config"
 import { metadataConfig } from "~/config/metadata"
@@ -48,9 +49,9 @@ export default function AboutPage() {
 
         <p>
           –{" "}
-          <a href={config.links.author} target="_blank" rel="noreferrer">
+          <ExternalLink href={config.links.author} doFollow>
             Piotr Kulpinski
-          </a>
+          </ExternalLink>
         </p>
       </Prose>
     </>

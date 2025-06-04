@@ -4,7 +4,6 @@ import { Stack } from "~/components/common/stack"
 import { Container } from "~/components/web/ui/container"
 import { NavLink } from "~/components/web/ui/nav-link"
 import { Tile, TileCaption, TileDivider } from "~/components/web/ui/tile"
-import { siteConfig } from "~/config/site"
 import { findCategories } from "~/server/web/categories/queries"
 import { cx } from "~/utils/cva"
 
@@ -28,7 +27,7 @@ export const Bottom = async ({ className, ...props }: ComponentProps<"div">) => 
         {...props}
       >
         {!!categories?.length && (
-          <Stack className="gap-x-4 text-sm/normal">
+          <Stack className="gap-x-4 text-sm">
             <H6 as="strong">Popular Categories:</H6>
 
             <div className="grid grid-cols-2xs gap-x-4 gap-y-2 w-full sm:grid-cols-xs">

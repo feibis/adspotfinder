@@ -46,7 +46,7 @@ export const FeaturedTools = async ({ ...props }: ComponentProps<typeof Card>) =
         ))}
 
         {showAddButton && (
-          <Tooltip tooltip="Contact us to get your project featured">
+          <Tooltip tooltip="Get your project featured">
             <Link
               href="/submit"
               className="grid place-items-center size-9 p-1 rounded-lg border hover:bg-accent"
