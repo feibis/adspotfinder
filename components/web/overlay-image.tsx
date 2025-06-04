@@ -1,5 +1,4 @@
 import { ArrowUpRightIcon } from "lucide-react"
-import Image from "next/image"
 import type { ComponentProps } from "react"
 import { Box } from "~/components/common/box"
 import { Button } from "~/components/common/button"
@@ -18,7 +17,7 @@ export const OverlayImage = ({ children, className, src, alt, ...props }: Overla
         className={cx("not-prose group relative rounded-md overflow-clip", className)}
         {...props}
       >
-        <Image
+        <img
           src={src}
           alt={alt ?? ""}
           width={1280}
