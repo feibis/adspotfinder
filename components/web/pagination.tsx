@@ -38,7 +38,7 @@ export const Pagination = ({
 
   return (
     <nav
-      className={cx("-mt-px flex w-full items-start justify-between md:w-auto", className)}
+      className={cx("-mt-px flex w-full items-start justify-between text-sm md:w-auto", className)}
       {...props}
     >
       <PaginationLink
