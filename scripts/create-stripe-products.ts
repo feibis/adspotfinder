@@ -79,19 +79,13 @@ const prices: (Stripe.PriceCreateParams & { productName: string })[] = [
 ]
 
 async function main() {
-  console.log("🚀 Starting Stripe products replication...")
-
   const createdProducts = new Map<string, string>()
 
   try {
     // Create products
     for (const productData of products) {
-      console.log(`📦 Creating product: ${productData.name}`)
-
       const product = await stripe.products.create(productData)
-
       createdProducts.set(productData.name, product.id)
-      console.log(`✅ Created product: ${product.name} (${product.id})`)
     }
 
     // Create prices
@@ -103,23 +97,10 @@ async function main() {
         continue
       }
 
-      console.log(`💰 Creating price for: ${productName}`)
-
-      const price = await stripe.prices.create(priceData)
-
-      console.log(`✅ Created price for ${productName}: ${price.id}`)
+      await stripe.prices.create(priceData)
     }
 
     console.log("🎉 All products and prices replicated successfully!")
-
-    // Summary
-    console.log("\n📊 Summary:")
-    console.log(`• Products created: ${createdProducts.size}`)
-    console.log(`• Prices created: ${prices.length}`)
-    console.log("\nProducts created:")
-    createdProducts.forEach((id, name) => {
-      console.log(`  • ${name} (${id})`)
-    })
   } catch (error) {
     console.error("❌ Error replicating products:", error)
     process.exit(1)

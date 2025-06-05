@@ -28,7 +28,8 @@ export function DataTableToolbar<TData>({
   const isFiltered = table.getState().columnFilters.length > 0
   const inputRef = useRef<HTMLInputElement>(null)
 
-  useHotkeys([["/", () => inputRef.current?.focus()]])
+  // Add hotkey to focus search input
+  useHotkeys([["/", () => inputRef.current?.focus()]], [], true)
 
   // Memoize computation of searchableColumns and filterableColumns
   const { searchableColumns, filterableColumns } = React.useMemo(() => {
