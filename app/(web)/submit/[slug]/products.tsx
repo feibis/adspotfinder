@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation"
 import type { SearchParams } from "nuqs/server"
 import { Plan } from "~/components/web/plan"
 import { getProductFeatures, getProducts, prepareProductsWithPrices } from "~/lib/products"
@@ -18,7 +19,6 @@ export const SubmitProducts = async ({ tool, searchParams }: SubmitProductsProps
     // Products
     stripe.products.list({
       active: true,
-      ids: process.env.STRIPE_PRODUCT_IDS?.split(",").map(e => e.trim()),
       expand: ["data.default_price"],
     }),
 
@@ -35,6 +35,11 @@ export const SubmitProducts = async ({ tool, searchParams }: SubmitProductsProps
     // Queue length
     countSubmittedTools({}),
   ])
+
+  // If there are no products, redirect to the success page
+  if (stripeProducts.data.length === 0) {
+    redirect(`/submit/${tool.slug}?success=true`)
+  }
 
   const isPublished = isToolPublished(tool)
   const coupon = stripePromo?.data[0]?.coupon

@@ -1,3 +1,4 @@
+import console from "node:console"
 import { addDays, differenceInMonths } from "date-fns"
 import plur from "plur"
 import type Stripe from "stripe"
@@ -44,8 +45,15 @@ export const getProducts = (
     return typeof price === "object" && price !== null ? (price.unit_amount ?? 0) : 0
   }
 
+  for (const product of products) {
+    console.log(product.name, getPriceAmount(product.default_price))
+  }
+
   return (
     products
+      // Filter out products that are not listings
+      .filter(({ name }) => name.includes("Listing"))
+
       // Sort by price
       .sort((a, b) => getPriceAmount(a.default_price) - getPriceAmount(b.default_price))
 

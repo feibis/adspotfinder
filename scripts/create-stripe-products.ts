@@ -1,7 +1,7 @@
 import type { Stripe } from "stripe"
 import { stripe } from "~/services/stripe"
 
-const products: Stripe.ProductCreateParams[] = [
+const products: (Stripe.ProductCreateParams & { price_data?: Stripe.PriceCreateParams[] })[] = [
   {
     name: "Free Listing",
     description: "Free listing with a wait time and a direct link to your website.",
@@ -14,6 +14,10 @@ const products: Stripe.ProductCreateParams[] = [
       { name: "✗ No featured spot" },
       { name: "✗ No prominent placement" },
     ],
+    default_price_data: {
+      unit_amount: 0,
+      currency: "usd",
+    },
   },
   {
     name: "Expedited Listing",
@@ -27,6 +31,10 @@ const products: Stripe.ProductCreateParams[] = [
       { name: "✗ No featured spot" },
       { name: "✗ No prominent placement" },
     ],
+    default_price_data: {
+      unit_amount: 9700,
+      currency: "usd",
+    },
   },
   {
     name: "Featured Listing",
@@ -40,64 +48,39 @@ const products: Stripe.ProductCreateParams[] = [
       { name: "✓ Featured spot on homepage" },
       { name: "✓ Prominent placement" },
     ],
-  },
-]
-
-const prices: (Stripe.PriceCreateParams & { productName: string })[] = [
-  {
-    // Free Listing - $0.00
-    productName: "Free Listing",
-    unit_amount: 0,
-    currency: "usd",
-  },
-  {
-    // Expedited Listing - $97.00
-    productName: "Expedited Listing",
-    unit_amount: 9700,
-    currency: "usd",
-  },
-  {
-    // Featured Listing - Monthly $197.00
-    productName: "Featured Listing",
-    unit_amount: 19700,
-    currency: "usd",
-    recurring: {
-      interval: "month",
-      interval_count: 1,
+    default_price_data: {
+      unit_amount: 19700,
+      currency: "usd",
+      recurring: {
+        interval: "month",
+        interval_count: 1,
+      },
     },
-  },
-  {
-    // Featured Listing - Yearly $1,970.00
-    productName: "Featured Listing",
-    unit_amount: 197000,
-    currency: "usd",
-    recurring: {
-      interval: "year",
-      interval_count: 1,
-    },
+    price_data: [
+      {
+        unit_amount: 197000,
+        currency: "usd",
+        recurring: {
+          interval: "year",
+          interval_count: 1,
+        },
+      },
+    ],
   },
 ]
 
 async function main() {
-  const createdProducts = new Map<string, string>()
-
   try {
     // Create products
-    for (const productData of products) {
+    for (const { price_data, ...productData } of products) {
       const product = await stripe.products.create(productData)
-      createdProducts.set(productData.name, product.id)
-    }
 
-    // Create prices
-    for (const { productName, ...priceData } of prices) {
-      const productId = createdProducts.get(productName)
-
-      if (!productId) {
-        console.error(`❌ Product not found: ${productName}`)
-        continue
+      // Create prices
+      if (price_data) {
+        for (const priceData of price_data) {
+          await stripe.prices.create({ ...priceData, product: product.id })
+        }
       }
-
-      await stripe.prices.create(priceData)
     }
 
     console.log("🎉 All products and prices replicated successfully!")
