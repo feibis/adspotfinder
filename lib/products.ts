@@ -1,4 +1,3 @@
-import console from "node:console"
 import { addDays, differenceInMonths } from "date-fns"
 import plur from "plur"
 import type Stripe from "stripe"
@@ -43,10 +42,6 @@ export const getProducts = (
 ) => {
   const getPriceAmount = (price?: Stripe.Price | string | null) => {
     return typeof price === "object" && price !== null ? (price.unit_amount ?? 0) : 0
-  }
-
-  for (const product of products) {
-    console.log(product.name, getPriceAmount(product.default_price))
   }
 
   return (

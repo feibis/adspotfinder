@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation"
-import type { SearchParams } from "nuqs/server"
+import { type SearchParams, createLoader, parseAsString } from "nuqs/server"
 import { Plan } from "~/components/web/plan"
 import { getProductFeatures, getProducts, prepareProductsWithPrices } from "~/lib/products"
 import { isToolPublished } from "~/lib/tools"
@@ -13,7 +13,8 @@ type SubmitProductsProps = {
 }
 
 export const SubmitProducts = async ({ tool, searchParams }: SubmitProductsProps) => {
-  const { discountCode } = await searchParams
+  const loadSearchParams = createLoader({ discountCode: parseAsString.withDefault("") })
+  const { discountCode } = await loadSearchParams(searchParams)
 
   const [stripeProducts, stripePromo, queueLength] = await Promise.all([
     // Products
