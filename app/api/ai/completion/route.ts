@@ -1,6 +1,6 @@
 import { google } from "@ai-sdk/google"
 import { streamText } from "ai"
-import { z } from "zod"
+import { z } from "zod/v4"
 import { withAdminAuth } from "~/lib/auth-hoc"
 
 const completionSchema = z.object({
@@ -17,8 +17,7 @@ export const POST = withAdminAuth(async req => {
   const result = streamText({
     model: google(model),
     prompt,
-    maxTokens: 300,
   })
 
-  return result.toDataStreamResponse()
+  return result.toUIMessageStreamResponse()
 })

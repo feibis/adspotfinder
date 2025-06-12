@@ -3,7 +3,7 @@ import { AdType } from "@prisma/client"
 import { revalidateTag } from "next/cache"
 import { after } from "next/server"
 import type Stripe from "stripe"
-import { z } from "zod"
+import { z } from "zod/v4"
 import { env } from "~/env"
 import { uploadFavicon } from "~/lib/media"
 import { notifyAdminOfPremiumTool, notifySubmitterOfPremiumTool } from "~/lib/notifications"
@@ -82,7 +82,7 @@ export const POST = async (req: Request) => {
 
               const adsSchema = z.array(
                 z.object({
-                  type: z.nativeEnum(AdType),
+                  type: z.enum(AdType),
                   startsAt: z.coerce.number().transform(date => new Date(date)),
                   endsAt: z.coerce.number().transform(date => new Date(date)),
                 }),

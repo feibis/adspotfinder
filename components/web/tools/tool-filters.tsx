@@ -1,8 +1,8 @@
 "use client"
 
+import { useAction } from "next-safe-action/hooks"
 import plur from "plur"
 import { type ComponentProps, useEffect } from "react"
-import { useServerAction } from "zsa-react"
 import {
   Select,
   SelectContent,
@@ -15,7 +15,7 @@ import { findFilterOptions } from "~/server/web/actions/filters"
 
 export const ToolFilters = ({ ...props }: ComponentProps<typeof Select>) => {
   const { filters, updateFilters } = useFilters()
-  const { execute, data } = useServerAction(findFilterOptions)
+  const { result, execute } = useAction(findFilterOptions)
 
   useEffect(() => {
     execute()
@@ -23,7 +23,7 @@ export const ToolFilters = ({ ...props }: ComponentProps<typeof Select>) => {
 
   return (
     <>
-      {data?.map(({ type, options }) => (
+      {result.data?.map(({ type, options }) => (
         <Select
           key={type}
           value={filters[type]}

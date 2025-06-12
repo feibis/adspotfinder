@@ -1,13 +1,13 @@
 "use client"
 
 import { ArrowUpRightIcon, CheckIcon, XIcon } from "lucide-react"
+import { useAction } from "next-safe-action/hooks"
 import { useRouter } from "next/navigation"
 import { posthog } from "posthog-js"
 import { Slot } from "radix-ui"
 import type { ComponentProps } from "react"
 import { toast } from "sonner"
 import type Stripe from "stripe"
-import { useServerAction } from "zsa-react"
 import { Button } from "~/components/common/button"
 import { Card, CardBg, type cardVariants } from "~/components/common/card"
 import { H5 } from "~/components/common/heading"
@@ -108,18 +108,16 @@ const Plan = ({
   const { isSubscription, currentPrice, price, fullPrice, discount, interval, setInterval } =
     usePlanPrices(prices, coupon)
 
-  const { execute, isPending } = useServerAction(createStripeToolCheckout, {
-    onSuccess: ({ data }) => {
+  const { execute, isPending } = useAction(createStripeToolCheckout, {
+    onSuccess: () => {
       posthog.capture("stripe_checkout_tool", {
         tool: tool.slug,
         mode: isSubscription ? "featured" : "expedited",
       })
-
-      router.push(data)
     },
 
-    onError: ({ err }) => {
-      toast.error(err.message)
+    onError: ({ error }) => {
+      toast.error(error.serverError)
     },
   })
 

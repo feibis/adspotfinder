@@ -6,7 +6,7 @@ import {
   parseAsString,
   parseAsStringEnum,
 } from "nuqs/server"
-import * as z from "zod"
+import * as z from "zod/v4"
 import { getSortingStateParser } from "~/lib/parsers"
 
 export const toolsTableParamsSchema = {
@@ -17,7 +17,7 @@ export const toolsTableParamsSchema = {
   from: parseAsString.withDefault(""),
   to: parseAsString.withDefault(""),
   operator: parseAsStringEnum(["and", "or"]).withDefault("and"),
-  status: parseAsArrayOf(z.nativeEnum(ToolStatus)).withDefault([]),
+  status: parseAsArrayOf(z.enum(ToolStatus)).withDefault([]),
 }
 
 export const toolsTableParamsCache = createSearchParamsCache(toolsTableParamsSchema)
@@ -27,7 +27,7 @@ export const toolSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   slug: z.string().optional(),
-  websiteUrl: z.string().min(1, "Website is required").url(),
+  websiteUrl: z.url().min(1, "Website is required"),
   tagline: z.string().optional(),
   description: z.string().optional(),
   content: z.string().optional(),
@@ -38,7 +38,7 @@ export const toolSchema = z.object({
   submitterEmail: z.string().optional(),
   submitterNote: z.string().optional(),
   publishedAt: z.coerce.date().nullish(),
-  status: z.nativeEnum(ToolStatus).default("Draft"),
+  status: z.enum(ToolStatus).default("Draft"),
   categories: z.array(z.string()).optional(),
   notifySubmitter: z.boolean().default(true),
 })

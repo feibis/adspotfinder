@@ -3,10 +3,10 @@
 import { getUrlHostname, slugify } from "@primoui/utils"
 import { headers } from "next/headers"
 import { after } from "next/server"
-import { createServerAction } from "zsa"
 import { auth } from "~/lib/auth"
 import { notifySubmitterOfToolSubmitted } from "~/lib/notifications"
 import { getIP, isRateLimited } from "~/lib/rate-limiter"
+import { actionClient } from "~/lib/safe-actions"
 import { subscribeToNewsletter } from "~/server/web/actions/subscribe"
 import { submitToolSchema } from "~/server/web/shared/schema"
 import { db } from "~/services/db"
@@ -37,9 +37,9 @@ const generateUniqueSlug = async (baseName: string): Promise<string> => {
  * @param input - The tool data to submit
  * @returns The tool that was submitted
  */
-export const submitTool = createServerAction()
-  .input(submitToolSchema)
-  .handler(async ({ input: { newsletterOptIn, ...data } }) => {
+export const submitTool = actionClient
+  .inputSchema(submitToolSchema)
+  .action(async ({ parsedInput: { newsletterOptIn, ...data } }) => {
     const session = await auth.api.getSession({ headers: await headers() })
 
     const ip = await getIP()

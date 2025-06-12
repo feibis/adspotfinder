@@ -1,17 +1,16 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { posthog } from "posthog-js"
 import type { ComponentProps } from "react"
-import { useForm } from "react-hook-form"
-import { useServerAction } from "zsa-react"
 import { Box } from "~/components/common/box"
 import { Button } from "~/components/common/button"
 import { Form, FormControl, FormField } from "~/components/common/form"
 import { Hint } from "~/components/common/hint"
 import { Input } from "~/components/common/input"
-import { subscribeToNewsletter } from "~/server/web/actions/subscribe"
-import { type NewsletterSchema, newsletterSchema } from "~/server/web/shared/schema"
+import { subscribeToNewsletter as subscribe } from "~/server/web/actions/subscribe"
+import { newsletterSchema } from "~/server/web/shared/schema"
 import { cx } from "~/utils/cva"
 
 type ButtonProps = ComponentProps<typeof Button>
@@ -31,24 +30,31 @@ export const CTAForm = ({
   buttonProps = { size: "sm", children: "Subscribe" },
   ...props
 }: CTAFormProps) => {
-  const form = useForm<NewsletterSchema>({
-    resolver: zodResolver(newsletterSchema),
-    defaultValues: { captcha: "", value: "" },
-  })
+  const resolver = zodResolver(newsletterSchema)
 
-  const { data, error, isPending, execute } = useServerAction(subscribeToNewsletter, {
-    onSuccess: () => {
-      posthog.capture("subscribe_newsletter", { email: form.getValues("value") })
-      form.reset()
+  const { form, action, handleSubmitWithAction } = useHookFormAction(subscribe, resolver, {
+    formProps: {
+      defaultValues: {
+        captcha: "",
+        value: "",
+      },
     },
 
-    onError: () => form.reset(),
+    actionProps: {
+      onSuccess: () => {
+        posthog.capture("subscribe_newsletter", { email: form.getValues("value") })
+      },
+
+      onSettled: () => {
+        form.reset()
+      },
+    },
   })
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(data => execute(data))}
+        onSubmit={handleSubmitWithAction}
         className={cx("flex flex-col gap-3 w-full", className)}
         noValidate
         {...props}
@@ -83,7 +89,7 @@ export const CTAForm = ({
             />
 
             <Button
-              isPending={isPending}
+              isPending={action.isPending}
               className={cx(
                 "shrink-0",
                 size === "lg" ? "text-sm/tight px-4 py-2 m-1" : "px-3 py-1.5 m-0.5",
@@ -93,11 +99,13 @@ export const CTAForm = ({
           </div>
         </Box>
 
-        {(error || form.formState.errors.value) && (
-          <Hint className="-mt-1">{(error || form.formState.errors.value)?.message}</Hint>
+        {(action.result.serverError || form.formState.errors.value) && (
+          <Hint className="-mt-1">
+            {action.result.serverError || form.formState.errors.value?.message}
+          </Hint>
         )}
 
-        {data && <p className="text-sm text-green-600">{data}</p>}
+        {action.result.data && <p className="text-sm text-green-600">{action.result.data}</p>}
 
         {children}
       </form>

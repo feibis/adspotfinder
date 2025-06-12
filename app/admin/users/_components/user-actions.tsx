@@ -21,8 +21,7 @@ import {
 } from "~/components/common/dropdown-menu"
 import { Link } from "~/components/common/link"
 import { admin, useSession } from "~/lib/auth-client"
-import { getErrorMessage } from "~/lib/handle-error"
-import { updateUser } from "~/server/admin/users/actions"
+import { updateUserRole } from "~/server/admin/users/actions"
 import { cx } from "~/utils/cva"
 
 type UserActionsProps = ComponentProps<typeof Button> & {
@@ -70,16 +69,13 @@ export const UserActions = ({ user, className, ...props }: UserActionsProps) => 
               onValueChange={value => {
                 startUpdateTransition(() => {
                   toast.promise(
-                    async () =>
-                      await updateUser({
+                    async () => {
+                      await updateUserRole({
                         id: user.id,
                         role: value as (typeof roles)[number],
-                      }),
-                    {
-                      loading: "Updating...",
-                      success: "Role successfully updated",
-                      error: err => getErrorMessage(err),
+                      })
                     },
+                    { loading: "Updating...", success: "Role successfully updated" },
                   )
                 })
               }}
@@ -109,11 +105,7 @@ export const UserActions = ({ user, className, ...props }: UserActionsProps) => 
                     await admin.unbanUser({ userId: user.id })
                     router.refresh()
                   },
-                  {
-                    loading: "Unbanning...",
-                    success: "User successfully unbanned",
-                    error: err => getErrorMessage(err),
-                  },
+                  { loading: "Unbanning...", success: "User successfully unbanned" },
                 )
               }}
             >
@@ -127,11 +119,7 @@ export const UserActions = ({ user, className, ...props }: UserActionsProps) => 
                     await admin.banUser({ userId: user.id })
                     router.refresh()
                   },
-                  {
-                    loading: "Banning...",
-                    success: "User successfully banned",
-                    error: err => getErrorMessage(err),
-                  },
+                  { loading: "Banning...", success: "User successfully banned" },
                 )
               }}
             >
@@ -144,7 +132,6 @@ export const UserActions = ({ user, className, ...props }: UserActionsProps) => 
             toast.promise(admin.revokeUserSessions({ userId: user.id }), {
               loading: "Revoking sessions...",
               success: "Sessions successfully revoked",
-              error: err => getErrorMessage(err),
             })
           }}
         >

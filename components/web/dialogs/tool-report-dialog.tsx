@@ -1,10 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ReportType } from "@prisma/client"
 import { sentenceCase } from "change-case"
+import { useAction } from "next-safe-action/hooks"
 import type { Dispatch, SetStateAction } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { useServerAction } from "zsa-react"
 import { Button } from "~/components/common/button"
 import {
   Dialog,
@@ -47,14 +47,14 @@ export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogPr
     },
   })
 
-  const { execute, isPending } = useServerAction(reportTool, {
+  const { execute, isPending } = useAction(reportTool, {
     onSuccess: () => {
       toast.success("Thank you for your report. We'll take a look at it shortly.")
       setIsOpen(false)
       form.reset()
     },
-    onError: ({ err }) => {
-      toast.error(err.message)
+    onError: ({ error }) => {
+      toast.error(error.serverError)
     },
   })
 

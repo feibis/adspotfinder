@@ -1,36 +1,29 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
 import { after } from "next/server"
-import { z } from "zod"
+import { z } from "zod/v4"
 import { removeS3Directories } from "~/lib/media"
-import { adminProcedure } from "~/lib/safe-actions"
+import { adminActionClient } from "~/lib/safe-actions"
 import { userSchema } from "~/server/admin/users/schema"
 import { db } from "~/services/db"
 
-export const updateUser = adminProcedure
-  .createServerAction()
-  .input(userSchema.extend({ id: z.string() }))
-  .handler(async ({ input: { id, ...input } }) => {
+export const updateUser = adminActionClient
+  .inputSchema(userSchema)
+  .action(async ({ parsedInput: { id, ...input } }) => {
     const user = await db.user.update({
       where: { id },
       data: input,
     })
 
-    revalidatePath("/admin/users")
-
     return user
   })
 
-export const deleteUsers = adminProcedure
-  .createServerAction()
-  .input(z.object({ ids: z.array(z.string()) }))
-  .handler(async ({ input: { ids } }) => {
+export const deleteUsers = adminActionClient
+  .inputSchema(z.object({ ids: z.array(z.string()) }))
+  .action(async ({ parsedInput: { ids } }) => {
     await db.user.deleteMany({
       where: { id: { in: ids }, role: { not: "admin" } },
     })
-
-    revalidatePath("/admin/users")
 
     // Remove the user images from S3 asynchronously
     after(async () => {
@@ -38,4 +31,15 @@ export const deleteUsers = adminProcedure
     })
 
     return true
+  })
+
+export const updateUserRole = adminActionClient
+  .inputSchema(userSchema.pick({ id: true, role: true }))
+  .action(async ({ parsedInput: { id, role } }) => {
+    const user = await db.user.update({
+      where: { id },
+      data: { role },
+    })
+
+    return user
   })

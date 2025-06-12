@@ -1,12 +1,11 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { slugify } from "@primoui/utils"
 import { useRouter } from "next/navigation"
 import type { ComponentProps } from "react"
-import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { useServerAction } from "zsa-react"
 import { TagActions } from "~/app/admin/tags/_components/tag-actions"
 import { RelationSelector } from "~/components/admin/relation-selector"
 import { Button } from "~/components/common/button"
@@ -36,13 +35,27 @@ type TagFormProps = ComponentProps<"form"> & {
 
 export function TagForm({ children, className, title, tag, tools, ...props }: TagFormProps) {
   const router = useRouter()
+  const resolver = zodResolver(tagSchema)
 
-  const form = useForm({
-    resolver: zodResolver(tagSchema),
-    defaultValues: {
-      name: tag?.name ?? "",
-      slug: tag?.slug ?? "",
-      tools: tag?.tools.map(t => t.id) ?? [],
+  const { form, action, handleSubmitWithAction } = useHookFormAction(upsertTag, resolver, {
+    formProps: {
+      defaultValues: {
+        id: tag?.id ?? "",
+        name: tag?.name ?? "",
+        slug: tag?.slug ?? "",
+        tools: tag?.tools.map(t => t.id) ?? [],
+      },
+    },
+
+    actionProps: {
+      onSuccess: ({ data }) => {
+        toast.success(`Tag successfully ${tag ? "updated" : "created"}`)
+        router.push(`/admin/tags/${data?.slug}`)
+      },
+
+      onError: ({ error }) => {
+        toast.error(error.serverError)
+      },
     },
   })
 
@@ -53,24 +66,6 @@ export function TagForm({ children, className, title, tag, tools, ...props }: Ta
     computedField: "slug",
     callback: slugify,
     enabled: !tag,
-  })
-
-  // Upsert tag
-  const upsertAction = useServerAction(upsertTag, {
-    onSuccess: ({ data }) => {
-      toast.success(`Tag successfully ${tag ? "updated" : "created"}`)
-
-      // If not updating a tag, or slug has changed, redirect to the new tag
-      if (!tag || data.slug !== tag?.slug) {
-        router.push(`/admin/tags/${data.slug}`)
-      }
-    },
-
-    onError: ({ err }) => toast.error(err.message),
-  })
-
-  const handleSubmit = form.handleSubmit(data => {
-    upsertAction.execute({ id: tag?.id, ...data })
   })
 
   return (
@@ -84,7 +79,7 @@ export function TagForm({ children, className, title, tag, tools, ...props }: Ta
       </Stack>
 
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmitWithAction}
         className={cx("grid gap-4 @sm:grid-cols-2", className)}
         noValidate
         {...props}
@@ -137,7 +132,7 @@ export function TagForm({ children, className, title, tag, tools, ...props }: Ta
             <Link href="/admin/tags">Cancel</Link>
           </Button>
 
-          <Button size="md" isPending={upsertAction.isPending}>
+          <Button size="md" isPending={action.isPending}>
             {tag ? "Update tag" : "Create tag"}
           </Button>
         </div>

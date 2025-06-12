@@ -3,7 +3,7 @@ import type { ErrorContext } from "better-auth/react"
 import { usePathname, useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { z } from "zod/v4"
 import { signIn } from "~/lib/auth-client"
 
 type UseMagicLinkProps = {
@@ -18,7 +18,7 @@ export const useMagicLink = ({ onSuccess, onError }: UseMagicLinkProps = {}) => 
   const callbackURL = searchParams.get("next") || pathname
 
   const schema = z.object({
-    email: z.string().email("Please enter a valid email address"),
+    email: z.email("Please enter a valid email address"),
   })
 
   const form = useForm<z.infer<typeof schema>>({

@@ -1,10 +1,10 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
+import { useAction } from "next-safe-action/hooks"
 import type { ComponentProps } from "react"
-import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { useServerAction } from "zsa-react"
 import { UserActions } from "~/app/admin/users/_components/user-actions"
 import { Avatar, AvatarImage } from "~/components/common/avatar"
 import { Button } from "~/components/common/button"
@@ -31,41 +31,40 @@ type UserFormProps = ComponentProps<"form"> & {
 }
 
 export function UserForm({ children, className, title, user, ...props }: UserFormProps) {
-  const form = useForm({
-    resolver: zodResolver(userSchema),
-    defaultValues: {
-      name: user?.name ?? "",
-      email: user?.email ?? "",
-      image: user?.image ?? "",
-    },
-  })
+  const resolver = zodResolver(userSchema)
 
   // Update user
-  const updateAction = useServerAction(updateUser, {
-    onSuccess: () => {
-      toast.success("User successfully updated")
+  const { form, action, handleSubmitWithAction } = useHookFormAction(updateUser, resolver, {
+    formProps: {
+      defaultValues: {
+        id: user?.id ?? "",
+        name: user?.name ?? "",
+        email: user?.email ?? "",
+        image: user?.image ?? "",
+      },
     },
 
-    onError: ({ err }) => {
-      toast.error(err.message)
+    actionProps: {
+      onSuccess: () => {
+        toast.success("User successfully updated")
+      },
+
+      onError: ({ error }) => {
+        toast.error(error.serverError)
+      },
     },
   })
 
   // Upload user image
-  const uploadAction = useServerAction(uploadUserImage, {
+  const uploadAction = useAction(uploadUserImage, {
     onSuccess: ({ data }) => {
       toast.success("User image successfully uploaded")
       form.setValue("image", data)
     },
 
-    onError: ({ err }) => {
-      console.log(err)
-      toast.error(JSON.parse(err.message)[0]?.message)
+    onError: ({ error }) => {
+      toast.error(error.serverError)
     },
-  })
-
-  const handleSubmit = form.handleSubmit(data => {
-    updateAction.execute({ id: user.id, ...data })
   })
 
   return (
@@ -79,7 +78,7 @@ export function UserForm({ children, className, title, user, ...props }: UserFor
       </Stack>
 
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmitWithAction}
         className={cx("grid gap-4 @sm:grid-cols-2", className)}
         noValidate
         {...props}
@@ -157,7 +156,7 @@ export function UserForm({ children, className, title, user, ...props }: UserFor
             <Link href="/admin/users">Cancel</Link>
           </Button>
 
-          <Button size="md" isPending={updateAction.isPending || uploadAction.isPending}>
+          <Button size="md" isPending={action.isPending || uploadAction.isPending}>
             Update user
           </Button>
         </div>

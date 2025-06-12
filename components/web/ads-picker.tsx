@@ -4,11 +4,11 @@ import { formatDateRange } from "@primoui/utils"
 import { cx } from "cva"
 import { endOfDay, startOfDay } from "date-fns"
 import { XIcon } from "lucide-react"
+import { useAction } from "next-safe-action/hooks"
 import plur from "plur"
 import posthog from "posthog-js"
 import type { ComponentProps } from "react"
 import { toast } from "sonner"
-import { useServerAction } from "zsa-react"
 import { AnimatedContainer } from "~/components/common/animated-container"
 import { Badge } from "~/components/common/badge"
 import { Button } from "~/components/common/button"
@@ -29,15 +29,13 @@ type AdsCalendarProps = ComponentProps<"div"> & {
 export const AdsPicker = ({ className, ads, ...props }: AdsCalendarProps) => {
   const { price, selections, hasSelections, findAdSpot, clearSelection, updateSelection } = useAds()
 
-  const { execute, isPending } = useServerAction(createStripeAdsCheckout, {
-    onSuccess: ({ data }) => {
+  const { execute, isPending } = useAction(createStripeAdsCheckout, {
+    onSuccess: () => {
       posthog.capture("stripe_checkout_ad", { ...price })
-
-      window.open(data, "_blank")?.focus()
     },
 
-    onError: ({ err }) => {
-      toast.error(err.message)
+    onError: ({ error }) => {
+      toast.error(error.serverError)
     },
   })
 

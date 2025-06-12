@@ -55,6 +55,7 @@ export const RelationSelector = <T extends Relation>({
     experimental_throttle: 1000,
 
     onFinish: (_, completion) => {
+      console.log(completion)
       if (completion) {
         const suggestions = completion
           .split(",")

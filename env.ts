@@ -1,5 +1,5 @@
 import { createEnv } from "@t3-oss/env-nextjs"
-import { z } from "zod"
+import { z } from "zod/v4"
 
 export const env = createEnv({
   shared: {
@@ -19,13 +19,13 @@ export const env = createEnv({
     VERCEL_ENV: z.enum(["development", "preview", "production"]).default("development"),
     CRON_SECRET: z.string().optional(),
     BETTER_AUTH_SECRET: z.string().min(1),
-    BETTER_AUTH_URL: z.string().min(1).url(),
+    BETTER_AUTH_URL: z.url().min(1),
     AUTH_GOOGLE_ID: z.string().min(1),
     AUTH_GOOGLE_SECRET: z.string().min(1),
     REDIS_REST_URL: z.string().optional(),
     REDIS_REST_TOKEN: z.string().optional(),
     RESEND_API_KEY: z.string().min(1),
-    RESEND_SENDER_EMAIL: z.string().email().min(1),
+    RESEND_SENDER_EMAIL: z.email().min(1),
     RESEND_AUDIENCE_ID: z.string().min(1),
     S3_ENDPOINT: z.string().optional(),
     S3_REGION: z.string().min(1),
@@ -46,11 +46,11 @@ export const env = createEnv({
    * For them to be exposed to the client, prefix them with `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_SITE_URL: z.string().url().min(1),
-    NEXT_PUBLIC_SITE_EMAIL: z.string().email().min(1),
+    NEXT_PUBLIC_SITE_URL: z.url().min(1),
+    NEXT_PUBLIC_SITE_EMAIL: z.email().min(1),
     NEXT_PUBLIC_PLAUSIBLE_DOMAIN: z.string().min(1),
-    NEXT_PUBLIC_PLAUSIBLE_URL: z.string().url().min(1),
-    NEXT_PUBLIC_POSTHOG_HOST: z.string().url().min(1),
+    NEXT_PUBLIC_PLAUSIBLE_URL: z.url().min(1),
+    NEXT_PUBLIC_POSTHOG_HOST: z.url().min(1),
     NEXT_PUBLIC_POSTHOG_API_KEY: z.string().min(1),
   },
 

@@ -1,12 +1,11 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { ReportType } from "@prisma/client"
 import { sentenceCase } from "change-case"
 import type { ComponentProps } from "react"
-import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { useServerAction } from "zsa-react"
 import { ReportActions } from "~/app/admin/reports/_components/report-actions"
 import { Button } from "~/components/common/button"
 import {
@@ -38,27 +37,26 @@ type ReportFormProps = ComponentProps<"form"> & {
 }
 
 export function ReportForm({ children, className, title, report, ...props }: ReportFormProps) {
-  const form = useForm({
-    resolver: zodResolver(reportSchema),
-    defaultValues: {
-      type: report?.type ?? ReportType.Other,
-      message: report?.message ?? "",
-    },
-  })
+  const resolver = zodResolver(reportSchema)
 
-  // Update report
-  const updateAction = useServerAction(updateReport, {
-    onSuccess: () => {
-      toast.success("Report successfully updated")
+  const { form, action, handleSubmitWithAction } = useHookFormAction(updateReport, resolver, {
+    formProps: {
+      defaultValues: {
+        id: report?.id ?? "",
+        type: report?.type ?? ReportType.Other,
+        message: report?.message ?? "",
+      },
     },
 
-    onError: ({ err }) => {
-      toast.error(err.message)
-    },
-  })
+    actionProps: {
+      onSuccess: () => {
+        toast.success("Report successfully updated")
+      },
 
-  const handleSubmit = form.handleSubmit(data => {
-    updateAction.execute({ id: report.id, ...data })
+      onError: ({ error }) => {
+        toast.error(error.serverError)
+      },
+    },
   })
 
   return (
@@ -72,7 +70,7 @@ export function ReportForm({ children, className, title, report, ...props }: Rep
       </Stack>
 
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmitWithAction}
         className={cx("grid gap-4 @sm:grid-cols-2", className)}
         noValidate
         {...props}
@@ -121,7 +119,7 @@ export function ReportForm({ children, className, title, report, ...props }: Rep
             <Link href="/admin/reports">Cancel</Link>
           </Button>
 
-          <Button size="md" isPending={updateAction.isPending}>
+          <Button size="md" isPending={action.isPending}>
             Update report
           </Button>
         </div>

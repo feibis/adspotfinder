@@ -1,13 +1,14 @@
 "use server"
 
 import { AdType } from "@prisma/client"
-import { z } from "zod"
-import { createServerAction } from "zsa"
+import { redirect } from "next/navigation"
+import { z } from "zod/v4"
 import { env } from "~/env"
+import { actionClient } from "~/lib/safe-actions"
 import { stripe } from "~/services/stripe"
 
-export const createStripeToolCheckout = createServerAction()
-  .input(
+export const createStripeToolCheckout = actionClient
+  .inputSchema(
     z.object({
       priceId: z.string(),
       tool: z.string(),
@@ -15,7 +16,7 @@ export const createStripeToolCheckout = createServerAction()
       coupon: z.string().optional(),
     }),
   )
-  .handler(async ({ input: { priceId, tool, mode, coupon } }) => {
+  .action(async ({ parsedInput: { priceId, tool, mode, coupon } }) => {
     const checkout = await stripe.checkout.sessions.create({
       mode,
       line_items: [{ price: priceId, quantity: 1 }],
@@ -34,15 +35,15 @@ export const createStripeToolCheckout = createServerAction()
       throw new Error("Unable to create a new Stripe Checkout Session.")
     }
 
-    // Return the checkout session url
-    return checkout.url
+    // Redirect to the checkout session url
+    redirect(checkout.url)
   })
 
-export const createStripeAdsCheckout = createServerAction()
-  .input(
+export const createStripeAdsCheckout = actionClient
+  .inputSchema(
     z.array(
       z.object({
-        type: z.nativeEnum(AdType),
+        type: z.enum(AdType),
         price: z.coerce.number(),
         duration: z.coerce.number(),
         metadata: z.object({
@@ -52,7 +53,7 @@ export const createStripeAdsCheckout = createServerAction()
       }),
     ),
   )
-  .handler(async ({ input: ads }) => {
+  .action(async ({ parsedInput: ads }) => {
     const customer = await stripe.customers.create()
 
     const checkout = await stripe.checkout.sessions.create({
@@ -106,6 +107,6 @@ export const createStripeAdsCheckout = createServerAction()
       throw new Error("Unable to create a new Stripe Checkout Session.")
     }
 
-    // Return the checkout session url
-    return checkout.url
+    // Redirect to the checkout session url
+    redirect(checkout.url)
   })

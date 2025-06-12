@@ -2,9 +2,9 @@
 
 import type { Tool } from "@prisma/client"
 import { TrashIcon } from "lucide-react"
+import { useAction } from "next-safe-action/hooks"
 import type { ComponentProps } from "react"
 import { toast } from "sonner"
-import { useServerAction } from "zsa-react"
 import { Button } from "~/components/common/button"
 import {
   Dialog,
@@ -30,15 +30,15 @@ export const ToolsDeleteDialog = ({
   onSuccess,
   ...props
 }: ToolsDeleteDialogProps) => {
-  const { execute, isPending } = useServerAction(deleteTools, {
+  const { execute, isPending } = useAction(deleteTools, {
     onSuccess: () => {
       props.onOpenChange?.(false)
       toast.success("Tools deleted")
       onSuccess?.()
     },
 
-    onError: ({ err }) => {
-      toast.error(err.message)
+    onError: ({ error }) => {
+      toast.error(error.serverError)
     },
   })
 

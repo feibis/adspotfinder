@@ -2,9 +2,9 @@
 
 import type { User } from "@prisma/client"
 import { TrashIcon } from "lucide-react"
+import { useAction } from "next-safe-action/hooks"
 import type { ComponentProps } from "react"
 import { toast } from "sonner"
-import { useServerAction } from "zsa-react"
 import { Button } from "~/components/common/button"
 import {
   Dialog,
@@ -30,15 +30,15 @@ export const UsersDeleteDialog = ({
   onSuccess,
   ...props
 }: UsersDeleteDialogProps) => {
-  const { execute, isPending } = useServerAction(deleteUsers, {
+  const { execute, isPending } = useAction(deleteUsers, {
     onSuccess: () => {
       props.onOpenChange?.(false)
       toast.success("Users deleted")
       onSuccess?.()
     },
 
-    onError: ({ err }) => {
-      toast.error(err.message)
+    onError: ({ error }) => {
+      toast.error(error.serverError)
     },
   })
 

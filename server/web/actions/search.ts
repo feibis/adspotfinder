@@ -1,13 +1,13 @@
 "use server"
 
 import { ToolStatus } from "@prisma/client"
-import { z } from "zod"
-import { createServerAction } from "zsa"
+import { z } from "zod/v4"
+import { actionClient } from "~/lib/safe-actions"
 import { db } from "~/services/db"
 
-export const searchItems = createServerAction()
-  .input(z.object({ query: z.string() }))
-  .handler(async ({ input: { query } }) => {
+export const searchItems = actionClient
+  .inputSchema(z.object({ query: z.string() }))
+  .action(async ({ parsedInput: { query } }) => {
     const start = performance.now()
 
     const [tools, categories, tags] = await Promise.all([

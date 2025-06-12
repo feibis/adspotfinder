@@ -1,12 +1,11 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { useRouter } from "next/navigation"
 import { posthog } from "posthog-js"
 import type { ComponentProps } from "react"
-import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { useServerAction } from "zsa-react"
 import { Button } from "~/components/common/button"
 import { Checkbox } from "~/components/common/checkbox"
 import {
@@ -24,52 +23,56 @@ import { FeatureNudge } from "~/components/web/feature-nudge"
 import { useSession } from "~/lib/auth-client"
 import { isToolPublished } from "~/lib/tools"
 import { submitTool } from "~/server/web/actions/submit"
-import { type SubmitToolSchema, submitToolSchema } from "~/server/web/shared/schema"
+import { submitToolSchema } from "~/server/web/shared/schema"
 import { cx } from "~/utils/cva"
 
 export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
   const router = useRouter()
   const { data: session } = useSession()
+  const resolver = zodResolver(submitToolSchema)
 
-  const form = useForm<SubmitToolSchema>({
-    resolver: zodResolver(submitToolSchema),
-    values: {
-      name: "",
-      websiteUrl: "",
-      submitterName: session?.user.name || "",
-      submitterEmail: session?.user.email || "",
-      submitterNote: "",
-      newsletterOptIn: true,
+  const { form, action, handleSubmitWithAction } = useHookFormAction(submitTool, resolver, {
+    formProps: {
+      defaultValues: {
+        name: "",
+        websiteUrl: "",
+        submitterName: session?.user.name || "",
+        submitterEmail: session?.user.email || "",
+        submitterNote: "",
+        newsletterOptIn: true,
+      },
     },
-  })
 
-  const { error, execute, isPending } = useServerAction(submitTool, {
-    onSuccess: ({ data }) => {
-      form.reset()
+    actionProps: {
+      onSuccess: ({ data }) => {
+        form.reset()
 
-      // Capture event
-      posthog.capture("submit_tool", { slug: data.slug })
+        if (!data) return
 
-      if (isToolPublished(data)) {
-        if (data.isFeatured) {
-          toast.info(`${data.name} has already been published.`)
+        // Capture event
+        posthog.capture("submit_tool", { slug: data.slug })
+
+        if (isToolPublished(data)) {
+          if (data.isFeatured) {
+            toast.info(`${data.name} has already been published.`)
+          } else {
+            toast.custom(t => <FeatureNudge tool={data} t={t} />, {
+              duration: Number.POSITIVE_INFINITY,
+            })
+          }
+          router.push(`/${data.slug}`)
         } else {
-          toast.custom(t => <FeatureNudge tool={data} t={t} />, {
-            duration: Number.POSITIVE_INFINITY,
-          })
+          toast.success(`${data.name} has been submitted.`)
+          router.push(`/submit/${data.slug}`)
         }
-        router.push(`/${data.slug}`)
-      } else {
-        toast.success(`${data.name} has been submitted.`)
-        router.push(`/submit/${data.slug}`)
-      }
+      },
     },
   })
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(data => execute(data))}
+        onSubmit={handleSubmitWithAction}
         className={cx("grid w-full gap-5 sm:grid-cols-2", className)}
         noValidate
         {...props}
@@ -83,7 +86,7 @@ export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
                 <FormItem>
                   <FormLabel isRequired>Your Name:</FormLabel>
                   <FormControl>
-                    <Input type="text" size="lg" placeholder="John Doe" data-1p-ignore {...field} />
+                    <Input size="lg" placeholder="John Doe" data-1p-ignore {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -119,7 +122,7 @@ export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
             <FormItem>
               <FormLabel isRequired>Name:</FormLabel>
               <FormControl>
-                <Input type="text" size="lg" placeholder="PostHog" data-1p-ignore {...field} />
+                <Input size="lg" placeholder="PostHog" data-1p-ignore {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -169,12 +172,14 @@ export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
         />
 
         <div className="col-span-full">
-          <Button variant="primary" isPending={isPending} className="flex min-w-32">
+          <Button variant="primary" isPending={action.isPending} className="flex min-w-32">
             Submit
           </Button>
         </div>
 
-        {error && <Hint className="col-span-full">{error.message}</Hint>}
+        {action.result.serverError && (
+          <Hint className="col-span-full">{action.result.serverError}</Hint>
+        )}
       </form>
     </Form>
   )

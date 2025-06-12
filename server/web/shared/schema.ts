@@ -1,6 +1,6 @@
 import { ReportType } from "@prisma/client"
 import { createSearchParamsCache, parseAsInteger, parseAsString } from "nuqs/server"
-import { z } from "zod"
+import { z } from "zod/v4"
 import { config } from "~/config"
 
 export const filterParamsSchema = {
@@ -16,23 +16,23 @@ export type FilterSchema = Awaited<ReturnType<typeof filterParamsCache.parse>>
 
 export const submitToolSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  websiteUrl: z.string().min(1, "Website is required").url("Invalid URL").trim(),
+  websiteUrl: z.url("Invalid URL").min(1, "Website is required").trim(),
   submitterName: z.string().min(1, "Your name is required"),
-  submitterEmail: z.string().email("Please enter a valid email address"),
+  submitterEmail: z.email("Please enter a valid email address"),
   submitterNote: z.string().max(200),
   newsletterOptIn: z.boolean().optional().default(true),
 })
 
 export const newsletterSchema = z.object({
   captcha: z.literal("").optional(),
-  value: z.string().email("Please enter a valid email address"),
+  value: z.email("Please enter a valid email address"),
   unsubscribed: z.boolean().default(false),
   firstName: z.string().optional(),
   lastName: z.string().optional(),
 })
 
 export const reportSchema = z.object({
-  type: z.nativeEnum(ReportType),
+  type: z.enum(ReportType),
   message: z.string().optional(),
 })
 

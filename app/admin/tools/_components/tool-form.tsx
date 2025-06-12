@@ -1,15 +1,15 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { formatDateTime, getRandomString, isValidUrl, slugify } from "@primoui/utils"
 import { type Tool, ToolStatus } from "@prisma/client"
 import { EyeIcon, PencilIcon, RefreshCwIcon } from "lucide-react"
+import { useAction } from "next-safe-action/hooks"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { type ComponentProps, useState } from "react"
-import { useForm } from "react-hook-form"
+import { type ComponentProps, useRef, useState } from "react"
 import { toast } from "sonner"
-import { useServerAction } from "zsa-react"
 import { ToolActions } from "~/app/admin/tools/_components/tool-actions"
 import { ToolGenerateContent } from "~/app/admin/tools/_components/tool-generate-content"
 import { ToolPublishActions } from "~/app/admin/tools/_components/tool-publish-actions"
@@ -72,29 +72,56 @@ export function ToolForm({
   ...props
 }: ToolFormProps) {
   const router = useRouter()
+  const resolver = zodResolver(toolSchema)
   const [isPreviewing, setIsPreviewing] = useState(false)
   const [isStatusPending, setIsStatusPending] = useState(false)
-  const [originalStatus, setOriginalStatus] = useState(tool?.status ?? ToolStatus.Draft)
+  const originalStatus = useRef(tool?.status ?? ToolStatus.Draft)
 
-  const form = useForm({
-    resolver: zodResolver(toolSchema),
-    defaultValues: {
-      name: tool?.name ?? "",
-      slug: tool?.slug ?? "",
-      tagline: tool?.tagline ?? "",
-      description: tool?.description ?? "",
-      content: tool?.content ?? "",
-      websiteUrl: tool?.websiteUrl ?? "",
-      faviconUrl: tool?.faviconUrl ?? "",
-      screenshotUrl: tool?.screenshotUrl ?? "",
-      isFeatured: tool?.isFeatured ?? false,
-      submitterName: tool?.submitterName ?? "",
-      submitterEmail: tool?.submitterEmail ?? "",
-      submitterNote: tool?.submitterNote ?? "",
-      status: tool?.status ?? ToolStatus.Draft,
-      publishedAt: tool?.publishedAt ?? undefined,
-      categories: tool?.categories.map(c => c.id) ?? [],
-      notifySubmitter: true,
+  const { form, action } = useHookFormAction(upsertTool, resolver, {
+    formProps: {
+      defaultValues: {
+        id: tool?.id ?? "",
+        name: tool?.name ?? "",
+        slug: tool?.slug ?? "",
+        tagline: tool?.tagline ?? "",
+        description: tool?.description ?? "",
+        content: tool?.content ?? "",
+        websiteUrl: tool?.websiteUrl ?? "",
+        faviconUrl: tool?.faviconUrl ?? "",
+        screenshotUrl: tool?.screenshotUrl ?? "",
+        isFeatured: tool?.isFeatured ?? false,
+        submitterName: tool?.submitterName ?? "",
+        submitterEmail: tool?.submitterEmail ?? "",
+        submitterNote: tool?.submitterNote ?? "",
+        status: tool?.status ?? ToolStatus.Draft,
+        publishedAt: tool?.publishedAt ?? undefined,
+        categories: tool?.categories.map(c => c.id) ?? [],
+        notifySubmitter: true,
+      },
+    },
+
+    actionProps: {
+      onSuccess: ({ data }) => {
+        if (!data) return
+
+        if (data.status !== originalStatus.current) {
+          toast.success(<ToolStatusChange tool={data} />)
+          originalStatus.current = data.status
+        } else {
+          toast.success(`Tool successfully ${tool ? "updated" : "created"}`)
+        }
+
+        // Redirect to the new tool
+        router.push(`/admin/tools/${data.slug}`)
+      },
+
+      onError: ({ error }) => {
+        toast.error(error.serverError)
+      },
+
+      onSettled: () => {
+        setIsStatusPending(false)
+      },
     },
   })
 
@@ -115,48 +142,24 @@ export function ToolForm({
     "description",
   ])
 
-  // Upsert tool
-  const upsertAction = useServerAction(upsertTool, {
-    onSuccess: ({ data }) => {
-      // If status has changed, show a status change notification
-      if (data.status !== originalStatus) {
-        toast.success(<ToolStatusChange tool={data} />)
-        setOriginalStatus(data.status)
-      }
-
-      // Otherwise, just show a success message
-      else {
-        toast.success(`Tool successfully ${tool ? "updated" : "created"}`)
-      }
-
-      // If not updating a tool, or slug has changed, redirect to the new tool
-      if (!tool || data.slug !== tool?.slug) {
-        router.push(`/admin/tools/${data.slug}`)
-      }
-    },
-
-    onError: ({ err }) => toast.error(err.message),
-    onFinish: () => setIsStatusPending(false),
-  })
-
   // Generate favicon
-  const faviconAction = useServerAction(generateFavicon, {
+  const faviconAction = useAction(generateFavicon, {
     onSuccess: ({ data }) => {
       toast.success("Favicon successfully generated. Please save the tool to update.")
       form.setValue("faviconUrl", data)
     },
 
-    onError: ({ err }) => toast.error(err.message),
+    onError: ({ error }) => toast.error(error.serverError),
   })
 
   // Generate screenshot
-  const screenshotAction = useServerAction(generateScreenshot, {
+  const screenshotAction = useAction(generateScreenshot, {
     onSuccess: ({ data }) => {
       toast.success("Screenshot successfully generated. Please save the tool to update.")
       form.setValue("screenshotUrl", data)
     },
 
-    onError: ({ err }) => toast.error(err.message),
+    onError: ({ error }) => toast.error(error.serverError),
   })
 
   const handleSubmit = form.handleSubmit((data, event) => {
@@ -167,7 +170,7 @@ export function ToolForm({
       setIsStatusPending(true)
     }
 
-    upsertAction.execute({ id: tool?.id, ...data })
+    action.execute(data)
   })
 
   const handleStatusSubmit = (status: ToolStatus, publishedAt: Date | null) => {
@@ -513,7 +516,7 @@ export function ToolForm({
 
           <ToolPublishActions
             tool={tool}
-            isPending={!isStatusPending && upsertAction.isPending}
+            isPending={!isStatusPending && action.isPending}
             isStatusPending={isStatusPending}
             onStatusSubmit={handleStatusSubmit}
           />

@@ -1,12 +1,11 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { slugify } from "@primoui/utils"
 import { useRouter } from "next/navigation"
 import type { ComponentProps } from "react"
-import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { useServerAction } from "zsa-react"
 import { CategoryActions } from "~/app/admin/categories/_components/category-actions"
 import { RelationSelector } from "~/components/admin/relation-selector"
 import { Button } from "~/components/common/button"
@@ -43,14 +42,28 @@ export function CategoryForm({
   ...props
 }: CategoryFormProps) {
   const router = useRouter()
+  const resolver = zodResolver(categorySchema)
 
-  const form = useForm({
-    resolver: zodResolver(categorySchema),
-    defaultValues: {
-      name: category?.name ?? "",
-      slug: category?.slug ?? "",
-      label: category?.label ?? "",
-      tools: category?.tools.map(t => t.id) ?? [],
+  const { form, action, handleSubmitWithAction } = useHookFormAction(upsertCategory, resolver, {
+    formProps: {
+      defaultValues: {
+        id: category?.id ?? "",
+        name: category?.name ?? "",
+        slug: category?.slug ?? "",
+        label: category?.label ?? "",
+        tools: category?.tools.map(t => t.id) ?? [],
+      },
+    },
+
+    actionProps: {
+      onSuccess: ({ data }) => {
+        toast.success(`Category successfully ${category ? "updated" : "created"}`)
+        router.push(`/admin/categories/${data?.slug}`)
+      },
+
+      onError: ({ error }) => {
+        toast.error(error.serverError)
+      },
     },
   })
 
@@ -72,24 +85,6 @@ export function CategoryForm({
     enabled: !category,
   })
 
-  // Upsert category
-  const upsertAction = useServerAction(upsertCategory, {
-    onSuccess: ({ data }) => {
-      toast.success(`Category successfully ${category ? "updated" : "created"}`)
-
-      // If not updating a category, or slug has changed, redirect to the new category
-      if (!category || data.slug !== category?.slug) {
-        router.push(`/admin/categories/${data.slug}`)
-      }
-    },
-
-    onError: ({ err }) => toast.error(err.message),
-  })
-
-  const handleSubmit = form.handleSubmit(data => {
-    upsertAction.execute({ id: category?.id, ...data })
-  })
-
   return (
     <Form {...form}>
       <Stack className="justify-between">
@@ -101,7 +96,7 @@ export function CategoryForm({
       </Stack>
 
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmitWithAction}
         className={cx("grid gap-4 @sm:grid-cols-2", className)}
         noValidate
         {...props}
@@ -114,7 +109,7 @@ export function CategoryForm({
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input data-1p-ignore {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -170,7 +165,7 @@ export function CategoryForm({
             <Link href="/admin/categories">Cancel</Link>
           </Button>
 
-          <Button size="md" isPending={upsertAction.isPending}>
+          <Button size="md" isPending={action.isPending}>
             {category ? "Update category" : "Create category"}
           </Button>
         </div>

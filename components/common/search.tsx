@@ -3,11 +3,11 @@
 import { type HotkeyItem, useDebouncedState, useHotkeys } from "@mantine/hooks"
 import { getUrlHostname } from "@primoui/utils"
 import { LoaderIcon } from "lucide-react"
+import type { InferSafeActionFnResult } from "next-safe-action"
+import { useAction } from "next-safe-action/hooks"
 import { usePathname, useRouter } from "next/navigation"
 import posthog from "posthog-js"
 import { type ReactNode, useEffect, useRef, useState } from "react"
-import type { inferServerActionReturnData } from "zsa"
-import { useServerAction } from "zsa-react"
 import {
   CommandDialog,
   CommandEmpty,
@@ -68,7 +68,7 @@ export const Search = () => {
   const router = useRouter()
   const pathname = usePathname()
   const search = useSearch()
-  const [results, setResults] = useState<inferServerActionReturnData<typeof searchItems>>()
+  const [results, setResults] = useState<InferSafeActionFnResult<typeof searchItems>["data"]>()
   const [query, setQuery] = useDebouncedState("", 250)
   const listRef = useRef<HTMLDivElement>(null)
 
@@ -137,7 +137,7 @@ export const Search = () => {
 
   useHotkeys(hotkeys, [], true)
 
-  const { execute, isPending } = useServerAction(searchItems, {
+  const { execute, isPending } = useAction(searchItems, {
     onSuccess: ({ data }) => {
       setResults(data)
 
@@ -148,8 +148,8 @@ export const Search = () => {
       }
     },
 
-    onError: ({ err }) => {
-      console.error(err)
+    onError: ({ error }) => {
+      console.error(error)
       setResults(undefined)
     },
   })

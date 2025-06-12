@@ -6,7 +6,7 @@ import {
   parseAsString,
   parseAsStringEnum,
 } from "nuqs/server"
-import { z } from "zod"
+import { z } from "zod/v4"
 import { getSortingStateParser } from "~/lib/parsers"
 
 export const reportsTableParamsSchema = {
@@ -17,14 +17,15 @@ export const reportsTableParamsSchema = {
   from: parseAsString.withDefault(""),
   to: parseAsString.withDefault(""),
   operator: parseAsStringEnum(["and", "or"]).withDefault("and"),
-  type: parseAsArrayOf(z.nativeEnum(ReportType)).withDefault([]),
+  type: parseAsArrayOf(z.enum(ReportType)).withDefault([]),
 }
 
 export const reportsTableParamsCache = createSearchParamsCache(reportsTableParamsSchema)
 export type ReportsTableSchema = Awaited<ReturnType<typeof reportsTableParamsCache.parse>>
 
 export const reportSchema = z.object({
-  type: z.nativeEnum(ReportType),
+  id: z.string().optional(),
+  type: z.enum(ReportType),
   message: z.string().optional(),
   userId: z.string().optional(),
   toolId: z.string().optional(),

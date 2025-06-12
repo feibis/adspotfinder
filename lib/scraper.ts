@@ -1,6 +1,5 @@
 import wretch from "wretch"
 import { env } from "~/env"
-import { getErrorMessage } from "~/lib/handle-error"
 import { tryCatch } from "~/utils/helpers"
 
 type JinaResponse = {
@@ -33,7 +32,7 @@ export const scrapeWebsiteData = async (url: string) => {
   const { data, error } = await tryCatch(jinaApi.post({ url }).json<JinaResponse>())
 
   if (error) {
-    throw new Error(getErrorMessage(error))
+    throw new Error(error.message)
   }
 
   return data.data

@@ -1,16 +1,16 @@
 "use server"
 
 import { slugify } from "@primoui/utils"
-import { revalidatePath, revalidateTag } from "next/cache"
-import { z } from "zod"
-import { adminProcedure } from "~/lib/safe-actions"
+import { revalidateTag } from "next/cache"
+import { after } from "next/server"
+import { z } from "zod/v4"
+import { adminActionClient } from "~/lib/safe-actions"
 import { tagSchema } from "~/server/admin/tags/schema"
 import { db } from "~/services/db"
 
-export const upsertTag = adminProcedure
-  .createServerAction()
-  .input(tagSchema)
-  .handler(async ({ input: { id, tools, ...input } }) => {
+export const upsertTag = adminActionClient
+  .inputSchema(tagSchema)
+  .action(async ({ parsedInput: { id, tools, ...input } }) => {
     const toolIds = tools?.map(id => ({ id }))
 
     const tag = id
@@ -30,22 +30,24 @@ export const upsertTag = adminProcedure
           },
         })
 
-    revalidateTag("tags")
-    revalidateTag(`tag-${tag.slug}`)
+    after(() => {
+      revalidateTag("tags")
+      revalidateTag(`tag-${tag.slug}`)
+    })
 
     return tag
   })
 
-export const deleteTags = adminProcedure
-  .createServerAction()
-  .input(z.object({ ids: z.array(z.string()) }))
-  .handler(async ({ input: { ids } }) => {
+export const deleteTags = adminActionClient
+  .inputSchema(z.object({ ids: z.array(z.string()) }))
+  .action(async ({ parsedInput: { ids } }) => {
     await db.tag.deleteMany({
       where: { id: { in: ids } },
     })
 
-    revalidatePath("/admin/tags")
-    revalidateTag("tags")
+    after(() => {
+      revalidateTag("tags")
+    })
 
     return true
   })

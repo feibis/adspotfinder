@@ -1,10 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { getUrlHostname } from "@primoui/utils"
+import { useAction } from "next-safe-action/hooks"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { z } from "zod"
-import { useServerAction } from "zsa-react"
+import { z } from "zod/v4"
 import { Button } from "~/components/common/button"
 import {
   Dialog,
@@ -38,7 +38,7 @@ type ToolClaimDialogProps = {
 }
 
 const emailSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.email("Please enter a valid email address"),
 })
 
 const otpSchema = z.object({
@@ -83,25 +83,25 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
     return () => clearInterval(interval)
   }, [cooldownRemaining])
 
-  const { execute: sendOtp, isPending: isSendingOtp } = useServerAction(sendToolClaimOtp, {
+  const { execute: sendOtp, isPending: isSendingOtp } = useAction(sendToolClaimOtp, {
     onSuccess: () => {
       toast.success("OTP code sent to your email")
       setVerificationEmail(emailForm.getValues().email)
       setStep("otp")
       setCooldownRemaining(claimsConfig.resendCooldown)
     },
-    onError: ({ err }) => {
-      toast.error(err.message)
+    onError: ({ error }) => {
+      toast.error(error.serverError)
     },
   })
 
-  const { execute: verifyOtp, isPending: isVerifying } = useServerAction(verifyToolClaimOtp, {
+  const { execute: verifyOtp, isPending: isVerifying } = useAction(verifyToolClaimOtp, {
     onSuccess: () => {
       toast.success(`You've successfully claimed ${tool.name}`)
       setIsOpen(false)
     },
-    onError: ({ err }) => {
-      toast.error(err.message)
+    onError: ({ error }) => {
+      toast.error(error.serverError)
     },
   })
 

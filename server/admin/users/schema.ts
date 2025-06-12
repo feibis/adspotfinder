@@ -5,7 +5,7 @@ import {
   parseAsString,
   parseAsStringEnum,
 } from "nuqs/server"
-import { z } from "zod"
+import { z } from "zod/v4"
 import { getSortingStateParser } from "~/lib/parsers"
 
 export const usersTableParamsSchema = {
@@ -22,9 +22,10 @@ export const usersTableParamsCache = createSearchParamsCache(usersTableParamsSch
 export type UsersTableSchema = Awaited<ReturnType<typeof usersTableParamsCache.parse>>
 
 export const userSchema = z.object({
+  id: z.string().optional(),
   name: z.string().optional(),
-  email: z.string().email("Invalid email").optional().or(z.literal("")),
-  image: z.string().url().optional().or(z.literal("")),
+  email: z.email("Invalid email").optional().or(z.literal("")),
+  image: z.url().optional().or(z.literal("")),
   role: z.enum(["admin", "user"]).optional(),
 })
 

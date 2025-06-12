@@ -1,6 +1,6 @@
 import { google } from "@ai-sdk/google"
 import { streamObject } from "ai"
-import { z } from "zod"
+import { z } from "zod/v4"
 import { withAdminAuth } from "~/lib/auth-hoc"
 import { scrapeWebsiteData } from "~/lib/scraper"
 import { contentSchema } from "~/server/admin/shared/schema"
@@ -8,7 +8,7 @@ import { contentSchema } from "~/server/admin/shared/schema"
 export const maxDuration = 60
 
 const generateContentSchema = z.object({
-  url: z.string().url(),
+  url: z.url(),
 })
 
 export const POST = withAdminAuth(async req => {
@@ -24,7 +24,6 @@ export const POST = withAdminAuth(async req => {
       You do not use any catchphrases like "Empower", "Streamline" etc.
     `,
     temperature: 0.3,
-    maxTokens: 5000,
     prompt: `
       Provide me details for the following data:
       Title: ${scrapedData.title}

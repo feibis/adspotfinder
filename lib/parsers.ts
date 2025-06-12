@@ -1,6 +1,6 @@
 import type { Row } from "@tanstack/react-table"
 import { createParser } from "nuqs/server"
-import { z } from "zod"
+import { z } from "zod/v4"
 import type { ExtendedSortingState } from "~/types"
 
 const sortingItemSchema = z.object({

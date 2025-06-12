@@ -2,19 +2,18 @@
 
 import { slugify } from "@primoui/utils"
 import { ToolStatus } from "@prisma/client"
-import { revalidatePath, revalidateTag } from "next/cache"
+import { revalidateTag } from "next/cache"
 import { after } from "next/server"
-import { z } from "zod"
+import { z } from "zod/v4"
 import { removeS3Directories } from "~/lib/media"
 import { notifySubmitterOfToolPublished, notifySubmitterOfToolScheduled } from "~/lib/notifications"
-import { adminProcedure } from "~/lib/safe-actions"
+import { adminActionClient } from "~/lib/safe-actions"
 import { toolSchema } from "~/server/admin/tools/schema"
 import { db } from "~/services/db"
 
-export const upsertTool = adminProcedure
-  .createServerAction()
-  .input(toolSchema)
-  .handler(async ({ input: { id, categories, notifySubmitter, ...input } }) => {
+export const upsertTool = adminActionClient
+  .inputSchema(toolSchema)
+  .action(async ({ parsedInput: { id, categories, notifySubmitter, ...input } }) => {
     const categoryIds = categories?.map(id => ({ id }))
     const existingTool = id ? await db.tool.findUnique({ where: { id } }) : null
 
@@ -38,29 +37,32 @@ export const upsertTool = adminProcedure
         })
 
     // Revalidate the tools
-    revalidateTag("tools")
-    revalidateTag(`tool-${tool.slug}`)
+    after(() => {
+      revalidateTag("tools")
+      revalidateTag(`tool-${tool.slug}`)
 
-    if (tool.status === ToolStatus.Scheduled) {
-      // Revalidate the schedule if the tool is scheduled
-      revalidateTag("schedule")
-    }
+      if (tool.status === ToolStatus.Scheduled) {
+        // Revalidate the schedule if the tool is scheduled
+        revalidateTag("schedule")
+      }
+    })
 
-    if (notifySubmitter && (!existingTool || existingTool.status !== tool.status)) {
-      // Notify the submitter of the tool published
-      after(async () => await notifySubmitterOfToolPublished(tool))
+    after(async () => {
+      if (notifySubmitter && (!existingTool || existingTool.status !== tool.status)) {
+        // Notify the submitter of the tool published
+        await notifySubmitterOfToolPublished(tool)
 
-      // Notify the submitter of the tool scheduled for publication
-      after(async () => await notifySubmitterOfToolScheduled(tool))
-    }
+        // Notify the submitter of the tool scheduled for publication
+        await notifySubmitterOfToolScheduled(tool)
+      }
+    })
 
     return tool
   })
 
-export const deleteTools = adminProcedure
-  .createServerAction()
-  .input(z.object({ ids: z.array(z.string()) }))
-  .handler(async ({ input: { ids } }) => {
+export const deleteTools = adminActionClient
+  .inputSchema(z.object({ ids: z.array(z.string()) }))
+  .action(async ({ parsedInput: { ids } }) => {
     const tools = await db.tool.findMany({
       where: { id: { in: ids } },
       select: { slug: true },
@@ -70,8 +72,9 @@ export const deleteTools = adminProcedure
       where: { id: { in: ids } },
     })
 
-    revalidatePath("/admin/tools")
-    revalidateTag("tools")
+    after(() => {
+      revalidateTag("tools")
+    })
 
     // Remove the tool images from S3 asynchronously
     after(async () => await removeS3Directories(tools.map(({ slug }) => `tools/${slug}`)))
