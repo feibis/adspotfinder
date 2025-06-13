@@ -70,7 +70,7 @@ export const CTAForm = ({
         />
 
         <Box focusWithin>
-          <div className="flex w-full rounded-lg">
+          <div className="flex w-full bg-background rounded-lg">
             <FormField
               control={form.control}
               name="value"

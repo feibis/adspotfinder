@@ -19,7 +19,7 @@ import { OverlayImage } from "~/components/web/overlay-image"
 import { ShareButtons } from "~/components/web/share-buttons"
 import { ToolActions } from "~/components/web/tools/tool-actions"
 import { ToolListSkeleton } from "~/components/web/tools/tool-list"
-import { FaviconImage } from "~/components/web/ui/favicon"
+import { Favicon } from "~/components/web/ui/favicon"
 import { IntroDescription } from "~/components/web/ui/intro"
 import { Section } from "~/components/web/ui/section"
 import { Tag } from "~/components/web/ui/tag"
@@ -78,7 +78,7 @@ export default async function ToolPage(props: PageProps) {
           <div className="flex flex-1 flex-col items-start gap-6 max-md:order-1 md:gap-8">
             <div className="flex w-full flex-col items-start gap-y-4">
               <Stack className="w-full">
-                <FaviconImage src={tool.faviconUrl} title={tool.name} className="size-8" />
+                <Favicon src={tool.faviconUrl} title={tool.name} className="size-8" />
 
                 <Stack className="flex-1 min-w-0">
                   <H2 as="h1" className="leading-tight! truncate">

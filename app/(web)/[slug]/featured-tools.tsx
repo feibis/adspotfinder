@@ -40,7 +40,12 @@ export const FeaturedTools = async ({ ...props }: ComponentProps<typeof Card>) =
                 source: "supporter",
               }}
             >
-              <Favicon src={tool.faviconUrl} title={tool.name} className="size-9 rounded-lg" />
+              <Favicon
+                src={tool.faviconUrl}
+                title={tool.name}
+                className="size-9 rounded-lg"
+                contained
+              />
             </ExternalLink>
           </ToolHoverCard>
         ))}

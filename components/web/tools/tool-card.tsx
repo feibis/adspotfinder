@@ -26,7 +26,7 @@ const ToolCard = ({ tool, isRelated, ...props }: ToolCardProps) => {
   return (
     <Card {...props}>
       <CardHeader wrap={false}>
-        <Favicon src={tool.faviconUrl} title={tool.name} />
+        <Favicon src={tool.faviconUrl} title={tool.name} contained />
 
         <H4 as="h3" className="truncate">
           <Link href={`/${tool.slug}`}>
@@ -69,7 +69,7 @@ const ToolCardSkeleton = () => {
   return (
     <Card hover={false} className="items-stretch select-none">
       <CardHeader>
-        <Favicon src="/favicon.png" className="animate-pulse opacity-25 grayscale" />
+        <Favicon src="/favicon.png" className="animate-pulse opacity-25 grayscale" contained />
 
         <H4 className="w-2/3">
           <Skeleton>&nbsp;</Skeleton>

@@ -15,7 +15,7 @@ import {
 import { H4 } from "~/components/common/heading"
 import { Skeleton } from "~/components/common/skeleton"
 import { ExternalLink } from "~/components/web/external-link"
-import { Favicon, FaviconImage } from "~/components/web/ui/favicon"
+import { Favicon } from "~/components/web/ui/favicon"
 import { LogoSymbol } from "~/components/web/ui/logo-symbol"
 import { config } from "~/config"
 import type { AdOne } from "~/server/web/ads/payloads"
@@ -51,7 +51,7 @@ const AdCard = async ({ className, type, where, fallbackAd, ...props }: AdCardPr
         </CardBadges>
 
         <CardHeader wrap={false}>
-          <Favicon src={ad.faviconUrl ?? "/favicon.png"} title={ad.name} />
+          <Favicon src={ad.faviconUrl ?? "/favicon.png"} title={ad.name} contained />
 
           <H4 as="strong" className="truncate">
             {ad.name}
@@ -65,7 +65,7 @@ const AdCard = async ({ className, type, where, fallbackAd, ...props }: AdCardPr
         </Button>
 
         <CardIcon>
-          {isDefault ? <LogoSymbol /> : <FaviconImage src={ad.faviconUrl} title={ad.name} />}
+          {isDefault ? <LogoSymbol /> : <Favicon src={ad.faviconUrl} title={ad.name} />}
         </CardIcon>
       </ExternalLink>
     </Card>
@@ -80,7 +80,7 @@ const AdCardSkeleton = ({ className }: ComponentProps<typeof Card>) => {
   return (
     <Card hover={false} className={cx("items-stretch select-none", className)}>
       <CardHeader>
-        <Favicon src="/favicon.png" className="animate-pulse opacity-25 grayscale" />
+        <Favicon src="/favicon.png" className="animate-pulse opacity-25 grayscale" contained />
 
         <H4 className="w-2/3">
           <Skeleton>&nbsp;</Skeleton>

@@ -1,47 +1,45 @@
-import type Image from "next/image"
 import type { ComponentProps } from "react"
-import { cx } from "~/utils/cva"
+import { cva, cx } from "~/utils/cva"
+import type { VariantProps } from "~/utils/cva"
 
-type FaviconProps = ComponentProps<"div"> & {
-  src: string | null
-  title?: string | null
-}
+const faviconVariants = cva({
+  base: "size-9 rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal",
+  variants: {
+    contained: {
+      true: "p-[0.1875em] border",
+    },
+  },
+  defaultVariants: {
+    contained: false,
+  },
+})
 
-const Favicon = ({ className, src, title, ...props }: FaviconProps) => {
-  if (!src) return null
+type FaviconProps = Omit<ComponentProps<"img">, "src" | "alt" | "width" | "height"> &
+  VariantProps<typeof faviconVariants> & {
+    src?: string | null
+    name?: string
+    size?: number
+  }
 
-  return (
-    <div
-      className={cx(
-        "flex size-9 items-center justify-center shrink-0 rounded-md border bg-accent p-1",
-        className,
-      )}
-      {...props}
-    >
-      <FaviconImage src={src} title={title} className="size-full" />
-    </div>
-  )
-}
-
-type FaviconImageProps = Omit<ComponentProps<typeof Image>, "src" | "alt"> & {
-  src: string | null
-  title?: string | null
-}
-
-const FaviconImage = ({ className, src, title, ...props }: FaviconImageProps) => {
+export const Favicon = ({
+  className,
+  src,
+  title,
+  contained,
+  size = 64,
+  ...props
+}: FaviconProps) => {
   if (!src) return null
 
   return (
     <img
       src={src}
-      alt={title ? `A favicon of ${title}` : ""}
+      alt={title ? `Favicon of ${title}` : "Favicon"}
       loading="lazy"
-      width="64"
-      height="64"
-      className={cx("aspect-square size-9 rounded-sm bg-accent", className)}
+      width={size}
+      height={size}
+      className={cx(faviconVariants({ contained, className }))}
       {...props}
     />
   )
 }
-
-export { Favicon, FaviconImage }
