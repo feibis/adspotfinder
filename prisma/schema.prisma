@@ -150,12 +150,13 @@ model Tool {
 }
 
 model Category {
-  id        String   @id @default(cuid())
-  name      String   @db.Citext
-  slug      String   @unique
-  label     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  name        String   @db.Citext
+  slug        String   @unique
+  label       String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // Implicit relation
   tools Tool[]

@@ -51,6 +51,7 @@ export function CategoryForm({
         name: category?.name ?? "",
         slug: category?.slug ?? "",
         label: category?.label ?? "",
+        description: category?.description ?? "",
         tools: category?.tools.map(t => t.id) ?? [],
       },
     },
@@ -137,6 +138,20 @@ export function CategoryForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Label</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem className="col-span-full">
+              <FormLabel>Description</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>

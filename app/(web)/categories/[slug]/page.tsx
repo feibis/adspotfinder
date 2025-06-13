@@ -1,3 +1,5 @@
+import { lcFirst } from "@primoui/utils"
+import { noCase } from "change-case"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import type { SearchParams } from "nuqs/server"
@@ -31,7 +33,7 @@ const getMetadata = (category: CategoryOne): Metadata => {
 
   return {
     title,
-    description: `A curated collection of the best ${title}.`,
+    description: `A curated collection of the best ${lcFirst(category.description ?? noCase(title))}`,
   }
 }
 

@@ -34,14 +34,54 @@ async function main() {
   // Create categories
   const categories = await prisma.category.createMany({
     data: [
-      { name: "Frontend", slug: "frontend", label: "Frontend Development" },
-      { name: "Backend", slug: "backend", label: "Backend Development" },
-      { name: "DevOps", slug: "devops", label: "DevOps & Deployment" },
-      { name: "Design Tools", slug: "design-tools", label: "Design & UI/UX" },
-      { name: "Productivity", slug: "productivity", label: "Productivity Tools" },
-      { name: "Testing", slug: "testing", label: "Testing & QA" },
-      { name: "Learning", slug: "learning", label: "Learning Resources" },
-      { name: "AI Tools", slug: "ai-tools", label: "AI & Machine Learning" },
+      {
+        name: "Frontend",
+        slug: "frontend",
+        label: "Frontend Development",
+        description: "Tools for building the user interface of a website or application.",
+      },
+      {
+        name: "Backend",
+        slug: "backend",
+        label: "Backend Development",
+        description: "Tools for building the server-side of a website or application.",
+      },
+      {
+        name: "DevOps",
+        slug: "devops",
+        label: "DevOps & Deployment",
+        description: "Tools for deploying and managing applications.",
+      },
+      {
+        name: "Design Tools",
+        slug: "design-tools",
+        label: "Design & UI/UX",
+        description: "Tools for designing and creating user interfaces.",
+      },
+      {
+        name: "Productivity",
+        slug: "productivity",
+        label: "Productivity Tools",
+        description: "Tools for increasing productivity and efficiency.",
+      },
+      {
+        name: "Testing",
+        slug: "testing",
+        label: "Testing & QA",
+        description: "Tools for testing and quality assurance.",
+      },
+      {
+        name: "Learning",
+        slug: "learning",
+        label: "Learning Resources",
+        description: "Tools for learning and improving skills.",
+      },
+      {
+        name: "AI Tools",
+        slug: "ai-tools",
+        label: "AI & Machine Learning",
+        description: "Tools for using AI and machine learning.",
+      },
     ],
   })
 
