@@ -11,14 +11,9 @@ import type { ToolMany } from "~/server/web/tools/payloads"
 
 type ToolCardProps = ComponentProps<typeof Card> & {
   tool: ToolMany
-
-  /**
-   * Disables the view transition.
-   */
-  isRelated?: boolean
 }
 
-const ToolCard = ({ tool, isRelated, ...props }: ToolCardProps) => {
+const ToolCard = ({ tool, ...props }: ToolCardProps) => {
   const maxCategories = 2
   const visibleCategories = tool.categories.slice(0, maxCategories)
   const hiddenCount = tool.categories.length - maxCategories
