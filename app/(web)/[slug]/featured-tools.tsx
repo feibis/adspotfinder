@@ -27,7 +27,7 @@ export const FeaturedTools = async ({ ...props }: ComponentProps<typeof Card>) =
         <Note>{siteConfig.name} is made possible by the following supporters:</Note>
       </Stack>
 
-      <Stack className="gap-2">
+      <Stack className="gap-[7px]">
         {tools.map(tool => (
           <ToolHoverCard key={tool.slug} tool={tool}>
             <ExternalLink
@@ -43,7 +43,7 @@ export const FeaturedTools = async ({ ...props }: ComponentProps<typeof Card>) =
               <Favicon
                 src={tool.faviconUrl}
                 title={tool.name}
-                className="size-9 rounded-lg"
+                className="size-10 rounded-lg"
                 contained
               />
             </ExternalLink>
@@ -54,7 +54,7 @@ export const FeaturedTools = async ({ ...props }: ComponentProps<typeof Card>) =
           <Tooltip tooltip="Get your project featured">
             <Link
               href="/submit"
-              className="grid place-items-center size-9 p-1 rounded-lg border hover:bg-accent"
+              className="grid place-items-center size-10 p-1 rounded-lg border hover:bg-accent"
             >
               <PlusIcon className="size-6" />
             </Link>

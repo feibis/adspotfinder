@@ -30,7 +30,7 @@ export const Bottom = async ({ className, ...props }: ComponentProps<"div">) => 
           <Stack className="gap-x-4 text-sm">
             <H6 as="strong">Popular Categories:</H6>
 
-            <div className="grid grid-cols-2xs gap-x-4 gap-y-2 w-full sm:grid-cols-xs">
+            <div className="grid grid-cols-2xs gap-x-4 gap-y-2 w-full sm:grid-cols-xs md:grid-cols-sm">
               {categories.map(category => (
                 <Tile key={category.slug} className="gap-2" asChild>
                   <NavLink href={`/categories/${category.slug}`}>
