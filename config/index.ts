@@ -1,4 +1,5 @@
 import { adsConfig } from "~/config/ads"
+import { breadcrumbsConfig } from "~/config/breadcrumbs"
 import { claimsConfig } from "~/config/claims"
 import { linksConfig } from "~/config/links"
 import { metadataConfig } from "~/config/metadata"
@@ -12,4 +13,5 @@ export const config = {
   ads: adsConfig,
   submissions: submissionsConfig,
   claims: claimsConfig,
+  breadcrumbs: breadcrumbsConfig,
 }

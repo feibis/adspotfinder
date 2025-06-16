@@ -25,7 +25,7 @@ type BreadcrumbsProps = ComponentProps<typeof Stack> & {
   items: Breadcrumb[]
 }
 
-export const Breadcrumbs = ({ children, className, items, ...props }: BreadcrumbsProps) => {
+export const Breadcrumbs = ({ className, items, ...props }: BreadcrumbsProps) => {
   const breadcrumbItems = [
     {
       href: "/",
@@ -53,30 +53,31 @@ export const Breadcrumbs = ({ children, className, items, ...props }: Breadcrumb
   }
 
   return (
-    <Stack
-      size="lg"
-      className={cx("w-full justify-between -mb-2 text-sm md:-mb-6 lg:-mb-8", className)}
-      {...props}
-    >
-      <Stack size="sm" asChild>
-        <nav>
-          {breadcrumbItems.map(({ href, name }, index) => (
-            <div key={index} className="contents">
-              {index > 0 && <BreadcrumbsSeparator />}
-              <NavLink exact href={href}>
-                {name}
-              </NavLink>
-            </div>
-          ))}
-        </nav>
-      </Stack>
+    <>
+      {config.breadcrumbs.enabled && (
+        <Stack
+          size="sm"
+          className={cx("-mb-2 text-sm md:-mb-6 lg:-mb-8", className)}
+          asChild
+          {...props}
+        >
+          <nav>
+            {breadcrumbItems.map(({ href, name }, index) => (
+              <div key={index} className="contents">
+                {index > 0 && <BreadcrumbsSeparator />}
+                <NavLink exact href={href}>
+                  {name}
+                </NavLink>
+              </div>
+            ))}
+          </nav>
+        </Stack>
+      )}
 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-
-      {children}
-    </Stack>
+    </>
   )
 }
