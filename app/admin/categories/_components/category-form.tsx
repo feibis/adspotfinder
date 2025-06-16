@@ -108,7 +108,7 @@ export function CategoryForm({
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel isRequired>Name</FormLabel>
                 <FormControl>
                   <Input data-1p-ignore {...field} />
                 </FormControl>
@@ -122,7 +122,7 @@ export function CategoryForm({
             name="slug"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Slug</FormLabel>
+                <FormLabel isRequired>Slug</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>

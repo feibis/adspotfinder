@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { formatDateTime, getRandomString, isValidUrl, slugify } from "@primoui/utils"
 import { type Tool, ToolStatus } from "@prisma/client"
-import { EyeIcon, PencilIcon, RefreshCwIcon } from "lucide-react"
+import { EyeIcon, InfoIcon, PencilIcon, RefreshCwIcon } from "lucide-react"
 import { useAction } from "next-safe-action/hooks"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -88,6 +88,7 @@ export function ToolForm({
         description: tool?.description ?? "",
         content: tool?.content ?? "",
         websiteUrl: tool?.websiteUrl ?? "",
+        affiliateUrl: tool?.affiliateUrl ?? "",
         faviconUrl: tool?.faviconUrl ?? "",
         screenshotUrl: tool?.screenshotUrl ?? "",
         isFeatured: tool?.isFeatured ?? false,
@@ -222,7 +223,7 @@ export function ToolForm({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel isRequired>Name</FormLabel>
               <FormControl>
                 <Input data-1p-ignore {...field} />
               </FormControl>
@@ -236,7 +237,7 @@ export function ToolForm({
           name="slug"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Slug</FormLabel>
+              <FormLabel isRequired>Slug</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>

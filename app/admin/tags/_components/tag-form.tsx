@@ -89,7 +89,7 @@ export function TagForm({ children, className, title, tag, tools, ...props }: Ta
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel isRequired>Name</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -103,7 +103,7 @@ export function TagForm({ children, className, title, tag, tools, ...props }: Ta
           name="slug"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Slug</FormLabel>
+              <FormLabel isRequired>Slug</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
