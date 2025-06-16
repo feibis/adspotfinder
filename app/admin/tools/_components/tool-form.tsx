@@ -29,6 +29,7 @@ import { Note } from "~/components/common/note"
 import { Stack } from "~/components/common/stack"
 import { Switch } from "~/components/common/switch"
 import { TextArea } from "~/components/common/textarea"
+import { Tooltip } from "~/components/common/tooltip"
 import { ExternalLink } from "~/components/web/external-link"
 import { Markdown } from "~/components/web/markdown"
 import { siteConfig } from "~/config/site"
@@ -249,9 +250,30 @@ export function ToolForm({
           name="websiteUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Website URL</FormLabel>
+              <FormLabel isRequired>Website URL</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input type="url" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="affiliateUrl"
+          render={({ field }) => (
+            <FormItem>
+              <Stack className="w-full justify-between">
+                <FormLabel>Affiliate URL</FormLabel>
+
+                <Tooltip tooltip="If you have an affiliate link, you can enter it here. This will be displayed on the tool page.">
+                  <InfoIcon className="cursor-help opacity-50" />
+                </Tooltip>
+              </Stack>
+
+              <FormControl>
+                <Input type="url" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -262,7 +284,7 @@ export function ToolForm({
           control={form.control}
           name="tagline"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="col-span-full">
               <Stack className="w-full justify-between">
                 <FormLabel>Tagline</FormLabel>
                 <Note className="text-xs">Max. 60 chars</Note>

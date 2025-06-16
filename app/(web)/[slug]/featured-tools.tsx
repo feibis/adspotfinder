@@ -31,7 +31,7 @@ export const FeaturedTools = async ({ ...props }: ComponentProps<typeof Card>) =
         {tools.map(tool => (
           <ToolHoverCard key={tool.slug} tool={tool}>
             <ExternalLink
-              href={tool.websiteUrl}
+              href={tool.affiliateUrl || tool.websiteUrl}
               doFollow={tool.isFeatured}
               eventName="click_website"
               eventProps={{

@@ -96,7 +96,7 @@ export default async function ToolPage(props: PageProps) {
 
             <Button suffix={<ArrowUpRightIcon />} asChild>
               <ExternalLink
-                href={tool.websiteUrl}
+                href={tool.affiliateUrl || tool.websiteUrl}
                 doFollow={tool.isFeatured}
                 eventName="click_website"
                 eventProps={{ url: tool.websiteUrl, isFeatured: tool.isFeatured, source: "button" }}
@@ -108,7 +108,7 @@ export default async function ToolPage(props: PageProps) {
 
           {tool.screenshotUrl && (
             <OverlayImage
-              href={tool.websiteUrl}
+              href={tool.affiliateUrl || tool.websiteUrl}
               doFollow={tool.isFeatured}
               eventName="click_website"
               eventProps={{ url: tool.websiteUrl, isFeatured: tool.isFeatured, source: "image" }}

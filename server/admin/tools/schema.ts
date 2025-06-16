@@ -28,6 +28,7 @@ export const toolSchema = z.object({
   name: z.string().min(1, "Name is required"),
   slug: z.string().optional(),
   websiteUrl: z.url().min(1, "Website is required"),
+  affiliateUrl: z.url().optional().or(z.literal("")),
   tagline: z.string().optional(),
   description: z.string().optional(),
   content: z.string().optional(),
