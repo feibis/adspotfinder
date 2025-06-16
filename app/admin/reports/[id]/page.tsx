@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 import { ReportForm } from "~/app/admin/reports/_components/report-form"
 import { withAdminPage } from "~/components/admin/auth-hoc"
-import { Wrapper } from "~/components/admin/wrapper"
+import { Wrapper } from "~/components/common/wrapper"
 import { findReportById } from "~/server/admin/reports/queries"
 
 type PageProps = {
@@ -17,7 +17,7 @@ const UpdateReportPage = async ({ params }: PageProps) => {
   }
 
   return (
-    <Wrapper size="md">
+    <Wrapper size="md" gap="sm">
       <ReportForm title="Update report" report={report} />
     </Wrapper>
   )

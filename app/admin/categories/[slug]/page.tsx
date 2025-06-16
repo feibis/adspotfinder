@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 import { CategoryForm } from "~/app/admin/categories/_components/category-form"
 import { withAdminPage } from "~/components/admin/auth-hoc"
-import { Wrapper } from "~/components/admin/wrapper"
+import { Wrapper } from "~/components/common/wrapper"
 import { findCategoryBySlug } from "~/server/admin/categories/queries"
 import { findToolList } from "~/server/admin/tools/queries"
 
@@ -18,7 +18,7 @@ const UpdateCategoryPage = async ({ params }: PageProps) => {
   }
 
   return (
-    <Wrapper size="md">
+    <Wrapper size="md" gap="sm">
       <CategoryForm title="Update category" category={category} tools={findToolList()} />
     </Wrapper>
   )

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 import { UserForm } from "~/app/admin/users/_components/user-form"
 import { withAdminPage } from "~/components/admin/auth-hoc"
-import { Wrapper } from "~/components/admin/wrapper"
+import { Wrapper } from "~/components/common/wrapper"
 import { findUserById } from "~/server/admin/users/queries"
 
 type PageProps = {
@@ -17,7 +17,7 @@ const UpdateUserPage = async ({ params }: PageProps) => {
   }
 
   return (
-    <Wrapper size="md">
+    <Wrapper size="md" gap="sm">
       <UserForm title="Update user" user={user} />
     </Wrapper>
   )

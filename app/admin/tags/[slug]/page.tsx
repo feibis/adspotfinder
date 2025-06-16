@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 import { TagForm } from "~/app/admin/tags/_components/tag-form"
 import { withAdminPage } from "~/components/admin/auth-hoc"
-import { Wrapper } from "~/components/admin/wrapper"
+import { Wrapper } from "~/components/common/wrapper"
 import { findTagBySlug } from "~/server/admin/tags/queries"
 import { findToolList } from "~/server/admin/tools/queries"
 
@@ -18,7 +18,7 @@ const UpdateTagPage = async ({ params }: PageProps) => {
   }
 
   return (
-    <Wrapper size="md">
+    <Wrapper size="md" gap="sm">
       <TagForm title="Update tag" tag={tag} tools={findToolList()} />
     </Wrapper>
   )
