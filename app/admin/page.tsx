@@ -11,15 +11,15 @@ const DashboardPage = () => {
       <H3>Dashboard</H3>
 
       <div className="grid gap-4 items-start lg:grid-cols-5">
-        <div className="grid gap-4 lg:col-span-3">
-          <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
+        <div className="flex flex-col gap-4 lg:col-span-3">
+          <div className="flex flex-wrap gap-4">
             <StatsCard />
           </div>
 
           <ScheduledCard />
         </div>
 
-        <div className="grid gap-4 lg:col-span-2">
+        <div className="flex flex-col gap-4 lg:col-span-2">
           <AnalyticsCard />
           <SubscribersCard />
         </div>

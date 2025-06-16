@@ -8,7 +8,6 @@ import {
   GalleryHorizontalEndIcon,
   GemIcon,
   GlobeIcon,
-  LayoutDashboardIcon,
   LogOutIcon,
   TagIcon,
   TriangleAlertIcon,
@@ -20,6 +19,7 @@ import { Nav } from "~/components/admin/nav"
 import { Button } from "~/components/common/button"
 import { Kbd } from "~/components/common/kbd"
 import { Tooltip } from "~/components/common/tooltip"
+import { LogoSymbol } from "~/components/web/ui/logo-symbol"
 import { siteConfig } from "~/config/site"
 import { useSearch } from "~/contexts/search-context"
 import { signOut } from "~/lib/auth-client"
@@ -51,9 +51,9 @@ export const Sidebar = () => {
       className={cx("sticky top-0 h-dvh z-40 border-r", isMobile ? "w-12" : "w-48")}
       links={[
         {
-          title: "Dashboard",
+          title: siteConfig.name,
           href: "/admin",
-          prefix: <LayoutDashboardIcon />,
+          prefix: <LogoSymbol />,
         },
 
         undefined, // Separator

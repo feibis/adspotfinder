@@ -15,7 +15,7 @@ export const StatsCard = async () => {
   return (
     <>
       {stats.map((stat, index) => (
-        <Card key={stat.label} asChild>
+        <Card key={stat.label} className="w-fit grow" asChild>
           <Link href={stat.href}>
             <CardHeader direction="column">
               <CardDescription>{stat.label}</CardDescription>

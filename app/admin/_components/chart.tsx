@@ -28,7 +28,7 @@ export const Chart = ({ className, cellClassName, data, average, label, ...props
   const maxValue = Math.max(...data.map(d => d.value), average || 0)
 
   return (
-    <div className={cx("relative flex h-full min-h-24 w-full flex-col", className)} {...props}>
+    <div className={cx("relative flex size-full min-h-24", className)} {...props}>
       {average !== undefined && (
         <div
           className="absolute inset-x-0 z-10 flex items-center pointer-events-none"
@@ -42,7 +42,7 @@ export const Chart = ({ className, cellClassName, data, average, label, ...props
         </div>
       )}
 
-      <div className="flex items-end justify-between gap-1 size-full">
+      <div className="flex items-end justify-between gap-1 flex-1">
         {data.map((item, index) => (
           <Tooltip
             key={item.date}
