@@ -11,8 +11,8 @@ import { useRouter } from "next/navigation"
 import { type ComponentProps, useRef, useState } from "react"
 import { toast } from "sonner"
 import { ToolActions } from "~/app/admin/tools/_components/tool-actions"
-import { ToolGenerateContent } from "~/app/admin/tools/_components/tool-generate-content"
 import { ToolPublishActions } from "~/app/admin/tools/_components/tool-publish-actions"
+import { AIGenerateContent } from "~/components/admin/ai/generate-content"
 import { RelationSelector } from "~/components/admin/relation-selector"
 import { Button } from "~/components/common/button"
 import {
@@ -36,6 +36,7 @@ import { siteConfig } from "~/config/site"
 import { useComputedField } from "~/hooks/use-computed-field"
 import { isToolPublished } from "~/lib/tools"
 import type { findCategoryList } from "~/server/admin/categories/queries"
+import { contentSchema } from "~/server/admin/shared/schema"
 import { upsertTool } from "~/server/admin/tools/actions"
 import type { findToolBySlug } from "~/server/admin/tools/queries"
 import { toolSchema } from "~/server/admin/tools/schema"
@@ -190,7 +191,15 @@ export function ToolForm({
         <H3 className="flex-1 truncate">{title}</H3>
 
         <Stack size="sm" className="-my-0.5">
-          <ToolGenerateContent />
+          <AIGenerateContent
+            url={websiteUrl}
+            schema={contentSchema}
+            onFinish={object => {
+              form.setValue("tagline", object.tagline)
+              form.setValue("description", object.description)
+              form.setValue("content", object.content)
+            }}
+          />
 
           {tool && <ToolActions tool={tool} size="md" />}
         </Stack>

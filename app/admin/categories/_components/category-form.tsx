@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation"
 import type { ComponentProps } from "react"
 import { toast } from "sonner"
 import { CategoryActions } from "~/app/admin/categories/_components/category-actions"
+import { AIGenerateDescription } from "~/components/admin/ai/generate-description"
 import { RelationSelector } from "~/components/admin/relation-selector"
 import { Button } from "~/components/common/button"
 import {
@@ -25,6 +26,7 @@ import { useComputedField } from "~/hooks/use-computed-field"
 import { upsertCategory } from "~/server/admin/categories/actions"
 import type { findCategoryBySlug } from "~/server/admin/categories/queries"
 import { categorySchema } from "~/server/admin/categories/schema"
+import { descriptionSchema } from "~/server/admin/shared/schema"
 import type { findToolList } from "~/server/admin/tools/queries"
 import { cx } from "~/utils/cva"
 
@@ -68,6 +70,8 @@ export function CategoryForm({
     },
   })
 
+  const name = form.watch("name")
+
   // Set the slug based on the name
   useComputedField({
     form,
@@ -92,6 +96,12 @@ export function CategoryForm({
         <H3 className="flex-1 truncate">{title}</H3>
 
         <Stack size="sm" className="-my-0.5">
+          <AIGenerateDescription
+            prompt={`Create a compelling description for the category named "${name}". Begin with a plural noun phrase (e.g., "Tools for..." or "Resources that..."). Craft a single, concise sentence that clearly conveys the purpose and value of this category. Ensure the description is specific enough to differentiate this category from others while remaining broad enough to encompass all relevant items within it.`}
+            schema={descriptionSchema}
+            onFinish={object => form.setValue("description", object.description)}
+          />
+
           {category && <CategoryActions category={category} size="md" />}
         </Stack>
       </Stack>

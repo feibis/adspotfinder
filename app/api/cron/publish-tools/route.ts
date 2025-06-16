@@ -5,6 +5,8 @@ import { env } from "~/env"
 import { notifySubmitterOfToolPublished } from "~/lib/notifications"
 import { db } from "~/services/db"
 
+export const maxDuration = 60
+
 export const GET = async (req: Request) => {
   // Verify the authorization token
   if (req.headers.get("authorization") !== `Bearer ${env.CRON_SECRET}`) {

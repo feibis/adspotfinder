@@ -2,36 +2,28 @@ import { google } from "@ai-sdk/google"
 import { streamObject } from "ai"
 import { z } from "zod/v4"
 import { withAdminAuth } from "~/lib/auth-hoc"
-import { scrapeWebsiteData } from "~/lib/scraper"
-import { contentSchema } from "~/server/admin/shared/schema"
+import { descriptionSchema } from "~/server/admin/shared/schema"
 
 export const maxDuration = 60
 
 export const POST = withAdminAuth(async req => {
-  const { url, temperature } = z
+  const { prompt, temperature } = z
     .object({
-      url: z.url(),
+      prompt: z.string(),
       temperature: z.number().default(0.3),
     })
     .parse(await req.json())
 
-  const scrapedData = await scrapeWebsiteData(url)
-
   const result = streamObject({
     model: google("gemini-2.5-pro-preview-05-06"),
-    schema: contentSchema,
+    schema: descriptionSchema,
     system: `
       You are an expert content creator specializing in reasearching and writing about tools.
       Your task is to generate high-quality, engaging content to display on a directory website.
-      You do not use any catchphrases like "Empower", "Streamline" etc.
+      DO NOT use catchphrases like "Empower", "Streamline" etc.
     `,
     temperature,
-    prompt: `
-      Provide me details for the following data:
-      Title: ${scrapedData.title}
-      Description: ${scrapedData.description}
-      Content: ${scrapedData.content}
-    `,
+    prompt,
     onError: error => {
       console.error(error)
       throw error
