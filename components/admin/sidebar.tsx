@@ -7,7 +7,6 @@ import {
   ExternalLinkIcon,
   GalleryHorizontalEndIcon,
   GemIcon,
-  GlobeIcon,
   LogOutIcon,
   TagIcon,
   TriangleAlertIcon,
@@ -54,6 +53,17 @@ export const Sidebar = () => {
           title: siteConfig.name,
           href: "/admin",
           prefix: <LogoSymbol />,
+          suffix: (
+            <Tooltip tooltip="Visit site">
+              <Button
+                variant="secondary"
+                onClick={handleOpenSite}
+                className="-my-0.5-mr-[0.21425em] -mr-[0.21425em] px-1 py-[0.2em] text-xs/tight rounded-sm"
+              >
+                <ExternalLinkIcon className="size-3" />
+              </Button>
+            </Tooltip>
+          ),
         },
 
         undefined, // Separator
@@ -86,22 +96,6 @@ export const Sidebar = () => {
 
         undefined, // Separator
 
-        {
-          title: "Visit Site",
-          href: "/admin/site",
-          prefix: <GlobeIcon />,
-          suffix: (
-            <Tooltip tooltip="Open site in new tab">
-              <Button
-                variant="secondary"
-                onClick={handleOpenSite}
-                className="-my-0.5 px-1 py-[0.2em] text-xs/tight rounded-sm"
-              >
-                <ExternalLinkIcon className="size-3" />
-              </Button>
-            </Tooltip>
-          ),
-        },
         {
           title: "Quick Menu",
           href: "#",
