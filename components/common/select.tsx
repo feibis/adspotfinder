@@ -23,9 +23,10 @@ const SelectTrigger = ({
         className={cx(inputVariants({ size }), "flex items-center justify-between", className)}
         {...props}
       >
-        {children}
+        <span className="truncate">{children}</span>
+
         <SelectPrimitive.Icon asChild>
-          <ChevronsUpDownIcon className="ml-1 size-4 opacity-50" />
+          <ChevronsUpDownIcon className="ml-1 size-4 shrink-0 opacity-50" />
         </SelectPrimitive.Icon>
       </SelectPrimitive.Trigger>
     </Box>

@@ -74,6 +74,8 @@ export const UserActions = ({ user, className, ...props }: UserActionsProps) => 
                         id: user.id,
                         role: value as (typeof roles)[number],
                       })
+
+                      router.refresh()
                     },
                     { loading: "Updating...", success: "Role successfully updated" },
                   )
