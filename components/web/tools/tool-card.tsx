@@ -19,7 +19,7 @@ const ToolCard = ({ tool, ...props }: ToolCardProps) => {
   const hiddenCount = tool.categories.length - maxCategories
 
   return (
-    <Card {...props}>
+    <Card isRevealed {...props}>
       <CardHeader wrap={false}>
         <Favicon src={tool.faviconUrl} title={tool.name} contained />
 

@@ -58,13 +58,25 @@
 
   --animate-fade-in: fade-in 0.3s ease-in-out;
   --animate-ping: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-reveal: reveal linear forwards;
 
   @keyframes fade-in {
-    0% {
+    from {
       opacity: 0;
     }
-    100% {
+    to {
       opacity: 1;
+    }
+  }
+
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(20px) perspective(250px) rotateX(-15deg) scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) perspective(500px) rotateX(0deg) scale(1);
     }
   }
 }
@@ -184,4 +196,9 @@
   & [id]:hover > a[tabindex="-1"]:hover {
     @apply opacity-100;
   }
+}
+
+.animate-reveal {
+  animation-timeline: view();
+  animation-range: 0% 15%;
 }

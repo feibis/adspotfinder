@@ -9,6 +9,12 @@ const cardVariants = cva({
     "group relative flex flex-col items-start gap-4 w-full border bg-card p-5 rounded-lg transform-gpu",
     "hover:[&[href]]:bg-accent",
   ],
+
+  variants: {
+    isRevealed: {
+      true: "animate-reveal",
+    },
+  },
 })
 
 type CardProps = ComponentProps<"div"> &
@@ -21,12 +27,22 @@ type CardProps = ComponentProps<"div"> &
     asChild?: boolean
   }
 
-const Card = ({ className, hover = true, focus = true, asChild, ...props }: CardProps) => {
+const Card = ({
+  className,
+  hover = true,
+  focus = true,
+  isRevealed,
+  asChild,
+  ...props
+}: CardProps) => {
   const useAsChild = asChild && isValidElement(props.children)
   const Comp = useAsChild ? Slot.Root : "div"
 
   return (
-    <Comp className={cx(boxVariants({ hover, focus }), cardVariants({ className }))} {...props} />
+    <Comp
+      className={cx(boxVariants({ hover, focus }), cardVariants({ isRevealed, className }))}
+      {...props}
+    />
   )
 }
 

@@ -168,8 +168,8 @@ export default async function ToolPage(props: PageProps) {
             </Stack>
           )}
 
-          <Stack className="relative w-full md:sticky md:-bottom-px md:py-2 md:bg-background max-md:order-7">
-            <div className="absolute inset-x-0 bottom-full h-8 pointer-events-none bg-background mask-t-from-0 max-md:hidden" />
+          <Stack className="w-full md:sticky md:bottom-2 md:z-10 max-md:order-7">
+            <div className="absolute inset-x-0 -bottom-3 -top-8 -z-1 pointer-events-none bg-background mask-t-from-66% max-md:hidden" />
 
             <Nav
               className="mr-auto"
