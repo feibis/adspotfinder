@@ -31,7 +31,7 @@ export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) 
           className="flex flex-col items-start gap-4 col-span-full md:col-span-6"
         >
           <Stack size="lg" direction="column" className="min-w-0 max-w-64">
-            <H5 as="strong" className="px-0.5 font-medium">
+            <H5 as="strong" className="px-0.5">
               Subscribe to our newsletter
             </H5>
 

@@ -29,6 +29,7 @@ export const toolOnePayload = Prisma.validator<Prisma.ToolSelect>()({
   isFeatured: true,
   status: true,
   publishedAt: true,
+  createdAt: true,
   updatedAt: true,
   ownerId: true,
   categories: toolCategoriesPayload,

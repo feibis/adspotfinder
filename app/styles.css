@@ -156,11 +156,6 @@
     @apply translate-x-[0.1em];
     @apply -translate-y-[0.1em];
   }
-
-  [href]:hover svg[class*="arrow-right"],
-  [type]:hover svg[class*="arrow-right"] {
-    @apply translate-x-[0.15em];
-  }
 }
 
 @utility prose {

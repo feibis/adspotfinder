@@ -147,7 +147,7 @@ const Header = ({ children, className, session, ...props }: HeaderProps) => {
 
 const HeaderBackdrop = () => {
   return (
-    <div className="fixed top-(--header-offset) inset-x-0 z-40 h-8 pointer-events-none bg-linear-to-b from-background to-transparent" />
+    <div className="fixed top-(--header-offset) inset-x-0 z-40 h-8 pointer-events-none bg-background mask-b-from-0" />
   )
 }
 

@@ -10,7 +10,7 @@ import { Stack } from "~/components/common/stack"
 import { AdCard, AdCardSkeleton } from "~/components/web/ads/ad-card"
 import { ExternalLink } from "~/components/web/external-link"
 import { MDX } from "~/components/web/mdx"
-import { ShareButtons } from "~/components/web/share-buttons"
+import { Nav } from "~/components/web/nav"
 import { Author } from "~/components/web/ui/author"
 import { Breadcrumbs } from "~/components/web/ui/breadcrumbs"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
@@ -103,7 +103,7 @@ export default async function BlogPostPage(props: PageProps) {
 
             <MDX code={post.content} />
 
-            <ShareButtons title={post.title} />
+            <Nav className="self-start" title={post.title} />
           </Section.Content>
 
           <Section.Sidebar>

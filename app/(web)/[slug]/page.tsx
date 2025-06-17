@@ -1,4 +1,5 @@
 import { formatDate } from "@primoui/utils"
+import { ToolStatus } from "@prisma/client"
 import { ArrowUpRightIcon, ClockIcon, HashIcon } from "lucide-react"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
@@ -15,8 +16,8 @@ import { AdCard, AdCardSkeleton } from "~/components/web/ads/ad-card"
 import { ExternalLink } from "~/components/web/external-link"
 import { Listing } from "~/components/web/listing"
 import { Markdown } from "~/components/web/markdown"
+import { Nav } from "~/components/web/nav"
 import { OverlayImage } from "~/components/web/overlay-image"
-import { ShareButtons } from "~/components/web/share-buttons"
 import { ToolActions } from "~/components/web/tools/tool-actions"
 import { ToolListSkeleton } from "~/components/web/tools/tool-list"
 import { Favicon } from "~/components/web/ui/favicon"
@@ -71,6 +72,18 @@ export default async function ToolPage(props: PageProps) {
   const tool = await getTool(props)
   const { title } = getMetadata(tool)
 
+  const [previous, next] = await Promise.all([
+    findTool({
+      where: { createdAt: { lt: tool.createdAt }, status: ToolStatus.Published },
+      orderBy: { createdAt: "desc" },
+    }),
+
+    findTool({
+      where: { createdAt: { gt: tool.createdAt }, status: ToolStatus.Published },
+      orderBy: { createdAt: "asc" },
+    }),
+  ])
+
   return (
     <div className="flex flex-col gap-12">
       <Section>
@@ -87,8 +100,6 @@ export default async function ToolPage(props: PageProps) {
 
                   {tool.ownerId && <VerifiedBadge size="lg" />}
                 </Stack>
-
-                <ToolActions tool={tool} />
               </Stack>
 
               {tool.description && <IntroDescription>{tool.description}</IntroDescription>}
@@ -152,7 +163,18 @@ export default async function ToolPage(props: PageProps) {
             </Stack>
           )}
 
-          <ShareButtons title={`${title}`} className="max-md:order-7" />
+          <Stack className="relative w-full md:sticky md:-bottom-px md:py-2 md:bg-background max-md:order-7">
+            <div className="absolute inset-x-0 bottom-full h-8 pointer-events-none bg-background mask-t-from-0 max-md:hidden" />
+
+            <Nav
+              className="mr-auto"
+              title={`${title}`}
+              previous={previous?.slug}
+              next={next?.slug}
+            />
+
+            <ToolActions tool={tool} />
+          </Stack>
         </Section.Content>
 
         <Section.Sidebar className="max-md:contents">
