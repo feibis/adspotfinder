@@ -10,7 +10,7 @@ export const Logo = ({ className, ...props }: ComponentProps<typeof Stack>) => {
     <Stack size="sm" className={cx("group/logo", className)} wrap={false} asChild {...props}>
       <Link href="/">
         <LogoSymbol />
-        <span className="font-medium text-sm">{config.site.name}</span>
+        <span className="font-medium text-sm truncate">{config.site.name}</span>
       </Link>
     </Stack>
   )

@@ -60,7 +60,7 @@ const Header = ({ children, className, session, ...props }: HeaderProps) => {
     >
       <Container>
         <div className="flex items-center py-3.5 gap-4 text-sm h-(--header-height) md:gap-6 lg:gap-8">
-          <Stack size="sm" wrap={false}>
+          <Stack size="sm" wrap={false} className="min-w-0">
             <button
               type="button"
               onClick={() => setNavOpen(!isNavOpen)}
@@ -69,7 +69,7 @@ const Header = ({ children, className, session, ...props }: HeaderProps) => {
               <Hamburger className="size-7" />
             </button>
 
-            <Logo />
+            <Logo className="min-w-0" />
           </Stack>
 
           <nav className="flex flex-wrap gap-4 max-md:hidden">
