@@ -79,7 +79,7 @@ export const AdsPicker = ({ className, ads, ...props }: AdsCalendarProps) => {
         ))}
       </div>
 
-      <AnimatedContainer height>
+      <AnimatedContainer height className="-mt-px">
         {hasSelections && (
           <div className="flex flex-col gap-3 text-sm text-muted-foreground p-4">
             {selections.map(selection => {

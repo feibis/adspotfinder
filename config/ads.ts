@@ -32,6 +32,13 @@ export const adsConfig = {
       price: 25,
       preview: "https://share.cleanshot.com/SvqTztKT",
     },
+    {
+      label: "Tool Sidebar Ad",
+      type: "ToolPage",
+      description: "Visible on the sidebar of every tool page",
+      price: 15,
+      preview: "https://share.cleanshot.com/dXDbZPFv",
+    },
   ] satisfies AdSpot[],
 
   // Default ad configuration

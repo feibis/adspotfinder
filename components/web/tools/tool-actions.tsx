@@ -54,8 +54,9 @@ export const ToolActions = ({ tool, children, className, ...props }: ToolActions
           variant="secondary"
           prefix={<TriangleAlertIcon />}
           onClick={() => setIsReportOpen(true)}
-          aria-label="Report"
-        />
+        >
+          Report
+        </Button>
       </Tooltip>
 
       {children}
