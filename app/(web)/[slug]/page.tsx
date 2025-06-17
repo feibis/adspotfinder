@@ -1,16 +1,12 @@
-import { formatDate } from "@primoui/utils"
 import { ToolStatus } from "@prisma/client"
-import { ArrowUpRightIcon, ClockIcon, HashIcon } from "lucide-react"
+import { ArrowUpRightIcon, HashIcon } from "lucide-react"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { Suspense, cache } from "react"
 import { FeaturedTools } from "~/app/(web)/[slug]/featured-tools"
 import { RelatedTools } from "~/app/(web)/[slug]/related-tools"
 import { Button } from "~/components/common/button"
-import { Card } from "~/components/common/card"
 import { H2, H5 } from "~/components/common/heading"
-import { Link } from "~/components/common/link"
-import { Note } from "~/components/common/note"
 import { Stack } from "~/components/common/stack"
 import { AdCard, AdCardSkeleton } from "~/components/web/ads/ad-card"
 import { ExternalLink } from "~/components/web/external-link"
@@ -20,6 +16,7 @@ import { Nav } from "~/components/web/nav"
 import { OverlayImage } from "~/components/web/overlay-image"
 import { ToolActions } from "~/components/web/tools/tool-actions"
 import { ToolListSkeleton } from "~/components/web/tools/tool-list"
+import { ToolPreviewAlert } from "~/components/web/tools/tool-preview-alert"
 import { Favicon } from "~/components/web/ui/favicon"
 import { IntroDescription } from "~/components/web/ui/intro"
 import { Section } from "~/components/web/ui/section"
@@ -105,19 +102,27 @@ export default async function ToolPage(props: PageProps) {
               {tool.description && <IntroDescription>{tool.description}</IntroDescription>}
             </div>
 
-            <Button suffix={<ArrowUpRightIcon />} asChild>
-              <ExternalLink
-                href={tool.affiliateUrl || tool.websiteUrl}
-                doFollow={tool.isFeatured}
-                eventName="click_website"
-                eventProps={{ url: tool.websiteUrl, isFeatured: tool.isFeatured, source: "button" }}
-              >
-                Visit {tool.name}
-              </ExternalLink>
-            </Button>
+            {isToolPublished(tool) && (
+              <Button suffix={<ArrowUpRightIcon />} asChild>
+                <ExternalLink
+                  href={tool.affiliateUrl || tool.websiteUrl}
+                  doFollow={tool.isFeatured}
+                  eventName="click_website"
+                  eventProps={{
+                    url: tool.websiteUrl,
+                    isFeatured: tool.isFeatured,
+                    source: "button",
+                  }}
+                >
+                  Visit {tool.name}
+                </ExternalLink>
+              </Button>
+            )}
+
+            <ToolPreviewAlert tool={tool} />
           </div>
 
-          {tool.screenshotUrl && (
+          {isToolPublished(tool) && tool.screenshotUrl && (
             <OverlayImage
               href={tool.affiliateUrl || tool.websiteUrl}
               doFollow={tool.isFeatured}
@@ -178,35 +183,10 @@ export default async function ToolPage(props: PageProps) {
         </Section.Content>
 
         <Section.Sidebar className="max-md:contents">
-          {!isToolPublished(tool) && (
-            <Card
-              hover={false}
-              focus={false}
-              className="bg-yellow-500/10 border-foreground/10 max-md:order-first"
-            >
-              <H5>
-                This is a preview only.{" "}
-                {tool.publishedAt &&
-                  `${tool.name} will be published on ${formatDate(tool.publishedAt)}`}
-              </H5>
-
-              <Note className="-mt-2">
-                {tool.name} is not yet published and is only visible on this page. If you want to
-                speed up the process, you can expedite the review below.
-              </Note>
-
-              <Button size="md" variant="fancy" prefix={<ClockIcon />} asChild>
-                <Link href={`/submit/${tool.slug}`}>Publish within 24h</Link>
-              </Button>
-            </Card>
-          )}
-
           {/* Advertisement */}
-          {isToolPublished(tool) && (
-            <Suspense fallback={<AdCardSkeleton className="max-md:order-3" />}>
-              <AdCard where={{ type: "ToolPage" }} className="max-md:order-3" />
-            </Suspense>
-          )}
+          <Suspense fallback={<AdCardSkeleton className="max-md:order-3" />}>
+            <AdCard where={{ type: "ToolPage" }} className="max-md:order-3" />
+          </Suspense>
 
           {/* Featured */}
           <Suspense>

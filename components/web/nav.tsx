@@ -104,8 +104,6 @@ export const Nav = ({ title, previous, next, ...props }: NavProps) => {
     },
   ]
 
-  console.log(previous)
-
   if (previous || next) {
     actions.push(
       null,
