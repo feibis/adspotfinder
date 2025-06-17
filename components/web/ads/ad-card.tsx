@@ -1,5 +1,5 @@
 import { isExternalUrl } from "@primoui/utils"
-import type { AdType, Prisma } from "@prisma/client"
+import type { Prisma } from "@prisma/client"
 import { ArrowUpRightIcon } from "lucide-react"
 import type { ComponentProps } from "react"
 import { Badge } from "~/components/common/badge"
@@ -23,26 +23,32 @@ import { findAd } from "~/server/web/ads/queries"
 import { cx } from "~/utils/cva"
 
 type AdCardProps = CardProps & {
-  rel?: string
-  type: AdType
+  // Database query conditions to find a specific ad
   where?: Prisma.AdWhereInput
-  fallbackAd?: Partial<AdOne>
+  // Override ad data without database query
+  overrideAd?: AdOne | null
+  // Default values to merge with the fallback ad
+  defaultOverride?: Partial<AdOne>
 }
 
-const AdCard = async ({ className, type, where, fallbackAd, ...props }: AdCardProps) => {
-  if (!config.ads.enabled) {
-    return null
-  }
+const AdCard = async ({ className, where, overrideAd, defaultOverride, ...props }: AdCardProps) => {
+  // Default ad values to display if no ad is found
+  const defaultAd = { ...config.ads.defaultAd, ...defaultOverride }
 
-  const defaultAd = { ...config.ads.defaultAd, ...fallbackAd }
-  const ad = (await findAd({ where: { type, ...where } })) ?? defaultAd
-  const isDefault = !isExternalUrl(ad.websiteUrl)
+  // Resolve the ad data from the override or database (don't query if override is defined)
+  const resolvedAd = overrideAd !== undefined ? overrideAd : await findAd({ where })
+
+  // Final ad data to display
+  const ad = resolvedAd ?? defaultAd
+
+  // Determine if the ad is internal or external
+  const isInternalAd = !isExternalUrl(ad.websiteUrl)
 
   return (
     <Card className={cx("group/button", className)} asChild {...props}>
       <ExternalLink
         href={ad.websiteUrl}
-        target={isDefault ? "_self" : undefined}
+        target={isInternalAd ? "_self" : undefined}
         eventName="click_ad"
         eventProps={{ url: ad.websiteUrl, type: ad.type, source: "card" }}
       >
@@ -58,29 +64,34 @@ const AdCard = async ({ className, type, where, fallbackAd, ...props }: AdCardPr
           </H4>
         </CardHeader>
 
-        <CardDescription className="mb-auto line-clamp-4">{ad.description}</CardDescription>
+        <CardDescription className="mb-auto pr-2 line-clamp-4">{ad.description}</CardDescription>
 
-        <Button className="w-full pointer-events-none" suffix={<ArrowUpRightIcon />} asChild>
-          <span>{isDefault ? "Advertise" : `Visit ${ad.name}`}</span>
+        <Button
+          size="md"
+          className="pointer-events-none md:w-full"
+          suffix={<ArrowUpRightIcon />}
+          asChild
+        >
+          <span>{isInternalAd ? "Advertise" : `Visit ${ad.name}`}</span>
         </Button>
 
         <CardIcon>
-          {isDefault ? <LogoSymbol /> : <Favicon src={ad.faviconUrl} title={ad.name} />}
+          {isInternalAd ? <LogoSymbol /> : <Favicon src={ad.faviconUrl} title={ad.name} />}
         </CardIcon>
       </ExternalLink>
     </Card>
   )
 }
 
-const AdCardSkeleton = ({ className }: ComponentProps<typeof Card>) => {
-  if (!config.ads.enabled) {
-    return null
-  }
-
+const AdCardSkeleton = ({ className, ...props }: ComponentProps<typeof Card>) => {
   return (
-    <Card hover={false} className={cx("items-stretch select-none", className)}>
+    <Card hover={false} className={cx("items-stretch select-none", className)} {...props}>
+      <CardBadges>
+        <Badge variant="outline">Ad</Badge>
+      </CardBadges>
+
       <CardHeader>
-        <Favicon src="/favicon.png" className="animate-pulse opacity-25 grayscale" contained />
+        <Favicon src="/favicon.png" className="animate-pulse opacity-50" contained />
 
         <H4 className="w-2/3">
           <Skeleton>&nbsp;</Skeleton>
@@ -92,7 +103,11 @@ const AdCardSkeleton = ({ className }: ComponentProps<typeof Card>) => {
         <Skeleton className="h-5 w-2/3">&nbsp;</Skeleton>
       </CardDescription>
 
-      <Button size="md" className="pointer-events-none opacity-10 text-transparent" asChild>
+      <Button
+        size="md"
+        className="pointer-events-none opacity-10 text-transparent md:w-full"
+        asChild
+      >
         <span>&nbsp;</span>
       </Button>
     </Card>

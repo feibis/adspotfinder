@@ -204,7 +204,7 @@ export default async function ToolPage(props: PageProps) {
           {/* Advertisement */}
           {isToolPublished(tool) && (
             <Suspense fallback={<AdCardSkeleton className="max-md:order-3" />}>
-              <AdCard type="ToolPage" className="max-md:order-3" />
+              <AdCard where={{ type: "ToolPage" }} className="max-md:order-3" />
             </Suspense>
           )}
 
