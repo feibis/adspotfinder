@@ -81,7 +81,7 @@ const SelectContent = ({
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
         className={cx(
-          "relative z-50 isolate max-h-96 min-w-32 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md",
+          "relative z-50 isolate max-h-96 min-w-32 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md backdrop-blur-xs",
           popoverAnimationClasses,
           position === "popper" &&
             "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",

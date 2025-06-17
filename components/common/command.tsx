@@ -14,7 +14,7 @@ const Command = ({ className, ...props }: ComponentProps<typeof CommandPrimitive
   return (
     <CommandPrimitive
       className={cx(
-        "flex size-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground",
+        "flex size-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground backdrop-blur-xs",
         className,
       )}
       {...props}

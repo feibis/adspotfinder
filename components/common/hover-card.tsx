@@ -20,7 +20,7 @@ const HoverCardContent = ({
         align={align}
         sideOffset={sideOffset}
         className={cx(
-          "z-50 w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none",
+          "z-50 w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md backdrop-blur-xs outline-none",
           popoverAnimationClasses,
           className,
         )}
