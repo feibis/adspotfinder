@@ -1,6 +1,6 @@
-import Link from "next/link"
 import { Card, CardDescription, CardHeader } from "~/components/common/card"
 import { H2 } from "~/components/common/heading"
+import { Link } from "~/components/common/link"
 import { db } from "~/services/db"
 
 export const StatsCard = async () => {

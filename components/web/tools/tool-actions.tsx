@@ -1,10 +1,10 @@
 "use client"
 
 import { BadgeCheckIcon, SparklesIcon, TriangleAlertIcon } from "lucide-react"
-import Link from "next/link"
 import type { ComponentProps } from "react"
 import { useState } from "react"
 import { Button } from "~/components/common/button"
+import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
 import { Tooltip } from "~/components/common/tooltip"
 import { ToolClaimDialog } from "~/components/web/dialogs/tool-claim-dialog"
