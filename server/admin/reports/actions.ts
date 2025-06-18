@@ -1,5 +1,7 @@
 "use server"
 
+import { revalidatePath } from "next/cache"
+import { after } from "next/server"
 import { z } from "zod/v4"
 import { adminActionClient } from "~/lib/safe-actions"
 import { reportSchema } from "~/server/admin/reports/schema"
@@ -13,6 +15,10 @@ export const updateReport = adminActionClient
       data: input,
     })
 
+    after(() => {
+      revalidatePath("/admin/reports")
+    })
+
     return report
   })
 
@@ -21,6 +27,10 @@ export const deleteReports = adminActionClient
   .action(async ({ parsedInput: { ids } }) => {
     await db.report.deleteMany({
       where: { id: { in: ids } },
+    })
+
+    after(() => {
+      revalidatePath("/admin/reports")
     })
 
     return true

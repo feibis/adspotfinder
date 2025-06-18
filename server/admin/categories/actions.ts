@@ -1,7 +1,7 @@
 "use server"
 
 import { slugify } from "@primoui/utils"
-import { revalidateTag } from "next/cache"
+import { revalidatePath, revalidateTag } from "next/cache"
 import { after } from "next/server"
 import { z } from "zod/v4"
 import { adminActionClient } from "~/lib/safe-actions"
@@ -31,6 +31,7 @@ export const upsertCategory = adminActionClient
         })
 
     after(() => {
+      revalidatePath("/admin/categories")
       revalidateTag("categories")
       revalidateTag(`category-${category.slug}`)
     })
@@ -46,6 +47,7 @@ export const deleteCategories = adminActionClient
     })
 
     after(() => {
+      revalidatePath("/admin/categories")
       revalidateTag("categories")
     })
 

@@ -1,5 +1,6 @@
 "use server"
 
+import { revalidatePath } from "next/cache"
 import { after } from "next/server"
 import { z } from "zod/v4"
 import { removeS3Directories } from "~/lib/media"
@@ -15,6 +16,10 @@ export const updateUser = adminActionClient
       data: input,
     })
 
+    after(() => {
+      revalidatePath("/admin/users")
+    })
+
     return user
   })
 
@@ -23,6 +28,10 @@ export const deleteUsers = adminActionClient
   .action(async ({ parsedInput: { ids } }) => {
     await db.user.deleteMany({
       where: { id: { in: ids }, role: { not: "admin" } },
+    })
+
+    after(() => {
+      revalidatePath("/admin/users")
     })
 
     // Remove the user images from S3 asynchronously
@@ -39,6 +48,10 @@ export const updateUserRole = adminActionClient
     const user = await db.user.update({
       where: { id },
       data: { role },
+    })
+
+    after(() => {
+      revalidatePath("/admin/users")
     })
 
     return user

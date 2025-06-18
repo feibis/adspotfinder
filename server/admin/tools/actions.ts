@@ -2,7 +2,7 @@
 
 import { slugify } from "@primoui/utils"
 import { ToolStatus } from "@prisma/client"
-import { revalidateTag } from "next/cache"
+import { revalidatePath, revalidateTag } from "next/cache"
 import { after } from "next/server"
 import { z } from "zod/v4"
 import { removeS3Directories } from "~/lib/media"
@@ -38,6 +38,7 @@ export const upsertTool = adminActionClient
 
     // Revalidate the tools
     after(() => {
+      revalidatePath("/admin/tools")
       revalidateTag("tools")
       revalidateTag(`tool-${tool.slug}`)
 
@@ -73,6 +74,7 @@ export const deleteTools = adminActionClient
     })
 
     after(() => {
+      revalidatePath("/admin/tools")
       revalidateTag("tools")
     })
 
