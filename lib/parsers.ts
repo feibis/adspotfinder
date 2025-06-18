@@ -1,5 +1,5 @@
-import type { inferParserType, ParserMap } from "nuqs"
 import type { Row } from "@tanstack/react-table"
+import type { ParserMap, inferParserType } from "nuqs"
 import { createParser } from "nuqs/server"
 import { z } from "zod/v4"
 import type { ExtendedSortingState } from "~/types"
@@ -45,14 +45,20 @@ export const getSortingStateParser = <TData>(originalRow?: Row<TData>["original"
  * Checks if the state is the default state.
  * @param parsers The parsers to check.
  * @param values The values to check.
+ * @param excludeKeys Keys to exclude from the check.
  * @returns True if the state is the default state, false otherwise.
  */
 export const isDefaultState = <Parsers extends ParserMap>(
   parsers: Parsers,
   values: inferParserType<Parsers>,
+  excludeKeys: (keyof Parsers)[] = [],
 ) => {
-  for (const [key, parser] of Object.entries(parsers)) {
-    if (!parser.eq(values[key], parsers[key].defaultValue)) {
+  for (const key of Object.keys(parsers) as Array<keyof Parsers>) {
+    if (excludeKeys.includes(key)) {
+      continue
+    }
+
+    if (!parsers[key].eq(values[key], parsers[key].defaultValue)) {
       return false
     }
   }

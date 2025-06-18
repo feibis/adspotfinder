@@ -35,7 +35,7 @@ const FiltersProvider = ({
     startTransition,
   })
 
-  const isDefault = isDefaultState(filterParamsSchema, filters)
+  const isDefault = isDefaultState(filterParamsSchema, filters, ["page", "perPage"])
 
   const updateFilters = (values: Partial<Values<typeof filterParamsSchema>> | null) => {
     if (values === null) {
