@@ -31,7 +31,7 @@ export const AdBanner = async ({ className, ...props }: ComponentProps<typeof Ca
           eventName="click_ad"
           eventProps={{ url: ad.websiteUrl, type: ad.type, source: "banner" }}
         >
-          <Badge variant="outline" className="max-sm:order-last">
+          <Badge variant="outline" className="leading-none max-sm:order-last">
             Ad
           </Badge>
 
@@ -42,7 +42,7 @@ export const AdBanner = async ({ className, ...props }: ComponentProps<typeof Ca
                 alt={ad.name}
                 width={32}
                 height={32}
-                className="inline-flex align-text-top mr-1 size-3.5 sm:size-4"
+                className="flex float-left align-middle mr-1.5 size-3.5 rounded-sm sm:size-4"
               />
             )}
             <strong className="font-medium text-foreground">{ad.name}</strong> — {ad.description}
@@ -51,7 +51,7 @@ export const AdBanner = async ({ className, ...props }: ComponentProps<typeof Ca
           <Button
             variant="secondary"
             size="sm"
-            className="shrink-0 pointer-events-none max-sm:hidden"
+            className="shrink-0 leading-none pointer-events-none max-sm:hidden"
             asChild
           >
             <span>Learn More</span>

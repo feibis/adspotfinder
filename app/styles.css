@@ -198,7 +198,7 @@
   }
 }
 
-.animate-reveal {
+@utility animate-reveal {
   animation-timeline: view();
-  animation-range: 0% 15%;
+  animation-range: 0% 20%;
 }
