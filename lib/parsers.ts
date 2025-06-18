@@ -1,3 +1,4 @@
+import type { inferParserType, ParserMap } from "nuqs"
 import type { Row } from "@tanstack/react-table"
 import { createParser } from "nuqs/server"
 import { z } from "zod/v4"
@@ -38,4 +39,23 @@ export const getSortingStateParser = <TData>(originalRow?: Row<TData>["original"
       a.length === b.length &&
       a.every((item, index) => item.id === b[index]?.id && item.desc === b[index]?.desc),
   })
+}
+
+/**
+ * Checks if the state is the default state.
+ * @param parsers The parsers to check.
+ * @param values The values to check.
+ * @returns True if the state is the default state, false otherwise.
+ */
+export const isDefaultState = <Parsers extends ParserMap>(
+  parsers: Parsers,
+  values: inferParserType<Parsers>,
+) => {
+  for (const [key, parser] of Object.entries(parsers)) {
+    if (!parser.eq(values[key], parsers[key].defaultValue)) {
+      return false
+    }
+  }
+
+  return true
 }
