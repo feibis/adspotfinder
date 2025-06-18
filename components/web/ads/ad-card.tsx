@@ -32,6 +32,10 @@ type AdCardProps = CardProps & {
 }
 
 const AdCard = async ({ className, where, overrideAd, defaultOverride, ...props }: AdCardProps) => {
+  if (!config.ads.enabled) {
+    return null
+  }
+
   // Default ad values to display if no ad is found
   const defaultAd = { ...config.ads.defaultAd, ...defaultOverride }
 
