@@ -27,7 +27,7 @@ export const Filters = ({ children, className, placeholder, ...props }: FiltersP
           value={filters.q || ""}
           onChange={e => updateFilters({ q: e.target.value })}
           placeholder={isLoading ? "Loading..." : placeholder}
-          className={cx("w-full truncate pl-10", !isDefault && "pr-12 pr-sm:pr-24")}
+          className={cx("w-full truncate pl-10", !isDefault && "pr-12 sm:pr-20")}
         />
 
         {!isDefault && (
