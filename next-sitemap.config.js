@@ -1,4 +1,4 @@
-const excludePaths = ["/admin*", "/auth*", "/dashboard*"]
+const excludePaths = ["/admin*", "/auth*", "/dashboard*", "/*/opengraph-image-"]
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
