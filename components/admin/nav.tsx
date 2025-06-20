@@ -66,7 +66,7 @@ export const Nav = ({ className, links, isCollapsed, ...props }: NavProps) => {
                 size="md"
                 variant="ghost"
                 aria-label={title}
-                className={cx(isActive(href) && "bg-accent text-foreground")}
+                className={cx("font-sans", isActive(href) && "bg-accent text-foreground")}
                 asChild
                 {...props}
               >
@@ -89,7 +89,7 @@ export const Nav = ({ className, links, isCollapsed, ...props }: NavProps) => {
                 </Badge>
               ))
             }
-            className={cx("justify-start", isActive(href) && "bg-accent text-foreground")}
+            className={cx("justify-start font-sans", isActive(href) && "bg-accent text-foreground")}
             asChild
             {...props}
           >

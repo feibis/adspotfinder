@@ -56,9 +56,9 @@ export const Sidebar = () => {
           suffix: (
             <Tooltip tooltip="Visit site">
               <Button
-                variant="secondary"
+                variant="ghost"
                 onClick={handleOpenSite}
-                className="-my-0.5-mr-[0.21425em] -mr-[0.21425em] px-1 py-[0.2em] text-xs/tight rounded-sm"
+                className="-my-0.5 -mr-[0.21425em] px-1 py-[0.2em] text-xs/tight rounded-sm hover:bg-background"
               >
                 <ExternalLinkIcon className="size-3" />
               </Button>
