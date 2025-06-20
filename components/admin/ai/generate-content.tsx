@@ -34,5 +34,12 @@ export const AIGenerateContent = <T extends z.ZodSchema>({
   // Handle streaming updates from AI SDK
   useEffect(() => object && onFinish(object), [object])
 
-  return <AIGenerate onGenerate={() => submit({ url })} stop={stop} isLoading={isLoading} />
+  return (
+    <AIGenerate
+      onGenerate={() => submit({ url })}
+      stop={stop}
+      isLoading={isLoading}
+      buttonText="Generate Content"
+    />
+  )
 }

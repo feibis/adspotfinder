@@ -18,10 +18,11 @@ import { siteConfig } from "~/config/site"
 type AIGenerateProps = {
   stop: () => void
   isLoading: boolean
+  buttonText?: string
   onGenerate: () => void
 }
 
-export const AIGenerate = ({ stop, isLoading, onGenerate }: AIGenerateProps) => {
+export const AIGenerate = ({ stop, isLoading, buttonText, onGenerate }: AIGenerateProps) => {
   const key = siteConfig.name.toLowerCase()
   const [isAlertOpen, setIsAlertOpen] = useState(false)
   const [consent, setConsent] = useLocalStorage({ key: `${key}-ai-consent`, defaultValue: false })
@@ -54,7 +55,9 @@ export const AIGenerate = ({ stop, isLoading, onGenerate }: AIGenerateProps) => 
         prefix={isLoading ? <LoaderIcon className="animate-spin" /> : <SparklesIcon />}
         onClick={() => (isLoading ? stop() : handleGenerate())}
       >
-        {isLoading ? "Stop Generating" : "Generate"}
+        <span className="max-md:sr-only">
+          {isLoading ? "Stop Generating" : buttonText || "Generate"}
+        </span>
       </Button>
 
       <Dialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>

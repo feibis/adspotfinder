@@ -34,5 +34,12 @@ export const AIGenerateDescription = <T extends z.ZodSchema>({
   // Handle streaming updates from AI SDK
   useEffect(() => object && onFinish(object), [object])
 
-  return <AIGenerate onGenerate={() => submit({ prompt })} stop={stop} isLoading={isLoading} />
+  return (
+    <AIGenerate
+      onGenerate={() => submit({ prompt })}
+      stop={stop}
+      isLoading={isLoading}
+      buttonText="Generate Description"
+    />
+  )
 }
