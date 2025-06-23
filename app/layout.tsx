@@ -1,5 +1,6 @@
 import "./styles.css"
-import type { Metadata, Viewport } from "next"
+import type { Metadata } from "next"
+import { ThemeProvider } from "next-themes"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
 import type { PropsWithChildren } from "react"
 import { Search } from "~/components/common/search"
@@ -22,14 +23,6 @@ export const metadata: Metadata = {
   ...config.metadata,
 }
 
-export const viewport: Viewport = {
-  colorScheme: "dark light",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
-}
-
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" className={`${fontSans.variable} scroll-smooth`} suppressHydrationWarning>
@@ -37,9 +30,11 @@ export default function RootLayout({ children }: PropsWithChildren) {
         <NuqsAdapter>
           <TooltipProvider delayDuration={250}>
             <SearchProvider>
-              {children}
-              <Toaster />
-              <Search />
+              <ThemeProvider attribute="class" disableTransitionOnChange>
+                {children}
+                <Toaster />
+                <Search />
+              </ThemeProvider>
             </SearchProvider>
           </TooltipProvider>
         </NuqsAdapter>

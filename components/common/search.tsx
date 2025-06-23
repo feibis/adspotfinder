@@ -2,12 +2,13 @@
 
 import { type HotkeyItem, useDebouncedState, useHotkeys } from "@mantine/hooks"
 import { getUrlHostname } from "@primoui/utils"
-import { LoaderIcon } from "lucide-react"
+import { LoaderIcon, MoonIcon, SunIcon } from "lucide-react"
 import type { InferSafeActionFnResult } from "next-safe-action"
 import { useAction } from "next-safe-action/hooks"
+import { useTheme } from "next-themes"
 import { usePathname, useRouter } from "next/navigation"
 import posthog from "posthog-js"
-import { type ReactNode, useEffect, useRef, useState } from "react"
+import { type ComponentProps, type ReactNode, useEffect, useRef, useState } from "react"
 import {
   CommandDialog,
   CommandEmpty,
@@ -57,9 +58,11 @@ const SearchResults = <T extends { slug: string; name: string }>({
 type CommandSection = {
   name: string
   items: {
+    value?: string
     label: string
-    path: string
-    shortcut?: boolean
+    shortcut?: ComponentProps<typeof CommandShortcut>
+    icon?: ReactNode
+    onSelect: () => void
   }[]
 }
 
@@ -69,6 +72,7 @@ export const Search = () => {
   const pathname = usePathname()
   const search = useSearch()
   const [results, setResults] = useState<InferSafeActionFnResult<typeof searchItems>["data"]>()
+  const { resolvedTheme, setTheme, forcedTheme } = useTheme()
   const [query, setQuery] = useDebouncedState("", 250)
   const listRef = useRef<HTMLDivElement>(null)
 
@@ -103,36 +107,61 @@ export const Search = () => {
       items: [
         {
           label: "New Tool",
-          path: "/admin/tools/new",
-          shortcut: true,
+          shortcut: { meta: true, children: "1" },
+          onSelect: () => navigateTo("/admin/tools/new"),
         },
         {
           label: "New Category",
-          path: "/admin/categories/new",
-          shortcut: true,
+          shortcut: { meta: true, children: "2" },
+          onSelect: () => navigateTo("/admin/categories/new"),
         },
         {
           label: "New Tag",
-          path: "/admin/tags/new",
-          shortcut: true,
+          shortcut: { meta: true, children: "3" },
+          onSelect: () => navigateTo("/admin/tags/new"),
         },
       ],
     })
-
-    for (const [i, { path, shortcut }] of commandSections[0].items.entries()) {
-      shortcut && hotkeys.push([`mod+${i + 1}`, () => navigateTo(path)])
-    }
 
     // User command sections & hotkeys
   } else {
     commandSections.push({
       name: "Quick Links",
       items: [
-        { label: "Tools", path: "/" },
-        { label: "Categories", path: "/categories" },
-        { label: "Tags", path: "/tags" },
+        { label: "Tools", onSelect: () => navigateTo("/") },
+        { label: "Categories", onSelect: () => navigateTo("/categories") },
+        { label: "Tags", onSelect: () => navigateTo("/tags") },
       ],
     })
+  }
+
+  if (!forcedTheme) {
+    commandSections.push({
+      name: "Appearance",
+      items: [
+        {
+          value: "theme",
+          label: `Switch to ${resolvedTheme === "dark" ? "Light" : "Dark"} Mode`,
+          icon: resolvedTheme === "dark" ? <SunIcon /> : <MoonIcon />,
+          shortcut: { meta: true, shift: true, children: "L" },
+          onSelect: () => setTheme(resolvedTheme === "dark" ? "light" : "dark"),
+        },
+      ],
+    })
+  }
+
+  for (const [i, { shortcut, onSelect }] of commandSections
+    .flatMap(({ items }) => items)
+    .entries()) {
+    if (!shortcut) continue
+
+    const mods = []
+    if (shortcut.shift) mods.push("shift")
+    if (shortcut.meta) mods.push("mod")
+    if (shortcut.alt) mods.push("alt")
+    if (shortcut.ctrl) mods.push("ctrl")
+
+    hotkeys.push([[...mods, shortcut.children].join("+"), onSelect])
   }
 
   useHotkeys(hotkeys, [], true)
@@ -183,10 +212,11 @@ export const Search = () => {
         {!hasQuery &&
           commandSections.map(({ name, items }) => (
             <CommandGroup key={name} heading={name}>
-              {items.map(({ path, label, shortcut }, i) => (
-                <CommandItem key={path} onSelect={() => navigateTo(path)}>
+              {items.map(({ value, label, shortcut, icon, onSelect }) => (
+                <CommandItem key={value || label} onSelect={onSelect} value={value || label}>
+                  {icon}
                   {label}
-                  {shortcut && <CommandShortcut meta>{i + 1}</CommandShortcut>}
+                  {shortcut && <CommandShortcut {...shortcut} />}
                 </CommandItem>
               ))}
             </CommandGroup>

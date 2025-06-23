@@ -3,20 +3,24 @@
 import { usePathname } from "next/navigation"
 import type { ComponentProps } from "react"
 import { Link } from "~/components/common/link"
-import { cva, cx } from "~/utils/cva"
+import { type VariantProps, cva, cx } from "~/utils/cva"
 
 const navLinkVariants = cva({
-  base: "group flex items-center gap-2 p-0.5 -m-0.5 cursor-pointer disabled:opacity-50",
+  base: "group flex items-center gap-2 cursor-pointer disabled:opacity-50",
 
   variants: {
     isActive: {
       true: "font-medium text-foreground",
       false: "text-muted-foreground hover:text-foreground",
     },
+    isPadded: {
+      true: "p-0.5 -m-0.5",
+    },
   },
 
   defaultVariants: {
     isActive: false,
+    isPadded: true,
   },
 })
 
@@ -29,15 +33,16 @@ const isItemActive = (href: string, pathname: string, exact = false) => {
 }
 
 type NavLinkProps = ComponentProps<"a"> &
-  ComponentProps<typeof Link> & {
+  ComponentProps<typeof Link> &
+  VariantProps<typeof navLinkVariants> & {
     exact?: boolean
   }
 
-const NavLink = ({ className, exact, ...props }: NavLinkProps) => {
+const NavLink = ({ className, exact, isPadded, ...props }: NavLinkProps) => {
   const pathname = usePathname()
   const isActive = isItemActive(props.href, pathname, exact)
 
-  return <Link className={cx(navLinkVariants({ isActive, className }))} {...props} />
+  return <Link className={cx(navLinkVariants({ isActive, isPadded, className }))} {...props} />
 }
 
 export { NavLink, navLinkVariants }

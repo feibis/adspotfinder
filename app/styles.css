@@ -2,6 +2,8 @@
 @plugin "tailwindcss-animate";
 @plugin "@tailwindcss/typography";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --header-height: 3.125rem;
   --header-top: 0rem;
@@ -90,41 +92,39 @@
     @apply border-border;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --color-background: hsl(0 0% 8%);
-      --color-foreground: hsl(0 0% 90%);
-      --color-border: hsl(0 0% 18%);
-      --color-input: hsl(0 0% 18%);
-      --color-ring: hsl(0 0% 23%);
+  .dark {
+    --color-background: hsl(0 0% 8%);
+    --color-foreground: hsl(0 0% 90%);
+    --color-border: hsl(0 0% 18%);
+    --color-input: hsl(0 0% 18%);
+    --color-ring: hsl(0 0% 23%);
 
-      --color-card: hsl(0 0% 11%);
-      --color-card-foreground: hsl(0 0% 90%);
+    --color-card: hsl(0 0% 11%);
+    --color-card-foreground: hsl(0 0% 90%);
 
-      --color-popover: hsl(0 0% 8%);
-      --color-popover-foreground: hsl(0 0% 90%);
+    --color-popover: hsl(0 0% 8%);
+    --color-popover-foreground: hsl(0 0% 90%);
 
-      --color-primary: hsl(234 98% 61%);
-      --color-primary-foreground: hsl(0 0% 98%);
+    --color-primary: hsl(234 98% 61%);
+    --color-primary-foreground: hsl(0 0% 98%);
 
-      --color-secondary: hsl(0 0% 13%);
-      --color-secondary-foreground: hsl(0 0% 70%);
+    --color-secondary: hsl(0 0% 13%);
+    --color-secondary-foreground: hsl(0 0% 70%);
 
-      --color-muted: hsl(0 0% 13%);
-      --color-muted-foreground: hsl(0 0% 60%);
+    --color-muted: hsl(0 0% 13%);
+    --color-muted-foreground: hsl(0 0% 60%);
 
-      --color-accent: hsl(0 0% 13%);
-      --color-accent-foreground: hsl(0 0% 90%);
+    --color-accent: hsl(0 0% 13%);
+    --color-accent-foreground: hsl(0 0% 90%);
 
-      --color-destructive: hsl(0 62.8% 30.6%);
-      --color-destructive-foreground: hsl(0 0% 98%);
+    --color-destructive: hsl(0 62.8% 30.6%);
+    --color-destructive-foreground: hsl(0 0% 98%);
 
-      --color-chart-1: hsl(220 70% 50%);
-      --color-chart-2: hsl(160 60% 45%);
-      --color-chart-3: hsl(30 80% 55%);
-      --color-chart-4: hsl(43 74% 66%);
-      --color-chart-5: hsl(340 75% 55%);
-    }
+    --color-chart-1: hsl(220 70% 50%);
+    --color-chart-2: hsl(160 60% 45%);
+    --color-chart-3: hsl(30 80% 55%);
+    --color-chart-4: hsl(43 74% 66%);
+    --color-chart-5: hsl(340 75% 55%);
   }
 
   hr {
@@ -151,7 +151,8 @@
     @apply stroke-[1.75]!;
   }
 
-  svg.lucide:not([class*="size-"]):not([class*="h-"]) {
+  svg.lucide:not([class*="size-"]):not([class*="h-"]),
+  svg[aria-label*="Icon"]:not([class*="size-"]):not([class*="h-"]) {
     @apply size-[1em]!;
   }
 

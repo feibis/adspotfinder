@@ -2,7 +2,7 @@ import type { ComponentProps } from "react"
 import { type VariantProps, cva, cx } from "~/utils/cva"
 
 const kbdVariants = cva({
-  base: "inline-flex gap-[0.2em] -my-0.5 px-[0.4em] py-[0.088em] whitespace-nowrap tabular-nums rounded-sm border text-xs/tight font-medium text-muted-foreground",
+  base: "inline-flex gap-[0.1em] -my-0.5 px-[0.4em] py-[0.088em] whitespace-nowrap tabular-nums rounded-sm border text-xs/tight font-medium text-muted-foreground",
 
   variants: {
     variant: {
@@ -37,8 +37,8 @@ export const Kbd = ({
 }: KbdProps) => {
   return (
     <span className={cx(kbdVariants({ variant, className }))} {...props}>
-      {meta && <span>⌘</span>}
       {shift && <span>⇧</span>}
+      {meta && <span>⌘</span>}
       {alt && <span>⌥</span>}
       {ctrl && <span>⌃</span>}
       {children && <span>{children}</span>}

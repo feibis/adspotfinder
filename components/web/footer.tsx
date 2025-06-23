@@ -11,6 +11,7 @@ import { Tooltip } from "~/components/common/tooltip"
 import { BuiltWith } from "~/components/web/built-with"
 import { CTAForm } from "~/components/web/cta-form"
 import { ExternalLink } from "~/components/web/external-link"
+import { ThemeSwitcher } from "~/components/web/theme-switcher"
 import { NavLink, navLinkVariants } from "~/components/web/ui/nav-link"
 import { config } from "~/config"
 import { cx } from "~/utils/cva"
@@ -43,7 +44,11 @@ export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) 
             <CTAForm />
           </Stack>
 
-          <Stack className="text-xl opacity-75">
+          <Stack className="text-lg opacity-75">
+            <Tooltip tooltip="Toggle theme">
+              <ThemeSwitcher />
+            </Tooltip>
+
             <Tooltip tooltip="RSS Feed">
               <ExternalLink href={config.links.feed} className={navLinkVariants()}>
                 <RssIcon />
