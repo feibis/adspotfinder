@@ -3,6 +3,9 @@ import { addDays } from "date-fns"
 
 const prisma = new PrismaClient()
 
+const ADMIN_EMAIL = "admin@dirstarter.com"
+const USER_EMAIL = "user@dirstarter.com"
+
 async function main() {
   const now = new Date()
 
@@ -12,19 +15,15 @@ async function main() {
     data: [
       {
         name: "Admin User",
-        email: "admin@dirstarter.com",
+        email: ADMIN_EMAIL,
         emailVerified: true,
         role: "admin",
-        createdAt: now,
-        updatedAt: now,
       },
       {
         name: "User",
-        email: "user@dirstarter.com",
+        email: USER_EMAIL,
         emailVerified: true,
         role: "user",
-        createdAt: now,
-        updatedAt: now,
       },
     ],
   })
