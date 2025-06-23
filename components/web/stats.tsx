@@ -26,7 +26,7 @@ export const Stats = ({ className, ...props }: ComponentProps<"div">) => {
             locales="en-US"
             // @ts-expect-error
             style={{ "--number-flow-char-height": "0.75em" }}
-            className="text-5xl font-semibold tabular-nums"
+            className="text-5xl font-semibold"
           />
 
           <p className="text-muted-foreground">{label}</p>
