@@ -174,7 +174,7 @@ export const RelationSelector = <T extends Relation>({
                     size="md"
                     variant="ghost"
                     onClick={() => setSelectedIds([])}
-                    className="w-full"
+                    className="w-full bg-popover"
                   >
                     Clear selection
                   </Button>

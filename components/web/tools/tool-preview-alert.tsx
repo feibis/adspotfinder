@@ -34,7 +34,7 @@ export const ToolPreviewAlert = ({ className, tool, ...props }: ToolPreviewAlert
         the process, you can expedite the review below.
       </Note>
 
-      <Button size="md" variant="fancy" prefix={<ClockIcon />} asChild>
+      <Button variant="fancy" prefix={<ClockIcon />} asChild>
         <Link href={`/submit/${tool.slug}`}>Publish within 24h</Link>
       </Button>
     </Card>

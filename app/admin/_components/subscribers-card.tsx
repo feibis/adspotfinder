@@ -65,7 +65,7 @@ const SubscribersCard = async ({ ...props }: ComponentProps<typeof Card>) => {
       <CardHeader>
         <CardDescription>Subscribers</CardDescription>
         <span className="ml-auto text-xs text-muted-foreground">last 30 days</span>
-        <H2 className="w-full tabular-nums">{totalSubscribers.toLocaleString()}</H2>
+        <H2 className="w-full">{totalSubscribers.toLocaleString()}</H2>
       </CardHeader>
 
       <Chart
