@@ -1,4 +1,4 @@
-const excludePaths = ["/admin*", "/auth*", "/dashboard*", "/*/opengraph-image-"]
+const excludePaths = ["/admin*", "/auth*", "/dashboard*"]
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
@@ -11,6 +11,10 @@ module.exports = {
         userAgent: "*",
         allow: "/",
         disallow: excludePaths,
+      },
+      {
+        userAgent: "Googlebot",
+        disallow: "/*/opengraph-image-",
       },
     ],
   },
