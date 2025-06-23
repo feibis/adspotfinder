@@ -14,22 +14,25 @@ export const searchTags = async (search: TagsSearchParams, where?: Prisma.TagWhe
   const skip = (page - 1) * perPage
   const take = perPage
 
-  const [tags, totalCount] = await db.$transaction([
+  const whereQuery: Prisma.TagWhereInput = {
+    tools: { some: { status: ToolStatus.Published } },
+  }
+
+  const [tags, total] = await db.$transaction([
     db.tag.findMany({
       orderBy: { name: "asc" },
-      where: { tools: { some: { status: ToolStatus.Published } }, ...where },
+      where: { ...whereQuery, ...where },
       select: tagManyPayload,
       take,
       skip,
     }),
 
     db.tag.count({
-      where: { ...where },
+      where: { ...whereQuery, ...where },
     }),
   ])
 
-  const pageCount = Math.ceil(totalCount / perPage)
-  return { tags, totalCount, pageCount }
+  return { tags, total }
 }
 
 export const findTagSlugs = async ({ where, orderBy, ...args }: Prisma.TagFindManyArgs) => {

@@ -1,38 +1,45 @@
 "use client"
 
-import { getCurrentPage, getPageLink } from "@primoui/utils"
+import { usePagination } from "@mantine/hooks"
+import { getPageLink } from "@primoui/utils"
 import { MoveLeftIcon, MoveRightIcon } from "lucide-react"
 import { usePathname, useSearchParams } from "next/navigation"
-import { type ComponentProps, useMemo } from "react"
+import type { ComponentProps } from "react"
 import { Note } from "~/components/common/note"
 import { PaginationLink } from "~/components/web/pagination-link"
 import { navLinkVariants } from "~/components/web/ui/nav-link"
-import { type UsePaginationProps, usePagination } from "~/hooks/use-pagination"
 import { cx } from "~/utils/cva"
 
-export type PaginationProps = ComponentProps<"nav"> & Omit<UsePaginationProps, "currentPage">
+export type PaginationProps = ComponentProps<"nav"> & {
+  total: number
+  pageSize?: number
+  currentPage?: number
+  siblings?: number
+  boundaries?: number
+}
 
 export const Pagination = ({
   className,
-  totalCount,
+  total,
   pageSize = 1,
-  siblingCount,
+  currentPage = 1,
+  siblings,
+  boundaries,
   ...props
 }: PaginationProps) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const params = new URLSearchParams(searchParams)
-  const currentPage = useMemo(() => getCurrentPage(params.get("page")), [params])
-  const pageCount = Math.ceil(totalCount / pageSize)
+  const pageCount = Math.ceil(total / pageSize)
 
-  const paginationRange = usePagination({
-    currentPage,
-    totalCount,
-    pageSize,
-    siblingCount,
+  const pagination = usePagination({
+    total: pageCount,
+    page: currentPage,
+    siblings,
+    boundaries,
   })
 
-  if (paginationRange.length <= 1) {
+  if (pagination.range.length <= 1) {
     return null
   }
 
@@ -57,9 +64,9 @@ export const Pagination = ({
       <div className="flex items-center flex-wrap gap-3 max-md:hidden">
         <Note as="span">Page:</Note>
 
-        {paginationRange.map((page, index) => (
+        {pagination.range.map((page, index) => (
           <div key={`page-${index}`}>
-            {typeof page === "string" && <span className={navLinkVariants()}>{page}</span>}
+            {page === "dots" && <span className={navLinkVariants()}>...</span>}
 
             {typeof page === "number" && (
               <PaginationLink
@@ -78,7 +85,7 @@ export const Pagination = ({
         href={getPageLink(params, pathname, currentPage + 1)}
         isDisabled={currentPage >= pageCount}
         suffix={<MoveRightIcon />}
-        rel="prev"
+        rel="next"
       >
         Next
       </PaginationLink>

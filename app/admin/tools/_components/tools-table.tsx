@@ -23,7 +23,7 @@ type ToolsTableProps = {
 }
 
 export function ToolsTable({ toolsPromise }: ToolsTableProps) {
-  const { tools, toolsTotal, pageCount } = use(toolsPromise)
+  const { tools, total, pageCount } = use(toolsPromise)
   const [{ perPage, sort }] = useQueryStates(toolsTableParamsSchema)
 
   // Memoize the columns so they don't re-render on every render
@@ -80,7 +80,7 @@ export function ToolsTable({ toolsPromise }: ToolsTableProps) {
       <DataTable table={table}>
         <DataTableHeader
           title="Tools"
-          total={toolsTotal}
+          total={total}
           callToAction={
             <Button variant="primary" size="md" prefix={<PlusIcon />} asChild>
               <Link href="/admin/tools/new">

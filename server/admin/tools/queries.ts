@@ -33,7 +33,7 @@ export const findTools = async (search: ToolsTableSchema, where?: Prisma.ToolWhe
   }
 
   // Transaction is used to ensure both queries are executed in a single transaction
-  const [tools, toolsTotal] = await db.$transaction([
+  const [tools, total] = await db.$transaction([
     db.tool.findMany({
       where: { ...whereQuery, ...where },
       orderBy,
@@ -46,8 +46,8 @@ export const findTools = async (search: ToolsTableSchema, where?: Prisma.ToolWhe
     }),
   ])
 
-  const pageCount = Math.ceil(toolsTotal / perPage)
-  return { tools, toolsTotal, pageCount }
+  const pageCount = Math.ceil(total / perPage)
+  return { tools, total, pageCount }
 }
 
 export const findScheduledTools = async () => {

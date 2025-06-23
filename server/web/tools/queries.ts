@@ -31,7 +31,7 @@ export const searchTools = async (search: FilterSchema, where?: Prisma.ToolWhere
     ]
   }
 
-  const [tools, totalCount] = await db.$transaction([
+  const [tools, total] = await db.$transaction([
     db.tool.findMany({
       orderBy: sortBy ? { [sortBy]: sortOrder } : [{ isFeatured: "desc" }, { createdAt: "desc" }],
       where: { ...whereQuery, ...where },
@@ -47,8 +47,7 @@ export const searchTools = async (search: FilterSchema, where?: Prisma.ToolWhere
 
   console.log(`Tools search: ${Math.round(performance.now() - start)}ms`)
 
-  const pageCount = Math.ceil(totalCount / perPage)
-  return { tools, totalCount, pageCount }
+  return { tools, total }
 }
 
 export const findRelatedTools = async ({

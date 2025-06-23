@@ -10,12 +10,12 @@ type TagQueryProps = {
 
 const TagQuery = async ({ searchParams }: TagQueryProps) => {
   const parsedParams = tagsSearchParamsCache.parse(await searchParams)
-  const { tags, totalCount } = await searchTags(parsedParams, {})
+  const { tags, total } = await searchTags(parsedParams, {})
 
   return (
     <>
       <TagList tags={tags} />
-      <Pagination pageSize={parsedParams.perPage} totalCount={totalCount} />
+      <Pagination pageSize={parsedParams.perPage} total={total} currentPage={parsedParams.page} />
     </>
   )
 }

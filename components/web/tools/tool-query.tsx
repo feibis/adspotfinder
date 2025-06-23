@@ -24,12 +24,12 @@ const ToolQuery = async ({
 }: ToolQueryProps) => {
   const parsedParams = filterParamsCache.parse(await searchParams)
   const params = { ...parsedParams, ...overrideParams }
-  const { tools, totalCount } = await searchTools(params, where)
+  const { tools, total } = await searchTools(params, where)
 
   return (
     <ToolListing
       list={{ tools, ...list }}
-      pagination={{ totalCount, pageSize: params.perPage, ...pagination }}
+      pagination={{ total, pageSize: params.perPage, currentPage: params.page, ...pagination }}
       {...props}
     />
   )
