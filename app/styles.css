@@ -93,28 +93,28 @@
   }
 
   .dark {
-    --color-background: hsl(0 0% 4%);
+    --color-background: hsl(0 0% 5%);
     --color-foreground: hsl(0 0% 90%);
-    --color-border: hsl(0 0% 14%);
-    --color-input: hsl(0 0% 14%);
-    --color-ring: hsl(0 0% 19%);
+    --color-border: hsl(0 0% 15%);
+    --color-input: hsl(0 0% 15%);
+    --color-ring: hsl(0 0% 20%);
 
-    --color-card: hsl(0 0% 7%);
+    --color-card: hsl(0 0% 8%);
     --color-card-foreground: hsl(0 0% 90%);
 
-    --color-popover: hsl(0 0% 4%);
+    --color-popover: hsl(0 0% 5%);
     --color-popover-foreground: hsl(0 0% 90%);
 
     --color-primary: hsl(234 98% 61%);
     --color-primary-foreground: hsl(0 0% 98%);
 
-    --color-secondary: hsl(0 0% 9%);
+    --color-secondary: hsl(0 0% 10%);
     --color-secondary-foreground: hsl(0 0% 70%);
 
-    --color-muted: hsl(0 0% 9%);
+    --color-muted: hsl(0 0% 10%);
     --color-muted-foreground: hsl(0 0% 60%);
 
-    --color-accent: hsl(0 0% 9%);
+    --color-accent: hsl(0 0% 10%);
     --color-accent-foreground: hsl(0 0% 90%);
 
     --color-destructive: hsl(0 62.8% 30.6%);

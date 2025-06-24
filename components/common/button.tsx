@@ -98,7 +98,7 @@ const Button = ({
             <Slot.Root className={buttonAffixVariants()}>{prefix}</Slot.Root>
 
             {Children.count(child) > 0 && (
-              <Slot.Root className="flex-1 truncate only:text-center">
+              <Slot.Root className="flex-1 truncate only:text-center has-[div]:contents">
                 {isValidElement(child) ? child : <span>{child}</span>}
               </Slot.Root>
             )}

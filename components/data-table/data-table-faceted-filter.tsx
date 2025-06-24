@@ -14,6 +14,7 @@ import {
 } from "~/components/common/command"
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/common/popover"
 import { Separator } from "~/components/common/separator"
+import { Stack } from "~/components/common/stack"
 import type { Option } from "~/types"
 
 type DataTableFacetedFilterProps<TData, TValue> = {
@@ -68,38 +69,38 @@ export function DataTableFacetedFilter<TData, TValue>({
                 const isSelected = selectedValues.has(option.value)
 
                 return (
-                  <CommandItem
-                    key={option.value}
-                    onSelect={() => {
-                      if (isSelected) {
-                        selectedValues.delete(option.value)
-                      } else {
-                        selectedValues.add(option.value)
-                      }
-                      const filterValues = Array.from(selectedValues)
-                      column?.setFilterValue(filterValues.length ? filterValues : undefined)
-                    }}
-                    className="flex items-center gap-2"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      readOnly
-                      className="pointer-events-none"
-                    />
+                  <Stack key={option.value} size="sm" asChild>
+                    <CommandItem
+                      onSelect={() => {
+                        if (isSelected) {
+                          selectedValues.delete(option.value)
+                        } else {
+                          selectedValues.add(option.value)
+                        }
+                        const filterValues = Array.from(selectedValues)
+                        column?.setFilterValue(filterValues.length ? filterValues : undefined)
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        readOnly
+                        className="pointer-events-none"
+                      />
 
-                    <Slot.Root className="size-4 text-muted-foreground" aria-hidden="true">
-                      {option.icon}
-                    </Slot.Root>
+                      <Slot.Root className="-mr-0.5" aria-hidden="true">
+                        {option.icon}
+                      </Slot.Root>
 
-                    <span>{option.label}</span>
+                      <span>{option.label}</span>
 
-                    {option.withCount && column?.getFacetedUniqueValues()?.get(option.value) && (
-                      <span className="ml-auto flex items-center justify-center font-mono text-xs">
-                        {column?.getFacetedUniqueValues().get(option.value)}
-                      </span>
-                    )}
-                  </CommandItem>
+                      {option.withCount && column?.getFacetedUniqueValues()?.get(option.value) && (
+                        <span className="ml-auto flex items-center justify-center font-mono text-xs">
+                          {column?.getFacetedUniqueValues().get(option.value)}
+                        </span>
+                      )}
+                    </CommandItem>
+                  </Stack>
                 )
               })}
             </CommandGroup>
