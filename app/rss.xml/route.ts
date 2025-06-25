@@ -33,9 +33,7 @@ export const GET = async () => {
     language: "en",
     ttl: 14400,
     pubDate: new Date(),
-    custom_namespaces: {
-      dirstarter: "https://dirstarter.com",
-    },
+    custom_namespaces: { dirstarter: `${url}/dirstarter-rss.dtd` },
   })
 
   tools.map(tool => {
