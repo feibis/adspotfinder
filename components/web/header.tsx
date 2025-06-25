@@ -58,7 +58,7 @@ const Header = ({ children, className, session, ...props }: HeaderProps) => {
             <button
               type="button"
               onClick={() => setNavOpen(!isNavOpen)}
-              className="block -m-1 -ml-1.5 md:hidden"
+              className="block -m-1 -ml-1.5 lg:hidden"
             >
               <Hamburger className="size-7" />
             </button>
@@ -66,7 +66,7 @@ const Header = ({ children, className, session, ...props }: HeaderProps) => {
             <Logo className="min-w-0" />
           </Stack>
 
-          <nav className="flex flex-wrap gap-4 max-md:hidden">
+          <nav className="flex flex-wrap gap-x-4 gap-y-0.5 flex-1 max-lg:hidden">
             <DropdownMenu>
               <DropdownMenuTrigger className={cx(navLinkVariants({ className: "gap-1" }))}>
                 Browse{" "}
@@ -96,7 +96,7 @@ const Header = ({ children, className, session, ...props }: HeaderProps) => {
             <NavLink href="/about">About Us</NavLink>
           </nav>
 
-          <Stack size="sm" wrap={false} className="flex-1 justify-end">
+          <Stack size="sm" wrap={false} className="justify-end max-lg:grow">
             <Button size="sm" variant="ghost" className="p-1 text-base" onClick={search.open}>
               <SearchIcon />
             </Button>
@@ -115,7 +115,7 @@ const Header = ({ children, className, session, ...props }: HeaderProps) => {
 
         <nav
           className={cx(
-            "absolute top-full inset-x-0 h-[calc(100dvh-var(--header-top)-var(--header-height))] -mt-px py-4 px-6 grid grid-cols-2 place-items-start place-content-start gap-x-4 gap-y-6 bg-background/90 backdrop-blur-lg transition-opacity md:hidden",
+            "absolute top-full inset-x-0 h-[calc(100dvh-var(--header-top)-var(--header-height))] -mt-px py-4 px-6 grid grid-cols-2 place-items-start place-content-start gap-x-4 gap-y-6 bg-background/90 backdrop-blur-lg transition-opacity lg:hidden",
             isNavOpen ? "opacity-100" : "opacity-0 pointer-events-none",
           )}
         >
