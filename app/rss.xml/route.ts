@@ -13,7 +13,6 @@ export const GET = async () => {
     orderBy: { publishedAt: "desc" },
     take: 50,
     select: {
-      id: true,
       name: true,
       slug: true,
       description: true,
@@ -32,18 +31,16 @@ export const GET = async () => {
     language: "en",
     ttl: 14400,
     pubDate: new Date(),
-    custom_namespaces: { dc: "http://purl.org/dc/elements/1.1/" },
   })
 
   tools.map(tool => {
     feed.item({
-      guid: tool.id,
+      guid: tool.websiteUrl,
       title: tool.name,
       url: addSearchParams(`${url}/${tool.slug}`, rssSearchParams),
       date: tool.publishedAt?.toUTCString() ?? new Date().toUTCString(),
       description: tool.description ?? "",
       categories: tool.categories?.map(({ name }) => name) || [],
-      custom_elements: [{ "dc:identifier": tool.websiteUrl }],
     })
   })
 
