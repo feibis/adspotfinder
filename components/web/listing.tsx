@@ -9,6 +9,7 @@ type ListingProps = ComponentProps<typeof Stack> & {
   title?: string
   button?: ReactNode
   separated?: boolean
+  showDivider?: boolean
 }
 
 export const Listing = ({
@@ -17,6 +18,7 @@ export const Listing = ({
   title,
   button,
   separated,
+  showDivider = true,
   ...props
 }: ListingProps) => {
   return (
@@ -26,6 +28,8 @@ export const Listing = ({
       <Stack size="lg" direction="column" className={cx("items-stretch", className)} {...props}>
         <Stack className="w-full justify-between">
           {title && <H4 as="h3">{title}</H4>}
+
+          {showDivider && <span className="flex-1 ml-1 mr-auto h-0.5 max-w-20 bg-border" />}
 
           {button && (
             <Button

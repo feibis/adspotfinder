@@ -4,10 +4,10 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { Suspense, cache } from "react"
 import { FeaturedTools } from "~/app/(web)/[slug]/featured-tools"
-import { RelatedTools } from "~/app/(web)/[slug]/related-tools"
 import { Button } from "~/components/common/button"
 import { H2, H5 } from "~/components/common/heading"
 import { Stack } from "~/components/common/stack"
+import { RelatedTools } from "~/components/listings/related-tools"
 import { AdCard, AdCardSkeleton } from "~/components/web/ads/ad-card"
 import { ExternalLink } from "~/components/web/external-link"
 import { Listing } from "~/components/web/listing"
@@ -198,7 +198,7 @@ export default async function ToolPage(props: PageProps) {
       {/* Related */}
       <Suspense
         fallback={
-          <Listing title={`Similar to ${tool.name}:`}>
+          <Listing title={`Similar to ${tool.name}`}>
             <ToolListSkeleton count={3} />
           </Listing>
         }
