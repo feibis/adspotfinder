@@ -1,8 +1,8 @@
 import { Suspense } from "react"
 import { Button } from "~/components/common/button"
 import { Link } from "~/components/common/link"
-import { FeaturedTools } from "~/components/listings/featured-tools"
 import { Listing } from "~/components/web/listing"
+import { FeaturedTools } from "~/components/web/listings/featured-tools"
 import { ToolListSkeleton } from "~/components/web/tools/tool-list"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 
