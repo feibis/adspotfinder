@@ -16,7 +16,6 @@ export const GET = async () => {
       id: true,
       name: true,
       slug: true,
-      tagline: true,
       description: true,
       websiteUrl: true,
       publishedAt: true,
@@ -33,7 +32,7 @@ export const GET = async () => {
     language: "en",
     ttl: 14400,
     pubDate: new Date(),
-    custom_namespaces: { dirstarter: `${url}/dirstarter-rss.dtd` },
+    custom_namespaces: { dc: "http://purl.org/dc/elements/1.1/" },
   })
 
   tools.map(tool => {
@@ -44,10 +43,7 @@ export const GET = async () => {
       date: tool.publishedAt?.toUTCString() ?? new Date().toUTCString(),
       description: tool.description ?? "",
       categories: tool.categories?.map(({ name }) => name) || [],
-      custom_elements: [
-        { "dirstarter:tagline": tool.tagline ?? "" },
-        { "dirstarter:websiteUrl": tool.websiteUrl },
-      ],
+      custom_elements: [{ "dc:identifier": tool.websiteUrl }],
     })
   })
 
