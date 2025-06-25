@@ -10,6 +10,10 @@ const backdropVariants = cva({
       false: "absolute top-full h-3",
     },
   },
+
+  defaultVariants: {
+    isFixed: false,
+  },
 })
 
 type BackdropProps = ComponentProps<"div"> & VariantProps<typeof backdropVariants>
