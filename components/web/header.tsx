@@ -19,6 +19,7 @@ import {
 } from "~/components/common/dropdown-menu"
 import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
+import { ThemeSwitcher } from "~/components/web/theme-switcher"
 import { Container } from "~/components/web/ui/container"
 import { Hamburger } from "~/components/web/ui/hamburger"
 import { Logo } from "~/components/web/ui/logo"
@@ -100,6 +101,10 @@ const Header = ({ children, className, session, ...props }: HeaderProps) => {
               <SearchIcon />
             </Button>
 
+            <Button size="sm" variant="ghost" className="p-1 -ml-1 text-base max-sm:hidden" asChild>
+              <ThemeSwitcher />
+            </Button>
+
             <Button size="sm" variant="secondary" asChild>
               <Link href="/submit">Submit</Link>
             </Button>
@@ -138,16 +143,4 @@ const Header = ({ children, className, session, ...props }: HeaderProps) => {
   )
 }
 
-const HeaderBackdrop = ({ className, ...props }: ComponentProps<"div">) => {
-  return (
-    <div
-      className={cx(
-        "fixed top-(--header-inner-offset) inset-x-0 z-40 h-8 pointer-events-none bg-background mask-b-from-0",
-        className,
-      )}
-      {...props}
-    />
-  )
-}
-
-export { Header, HeaderBackdrop, type HeaderProps }
+export { Header, type HeaderProps }

@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react"
-import { Sticky } from "~/components/web/sticky"
+import { Sticky } from "~/components/web/ui/sticky"
 import { cx } from "~/utils/cva"
 
 export const SectionBase = ({ className, ...props }: ComponentProps<"div">) => {

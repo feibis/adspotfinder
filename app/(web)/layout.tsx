@@ -6,7 +6,8 @@ import Providers from "~/app/(web)/providers"
 import { AdBanner } from "~/components/web/ads/ad-banner"
 import { Bottom } from "~/components/web/bottom"
 import { Footer } from "~/components/web/footer"
-import { Header, HeaderBackdrop } from "~/components/web/header"
+import { Header } from "~/components/web/header"
+import { Backdrop } from "~/components/web/ui/backdrop"
 import { Container } from "~/components/web/ui/container"
 import { env } from "~/env"
 import { getServerSession } from "~/lib/auth"
@@ -19,7 +20,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
     <Providers>
       <div className="flex flex-col min-h-dvh overflow-clip pt-(--header-inner-offset)">
         <Header session={session} />
-        <HeaderBackdrop />
+        <Backdrop isFixed />
 
         <Suspense>
           <AdBanner />
