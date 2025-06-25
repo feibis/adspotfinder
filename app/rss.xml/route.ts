@@ -16,7 +16,9 @@ export const GET = async () => {
       id: true,
       name: true,
       slug: true,
+      tagline: true,
       description: true,
+      websiteUrl: true,
       publishedAt: true,
       categories: true,
     },
@@ -31,6 +33,9 @@ export const GET = async () => {
     language: "en",
     ttl: 14400,
     pubDate: new Date(),
+    custom_namespaces: {
+      dirstarter: "https://dirstarter.com",
+    },
   })
 
   tools.map(tool => {
@@ -41,6 +46,10 @@ export const GET = async () => {
       date: tool.publishedAt?.toUTCString() ?? new Date().toUTCString(),
       description: tool.description ?? "",
       categories: tool.categories?.map(({ name }) => name) || [],
+      custom_elements: [
+        { "dirstarter:tagline": tool.tagline ?? "" },
+        { "dirstarter:websiteUrl": tool.websiteUrl },
+      ],
     })
   })
 
