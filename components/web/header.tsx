@@ -142,7 +142,7 @@ const HeaderBackdrop = ({ className, ...props }: ComponentProps<"div">) => {
   return (
     <div
       className={cx(
-        "fixed top-(--header-offset) inset-x-0 z-40 h-8 pointer-events-none bg-background mask-b-from-0",
+        "fixed top-(--header-inner-offset) inset-x-0 z-40 h-8 pointer-events-none bg-background mask-b-from-0",
         className,
       )}
       {...props}

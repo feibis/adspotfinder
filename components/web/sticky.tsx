@@ -3,12 +3,12 @@ import type { ComponentProps } from "react"
 import { type VariantProps, cva, cx } from "~/utils/cva"
 
 const stickyVariants = cva({
-  base: "md:sticky md:top-(--header-offset) md:z-49",
+  base: "md:sticky md:z-49",
 
   variants: {
     isOverlay: {
-      true: "md:p-(--sticky-offset) md:-m-(--sticky-offset) md:bg-background",
-      false: "md:pt-(--sticky-offset) md:-mt-(--sticky-offset)",
+      true: "md:top-(--header-inner-offset) md:p-(--header-bottom) md:-m-(--header-bottom) md:bg-background",
+      false: "md:top-(--header-outer-offset)",
     },
   },
 
