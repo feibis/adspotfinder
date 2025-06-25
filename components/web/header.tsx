@@ -1,5 +1,6 @@
 "use client"
 
+import { useHotkeys } from "@mantine/hooks"
 import {
   CalendarDaysIcon,
   ChevronDownIcon,
@@ -37,18 +38,10 @@ const Header = ({ children, className, session, ...props }: HeaderProps) => {
   const [isNavOpen, setNavOpen] = useState(false)
 
   // Close the mobile navigation when the user presses the "Escape" key
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setNavOpen(false)
-    }
+  useHotkeys([["Escape", () => setNavOpen(false)]])
 
-    document.addEventListener("keydown", onKeyDown)
-    return () => document.removeEventListener("keydown", onKeyDown)
-  }, [])
-
-  useEffect(() => {
-    setNavOpen(false)
-  }, [pathname])
+  // Close the mobile navigation when the user navigates to a new page
+  useEffect(() => setNavOpen(false), [pathname])
 
   return (
     <div
@@ -103,8 +96,8 @@ const Header = ({ children, className, session, ...props }: HeaderProps) => {
           </nav>
 
           <Stack size="sm" wrap={false} className="flex-1 justify-end">
-            <Button size="sm" variant="ghost" className="p-1" onClick={search.open}>
-              <SearchIcon className="size-4" />
+            <Button size="sm" variant="ghost" className="p-1 text-base" onClick={search.open}>
+              <SearchIcon />
             </Button>
 
             <Button size="sm" variant="secondary" asChild>
@@ -145,9 +138,15 @@ const Header = ({ children, className, session, ...props }: HeaderProps) => {
   )
 }
 
-const HeaderBackdrop = () => {
+const HeaderBackdrop = ({ className, ...props }: ComponentProps<"div">) => {
   return (
-    <div className="fixed top-(--header-offset) inset-x-0 z-40 h-8 pointer-events-none bg-background mask-b-from-0" />
+    <div
+      className={cx(
+        "fixed top-(--header-offset) inset-x-0 z-40 h-8 pointer-events-none bg-background mask-b-from-0",
+        className,
+      )}
+      {...props}
+    />
   )
 }
 

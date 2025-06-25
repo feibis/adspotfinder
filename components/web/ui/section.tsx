@@ -1,4 +1,5 @@
 import type { ComponentProps } from "react"
+import { Sticky } from "~/components/web/sticky"
 import { cx } from "~/utils/cva"
 
 export const SectionBase = ({ className, ...props }: ComponentProps<"div">) => {
@@ -18,10 +19,9 @@ export const SectionContent = ({ className, ...props }: ComponentProps<"div">) =
 
 export const SectionSidebar = ({ className, ...props }: ComponentProps<"div">) => {
   return (
-    <div
-      className={cx("flex flex-col gap-6 w-full md:sticky md:top-16 md:z-49", className)}
-      {...props}
-    />
+    <Sticky>
+      <div className={cx("flex flex-col gap-6 w-full", className)} {...props} />
+    </Sticky>
   )
 }
 
