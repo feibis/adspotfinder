@@ -18,7 +18,7 @@ const THEMES = {
     background: "hsl(0 0% 5%)",
     border: "hsl(0 0% 20%)",
     text: "hsl(0 0% 90%)",
-    logo: "hsl(0 0% 12%)",
+    logo: "hsl(0 0% 90%)",
   },
   neutral: {
     background: "hsl(0 0% 80%)",
@@ -41,9 +41,9 @@ const SvgBadge = ({ theme }: { theme: keyof typeof THEMES }) => {
         borderRadius: "0.75em",
         display: "flex",
         alignItems: "center",
-        gap: "1em",
-        paddingLeft: "1em",
-        paddingRight: "1em",
+        gap: "0.8em",
+        paddingLeft: "0.8em",
+        paddingRight: "0.8em",
         color: colors.text,
         fontFamily: "Geist",
         overflow: "hidden",
@@ -100,6 +100,7 @@ const SvgBadge = ({ theme }: { theme: keyof typeof THEMES }) => {
           right: "-1em",
           transform: "translateY(-50%) rotate(12deg)",
           marginTop: "0.5em",
+          color: colors.logo,
           opacity: theme === "dark" ? 0.1 : 0.05,
         }}
       />
