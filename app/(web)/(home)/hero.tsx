@@ -8,7 +8,7 @@ import { cx } from "~/utils/cva"
 
 export const Hero = ({ className, ...props }: ComponentProps<"section">) => {
   return (
-    <section className={cx("flex flex-col gap-y-6 w-full mb-6", className)} {...props}>
+    <section className={cx("flex flex-col gap-y-6 w-full pb-6", className)} {...props}>
       <Intro alignment="center">
         <IntroTitle className="max-w-[16em] lg:text-5xl/[1.1]!">{config.site.tagline}</IntroTitle>
 

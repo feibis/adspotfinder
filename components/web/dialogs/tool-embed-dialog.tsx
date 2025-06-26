@@ -77,7 +77,7 @@ export const ToolEmbedDialog = ({ tool, isOpen, setIsOpen }: ToolEmbedDialogProp
   }, [theme, width, height, toolLink])
 
   const utm = new URLSearchParams({
-    utm_source: siteConfig.name.toLowerCase(),
+    utm_source: siteConfig.slug,
     utm_medium: "badge",
     utm_campaign: "embed",
     utm_content: `tool-${tool.slug}`,

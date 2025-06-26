@@ -23,7 +23,7 @@ type AIGenerateProps = {
 }
 
 export const AIGenerate = ({ stop, isLoading, buttonText, onGenerate }: AIGenerateProps) => {
-  const key = siteConfig.name.toLowerCase()
+  const key = siteConfig.slug
   const [isAlertOpen, setIsAlertOpen] = useState(false)
   const [consent, setConsent] = useLocalStorage({ key: `${key}-ai-consent`, defaultValue: false })
   const { formState } = useFormContext()
