@@ -14,7 +14,7 @@ type ToolCardProps = ComponentProps<typeof Card> & {
 }
 
 const ToolCard = ({ tool, ...props }: ToolCardProps) => {
-  const maxCategories = 2
+  const maxCategories = 1
   const visibleCategories = tool.categories.slice(0, maxCategories)
   const hiddenCount = tool.categories.length - maxCategories
 
