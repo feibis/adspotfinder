@@ -70,12 +70,7 @@ const AdCard = async ({ className, where, overrideAd, defaultOverride, ...props 
 
         <CardDescription className="mb-auto pr-2 line-clamp-4">{ad.description}</CardDescription>
 
-        <Button
-          size="md"
-          className="pointer-events-none md:w-full"
-          suffix={<ArrowUpRightIcon />}
-          asChild
-        >
+        <Button className="pointer-events-none md:w-full" suffix={<ArrowUpRightIcon />} asChild>
           <span>{ad.buttonLabel ?? `Visit ${ad.name}`}</span>
         </Button>
 
@@ -107,11 +102,7 @@ const AdCardSkeleton = ({ className, ...props }: ComponentProps<typeof Card>) =>
         <Skeleton className="h-5 w-2/3">&nbsp;</Skeleton>
       </CardDescription>
 
-      <Button
-        size="md"
-        className="pointer-events-none opacity-10 text-transparent md:w-full"
-        asChild
-      >
+      <Button className="pointer-events-none opacity-10 text-transparent md:w-full" asChild>
         <span>&nbsp;</span>
       </Button>
     </Card>

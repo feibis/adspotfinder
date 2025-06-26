@@ -24,7 +24,7 @@ const buttonVariants = cva({
     size: {
       sm: "px-2 py-1 gap-[0.66ch]",
       md: "px-3 py-2 gap-[0.75ch]",
-      lg: "px-4 py-2.5 gap-[1ch] rounded-lg sm:text-sm",
+      lg: "px-4 py-2.5 gap-[1ch] rounded-lg sm:text-sm/tight",
     },
     isPending: {
       true: "[&>*:not(.animate-spin)]:text-transparent select-none",
