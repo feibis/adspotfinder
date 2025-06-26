@@ -20,12 +20,6 @@ const THEMES = {
     text: "hsl(0 0% 90%)",
     logo: "hsl(0 0% 90%)",
   },
-  neutral: {
-    background: "hsl(0 0% 80%)",
-    border: "hsl(0 0% 12%)",
-    text: "hsl(0 0% 12%)",
-    logo: "hsl(0 0% 12%)",
-  },
 } as const
 
 const SvgBadge = ({ theme }: { theme: keyof typeof THEMES }) => {
@@ -113,7 +107,7 @@ type PageProps = {
 }
 
 const searchParamsCache = createSearchParamsCache({
-  theme: parseAsStringEnum(["light", "dark", "neutral"]).withDefault("light"),
+  theme: parseAsStringEnum(["light", "dark"]).withDefault("light"),
   width: parseAsInteger.withDefault(200),
   height: parseAsInteger.withDefault(50),
 })

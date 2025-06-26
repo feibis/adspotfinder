@@ -37,7 +37,6 @@ import { cx } from "~/utils/cva"
 const THEMES = [
   { value: "light", label: "Light" },
   { value: "dark", label: "Dark" },
-  { value: "neutral", label: "Neutral" },
 ] as const
 
 type Theme = (typeof THEMES)[number]["value"]
