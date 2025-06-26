@@ -1,5 +1,5 @@
 import { useClipboard } from "@mantine/hooks"
-import { CheckIcon, CopyIcon } from "lucide-react"
+import { CheckIcon, ClipboardIcon } from "lucide-react"
 import { useTheme } from "next-themes"
 import type { Dispatch, SetStateAction } from "react"
 import { useMemo } from "react"
@@ -188,7 +188,7 @@ export const ToolEmbedDialog = ({ tool, isOpen, setIsOpen }: ToolEmbedDialogProp
                   size="sm"
                   variant="secondary"
                   onClick={() => clipboard.copy(embedCode)}
-                  prefix={clipboard.copied ? <CheckIcon /> : <CopyIcon />}
+                  prefix={clipboard.copied ? <CheckIcon /> : <ClipboardIcon />}
                   className={cx(clipboard.copied && "text-green-600")}
                 >
                   {clipboard.copied ? "Copied!" : "Copy"}

@@ -29,27 +29,31 @@ export const ToolActions = ({ tool, children, className, ...props }: ToolActions
   return (
     <Stack size="sm" wrap={false} className={cx("justify-end", className)} {...props}>
       {!tool.isFeatured && tool.ownerId && tool.ownerId === session?.user.id && (
-        <Button
-          size="md"
-          variant="secondary"
-          prefix={<SparklesIcon className="text-inherit" />}
-          className="text-blue-600 dark:text-blue-400"
-          asChild
-        >
-          <Link href={`/submit/${tool.slug}`}>Promote</Link>
-        </Button>
+        <Tooltip tooltip="Promote this tool to get more visibility">
+          <Button
+            size="md"
+            variant="secondary"
+            prefix={<SparklesIcon className="text-inherit" />}
+            className="text-blue-600 dark:text-blue-400"
+            asChild
+          >
+            <Link href={`/submit/${tool.slug}`}>Promote</Link>
+          </Button>
+        </Tooltip>
       )}
 
       {!tool.ownerId && (
-        <Button
-          size="md"
-          variant="secondary"
-          prefix={<BadgeCheckIcon className="text-inherit" />}
-          onClick={() => setOpenDialog("claim")}
-          className="text-blue-600 dark:text-blue-400"
-        >
-          Claim
-        </Button>
+        <Tooltip tooltip="Claim this tool to get a verified badge">
+          <Button
+            size="md"
+            variant="secondary"
+            prefix={<BadgeCheckIcon className="text-inherit" />}
+            onClick={() => setOpenDialog("claim")}
+            className="text-blue-600 dark:text-blue-400"
+          >
+            Claim
+          </Button>
+        </Tooltip>
       )}
 
       <Tooltip tooltip="Send a report/suggestion">
@@ -58,17 +62,17 @@ export const ToolActions = ({ tool, children, className, ...props }: ToolActions
           variant="secondary"
           prefix={<FlagIcon />}
           onClick={() => setOpenDialog("report")}
-          aria-label="Send a report/suggestion"
+          aria-label="Report"
         />
       </Tooltip>
 
-      <Tooltip tooltip="Embed the badge">
+      <Tooltip tooltip="Embed this tool on your website">
         <Button
           size="md"
           variant="secondary"
           prefix={<CodeXmlIcon />}
           onClick={() => setOpenDialog("embed")}
-          aria-label="Embed this tool on your website"
+          aria-label="Embed"
         />
       </Tooltip>
 
