@@ -1,32 +1,28 @@
 import { formatNumber } from "@primoui/utils"
 import Image from "next/image"
 import type { ComponentProps } from "react"
+import { Note } from "~/components/common/note"
+import { Stack } from "~/components/common/stack"
 import { cx } from "~/utils/cva"
 
-export const CTAProof = ({ className, ...props }: ComponentProps<"div">) => {
+export const CTAProof = ({ className, ...props }: ComponentProps<typeof Stack>) => {
   return (
-    <div
-      className={cx(
-        "flex flex-wrap items-center justify-center text-center gap-y-1 -space-x-1.5",
-        className,
-      )}
-      {...props}
-    >
-      {Array.from({ length: 5 }).map((_, index) => (
-        <Image
-          key={index}
-          src={`/users/${index + 1}.webp`}
-          alt=""
-          width={56}
-          height={56}
-          loading="lazy"
-          className="size-7 border-2 border-card rounded-full"
-        />
-      ))}
+    <Stack size="sm" direction="column" className={cx("items-center", className)} {...props}>
+      <div className="flex flex-wrap items-center justify-center -space-x-1.5">
+        {Array.from({ length: 5 }).map((_, index) => (
+          <Image
+            key={index}
+            src={`/users/${index + 1}.webp`}
+            alt=""
+            width={56}
+            height={56}
+            loading="lazy"
+            className="size-7 border-2 border-card rounded-full"
+          />
+        ))}
+      </div>
 
-      <p className="w-full text-xs text-muted-foreground">
-        Join {formatNumber(5000, "standard")}+ directory enthusiasts
-      </p>
-    </div>
+      <Note className="text-xs">Join {formatNumber(5000, "standard")}+ directory enthusiasts</Note>
+    </Stack>
   )
 }
