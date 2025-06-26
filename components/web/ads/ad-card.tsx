@@ -76,7 +76,7 @@ const AdCard = async ({ className, where, overrideAd, defaultOverride, ...props 
           suffix={<ArrowUpRightIcon />}
           asChild
         >
-          <span>{isInternalAd ? "Advertise" : `Visit ${ad.name}`}</span>
+          <span>{ad.buttonLabel ?? `Visit ${ad.name}`}</span>
         </Button>
 
         <CardIcon>

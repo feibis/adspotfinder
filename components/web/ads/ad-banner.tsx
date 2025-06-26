@@ -54,7 +54,7 @@ export const AdBanner = async ({ className, ...props }: ComponentProps<typeof Ca
             className="shrink-0 leading-none pointer-events-none max-sm:hidden"
             asChild
           >
-            <span>Learn More</span>
+            <span>{ad.buttonLabel ?? "Learn More"}</span>
           </Button>
         </ExternalLink>
       </Card>

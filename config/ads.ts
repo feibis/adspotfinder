@@ -1,4 +1,5 @@
 import type { AdType } from "@prisma/client"
+import { siteConfig } from "~/config/site"
 import type { AdOne } from "~/server/web/ads/payloads"
 
 export type AdSpot = {
@@ -45,8 +46,9 @@ export const adsConfig = {
   defaultAd: {
     type: "All",
     websiteUrl: "/advertise",
-    name: "Advertise with us",
+    name: "Your brand here",
     description: "Reach our audience of professional directory owners and boost your sales.",
+    buttonLabel: `Advertise on ${siteConfig.name}`,
     faviconUrl: "/favicon.png",
   } satisfies AdOne,
 }
