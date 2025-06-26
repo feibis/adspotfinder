@@ -1,6 +1,7 @@
 "use client"
 
-import { ArrowLeftIcon, ArrowRightIcon, LinkIcon } from "lucide-react"
+import { useClipboard } from "@mantine/hooks"
+import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, LinkIcon } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import { Slot } from "radix-ui"
 import { type ComponentProps, Fragment, type ReactNode } from "react"
@@ -88,17 +89,18 @@ type NavProps = ComponentProps<typeof Dock> & {
 export const Nav = ({ title, previous, next, ...props }: NavProps) => {
   const router = useRouter()
   const pathname = usePathname()
+  const clipboard = useClipboard({ timeout: 2000 })
 
   const currentUrl = encodeURIComponent(`${config.site.url}${pathname}`)
   const shareTitle = encodeURIComponent(`${title} — ${config.site.name}`)
 
   const actions: (null | NavItemProps)[] = [
     {
-      icon: <LinkIcon />,
-      tooltip: "Copy Link",
+      icon: clipboard.copied ? <CheckIcon /> : <LinkIcon />,
+      tooltip: clipboard.copied ? "Copied!" : "Copy Link",
       shortcut: "C",
       onClick: () => {
-        navigator.clipboard.writeText(window.location.href)
+        clipboard.copy(window.location.href)
         toast.success("Link copied to clipboard")
       },
     },

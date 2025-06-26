@@ -1,13 +1,14 @@
 "use client"
 
-import { BadgeCheckIcon, SparklesIcon, TriangleAlertIcon } from "lucide-react"
-import type { ComponentProps } from "react"
+import { BadgeCheckIcon, CodeXmlIcon, FlagIcon, SparklesIcon } from "lucide-react"
+import type { ComponentProps, SetStateAction } from "react"
 import { useState } from "react"
 import { Button } from "~/components/common/button"
 import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
 import { Tooltip } from "~/components/common/tooltip"
 import { ToolClaimDialog } from "~/components/web/dialogs/tool-claim-dialog"
+import { ToolEmbedDialog } from "~/components/web/dialogs/tool-embed-dialog"
 import { ToolReportDialog } from "~/components/web/dialogs/tool-report-dialog"
 import { useSession } from "~/lib/auth-client"
 import type { ToolOne } from "~/server/web/tools/payloads"
@@ -19,8 +20,11 @@ type ToolActionsProps = ComponentProps<typeof Stack> & {
 
 export const ToolActions = ({ tool, children, className, ...props }: ToolActionsProps) => {
   const { data: session } = useSession()
-  const [isReportOpen, setIsReportOpen] = useState(false)
-  const [isClaimOpen, setIsClaimOpen] = useState(false)
+  const [openDialog, setOpenDialog] = useState<null | "report" | "embed" | "claim">(null)
+
+  const handleClose = (isOpen: SetStateAction<boolean>) => {
+    !isOpen && setOpenDialog(null)
+  }
 
   return (
     <Stack size="sm" wrap={false} className={cx("justify-end", className)} {...props}>
@@ -41,7 +45,7 @@ export const ToolActions = ({ tool, children, className, ...props }: ToolActions
           size="md"
           variant="secondary"
           prefix={<BadgeCheckIcon className="text-inherit" />}
-          onClick={() => setIsClaimOpen(true)}
+          onClick={() => setOpenDialog("claim")}
           className="text-blue-600 dark:text-blue-400"
         >
           Claim
@@ -52,19 +56,29 @@ export const ToolActions = ({ tool, children, className, ...props }: ToolActions
         <Button
           size="md"
           variant="secondary"
-          prefix={<TriangleAlertIcon />}
-          onClick={() => setIsReportOpen(true)}
-        >
-          Report
-        </Button>
+          prefix={<FlagIcon />}
+          onClick={() => setOpenDialog("report")}
+          aria-label="Send a report/suggestion"
+        />
+      </Tooltip>
+
+      <Tooltip tooltip="Embed the badge">
+        <Button
+          size="md"
+          variant="secondary"
+          prefix={<CodeXmlIcon />}
+          onClick={() => setOpenDialog("embed")}
+          aria-label="Embed this tool on your website"
+        />
       </Tooltip>
 
       {children}
 
-      <ToolReportDialog tool={tool} isOpen={isReportOpen} setIsOpen={setIsReportOpen} />
+      <ToolReportDialog tool={tool} isOpen={openDialog === "report"} setIsOpen={handleClose} />
+      <ToolEmbedDialog tool={tool} isOpen={openDialog === "embed"} setIsOpen={handleClose} />
 
       {!tool.ownerId && (
-        <ToolClaimDialog tool={tool} isOpen={isClaimOpen} setIsOpen={setIsClaimOpen} />
+        <ToolClaimDialog tool={tool} isOpen={openDialog === "claim"} setIsOpen={handleClose} />
       )}
     </Stack>
   )
