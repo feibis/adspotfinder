@@ -1,11 +1,11 @@
 import type { Dispatch, SetStateAction } from "react"
 import {
+  Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "~/components/common/dialog"
-import { Dialog } from "~/components/common/dialog"
 import { Login } from "~/components/web/auth/login"
 import { useSession } from "~/lib/auth-client"
 

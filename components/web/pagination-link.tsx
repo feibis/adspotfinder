@@ -4,7 +4,7 @@ import { Slot } from "radix-ui"
 import type { ComponentProps, ReactNode } from "react"
 import { Link } from "~/components/common/link"
 import { navLinkVariants } from "~/components/web/ui/nav-link"
-import { type VariantProps, cva, cx } from "~/utils/cva"
+import { cva, cx, type VariantProps } from "~/utils/cva"
 
 const affixVariants = cva({
   base: "size-5 duration-150 first:group-hover:-translate-x-0.5 last:group-hover:translate-x-0.5",

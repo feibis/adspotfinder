@@ -1,5 +1,5 @@
 import type { Row } from "@tanstack/react-table"
-import type { ParserMap, inferParserType } from "nuqs"
+import type { inferParserType, ParserMap } from "nuqs"
 import { createParser } from "nuqs/server"
 import { z } from "zod/v4"
 import type { ExtendedSortingState } from "~/types"

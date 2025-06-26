@@ -1,5 +1,5 @@
 import { defineCollection, defineConfig } from "@content-collections/core"
-import { type Options, compileMDX } from "@content-collections/mdx"
+import { compileMDX, type Options } from "@content-collections/mdx"
 import rehypeAutolinkHeadings from "rehype-autolink-headings"
 import rehypeSlug from "rehype-slug"
 

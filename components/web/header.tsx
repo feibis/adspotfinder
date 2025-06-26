@@ -45,10 +45,8 @@ const Header = ({ children, className, session, ...props }: HeaderProps) => {
   useEffect(() => setNavOpen(false), [pathname])
 
   return (
-    <div
+    <header
       className={cx("fixed top-(--header-top) inset-x-0 z-50 bg-background", className)}
-      id="header"
-      role="banner"
       data-state={isNavOpen ? "open" : "close"}
       {...props}
     >
@@ -139,7 +137,7 @@ const Header = ({ children, className, session, ...props }: HeaderProps) => {
           </NavLink>
         </nav>
       </Container>
-    </div>
+    </header>
   )
 }
 

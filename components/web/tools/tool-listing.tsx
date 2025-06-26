@@ -1,7 +1,6 @@
 import { Input } from "~/components/common/input"
 import { Pagination, type PaginationProps } from "~/components/web/pagination"
-import { ToolList, type ToolListProps } from "~/components/web/tools/tool-list"
-import { ToolListSkeleton } from "~/components/web/tools/tool-list"
+import { ToolList, type ToolListProps, ToolListSkeleton } from "~/components/web/tools/tool-list"
 import { ToolSearch, type ToolSearchProps } from "~/components/web/tools/tool-search"
 import { FiltersProvider, type FiltersProviderProps } from "~/contexts/filter-context"
 

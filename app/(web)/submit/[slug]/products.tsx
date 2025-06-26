@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation"
-import { type SearchParams, createLoader, parseAsString } from "nuqs/server"
+import { createLoader, parseAsString, type SearchParams } from "nuqs/server"
 import { Plan } from "~/components/web/plan"
 import { getProductFeatures, getProducts, prepareProductsWithPrices } from "~/lib/products"
 import { isToolPublished } from "~/lib/tools"

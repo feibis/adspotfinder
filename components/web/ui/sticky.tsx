@@ -1,6 +1,6 @@
 import { Slot } from "radix-ui"
 import type { ComponentProps } from "react"
-import { type VariantProps, cva, cx } from "~/utils/cva"
+import { cva, cx, type VariantProps } from "~/utils/cva"
 
 const stickyVariants = cva({
   base: "md:sticky md:z-49",

@@ -42,6 +42,7 @@ export const Nav = ({ className, links, isCollapsed, ...props }: NavProps) => {
         "flex flex-col gap-1 p-3 group-data-[collapsed=true]/collapsible:justify-center group-data-[collapsed=true]/collapsible:px-2",
         className,
       )}
+      {...props}
     >
       {links.map((link, index) => {
         if (!link) {

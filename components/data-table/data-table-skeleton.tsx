@@ -1,4 +1,4 @@
-import type { CSSProperties, ComponentProps } from "react"
+import type { ComponentProps, CSSProperties } from "react"
 import { H3 } from "~/components/common/heading"
 import { Skeleton } from "~/components/common/skeleton"
 import {

@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation"
 import type { ComponentProps } from "react"
 import { Link } from "~/components/common/link"
-import { type VariantProps, cva, cx } from "~/utils/cva"
+import { cva, cx, type VariantProps } from "~/utils/cva"
 
 const navLinkVariants = cva({
   base: "group flex items-center gap-2 cursor-pointer disabled:opacity-50",

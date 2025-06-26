@@ -2,7 +2,7 @@ import { Slot } from "radix-ui"
 import type { ComponentProps } from "react"
 import { isValidElement } from "react"
 
-import { type VariantProps, cva, cx } from "~/utils/cva"
+import { cva, cx, type VariantProps } from "~/utils/cva"
 
 const stackVariants = cva({
   base: "flex",

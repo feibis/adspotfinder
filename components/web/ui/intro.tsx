@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react"
 import { Heading, type HeadingProps } from "~/components/common/heading"
-import { type VariantProps, cva, cx } from "~/utils/cva"
+import { cva, cx, type VariantProps } from "~/utils/cva"
 
 const introVariants = cva({
   base: "flex w-full flex-col gap-y-2",

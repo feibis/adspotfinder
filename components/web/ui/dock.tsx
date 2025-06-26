@@ -3,7 +3,7 @@
 import { Slot } from "radix-ui"
 import { type ComponentProps, isValidElement } from "react"
 import { Box } from "~/components/common/box"
-import { type VariantProps, cva, cx } from "~/utils/cva"
+import { cva, cx, type VariantProps } from "~/utils/cva"
 
 const Dock = ({ className, ...props }: ComponentProps<"div">) => {
   return (

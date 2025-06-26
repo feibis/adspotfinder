@@ -1,37 +1,36 @@
 "use client"
 
+import { useDebouncedCallback } from "@mantine/hooks"
 import {
   type ColumnFiltersState,
-  type PaginationState,
-  type RowSelectionState,
-  type SortingState,
-  type TableOptions,
-  type TableState,
-  type Updater,
-  type VisibilityState,
   getCoreRowModel,
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  type PaginationState,
+  type RowSelectionState,
+  type SortingState,
+  type TableOptions,
+  type TableState,
+  type Updater,
   useReactTable,
+  type VisibilityState,
 } from "@tanstack/react-table"
 import {
   type Parser,
-  type UseQueryStateOptions,
   parseAsArrayOf,
   parseAsInteger,
   parseAsString,
+  type UseQueryStateOptions,
   useQueryState,
   useQueryStates,
 } from "nuqs"
 import * as React from "react"
-import type { DataTableFilterField, ExtendedSortingState } from "~/types"
-
-import { useDebouncedCallback } from "@mantine/hooks"
 import { useMemo, useState } from "react"
 import { getSortingStateParser } from "~/lib/parsers"
+import type { DataTableFilterField, ExtendedSortingState } from "~/types"
 
 type UseDataTableProps<TData> = Omit<
   TableOptions<TData>,

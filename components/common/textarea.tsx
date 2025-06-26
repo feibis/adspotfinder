@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react"
 import { Box } from "~/components/common/box"
 import { inputVariants } from "~/components/common/input"
-import { type VariantProps, cx } from "~/utils/cva"
+import { cx, type VariantProps } from "~/utils/cva"
 
 export type TextAreaProps = Omit<ComponentProps<"textarea">, "size"> &
   VariantProps<typeof inputVariants>

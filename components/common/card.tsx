@@ -2,7 +2,7 @@ import { Slot } from "radix-ui"
 import { type ComponentProps, isValidElement } from "react"
 import { type BoxProps, boxVariants } from "~/components/common/box"
 import { Stack } from "~/components/common/stack"
-import { type VariantProps, cva, cx } from "~/utils/cva"
+import { cva, cx, type VariantProps } from "~/utils/cva"
 
 const cardVariants = cva({
   base: [

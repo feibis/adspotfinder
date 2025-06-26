@@ -1,6 +1,6 @@
 "use client"
 
-import { type PropsWithChildren, createContext, use, useState } from "react"
+import { createContext, type PropsWithChildren, use, useState } from "react"
 
 export type SearchContextType = {
   isOpen: boolean

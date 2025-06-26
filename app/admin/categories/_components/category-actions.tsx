@@ -2,8 +2,7 @@
 
 import type { Category } from "@prisma/client"
 import { EllipsisIcon } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { type ComponentProps, useState } from "react"
 import { CategoriesDeleteDialog } from "~/app/admin/categories/_components/categories-delete-dialog"
 import { Button } from "~/components/common/button"

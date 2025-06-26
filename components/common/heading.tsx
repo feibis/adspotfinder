@@ -1,6 +1,6 @@
 import { Slot } from "radix-ui"
 import { type ElementType, type HTMLProps, isValidElement } from "react"
-import { type VariantProps, cva, cx } from "~/utils/cva"
+import { cva, cx, type VariantProps } from "~/utils/cva"
 
 const headingVariants = cva({
   base: "font-display font-semibold",

@@ -1,8 +1,7 @@
 "use server"
 
 import { z } from "zod/v4"
-import { uploadScreenshot } from "~/lib/media"
-import { uploadFavicon } from "~/lib/media"
+import { uploadFavicon, uploadScreenshot } from "~/lib/media"
 import { adminActionClient } from "~/lib/safe-actions"
 
 const mediaSchema = z.object({

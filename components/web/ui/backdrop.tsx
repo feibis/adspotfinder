@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react"
-import { type VariantProps, cva, cx } from "~/utils/cva"
+import { cva, cx, type VariantProps } from "~/utils/cva"
 
 const backdropVariants = cva({
   base: "inset-x-0 z-40 pointer-events-none bg-background mask-b-from-0",

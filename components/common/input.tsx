@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react"
 import { Box, type boxVariants } from "~/components/common/box"
-import { type VariantProps, cva, cx } from "~/utils/cva"
+import { cva, cx, type VariantProps } from "~/utils/cva"
 
 const inputVariants = cva({
   base: "appearance-none min-h-0 w-full self-stretch bg-background text-foreground text-[0.8125rem]/tight break-words transition duration-150 disabled:text-secondary-foreground/50",

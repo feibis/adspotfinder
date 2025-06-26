@@ -18,11 +18,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
         <IntroDescription>Welcome back! Manage your account and tools.</IntroDescription>
       </Intro>
 
-      <div className="flex flex-col gap-4">
-        {/* <DashboardNav className="mb-2" /> */}
-
-        {children}
-      </div>
+      <div className="flex flex-col gap-4">{children}</div>
     </>
   )
 }

@@ -2,7 +2,6 @@
 
 import { ArrowUpRightIcon, CheckIcon, XIcon } from "lucide-react"
 import { useAction } from "next-safe-action/hooks"
-import { useRouter } from "next/navigation"
 import { posthog } from "posthog-js"
 import { Slot } from "radix-ui"
 import type { ComponentProps } from "react"
@@ -21,7 +20,7 @@ import { usePlanPrices } from "~/hooks/use-plan-prices"
 import { isToolPublished } from "~/lib/tools"
 import { createStripeToolCheckout } from "~/server/web/actions/stripe"
 import type { ToolOne } from "~/server/web/tools/payloads"
-import { type VariantProps, cva, cx } from "~/utils/cva"
+import { cva, cx, type VariantProps } from "~/utils/cva"
 
 const planVariants = cva({
   base: "items-stretch gap-8 basis-72 grow max-w-80 bg-transparent overflow-clip",
@@ -104,7 +103,6 @@ const Plan = ({
   isFeatured,
   ...props
 }: PlanProps) => {
-  const router = useRouter()
   const { isSubscription, currentPrice, price, fullPrice, discount, interval, setInterval } =
     usePlanPrices(prices, coupon)
 

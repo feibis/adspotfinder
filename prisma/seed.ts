@@ -11,7 +11,7 @@ async function main() {
 
   console.log("Starting seeding...")
 
-  const admin = await prisma.user.createMany({
+  await prisma.user.createMany({
     data: [
       {
         name: "Admin User",
@@ -31,7 +31,7 @@ async function main() {
   console.log("Created users")
 
   // Create categories
-  const categories = await prisma.category.createMany({
+  await prisma.category.createMany({
     data: [
       {
         name: "Frontend",
@@ -87,7 +87,7 @@ async function main() {
   console.log("Created categories")
 
   // Create tags
-  const tags = await prisma.tag.createMany({
+  await prisma.tag.createMany({
     data: [
       { name: "React", slug: "react" },
       { name: "Vue", slug: "vue" },

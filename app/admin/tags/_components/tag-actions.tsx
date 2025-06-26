@@ -2,8 +2,7 @@
 
 import type { Tag } from "@prisma/client"
 import { EllipsisIcon } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { type ComponentProps, useState } from "react"
 import { TagsDeleteDialog } from "~/app/admin/tags/_components/tags-delete-dialog"
 import { Button } from "~/components/common/button"
