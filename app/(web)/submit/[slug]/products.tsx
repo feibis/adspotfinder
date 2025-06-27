@@ -39,7 +39,7 @@ export const SubmitProducts = async ({ tool, searchParams }: SubmitProductsProps
 
   // If there are no products, redirect to the success page
   if (stripeProducts.data.length === 0) {
-    redirect(`/submit/${tool.slug}?success=true`)
+    redirect(`/submit/${tool.slug}/success`)
   }
 
   const isPublished = isToolPublished(tool)
