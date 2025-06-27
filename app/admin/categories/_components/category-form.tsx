@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { slugify } from "@primoui/utils"
 import { useRouter } from "next/navigation"
-import type { ComponentProps } from "react"
+import { type ComponentProps, use } from "react"
 import { toast } from "sonner"
 import { CategoryActions } from "~/app/admin/categories/_components/category-actions"
 import { AIGenerateDescription } from "~/components/admin/ai/generate-description"
@@ -32,7 +32,7 @@ import { cx } from "~/utils/cva"
 
 type CategoryFormProps = ComponentProps<"form"> & {
   category?: Awaited<ReturnType<typeof findCategoryBySlug>>
-  tools: ReturnType<typeof findToolList>
+  toolsPromise: ReturnType<typeof findToolList>
 }
 
 export function CategoryForm({
@@ -40,10 +40,11 @@ export function CategoryForm({
   className,
   title,
   category,
-  tools,
+  toolsPromise,
   ...props
 }: CategoryFormProps) {
   const router = useRouter()
+  const tools = use(toolsPromise)
   const resolver = zodResolver(categorySchema)
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(upsertCategory, resolver, {
@@ -177,7 +178,7 @@ export function CategoryForm({
             <FormItem className="col-span-full">
               <FormLabel>Tools</FormLabel>
               <RelationSelector
-                promise={tools}
+                relations={tools}
                 selectedIds={field.value ?? []}
                 setSelectedIds={field.onChange}
               />

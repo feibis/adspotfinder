@@ -19,7 +19,7 @@ const UpdateToolPage = async ({ params }: PageProps) => {
 
   return (
     <Wrapper size="md" gap="sm">
-      <ToolForm title={`Edit ${tool.name}`} tool={tool} categories={findCategoryList()} />
+      <ToolForm title={`Edit ${tool.name}`} tool={tool} categoriesPromise={findCategoryList()} />
     </Wrapper>
   )
 }

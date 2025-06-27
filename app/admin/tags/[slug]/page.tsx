@@ -19,7 +19,7 @@ const UpdateTagPage = async ({ params }: PageProps) => {
 
   return (
     <Wrapper size="md" gap="sm">
-      <TagForm title="Update tag" tag={tag} tools={findToolList()} />
+      <TagForm title="Update tag" tag={tag} toolsPromise={findToolList()} />
     </Wrapper>
   )
 }

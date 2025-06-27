@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { slugify } from "@primoui/utils"
 import { useRouter } from "next/navigation"
-import type { ComponentProps } from "react"
+import { type ComponentProps, use } from "react"
 import { toast } from "sonner"
 import { TagActions } from "~/app/admin/tags/_components/tag-actions"
 import { RelationSelector } from "~/components/admin/relation-selector"
@@ -30,11 +30,12 @@ import { cx } from "~/utils/cva"
 
 type TagFormProps = ComponentProps<"form"> & {
   tag?: Awaited<ReturnType<typeof findTagBySlug>>
-  tools: ReturnType<typeof findToolList>
+  toolsPromise: ReturnType<typeof findToolList>
 }
 
-export function TagForm({ children, className, title, tag, tools, ...props }: TagFormProps) {
+export function TagForm({ children, className, title, tag, toolsPromise, ...props }: TagFormProps) {
   const router = useRouter()
+  const tools = use(toolsPromise)
   const resolver = zodResolver(tagSchema)
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(upsertTag, resolver, {
@@ -119,7 +120,7 @@ export function TagForm({ children, className, title, tag, tools, ...props }: Ta
             <FormItem className="col-span-full">
               <FormLabel>Tools</FormLabel>
               <RelationSelector
-                promise={tools}
+                relations={tools}
                 selectedIds={field.value ?? []}
                 setSelectedIds={field.onChange}
               />

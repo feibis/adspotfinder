@@ -6,7 +6,7 @@ import { findToolList } from "~/server/admin/tools/queries"
 const CreateTagPage = () => {
   return (
     <Wrapper size="md" gap="sm">
-      <TagForm title="Create tag" tools={findToolList()} />
+      <TagForm title="Create tag" toolsPromise={findToolList()} />
     </Wrapper>
   )
 }

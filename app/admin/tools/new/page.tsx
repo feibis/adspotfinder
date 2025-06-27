@@ -6,7 +6,7 @@ import { findCategoryList } from "~/server/admin/categories/queries"
 const CreateToolPage = () => {
   return (
     <Wrapper size="md" gap="sm">
-      <ToolForm title="Create tool" categories={findCategoryList()} />
+      <ToolForm title="Create tool" categoriesPromise={findCategoryList()} />
     </Wrapper>
   )
 }

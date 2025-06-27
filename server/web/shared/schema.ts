@@ -57,8 +57,3 @@ export const adDetailsSchema = z.object({
   websiteUrl: z.string().url("Please enter a valid website URL"),
   buttonLabel: z.string().optional(),
 })
-
-export type SubmitToolSchema = z.infer<typeof submitToolSchema>
-export type NewsletterSchema = z.infer<typeof newsletterSchema>
-export type ReportSchema = z.infer<typeof reportSchema>
-export type AdDetailsSchema = z.infer<typeof adDetailsSchema>

@@ -1,7 +1,7 @@
 import { useCompletion } from "@ai-sdk/react"
 import { isTruthy } from "@primoui/utils"
 import { MousePointerClickIcon, SparklesIcon } from "lucide-react"
-import { type ReactNode, use, useEffect, useState } from "react"
+import { type ReactNode, useEffect, useState } from "react"
 import { AnimatedContainer } from "~/components/common/animated-container"
 import { Badge } from "~/components/common/badge"
 import { Button } from "~/components/common/button"
@@ -25,7 +25,7 @@ type Relation = {
 }
 
 type RelationSelectorProps<T> = {
-  promise: Promise<T[]>
+  relations: T[]
   selectedIds: string[]
   prompt?: string
   maxSuggestions?: number
@@ -36,7 +36,7 @@ type RelationSelectorProps<T> = {
 }
 
 export const RelationSelector = <T extends Relation>({
-  promise,
+  relations,
   selectedIds,
   prompt,
   maxSuggestions = 5,
@@ -45,7 +45,6 @@ export const RelationSelector = <T extends Relation>({
   sortFunction,
   setSelectedIds,
 }: RelationSelectorProps<T>) => {
-  const relations = use(promise)
   const suggestRelations = suggestedIds ? relations.filter(r => suggestedIds.includes(r.id)) : []
   const [suggestedRelations, setSuggestedRelations] = useState<T[]>(suggestRelations)
   const selectedRelations = relations?.filter(({ id }) => selectedIds.includes(id))
@@ -174,7 +173,7 @@ export const RelationSelector = <T extends Relation>({
                     size="md"
                     variant="ghost"
                     onClick={() => setSelectedIds([])}
-                    className="w-full bg-popover"
+                    className="w-full"
                   >
                     Clear selection
                   </Button>

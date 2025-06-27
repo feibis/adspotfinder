@@ -19,7 +19,7 @@ const UpdateCategoryPage = async ({ params }: PageProps) => {
 
   return (
     <Wrapper size="md" gap="sm">
-      <CategoryForm title="Update category" category={category} tools={findToolList()} />
+      <CategoryForm title="Update category" category={category} toolsPromise={findToolList()} />
     </Wrapper>
   )
 }

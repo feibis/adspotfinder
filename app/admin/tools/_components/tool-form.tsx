@@ -7,7 +7,7 @@ import { type Tool, ToolStatus } from "@prisma/client"
 import { EyeIcon, InfoIcon, PencilIcon, RefreshCwIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useAction } from "next-safe-action/hooks"
-import { type ComponentProps, useRef, useState } from "react"
+import { type ComponentProps, use, useRef, useState } from "react"
 import { toast } from "sonner"
 import { ToolActions } from "~/app/admin/tools/_components/tool-actions"
 import { ToolPublishActions } from "~/app/admin/tools/_components/tool-publish-actions"
@@ -62,7 +62,7 @@ const ToolStatusChange = ({ tool }: { tool: Tool }) => {
 
 type ToolFormProps = ComponentProps<"form"> & {
   tool?: NonNullable<Awaited<ReturnType<typeof findToolBySlug>>>
-  categories: ReturnType<typeof findCategoryList>
+  categoriesPromise: ReturnType<typeof findCategoryList>
 }
 
 export function ToolForm({
@@ -70,10 +70,11 @@ export function ToolForm({
   className,
   title,
   tool,
-  categories,
+  categoriesPromise,
   ...props
 }: ToolFormProps) {
   const router = useRouter()
+  const categories = use(categoriesPromise)
   const resolver = zodResolver(toolSchema)
   const [isPreviewing, setIsPreviewing] = useState(false)
   const [isStatusPending, setIsStatusPending] = useState(false)
@@ -510,7 +511,7 @@ export function ToolForm({
             <FormItem className="col-span-full">
               <FormLabel>Categories</FormLabel>
               <RelationSelector
-                promise={categories}
+                relations={categories}
                 selectedIds={field.value ?? []}
                 setSelectedIds={field.onChange}
                 prompt={
