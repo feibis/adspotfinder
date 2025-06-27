@@ -48,7 +48,7 @@
     "cva": "beta",
     "date-fns": "^4.1.0",
     "lucide-react": "^0.509.0",
-    "motion": "^12.19.1",
+    "motion": "^12.19.2",
     "next": "canary",
     "next-safe-action": "^8.0.7",
     "next-sitemap": "^4.2.3",
@@ -75,7 +75,7 @@
     "zod": "^3.25.67"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.0.5",
+    "@biomejs/biome": "^2.0.6",
     "@tailwindcss/postcss": "^4.1.11",
     "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^22.15.33",
