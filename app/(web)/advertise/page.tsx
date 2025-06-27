@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { Button } from "~/components/common/button"
-import { AdsPicker } from "~/components/web/ads-picker"
+import { AdsPicker } from "~/components/web/ads/ads-picker"
 import { ExternalLink } from "~/components/web/external-link"
 import { Stats } from "~/components/web/stats"
 import { Testimonial } from "~/components/web/testimonial"

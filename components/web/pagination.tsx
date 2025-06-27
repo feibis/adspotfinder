@@ -2,7 +2,7 @@
 
 import { usePagination } from "@mantine/hooks"
 import { getPageLink } from "@primoui/utils"
-import { MoveLeftIcon, MoveRightIcon } from "lucide-react"
+import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react"
 import { usePathname, useSearchParams } from "next/navigation"
 import type { ComponentProps } from "react"
 import { Note } from "~/components/common/note"
@@ -51,7 +51,7 @@ export const Pagination = ({
       <PaginationLink
         href={getPageLink(params, pathname, currentPage - 1)}
         isDisabled={currentPage <= 1}
-        prefix={<MoveLeftIcon />}
+        prefix={<ArrowLeftIcon />}
         rel="prev"
       >
         Prev
@@ -84,7 +84,7 @@ export const Pagination = ({
       <PaginationLink
         href={getPageLink(params, pathname, currentPage + 1)}
         isDisabled={currentPage >= pageCount}
-        suffix={<MoveRightIcon />}
+        suffix={<ArrowRightIcon />}
         rel="next"
       >
         Next
