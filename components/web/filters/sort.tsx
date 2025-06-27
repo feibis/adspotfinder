@@ -10,23 +10,21 @@ import {
 } from "~/components/common/select"
 import { useFilters } from "~/contexts/filter-context"
 
-export const ToolSort = ({ ...props }: ComponentProps<typeof Select>) => {
+export type SortProps = ComponentProps<typeof Select> & {
+  options: { value: string; label: string }[]
+}
+
+export const Sort = ({ options, ...props }: SortProps) => {
   const { filters, updateFilters } = useFilters()
 
-  const sortOptions = [
-    { value: "publishedAt.desc", label: "Latest" },
-    { value: "name.asc", label: "Name (A to Z)" },
-    { value: "name.desc", label: "Name (Z to A)" },
-  ]
-
   return (
-    <Select value={filters.sort} onValueChange={value => updateFilters({ sort: value })} {...props}>
+    <Select value={filters.sort} onValueChange={sort => updateFilters({ sort })} {...props}>
       <SelectTrigger size="lg" className="w-auto min-w-36 max-sm:flex-1">
         <SelectValue placeholder="Order by" />
       </SelectTrigger>
 
       <SelectContent align="end">
-        {sortOptions.map(option => (
+        {options.map(option => (
           <SelectItem key={option.value} value={option.value}>
             {option.label}
           </SelectItem>

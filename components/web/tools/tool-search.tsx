@@ -2,9 +2,9 @@
 
 import type { ComponentProps } from "react"
 import type { Stack } from "~/components/common/stack"
-import { Filters } from "~/components/web/filters"
+import { Filters } from "~/components/web/filters/filters"
+import { Sort } from "~/components/web/filters/sort"
 import { ToolFilters } from "~/components/web/tools/tool-filters"
-import { ToolSort } from "~/components/web/tools/tool-sort"
 import { useFilters } from "~/contexts/filter-context"
 
 export type ToolSearchProps = ComponentProps<typeof Stack> & {
@@ -14,10 +14,16 @@ export type ToolSearchProps = ComponentProps<typeof Stack> & {
 export const ToolSearch = ({ className, placeholder, ...props }: ToolSearchProps) => {
   const { enableSort, enableFilters } = useFilters()
 
+  const sortOptions = [
+    { value: "publishedAt.desc", label: "Latest" },
+    { value: "name.asc", label: "Name (A to Z)" },
+    { value: "name.desc", label: "Name (Z to A)" },
+  ]
+
   return (
     <Filters placeholder={placeholder || "Search tools..."} {...props}>
       {enableFilters && <ToolFilters />}
-      {enableSort && <ToolSort />}
+      {enableSort && <Sort options={sortOptions} />}
     </Filters>
   )
 }
