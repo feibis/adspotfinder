@@ -4,13 +4,13 @@ import { getUrlHostname } from "@primoui/utils"
 import { revalidateTag } from "next/cache"
 import { headers } from "next/headers"
 import { after } from "next/server"
-import { z } from "zod/v4"
 import { config } from "~/config"
 import EmailVerifyDomain from "~/emails/verify-domain"
 import { auth } from "~/lib/auth"
 import { sendEmail } from "~/lib/email"
 import { getIP, isRateLimited } from "~/lib/rate-limiter"
 import { userActionClient } from "~/lib/safe-actions"
+import { claimToolEmailSchema, claimToolOtpSchema } from "~/server/web/shared/schema"
 import { db } from "~/services/db"
 
 /**
@@ -90,15 +90,17 @@ const claimToolForUser = async (toolId: string, userId: string, slug: string) =>
   })
 
   // Revalidate tools
-  revalidateTag("tools")
-  revalidateTag(`tool-${slug}`)
+  after(async () => {
+    revalidateTag("tools")
+    revalidateTag(`tool-${slug}`)
+  })
 }
 
 /**
  * Send OTP to verify domain ownership
  */
 export const sendToolClaimOtp = userActionClient
-  .inputSchema(z.object({ toolSlug: z.string(), email: z.email() }))
+  .inputSchema(claimToolEmailSchema)
   .action(async ({ parsedInput: { toolSlug: slug, email } }) => {
     // Check rate limiting
     await checkRateLimit("otp")
@@ -119,7 +121,7 @@ export const sendToolClaimOtp = userActionClient
  * Verify OTP and claim tool
  */
 export const verifyToolClaimOtp = userActionClient
-  .inputSchema(z.object({ toolSlug: z.string(), otp: z.string() }))
+  .inputSchema(claimToolOtpSchema)
   .action(async ({ parsedInput: { toolSlug: slug, otp } }) => {
     // Check rate limiting
     await checkRateLimit("verify")

@@ -36,6 +36,20 @@ export const reportSchema = z.object({
   message: z.string().optional(),
 })
 
+export const reportToolSchema = reportSchema.extend({
+  toolSlug: z.string(),
+})
+
+export const claimToolEmailSchema = z.object({
+  toolSlug: z.string(),
+  email: z.email("Please enter a valid email address"),
+})
+
+export const claimToolOtpSchema = z.object({
+  toolSlug: z.string(),
+  otp: z.string().min(6, "Please enter a valid OTP code"),
+})
+
 export const adDetailsSchema = z.object({
   sessionId: z.string(),
   name: z.string().min(1, "Company name is required"),

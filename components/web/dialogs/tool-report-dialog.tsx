@@ -1,9 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { ReportType } from "@prisma/client"
 import { sentenceCase } from "change-case"
-import { useAction } from "next-safe-action/hooks"
 import type { Dispatch, SetStateAction } from "react"
-import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { Button } from "~/components/common/button"
 import {
@@ -27,7 +26,7 @@ import { TextArea } from "~/components/common/textarea"
 import { LoginDialog } from "~/components/web/auth/login-dialog"
 import { useSession } from "~/lib/auth-client"
 import { reportTool } from "~/server/web/actions/report"
-import { type ReportSchema, reportSchema } from "~/server/web/shared/schema"
+import { reportToolSchema } from "~/server/web/shared/schema"
 import type { ToolOne } from "~/server/web/tools/payloads"
 
 type ToolReportDialogProps = {
@@ -38,23 +37,27 @@ type ToolReportDialogProps = {
 
 export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogProps) => {
   const { data: session } = useSession()
+  const resolver = zodResolver(reportToolSchema)
 
-  const form = useForm<ReportSchema>({
-    resolver: zodResolver(reportSchema),
-    defaultValues: {
-      type: ReportType.BrokenLink,
-      message: "",
+  const { form, action, handleSubmitWithAction } = useHookFormAction(reportTool, resolver, {
+    formProps: {
+      defaultValues: {
+        toolSlug: tool.slug,
+        type: ReportType.BrokenLink,
+        message: "",
+      },
     },
-  })
 
-  const { execute, isPending } = useAction(reportTool, {
-    onSuccess: () => {
-      toast.success("Thank you for your report. We'll take a look at it shortly.")
-      setIsOpen(false)
-      form.reset()
-    },
-    onError: ({ error }) => {
-      toast.error(error.serverError)
+    actionProps: {
+      onSuccess: () => {
+        toast.success("Thank you for your report. We'll take a look at it shortly.")
+        setIsOpen(false)
+        form.reset()
+      },
+
+      onError: ({ error }) => {
+        toast.error(error.serverError)
+      },
     },
   })
 
@@ -71,11 +74,7 @@ export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogPr
         </DialogHeader>
 
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(data => execute({ toolSlug: tool.slug, ...data }))}
-            className="grid gap-6"
-            noValidate
-          >
+          <form onSubmit={handleSubmitWithAction} className="grid gap-6" noValidate>
             <FormField
               control={form.control}
               name="type"
@@ -124,7 +123,7 @@ export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogPr
                 Cancel
               </Button>
 
-              <Button type="submit" className="min-w-28" isPending={isPending}>
+              <Button type="submit" className="min-w-28" isPending={action.isPending}>
                 Send
               </Button>
             </DialogFooter>

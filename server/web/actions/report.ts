@@ -1,14 +1,13 @@
 "use server"
 
-import { z } from "zod/v4"
 import { getIP, isRateLimited } from "~/lib/rate-limiter"
 import { userActionClient } from "~/lib/safe-actions"
-import { reportSchema } from "~/server/web/shared/schema"
+import { reportToolSchema } from "~/server/web/shared/schema"
 import { db } from "~/services/db"
 import { tryCatch } from "~/utils/helpers"
 
 export const reportTool = userActionClient
-  .inputSchema(reportSchema.extend({ toolSlug: z.string() }))
+  .inputSchema(reportToolSchema)
   .action(async ({ parsedInput: { toolSlug, type, message }, ctx: { user } }) => {
     const ip = await getIP()
     const rateLimitKey = `report:${ip}`
