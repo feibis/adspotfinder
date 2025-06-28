@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import type { NextRequest } from "next/server"
-import { createSearchParamsCache, parseAsInteger, parseAsStringEnum } from "nuqs/server"
+import { createLoader, parseAsInteger, parseAsStringEnum } from "nuqs/server"
 import satori from "satori"
 import { LogoSymbol } from "~/components/web/ui/logo-symbol"
 import { siteConfig } from "~/config/site"
@@ -106,17 +106,15 @@ type PageProps = {
   params: Promise<{ slug: string }>
 }
 
-const searchParamsCache = createSearchParamsCache({
+const searchParamsLoader = createLoader({
   theme: parseAsStringEnum(["light", "dark"]).withDefault("light"),
   width: parseAsInteger.withDefault(200),
   height: parseAsInteger.withDefault(50),
 })
 
-export const GET = async ({ nextUrl }: NextRequest, { params }: PageProps) => {
-  const searchParams = Object.fromEntries(nextUrl.searchParams.entries())
-
+export const GET = async ({ url }: NextRequest, { params }: PageProps) => {
   const { slug } = await params
-  const { theme, width, height } = searchParamsCache.parse(searchParams)
+  const { theme, width, height } = searchParamsLoader(url)
 
   const tool = await findTool({ where: { slug } })
   if (!tool) notFound()
