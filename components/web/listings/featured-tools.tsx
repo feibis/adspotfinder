@@ -1,8 +1,11 @@
+import type { ComponentProps } from "react"
 import { Listing } from "~/components/web/listing"
 import { ToolList, ToolListSkeleton } from "~/components/web/tools/tool-list"
 import { findTools } from "~/server/web/tools/queries"
 
-const FeaturedTools = async () => {
+type FeaturedToolsProps = ComponentProps<typeof Listing>
+
+const FeaturedTools = async ({ title = "Featured Tools", ...props }: FeaturedToolsProps) => {
   const tools = await findTools({ where: { isFeatured: true } })
 
   if (!tools.length) {
@@ -10,15 +13,15 @@ const FeaturedTools = async () => {
   }
 
   return (
-    <Listing title="Featured Tools">
+    <Listing title={title} {...props}>
       <ToolList tools={tools} enableAds={false} />
     </Listing>
   )
 }
 
-const FeaturedToolsSkeleton = () => {
+const FeaturedToolsSkeleton = ({ title = "Featured Tools", ...props }: FeaturedToolsProps) => {
   return (
-    <Listing title="Featured Tools">
+    <Listing title={title} {...props}>
       <ToolListSkeleton />
     </Listing>
   )

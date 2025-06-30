@@ -1,9 +1,14 @@
+import type { ComponentProps } from "react"
 import { Listing } from "~/components/web/listing"
 import { ToolList, ToolListSkeleton } from "~/components/web/tools/tool-list"
 import type { ToolOne } from "~/server/web/tools/payloads"
 import { findRelatedTools } from "~/server/web/tools/queries"
 
-const RelatedTools = async ({ tool }: { tool: ToolOne }) => {
+type RelatedToolsProps = Omit<ComponentProps<typeof Listing>, "title"> & {
+  tool: ToolOne
+}
+
+const RelatedTools = async ({ tool, ...props }: RelatedToolsProps) => {
   const tools = await findRelatedTools({ slug: tool.slug })
 
   if (!tools.length) {
@@ -11,15 +16,15 @@ const RelatedTools = async ({ tool }: { tool: ToolOne }) => {
   }
 
   return (
-    <Listing title={`Similar to ${tool.name}`}>
+    <Listing title={`Similar to ${tool.name}`} {...props}>
       <ToolList tools={tools} enableAds={false} />
     </Listing>
   )
 }
 
-const RelatedToolsSkeleton = () => {
+const RelatedToolsSkeleton = ({ tool, ...props }: RelatedToolsProps) => {
   return (
-    <Listing title="Similar tools">
+    <Listing title={`Similar to ${tool.name}`} {...props}>
       <ToolListSkeleton count={3} />
     </Listing>
   )

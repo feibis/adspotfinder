@@ -33,7 +33,7 @@ type HeaderProps = ComponentProps<"div"> & {
   session: Session | null
 }
 
-const Header = ({ children, className, session, ...props }: HeaderProps) => {
+const Header = ({ className, session, ...props }: HeaderProps) => {
   const pathname = usePathname()
   const search = useSearch()
   const [isNavOpen, setNavOpen] = useState(false)

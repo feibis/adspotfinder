@@ -10,13 +10,14 @@ import { metadataConfig } from "~/config/metadata"
 type PageProps = {
   searchParams: Promise<SearchParams>
 }
+
 export const metadata: Metadata = {
   title: "Browse Tags",
   openGraph: { ...metadataConfig.openGraph, url: "/tags" },
   alternates: { ...metadataConfig.alternates, canonical: "/tags" },
 }
 
-export default function Tags({ searchParams }: PageProps) {
+export default function Tags(props: PageProps) {
   return (
     <>
       <Breadcrumbs
@@ -33,7 +34,7 @@ export default function Tags({ searchParams }: PageProps) {
       </Intro>
 
       <Suspense fallback={<TagListSkeleton />}>
-        <TagQuery searchParams={searchParams} />
+        <TagQuery searchParams={props.searchParams} options={{ enableFilters: true }} />
       </Suspense>
     </>
   )
