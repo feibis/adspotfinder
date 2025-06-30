@@ -34,7 +34,7 @@ export default function Tags(props: PageProps) {
       </Intro>
 
       <Suspense fallback={<TagListSkeleton />}>
-        <TagQuery searchParams={props.searchParams} options={{ enableFilters: true }} />
+        <TagQuery searchParams={props.searchParams} />
       </Suspense>
     </>
   )

@@ -6,6 +6,12 @@ const prisma = new PrismaClient()
 const ADMIN_EMAIL = "admin@dirstarter.com"
 const USER_EMAIL = "user@dirstarter.com"
 
+const DUMMY_CONTENT = `This tool has revolutionized the way developers approach modern software development. With its **intuitive interface** and powerful features, it streamlines workflows and enhances productivity across teams of all sizes. Whether you're a beginner just starting your development journey or an experienced professional working on complex enterprise applications, this tool provides the flexibility and reliability you need to succeed.
+
+The platform offers a **comprehensive suite of features** designed to meet the diverse needs of today's development landscape. From advanced code editing capabilities to seamless integration with popular development tools and services, every aspect has been carefully crafted to provide an exceptional user experience. The robust plugin ecosystem further extends functionality, allowing teams to customize their workflow according to specific project requirements.
+
+Setting up and getting started is remarkably straightforward, with detailed documentation and **community support** available to guide you through the process. The active community contributes to a wealth of tutorials, best practices, and real-world examples that help accelerate your learning curve. Regular updates and improvements ensure that you're always working with the latest features and security enhancements.`
+
 async function main() {
   const now = new Date()
 
@@ -356,6 +362,7 @@ async function main() {
     await prisma.tool.create({
       data: {
         ...toolData,
+        content: DUMMY_CONTENT,
         faviconUrl: `https://www.google.com/s2/favicons?sz=128&domain_url=${toolData.websiteUrl}`,
         categories: { connect: categories.map(slug => ({ slug })) },
         tags: { connect: tags.map(slug => ({ slug })) },
