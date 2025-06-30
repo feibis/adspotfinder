@@ -1,7 +1,7 @@
 "use client"
 
 import { Home } from "lucide-react"
-import type { ComponentProps, ReactNode } from "react"
+import { type ComponentProps, Fragment, type ReactNode } from "react"
 import type { Graph } from "schema-dts"
 import { Stack } from "~/components/common/stack"
 import { NavLink } from "~/components/web/ui/nav-link"
@@ -55,20 +55,15 @@ export const Breadcrumbs = ({ className, items, ...props }: BreadcrumbsProps) =>
   return (
     <>
       {config.breadcrumbs.enabled && (
-        <Stack
-          size="sm"
-          className={cx("-mb-2 text-sm md:-mb-6 lg:-mb-8", className)}
-          asChild
-          {...props}
-        >
+        <Stack size="sm" className={cx("-mb-fluid-md pb-3 text-sm", className)} asChild {...props}>
           <nav>
             {breadcrumbItems.map(({ href, name }, index) => (
-              <div key={index} className="contents">
+              <Fragment key={index}>
                 {index > 0 && <BreadcrumbsSeparator />}
-                <NavLink exact href={href}>
+                <NavLink exact href={href} className="not-last:shrink-0 last:line-clamp-1">
                   {name}
                 </NavLink>
-              </div>
+              </Fragment>
             ))}
           </nav>
         </Stack>
