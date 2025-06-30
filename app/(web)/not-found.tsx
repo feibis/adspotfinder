@@ -1,9 +1,7 @@
 import { Suspense } from "react"
 import { Button } from "~/components/common/button"
 import { Link } from "~/components/common/link"
-import { Listing } from "~/components/web/listing"
-import { FeaturedTools } from "~/components/web/listings/featured-tools"
-import { ToolListSkeleton } from "~/components/web/tools/tool-list"
+import { FeaturedTools, FeaturedToolsSkeleton } from "~/components/web/listings/featured-tools"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 
 export default function NotFound() {
@@ -22,13 +20,7 @@ export default function NotFound() {
         </Button>
       </Intro>
 
-      <Suspense
-        fallback={
-          <Listing title="Featured Tools">
-            <ToolListSkeleton count={6} />
-          </Listing>
-        }
-      >
+      <Suspense fallback={<FeaturedToolsSkeleton />}>
         <FeaturedTools />
       </Suspense>
     </>

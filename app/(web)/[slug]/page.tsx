@@ -9,13 +9,11 @@ import { H2, H5 } from "~/components/common/heading"
 import { Stack } from "~/components/common/stack"
 import { AdCard, AdCardSkeleton } from "~/components/web/ads/ad-card"
 import { ExternalLink } from "~/components/web/external-link"
-import { Listing } from "~/components/web/listing"
-import { RelatedTools } from "~/components/web/listings/related-tools"
+import { RelatedTools, RelatedToolsSkeleton } from "~/components/web/listings/related-tools"
 import { Markdown } from "~/components/web/markdown"
 import { Nav } from "~/components/web/nav"
 import { OverlayImage } from "~/components/web/overlay-image"
 import { ToolActions } from "~/components/web/tools/tool-actions"
-import { ToolListSkeleton } from "~/components/web/tools/tool-list"
 import { ToolPreviewAlert } from "~/components/web/tools/tool-preview-alert"
 import { Favicon } from "~/components/web/ui/favicon"
 import { IntroDescription } from "~/components/web/ui/intro"
@@ -103,7 +101,7 @@ export default async function ToolPage(props: PageProps) {
             </div>
 
             {isToolPublished(tool) && (
-              <Button suffix={<ArrowUpRightIcon />} asChild>
+              <Button suffix={<ArrowUpRightIcon />} className="md:min-w-36" asChild>
                 <ExternalLink
                   href={tool.affiliateUrl || tool.websiteUrl}
                   doFollow={tool.isFeatured}
@@ -196,13 +194,7 @@ export default async function ToolPage(props: PageProps) {
       </Section>
 
       {/* Related */}
-      <Suspense
-        fallback={
-          <Listing title={`Similar to ${tool.name}`}>
-            <ToolListSkeleton count={3} />
-          </Listing>
-        }
-      >
+      <Suspense fallback={<RelatedToolsSkeleton />}>
         <RelatedTools tool={tool} />
       </Suspense>
     </div>

@@ -1,8 +1,8 @@
 import { Listing } from "~/components/web/listing"
-import { ToolList } from "~/components/web/tools/tool-list"
+import { ToolList, ToolListSkeleton } from "~/components/web/tools/tool-list"
 import { findTools } from "~/server/web/tools/queries"
 
-export const FeaturedTools = async () => {
+const FeaturedTools = async () => {
   const tools = await findTools({ where: { isFeatured: true } })
 
   if (!tools.length) {
@@ -15,3 +15,13 @@ export const FeaturedTools = async () => {
     </Listing>
   )
 }
+
+const FeaturedToolsSkeleton = () => {
+  return (
+    <Listing title="Featured Tools">
+      <ToolListSkeleton />
+    </Listing>
+  )
+}
+
+export { FeaturedTools, FeaturedToolsSkeleton }
