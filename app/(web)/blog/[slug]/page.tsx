@@ -72,68 +72,68 @@ export default async function BlogPostPage(props: PageProps) {
         ]}
       />
 
-      <div className="flex flex-col gap-8 md:gap-10 lg:gap-12">
-        <Intro>
-          <IntroTitle>{post.title}</IntroTitle>
-          <IntroDescription>{post.description}</IntroDescription>
+      <Intro>
+        <IntroTitle>{post.title}</IntroTitle>
+        <IntroDescription>{post.description}</IntroDescription>
 
-          <Stack size="sm" className="mt-2" asChild>
-            <Note>
-              {post.publishedAt && (
-                <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
-              )}
+        <Stack size="lg" className="mt-4">
+          <Nav title={post.title} />
 
-              <span>&bull;</span>
-              <span>{getReadTime(post.content)} min read</span>
-            </Note>
-          </Stack>
-        </Intro>
-
-        <Section>
-          <Section.Content>
-            {post.image && (
-              <Image
-                src={post.image}
-                alt={post.title}
-                width={1200}
-                height={630}
-                className="w-full h-auto aspect-video object-cover rounded-lg"
-              />
+          <Note>
+            {post.publishedAt && (
+              <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
             )}
 
-            <MDX code={post.content} />
+            <span className="px-2">&bull;</span>
+            <span>{getReadTime(post.content)} min read</span>
+          </Note>
+        </Stack>
+      </Intro>
 
-            <Nav className="self-start" title={post.title} />
-          </Section.Content>
+      <Section>
+        <Section.Content>
+          {post.image && (
+            <Image
+              src={post.image}
+              alt={post.title}
+              width={1200}
+              height={630}
+              className="w-full h-auto aspect-video object-cover rounded-lg"
+            />
+          )}
 
-          <Section.Sidebar>
-            {post.author && (
-              <Stack direction="column">
-                <H6 as="strong" className="text-muted-foreground">
-                  Written by
-                </H6>
+          <MDX code={post.content} />
+        </Section.Content>
 
-                <ExternalLink
-                  href={`https://twitter.com/${post.author.twitterHandle}`}
-                  className="group"
-                >
-                  <Author
-                    name={post.author.name}
-                    image={post.author.image}
-                    title={`@${post.author.twitterHandle}`}
-                  />
-                </ExternalLink>
-              </Stack>
-            )}
+        <Section.Sidebar>
+          {post.author && (
+            <Stack direction="column">
+              <H6 as="strong" className="text-muted-foreground">
+                Written by
+              </H6>
 
-            {/* <TOC title="On this page" content={post.content} className="flex-1 overflow-y-auto" /> */}
+              <ExternalLink
+                href={`https://twitter.com/${post.author.twitterHandle}`}
+                className="group"
+              >
+                <Author
+                  name={post.author.name}
+                  image={post.author.image}
+                  title={`@${post.author.twitterHandle}`}
+                />
+              </ExternalLink>
+            </Stack>
+          )}
 
-            <Suspense fallback={<AdCardSkeleton className="max-md:hidden" />}>
-              <AdCard where={{ type: "BlogPost" }} className="max-md:hidden" />
-            </Suspense>
-          </Section.Sidebar>
-        </Section>
-      </div>
+          {/* <TOC title="On this page" content={post.content} className="flex-1 overflow-y-auto" /> */}
+
+          <Suspense fallback={<AdCardSkeleton className="max-md:hidden" />}>
+            <AdCard where={{ type: "BlogPost" }} className="max-md:hidden" />
+          </Suspense>
+        </Section.Sidebar>
+      </Section>
+
+      <Nav title={post.title} className="self-start" />
     </>
   )
 }
