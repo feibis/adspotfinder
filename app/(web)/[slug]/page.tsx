@@ -84,7 +84,7 @@ export default async function ToolPage(props: PageProps) {
   ])
 
   return (
-    <div className="flex flex-col gap-12">
+    <>
       <Section>
         <Section.Content className="max-md:contents">
           <Sticky isOverlay>
@@ -203,6 +203,6 @@ export default async function ToolPage(props: PageProps) {
       <Suspense fallback={<RelatedToolsSkeleton />}>
         <RelatedTools tool={tool} />
       </Suspense>
-    </div>
+    </>
   )
 }
