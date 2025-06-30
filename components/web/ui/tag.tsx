@@ -1,32 +1,46 @@
 import { Slot } from "radix-ui"
-import type { ComponentProps, ReactNode } from "react"
-import { Link } from "~/components/common/link"
-import { cx } from "~/utils/cva"
+import { type ComponentProps, isValidElement, type ReactNode } from "react"
+import { Slottable } from "~/components/common/slottable"
+import { cva, cx, type VariantProps } from "~/utils/cva"
 
-type TagProps = Omit<ComponentProps<typeof Link>, "prefix"> & {
-  /**
-   * The slot to be rendered before the label.
-   */
-  prefix?: ReactNode
+const tagVariants = cva({
+  base: "flex items-center gap-0.5 text-muted-foreground text-sm hover:[&[href]]:text-foreground",
+})
 
-  /**
-   * The slot to be rendered after the label.
-   */
-  suffix?: ReactNode
-}
+type TagProps = Omit<ComponentProps<"span">, "prefix"> &
+  VariantProps<typeof tagVariants> & {
+    /**
+     * If set to `true`, the button will be rendered as a child within the component.
+     * This child component must be a valid React component.
+     */
+    asChild?: boolean
 
-export const Tag = ({ children, className, prefix, suffix, ...props }: TagProps) => {
+    /**
+     * The slot to be rendered before the label.
+     */
+    prefix?: ReactNode
+
+    /**
+     * The slot to be rendered after the label.
+     */
+    suffix?: ReactNode
+  }
+
+export const Tag = ({ children, className, asChild, prefix, suffix, ...props }: TagProps) => {
+  const useAsChild = asChild && isValidElement(children)
+  const Comp = useAsChild ? Slot.Root : "span"
+
   return (
-    <Link
-      className={cx(
-        "flex items-center gap-0.5 text-muted-foreground text-sm hover:text-foreground",
-        className,
-      )}
-      {...props}
-    >
-      {prefix && <Slot.Root className="opacity-30 mr-0.5">{prefix}</Slot.Root>}
-      {children}
-      {suffix && <Slot.Root className="opacity-30 ml-0.5">{suffix}</Slot.Root>}
-    </Link>
+    <Comp className={cx(tagVariants({ className }))} {...props}>
+      <Slottable child={children} asChild={asChild}>
+        {child => (
+          <>
+            {prefix && <Slot.Root className="opacity-30 mr-0.5">{prefix}</Slot.Root>}
+            {child}
+            {suffix && <Slot.Root className="opacity-30 ml-0.5">{suffix}</Slot.Root>}
+          </>
+        )}
+      </Slottable>
+    </Comp>
   )
 }

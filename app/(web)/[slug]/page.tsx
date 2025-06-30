@@ -4,8 +4,10 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { cache, Suspense } from "react"
 import { FeaturedTools } from "~/app/(web)/[slug]/featured-tools"
+import { Badge } from "~/components/common/badge"
 import { Button } from "~/components/common/button"
 import { H2, H5 } from "~/components/common/heading"
+import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
 import { AdCard, AdCardSkeleton } from "~/components/web/ads/ad-card"
 import { ExternalLink } from "~/components/web/external-link"
@@ -141,11 +143,11 @@ export default async function ToolPage(props: PageProps) {
             <Stack size="lg" direction="column" className="w-full max-md:order-5">
               <H5 as="strong">Categories:</H5>
 
-              <Stack>
+              <Stack className="gap-2">
                 {tool.categories?.map(({ slug, name }) => (
-                  <Tag key={slug} href={`/categories/${slug}`} prefix={<HashIcon />}>
-                    {name}
-                  </Tag>
+                  <Badge key={slug} size="lg" asChild>
+                    <Link href={`/categories/${slug}`}>{name}</Link>
+                  </Badge>
                 ))}
               </Stack>
             </Stack>
@@ -158,8 +160,8 @@ export default async function ToolPage(props: PageProps) {
 
               <Stack>
                 {tool.tags.map(tag => (
-                  <Tag key={tag.slug} href={`/tags/${tag.slug}`} prefix={<HashIcon />}>
-                    {tag.slug}
+                  <Tag key={tag.slug} prefix={<HashIcon />} asChild>
+                    <Link href={`/tags/${tag.slug}`}>{tag.slug}</Link>
                   </Tag>
                 ))}
               </Stack>
