@@ -27,11 +27,11 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         </Suspense>
 
         <Container asChild>
-          <main className="flex flex-col grow py-8 gap-8 md:gap-10 md:py-10 lg:gap-12 lg:py-12">
+          <Wrapper className="grow py-fluid-md">
             {children}
 
             <Footer />
-          </main>
+          </Wrapper>
         </Container>
       </div>
 

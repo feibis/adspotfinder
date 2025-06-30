@@ -22,7 +22,7 @@ type FooterProps = ComponentProps<"div"> & {
 
 export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) => {
   return (
-    <footer className="flex flex-col gap-y-8 mt-auto pt-8 border-t border-foreground/10 md:pt-10 lg:pt-12">
+    <footer className="flex flex-col gap-y-8 mt-auto pt-fluid-md border-t border-foreground/10">
       <div
         className={cx("grid grid-cols-3 gap-y-8 gap-x-4 md:gap-x-6 md:grid-cols-16", className)}
         {...props}

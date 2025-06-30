@@ -17,9 +17,11 @@ import { Nav } from "~/components/web/nav"
 import { OverlayImage } from "~/components/web/overlay-image"
 import { ToolActions } from "~/components/web/tools/tool-actions"
 import { ToolPreviewAlert } from "~/components/web/tools/tool-preview-alert"
+import { Backdrop } from "~/components/web/ui/backdrop"
 import { Favicon } from "~/components/web/ui/favicon"
 import { IntroDescription } from "~/components/web/ui/intro"
 import { Section } from "~/components/web/ui/section"
+import { Sticky } from "~/components/web/ui/sticky"
 import { Tag } from "~/components/web/ui/tag"
 import { VerifiedBadge } from "~/components/web/verified-badge"
 import { metadataConfig } from "~/config/metadata"
@@ -85,42 +87,44 @@ export default async function ToolPage(props: PageProps) {
     <div className="flex flex-col gap-12">
       <Section>
         <Section.Content className="max-md:contents">
-          <div className="flex flex-1 flex-col items-start gap-6 max-md:order-1 md:gap-8">
-            <div className="flex w-full flex-col items-start gap-y-4">
-              <Stack className="w-full">
-                <Favicon src={tool.faviconUrl} title={tool.name} className="size-8" />
+          <Sticky isOverlay>
+            <Stack className="self-stretch">
+              <Favicon src={tool.faviconUrl} title={tool.name} className="size-8" />
 
-                <Stack className="flex-1 min-w-0">
-                  <H2 as="h1" className="leading-tight! truncate">
-                    {tool.name}
-                  </H2>
+              <Stack className="flex-1 min-w-0">
+                <H2 as="h1" className="leading-tight! truncate">
+                  {tool.name}
+                </H2>
 
-                  {tool.ownerId && <VerifiedBadge size="lg" />}
-                </Stack>
+                {tool.ownerId && <VerifiedBadge size="lg" />}
               </Stack>
 
-              {tool.description && <IntroDescription>{tool.description}</IntroDescription>}
-            </div>
+              <Backdrop />
+            </Stack>
+          </Sticky>
 
-            {isToolPublished(tool) && (
-              <Button suffix={<ArrowUpRightIcon />} className="md:min-w-36" asChild>
-                <ExternalLink
-                  href={tool.affiliateUrl || tool.websiteUrl}
-                  doFollow={tool.isFeatured}
-                  eventName="click_website"
-                  eventProps={{
-                    url: tool.websiteUrl,
-                    isFeatured: tool.isFeatured,
-                    source: "button",
-                  }}
-                >
-                  Visit {tool.name}
-                </ExternalLink>
-              </Button>
-            )}
+          {tool.description && (
+            <IntroDescription className="-mt-fluid-sm pt-4">{tool.description}</IntroDescription>
+          )}
 
-            <ToolPreviewAlert tool={tool} />
-          </div>
+          {isToolPublished(tool) && (
+            <Button suffix={<ArrowUpRightIcon />} className="md:min-w-36" asChild>
+              <ExternalLink
+                href={tool.affiliateUrl || tool.websiteUrl}
+                doFollow={tool.isFeatured}
+                eventName="click_website"
+                eventProps={{
+                  url: tool.websiteUrl,
+                  isFeatured: tool.isFeatured,
+                  source: "button",
+                }}
+              >
+                Visit {tool.name}
+              </ExternalLink>
+            </Button>
+          )}
+
+          <ToolPreviewAlert tool={tool} className="max-md:order-2" />
 
           {isToolPublished(tool) && tool.screenshotUrl && (
             <OverlayImage
@@ -130,7 +134,7 @@ export default async function ToolPage(props: PageProps) {
               eventProps={{ url: tool.websiteUrl, isFeatured: tool.isFeatured, source: "image" }}
               src={tool.screenshotUrl}
               alt={`Screenshot of ${tool.name} website`}
-              className="max-md:order-2"
+              className="my-2 max-md:order-2"
             >
               Visit {tool.name}
             </OverlayImage>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Button } from "~/components/common/button"
+import { Wrapper } from "~/components/common/wrapper"
 import { AdsPicker } from "~/components/web/ads/ads-picker"
 import { ExternalLink } from "~/components/web/external-link"
 import { Stats } from "~/components/web/stats"
@@ -20,7 +21,7 @@ export default async function AdvertisePage() {
   const ads = await findAds({})
 
   return (
-    <div className="flex flex-col gap-12 md:gap-14 lg:gap-16">
+    <Wrapper gap="lg">
       <Intro alignment="center">
         <IntroTitle>{`${metadata.title}`}</IntroTitle>
         <IntroDescription>{metadata.description}</IntroDescription>
@@ -54,6 +55,6 @@ export default async function AdvertisePage() {
           <ExternalLink href={`mailto:${config.site.email}`}>Contact us</ExternalLink>
         </Button>
       </Intro>
-    </div>
+    </Wrapper>
   )
 }

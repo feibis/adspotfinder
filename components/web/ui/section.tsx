@@ -1,26 +1,26 @@
 import type { ComponentProps } from "react"
+import { Wrapper } from "~/components/common/wrapper"
 import { Sticky } from "~/components/web/ui/sticky"
 import { cx } from "~/utils/cva"
 
-export const SectionBase = ({ className, ...props }: ComponentProps<"div">) => {
+const SectionBase = ({ className, ...props }: ComponentProps<typeof Wrapper>) => {
   return (
-    <div className={cx("grid items-start gap-6 md:grid-cols-3 lg:gap-8", className)} {...props} />
-  )
-}
-
-export const SectionContent = ({ className, ...props }: ComponentProps<"div">) => {
-  return (
-    <div
-      className={cx("flex flex-col gap-8 md:col-span-2 md:gap-10 lg:gap-12", className)}
+    <Wrapper
+      gap="sm"
+      className={cx("items-start gap-x-6 md:grid md:grid-cols-3 lg:gap-x-8", className)}
       {...props}
     />
   )
 }
 
-export const SectionSidebar = ({ className, ...props }: ComponentProps<"div">) => {
+const SectionContent = ({ className, ...props }: ComponentProps<typeof Wrapper>) => {
+  return <Wrapper gap="sm" className={cx("items-start md:col-span-2", className)} {...props} />
+}
+
+const SectionSidebar = ({ className, ...props }: ComponentProps<"div">) => {
   return (
     <Sticky>
-      <div className={cx("flex flex-col gap-6 w-full", className)} {...props} />
+      <div className={cx("flex flex-col gap-y-6 md:col-span-1", className)} {...props} />
     </Sticky>
   )
 }

@@ -7,7 +7,7 @@
 @theme {
   --header-height: 3.125rem;
   --header-top: 0rem;
-  --header-bottom: 1rem;
+  --header-bottom: 0.75rem;
   --header-inner-offset: calc(var(--header-top) + var(--header-height));
   --header-outer-offset: calc(var(--header-top) + var(--header-height) + var(--header-bottom));
 
@@ -50,6 +50,10 @@
   --font-display: var(--font-sans);
 
   --text-5xl: 2.75rem;
+
+  --spacing-fluid-sm: clamp(1.5rem, 3.5vw, 2rem);
+  --spacing-fluid-md: clamp(2rem, 5vw, 3rem);
+  --spacing-fluid-lg: clamp(3rem, 7vw, 4rem);
 
   --scale-flip: -1;
 

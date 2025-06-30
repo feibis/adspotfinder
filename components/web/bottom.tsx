@@ -20,10 +20,7 @@ export const Bottom = async ({ className, ...props }: ComponentProps<"div">) => 
   return (
     <Container>
       <div
-        className={cx(
-          "flex flex-col gap-y-6 py-8 border-t border-foreground/10 md:py-10 lg:py-12",
-          className,
-        )}
+        className={cx("flex flex-col gap-y-6 py-fluid-md border-t border-foreground/10", className)}
         {...props}
       >
         {!!categories?.length && (

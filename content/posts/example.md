@@ -32,27 +32,6 @@ Edge computing brings computation and data storage closer to the location where 
    - Improved system resilience
    - Reduced single points of failure
 
-## Modern Edge Computing Platforms
-
-The ecosystem has evolved rapidly, with several platforms leading the charge:
-
-```typescript
-// Example of an edge function on Vercel
-export default function handler(req, res) {
-  const { geo } = req;
-  
-  return new Response(JSON.stringify({
-    country: geo.country,
-    city: geo.city,
-    region: geo.region,
-  }), {
-    headers: { 'Content-Type': 'application/json' },
-  });
-}
-```
-
-This simple example demonstrates how edge functions can access geolocation data instantly, enabling location-aware features without additional infrastructure.
-
 ## Implementing Edge-First Architecture
 
 When building modern web applications, considering edge computing from the start can lead to significant advantages. Here's a practical approach:
@@ -94,18 +73,6 @@ Edge computing is already transforming various industries:
 ## Best Practices for Edge Development
 
 To make the most of edge computing, consider these best practices:
-
-```typescript
-// Example of efficient edge caching
-export async function getStaticProps() {
-  return {
-    props: {
-      data: await fetchData(),
-    },
-    revalidate: 60, // Revalidate every minute
-  };
-}
-```
 
 1. **Optimize for Edge Execution**
    - Minimize dependencies
