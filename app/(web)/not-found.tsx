@@ -1,28 +1,35 @@
-import { Suspense } from "react"
+"use client"
+
+import { ArrowLeftIcon, SearchIcon } from "lucide-react"
+import { usePathname } from "next/navigation"
 import { Button } from "~/components/common/button"
 import { Link } from "~/components/common/link"
-import { FeaturedTools, FeaturedToolsSkeleton } from "~/components/web/listings/featured-tools"
+import { Stack } from "~/components/common/stack"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
+import { useSearch } from "~/contexts/search-context"
 
 export default function NotFound() {
+  const pathname = usePathname()
+  const search = useSearch()
+
   return (
-    <>
-      <Intro className="mb-8">
-        <IntroTitle>404 Not Found</IntroTitle>
+    <Intro>
+      <IntroTitle>404 Not Found</IntroTitle>
 
-        <IntroDescription className="max-w-xl">
-          We're sorry, but the page could not be found. You may have mistyped the address or the
-          page may have moved.
-        </IntroDescription>
+      <IntroDescription className="max-w-xl">
+        We're sorry, but the page {pathname} could not be found. You may have mistyped the address
+        or the page may have moved.
+      </IntroDescription>
 
-        <Button size="lg" className="mt-4" asChild>
+      <Stack className="mt-4">
+        <Button onClick={search.open} prefix={<SearchIcon />}>
+          Search for tools
+        </Button>
+
+        <Button variant="ghost" prefix={<ArrowLeftIcon />} asChild>
           <Link href="/">Go back home</Link>
         </Button>
-      </Intro>
-
-      <Suspense fallback={<FeaturedToolsSkeleton />}>
-        <FeaturedTools />
-      </Suspense>
-    </>
+      </Stack>
+    </Intro>
   )
 }

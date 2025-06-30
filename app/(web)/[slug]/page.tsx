@@ -124,7 +124,7 @@ export default async function ToolPage(props: PageProps) {
             </Button>
           )}
 
-          <ToolPreviewAlert tool={tool} className="max-md:order-2" />
+          <ToolPreviewAlert tool={tool} className="self-stretch max-md:order-2" />
 
           {isToolPublished(tool) && tool.screenshotUrl && (
             <OverlayImage
@@ -200,7 +200,7 @@ export default async function ToolPage(props: PageProps) {
       </Section>
 
       {/* Related */}
-      <Suspense fallback={<RelatedToolsSkeleton />}>
+      <Suspense fallback={<RelatedToolsSkeleton tool={tool} />}>
         <RelatedTools tool={tool} />
       </Suspense>
     </>
