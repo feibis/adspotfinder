@@ -1,17 +1,4 @@
-import { createSearchParamsCache, parseAsInteger, parseAsString } from "nuqs/server"
 import { z } from "zod/v4"
-import { config } from "~/config"
-
-export const filterParamsSchema = {
-  q: parseAsString.withDefault(""),
-  sort: parseAsString.withDefault(""),
-  page: parseAsInteger.withDefault(1),
-  perPage: parseAsInteger.withDefault(config.ads.enabled ? 35 : 36),
-  category: parseAsString.withDefault(""),
-}
-
-export const filterParamsCache = createSearchParamsCache(filterParamsSchema)
-export type FilterSchema = Awaited<ReturnType<typeof filterParamsCache.parse>>
 
 export const VALID_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"]
 

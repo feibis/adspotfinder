@@ -1,34 +1,37 @@
 "use client"
 
-import { useQueryStates, type Values } from "nuqs"
+import { type UseQueryStatesKeysMap, useQueryStates, type Values } from "nuqs"
 import { createContext, type PropsWithChildren, use, useTransition } from "react"
 import { isDefaultState } from "~/lib/parsers"
-import { filterParamsSchema } from "~/server/web/shared/schema"
 
-export type FiltersContextType = {
-  filters: Values<typeof filterParamsSchema>
+// TODO: Add basic nuqs schema containing q, sort, page, perPage and extend it with the schema passed to the provider
+
+export type FiltersContextType<T extends UseQueryStatesKeysMap> = {
+  filters: Values<T>
   isLoading: boolean
   isDefault: boolean
   enableSort: boolean
   enableFilters: boolean
-  updateFilters: (values: Partial<Values<typeof filterParamsSchema>> | null) => void
+  updateFilters: (values: Partial<Values<T>> | null) => void
 }
 
-const FiltersContext = createContext<FiltersContextType>(null!)
+const FiltersContext = createContext<FiltersContextType<any>>(null!)
 
-export type FiltersProviderProps = {
+export type FiltersProviderProps<T = any> = {
+  schema: T
   enableSort?: boolean
   enableFilters?: boolean
 }
 
-const FiltersProvider = ({
+const FiltersProvider = <T extends UseQueryStatesKeysMap>({
   children,
+  schema,
   enableSort = true,
   enableFilters = false,
-}: PropsWithChildren<FiltersProviderProps>) => {
+}: PropsWithChildren<FiltersProviderProps<T>>) => {
   const [isLoading, startTransition] = useTransition()
 
-  const [filters, setFilters] = useQueryStates(filterParamsSchema, {
+  const [filters, setFilters] = useQueryStates(schema, {
     shallow: false,
     history: "push",
     startTransition,
@@ -38,9 +41,9 @@ const FiltersProvider = ({
     },
   })
 
-  const isDefault = isDefaultState(filterParamsSchema, filters, ["page", "perPage"])
+  const isDefault = isDefaultState(schema as any, filters, ["page", "perPage"])
 
-  const updateFilters = (values: Partial<Values<typeof filterParamsSchema>> | null) => {
+  const updateFilters = (values: Partial<Values<T>> | null) => {
     if (values === null) {
       setFilters(null)
     } else {
@@ -57,7 +60,7 @@ const FiltersProvider = ({
   )
 }
 
-const useFilters = () => {
+function useFilters<T extends UseQueryStatesKeysMap>(): FiltersContextType<T> {
   const context = use(FiltersContext)
 
   if (context === undefined) {

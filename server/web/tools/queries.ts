@@ -2,17 +2,17 @@ import { performance } from "node:perf_hooks"
 import { getRandomElement } from "@primoui/utils"
 import { type Prisma, ToolStatus } from "@prisma/client"
 import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
-import type { FilterSchema } from "~/server/web/shared/schema"
 import { toolManyPayload, toolOnePayload } from "~/server/web/tools/payloads"
+import type { ToolFilterParams } from "~/server/web/tools/schema"
 import { db } from "~/services/db"
 
-export const searchTools = async (search: FilterSchema, where?: Prisma.ToolWhereInput) => {
+export const searchTools = async (search: ToolFilterParams, where?: Prisma.ToolWhereInput) => {
   "use cache"
 
   cacheTag("tools")
   cacheLife("max")
 
-  const { q, category, page, sort, perPage } = search
+  const { q, category, sort, page, perPage } = search
   const start = performance.now()
   const skip = (page - 1) * perPage
   const take = perPage

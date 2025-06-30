@@ -3,7 +3,7 @@
 import type { ReactNode } from "react"
 import { actionClient } from "~/lib/safe-actions"
 import { findCategories } from "~/server/web/categories/queries"
-import type { filterParamsSchema } from "~/server/web/shared/schema"
+import type { ToolFilterParams } from "~/server/web/tools/schema"
 
 type FilterOption = {
   slug: string
@@ -12,7 +12,7 @@ type FilterOption = {
 }
 
 type FilterOptions = Array<{
-  type: Exclude<keyof typeof filterParamsSchema, "q" | "sort" | "page" | "perPage">
+  type: Exclude<keyof ToolFilterParams, "q" | "sort" | "page" | "perPage">
   options: FilterOption[]
 }>
 

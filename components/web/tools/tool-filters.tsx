@@ -12,9 +12,10 @@ import {
 } from "~/components/common/select"
 import { useFilters } from "~/contexts/filter-context"
 import { findFilterOptions } from "~/server/web/actions/filters"
+import type { ToolFilterSchema } from "~/server/web/tools/schema"
 
 export const ToolFilters = ({ ...props }: ComponentProps<typeof Select>) => {
-  const { filters, updateFilters } = useFilters()
+  const { filters, updateFilters } = useFilters<ToolFilterSchema>()
   const { result, execute } = useAction(findFilterOptions)
 
   useEffect(() => {

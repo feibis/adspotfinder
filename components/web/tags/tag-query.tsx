@@ -1,23 +1,38 @@
+import type { Prisma } from "@prisma/client"
 import type { SearchParams } from "nuqs"
-import { Pagination } from "~/components/web/pagination"
-import { TagList } from "~/components/web/tags/tag-list"
+import type { PaginationProps } from "~/components/web/pagination"
+import type { TagListProps } from "~/components/web/tags/tag-list"
+import { TagListing, type TagListingProps } from "~/components/web/tags/tag-listing"
 import { searchTags } from "~/server/web/tags/queries"
-import { tagsSearchParamsCache } from "~/server/web/tags/schema"
+import { type TagsFilterParams, tagsSearchParamsCache } from "~/server/web/tags/schema"
 
-type TagQueryProps = {
+type TagQueryProps = Omit<TagListingProps, "list" | "pagination"> & {
   searchParams: Promise<SearchParams>
+  overrideParams?: Partial<TagsFilterParams>
+  where?: Prisma.TagWhereInput
+  list?: Partial<Omit<TagListProps, "tags">>
+  pagination?: Partial<Omit<PaginationProps, "total" | "pageSize">>
 }
 
-const TagQuery = async ({ searchParams }: TagQueryProps) => {
+const TagQuery = async ({
+  searchParams,
+  overrideParams,
+  where,
+  list,
+  pagination,
+  ...props
+}: TagQueryProps) => {
   const parsedParams = tagsSearchParamsCache.parse(await searchParams)
-  const { tags, total } = await searchTags(parsedParams, {})
+  const params = { ...parsedParams, ...overrideParams }
+  const { tags, total } = await searchTags(params, where)
 
   return (
-    <>
-      <TagList tags={tags} />
-      <Pagination pageSize={parsedParams.perPage} total={total} currentPage={parsedParams.page} />
-    </>
+    <TagListing
+      list={{ tags, ...list }}
+      pagination={{ total, pageSize: params.perPage, currentPage: params.page, ...pagination }}
+      {...props}
+    />
   )
 }
 
-export { TagQuery }
+export { TagQuery, type TagQueryProps }

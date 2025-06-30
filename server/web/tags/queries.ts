@@ -1,26 +1,47 @@
 import { type Prisma, ToolStatus } from "@prisma/client"
 import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
 import { tagManyPayload, tagOnePayload } from "~/server/web/tags/payloads"
-import type { TagsSearchParams } from "~/server/web/tags/schema"
+import type { TagsFilterParams } from "~/server/web/tags/schema"
 import { db } from "~/services/db"
 
-export const searchTags = async (search: TagsSearchParams, where?: Prisma.TagWhereInput) => {
+export const searchTags = async (search: TagsFilterParams, where?: Prisma.TagWhereInput) => {
   "use cache"
 
   cacheTag("tags")
   cacheLife("max")
 
-  const { page, perPage } = search
+  const { q, letter, sort, page, perPage } = search
+  const start = performance.now()
   const skip = (page - 1) * perPage
   const take = perPage
+  const [sortBy, sortOrder] = sort.split(".")
 
   const whereQuery: Prisma.TagWhereInput = {
     tools: { some: { status: ToolStatus.Published } },
+    ...(q && { name: { contains: q, mode: "insensitive" } }),
+  }
+
+  // Filter by letter if provided
+  if (letter) {
+    if (/^[A-Za-z]$/.test(letter)) {
+      // Single alphabet letter - find tags starting with this letter
+      whereQuery.name = {
+        startsWith: letter.toUpperCase(),
+        mode: "insensitive",
+      }
+    } else {
+      // Non-alphabetic character (e.g., "#" for numbers/symbols) - find tags that don't start with alphabet letters
+      whereQuery.NOT = {
+        OR: "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(char => ({
+          name: { startsWith: char, mode: "insensitive" },
+        })),
+      }
+    }
   }
 
   const [tags, total] = await db.$transaction([
     db.tag.findMany({
-      orderBy: { name: "asc" },
+      orderBy: sortBy ? { [sortBy]: sortOrder } : { name: "asc" },
       where: { ...whereQuery, ...where },
       select: tagManyPayload,
       take,
@@ -31,6 +52,8 @@ export const searchTags = async (search: TagsSearchParams, where?: Prisma.TagWhe
       where: { ...whereQuery, ...where },
     }),
   ])
+
+  console.log(`Tags search: ${Math.round(performance.now() - start)}ms`)
 
   return { tags, total }
 }

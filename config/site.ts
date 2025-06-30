@@ -10,4 +10,6 @@ export const siteConfig = {
   email: env.NEXT_PUBLIC_SITE_EMAIL,
   url: env.NEXT_PUBLIC_SITE_URL,
   domain: getUrlHostname(env.NEXT_PUBLIC_SITE_URL),
+
+  alphabet: "abcdefghijklmnopqrstuvwxyz&",
 }

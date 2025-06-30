@@ -4,27 +4,26 @@ import type { ComponentProps } from "react"
 import type { Stack } from "~/components/common/stack"
 import { Filters } from "~/components/web/filters/filters"
 import { Sort } from "~/components/web/filters/sort"
-import { ToolFilters } from "~/components/web/tools/tool-filters"
+import { TagFilters } from "~/components/web/tags/tag-filters"
 import { useFilters } from "~/contexts/filter-context"
-import type { ToolFilterSchema } from "~/server/web/tools/schema"
+import type { TagsFilterSchema } from "~/server/web/tags/schema"
 
-export type ToolSearchProps = ComponentProps<typeof Stack> & {
+export type TagSearchProps = ComponentProps<typeof Stack> & {
   placeholder?: string
 }
 
-export const ToolSearch = ({ placeholder, ...props }: ToolSearchProps) => {
-  const { enableSort, enableFilters } = useFilters<ToolFilterSchema>()
+export const TagSearch = ({ placeholder, ...props }: TagSearchProps) => {
+  const { enableSort, enableFilters } = useFilters<TagsFilterSchema>()
 
   const sortOptions = [
-    { value: "publishedAt.desc", label: "Latest" },
     { value: "name.asc", label: "Name (A to Z)" },
     { value: "name.desc", label: "Name (Z to A)" },
   ]
 
   return (
-    <Filters placeholder={placeholder || "Search tools..."} {...props}>
-      {enableFilters && <ToolFilters />}
+    <Filters placeholder={placeholder || "Search tags..."} {...props}>
       {enableSort && <Sort options={sortOptions} />}
+      {enableFilters && <TagFilters />}
     </Filters>
   )
 }
