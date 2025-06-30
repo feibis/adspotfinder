@@ -64,7 +64,7 @@ export const submitTool = actionClient
 
     // Check if the tool already exists
     const existingTool = await db.tool.findFirst({
-      where: { websiteUrl: data.websiteUrl },
+      where: { websiteUrl: { contains: getUrlHostname(data.websiteUrl) } },
     })
 
     // If the tool exists, redirect to the tool or submit page
