@@ -134,7 +134,7 @@ export default async function ToolPage(props: PageProps) {
               eventProps={{ url: tool.websiteUrl, isFeatured: tool.isFeatured, source: "image" }}
               src={tool.screenshotUrl}
               alt={`Screenshot of ${tool.name} website`}
-              className="my-2 max-md:order-2"
+              className="self-stretch my-2 max-md:order-2"
             >
               Visit {tool.name}
             </OverlayImage>
