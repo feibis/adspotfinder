@@ -11,8 +11,8 @@ const headingVariants = cva({
       h2: "text-2xl tracking-tight md:text-3xl",
       h3: "text-2xl tracking-tight",
       h4: "text-xl tracking-tight",
-      h5: "text-base font-medium tracking-micro",
-      h6: "text-sm/tight font-medium",
+      h5: "text-base font-sans font-medium",
+      h6: "text-sm/tight font-sans font-medium",
     },
   },
 

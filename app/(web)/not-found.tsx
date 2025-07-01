@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLeftIcon, SearchIcon } from "lucide-react"
+import { SearchIcon } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { Button } from "~/components/common/button"
 import { Link } from "~/components/common/link"
@@ -13,7 +13,7 @@ export default function NotFound() {
   const search = useSearch()
 
   return (
-    <Intro>
+    <Intro alignment="center">
       <IntroTitle>404 Not Found</IntroTitle>
 
       <IntroDescription className="max-w-xl">
@@ -22,11 +22,11 @@ export default function NotFound() {
       </IntroDescription>
 
       <Stack className="mt-4">
-        <Button onClick={search.open} prefix={<SearchIcon />}>
+        <Button variant="fancy" onClick={search.open} prefix={<SearchIcon />}>
           Search for tools
         </Button>
 
-        <Button variant="ghost" prefix={<ArrowLeftIcon />} asChild>
+        <Button variant="ghost" asChild>
           <Link href="/">Go back home</Link>
         </Button>
       </Stack>

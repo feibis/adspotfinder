@@ -44,6 +44,7 @@ export const submitTool = actionClient
 
     const ip = await getIP()
     const rateLimitKey = `submission:${ip}`
+    const hostname = getUrlHostname(data.websiteUrl)
 
     // Rate limiting check
     if (await isRateLimited(rateLimitKey, "submission")) {
@@ -64,7 +65,7 @@ export const submitTool = actionClient
 
     // Check if the tool already exists
     const existingTool = await db.tool.findFirst({
-      where: { websiteUrl: { contains: getUrlHostname(data.websiteUrl) } },
+      where: { websiteUrl: { contains: hostname } },
     })
 
     // If the tool exists, redirect to the tool or submit page
@@ -76,9 +77,7 @@ export const submitTool = actionClient
     const slug = await generateUniqueSlug(data.name)
 
     // Check if the email domain matches the tool's website domain
-    const ownerId = session?.user.email.includes(getUrlHostname(data.websiteUrl))
-      ? session?.user.id
-      : undefined
+    const ownerId = session?.user.email.includes(hostname) ? session?.user.id : undefined
 
     // Save the tool to the database
     const tool = await db.tool.create({

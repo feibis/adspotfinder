@@ -5,12 +5,13 @@ import { Stack } from "~/components/common/stack"
 import { cva, cx, type VariantProps } from "~/utils/cva"
 
 const cardVariants = cva({
-  base: [
-    "group relative flex flex-col items-start gap-4 w-full border bg-card p-5 rounded-lg transform-gpu",
-    "hover:[&[href]]:bg-accent",
-  ],
+  base: "group relative flex flex-col items-start gap-4 w-full border bg-card p-5 rounded-lg transform-gpu",
 
   variants: {
+    hover: {
+      true: "hover:bg-accent",
+    },
+
     isRevealed: {
       true: "animate-reveal",
     },
@@ -40,7 +41,7 @@ const Card = ({
 
   return (
     <Comp
-      className={cx(boxVariants({ hover, focus }), cardVariants({ isRevealed, className }))}
+      className={cx(boxVariants({ hover, focus }), cardVariants({ hover, isRevealed, className }))}
       {...props}
     />
   )

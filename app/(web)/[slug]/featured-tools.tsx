@@ -54,7 +54,7 @@ export const FeaturedTools = async ({ ...props }: ComponentProps<typeof Card>) =
           <Tooltip tooltip="Get your project featured">
             <Link
               href="/submit"
-              className="grid place-items-center size-10 p-1 rounded-lg border hover:bg-accent"
+              className="grid place-items-center size-10 p-1 rounded-lg border hover:bg-muted"
             >
               <PlusIcon className="size-6" />
             </Link>
