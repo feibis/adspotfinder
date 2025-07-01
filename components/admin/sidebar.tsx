@@ -58,7 +58,7 @@ export const Sidebar = () => {
               <Button
                 variant="ghost"
                 onClick={handleOpenSite}
-                className="-my-0.5 -mr-[0.21425em] px-1 py-[0.2em] text-xs/tight rounded-sm hover:bg-background"
+                className="-my-0.5 -mx-[0.21425em] px-1 py-[0.2em] text-xs/tight rounded-sm hover:bg-background"
               >
                 <ExternalLinkIcon className="size-3" />
               </Button>
