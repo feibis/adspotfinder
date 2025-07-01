@@ -47,8 +47,9 @@ export const findTags = async (search: TagsTableSchema, where?: Prisma.TagWhereI
   return { tags, tagsTotal, pageCount }
 }
 
-export const findTagList = async () => {
+export const findTagList = async ({ ...args }: Prisma.TagFindManyArgs = {}) => {
   return db.tag.findMany({
+    ...args,
     select: { id: true, name: true },
     orderBy: { name: "asc" },
   })

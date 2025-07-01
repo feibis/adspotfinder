@@ -58,8 +58,9 @@ export const findScheduledTools = async () => {
   })
 }
 
-export const findToolList = async () => {
+export const findToolList = async ({ ...args }: Prisma.ToolFindManyArgs = {}) => {
   return db.tool.findMany({
+    ...args,
     select: { id: true, name: true },
     orderBy: { name: "asc" },
   })
