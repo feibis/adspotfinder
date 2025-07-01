@@ -1,4 +1,4 @@
-import { formatDate, getReadTime, isTruthy } from "@primoui/utils"
+import { formatDate, getReadTime } from "@primoui/utils"
 import { allPosts, type Post } from "content-collections"
 import type { Metadata } from "next"
 import Image from "next/image"
@@ -9,16 +9,13 @@ import { Note } from "~/components/common/note"
 import { Stack } from "~/components/common/stack"
 import { AdCard, AdCardSkeleton } from "~/components/web/ads/ad-card"
 import { ExternalLink } from "~/components/web/external-link"
-import { InlineMenu } from "~/components/web/inline-menu"
 import { MDX } from "~/components/web/mdx"
 import { Nav } from "~/components/web/nav"
 import { Author } from "~/components/web/ui/author"
 import { Breadcrumbs } from "~/components/web/ui/breadcrumbs"
-import { Favicon } from "~/components/web/ui/favicon"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { Section } from "~/components/web/ui/section"
 import { metadataConfig } from "~/config/metadata"
-import { findTool } from "~/server/web/tools/queries"
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -59,7 +56,6 @@ export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
 
 export default async function BlogPostPage(props: PageProps) {
   const post = await findPostBySlug(props)
-  const tools = await Promise.all(post.tools?.map(slug => findTool({ where: { slug } })) ?? [])
 
   return (
     <>
@@ -132,15 +128,6 @@ export default async function BlogPostPage(props: PageProps) {
               </ExternalLink>
             </Stack>
           )}
-
-          <InlineMenu
-            items={tools.filter(isTruthy).map(({ slug, name, faviconUrl }) => ({
-              id: slug,
-              title: name,
-              prefix: <Favicon src={faviconUrl} name={name} size={16} className="size-4" />,
-            }))}
-            className="flex-1 mx-5 max-md:hidden"
-          />
         </Section.Sidebar>
       </Section>
 

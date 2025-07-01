@@ -25,7 +25,6 @@ const posts = defineCollection({
         twitterHandle: z.string(),
       })
       .optional(),
-    tools: z.array(z.string()).optional(),
   }),
 
   transform: async (data, context) => {
