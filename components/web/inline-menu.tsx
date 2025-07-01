@@ -13,6 +13,10 @@ type InlineMenuProps = ComponentProps<typeof Stack> & {
 export const InlineMenu = ({ children, className, items, ...props }: InlineMenuProps) => {
   const activeId = useInlineMenu(items)
 
+  if (!items.length) {
+    return null
+  }
+
   return (
     <Stack
       size="xs"
