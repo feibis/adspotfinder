@@ -59,16 +59,14 @@ export function ReportsTable({ reportsPromise }: ReportsTableProps) {
   })
 
   return (
-    <>
-      <DataTable table={table}>
-        <DataTableHeader title="Reports" total={reportsTotal}>
-          <DataTableToolbar table={table} filterFields={filterFields}>
-            <ReportsTableToolbarActions table={table} />
-            <DateRangePicker align="end" />
-            <DataTableViewOptions table={table} />
-          </DataTableToolbar>
-        </DataTableHeader>
-      </DataTable>
-    </>
+    <DataTable table={table}>
+      <DataTableHeader title="Reports" total={reportsTotal}>
+        <DataTableToolbar table={table} filterFields={filterFields}>
+          <ReportsTableToolbarActions table={table} />
+          <DateRangePicker align="end" />
+          <DataTableViewOptions table={table} />
+        </DataTableToolbar>
+      </DataTableHeader>
+    </DataTable>
   )
 }

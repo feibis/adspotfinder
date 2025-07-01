@@ -76,26 +76,24 @@ export function ToolsTable({ toolsPromise }: ToolsTableProps) {
   })
 
   return (
-    <>
-      <DataTable table={table}>
-        <DataTableHeader
-          title="Tools"
-          total={total}
-          callToAction={
-            <Button variant="primary" size="md" prefix={<PlusIcon />} asChild>
-              <Link href="/admin/tools/new">
-                <div className="max-sm:sr-only">New tool</div>
-              </Link>
-            </Button>
-          }
-        >
-          <DataTableToolbar table={table} filterFields={filterFields}>
-            <ToolsTableToolbarActions table={table} />
-            <DateRangePicker align="end" />
-            <DataTableViewOptions table={table} />
-          </DataTableToolbar>
-        </DataTableHeader>
-      </DataTable>
-    </>
+    <DataTable table={table}>
+      <DataTableHeader
+        title="Tools"
+        total={total}
+        callToAction={
+          <Button variant="primary" size="md" prefix={<PlusIcon />} asChild>
+            <Link href="/admin/tools/new">
+              <div className="max-sm:sr-only">New tool</div>
+            </Link>
+          </Button>
+        }
+      >
+        <DataTableToolbar table={table} filterFields={filterFields}>
+          <ToolsTableToolbarActions table={table} />
+          <DateRangePicker align="end" />
+          <DataTableViewOptions table={table} />
+        </DataTableToolbar>
+      </DataTableHeader>
+    </DataTable>
   )
 }

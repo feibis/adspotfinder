@@ -54,26 +54,24 @@ export function TagsTable({ tagsPromise }: TagsTableProps) {
   })
 
   return (
-    <>
-      <DataTable table={table}>
-        <DataTableHeader
-          title="Tags"
-          total={tagsTotal}
-          callToAction={
-            <Button variant="primary" size="md" prefix={<PlusIcon />} asChild>
-              <Link href="/admin/tags/new">
-                <div className="max-sm:sr-only">New tag</div>
-              </Link>
-            </Button>
-          }
-        >
-          <DataTableToolbar table={table} filterFields={filterFields}>
-            <TagsTableToolbarActions table={table} />
-            <DateRangePicker align="end" />
-            <DataTableViewOptions table={table} />
-          </DataTableToolbar>
-        </DataTableHeader>
-      </DataTable>
-    </>
+    <DataTable table={table}>
+      <DataTableHeader
+        title="Tags"
+        total={tagsTotal}
+        callToAction={
+          <Button variant="primary" size="md" prefix={<PlusIcon />} asChild>
+            <Link href="/admin/tags/new">
+              <div className="max-sm:sr-only">New tag</div>
+            </Link>
+          </Button>
+        }
+      >
+        <DataTableToolbar table={table} filterFields={filterFields}>
+          <TagsTableToolbarActions table={table} />
+          <DateRangePicker align="end" />
+          <DataTableViewOptions table={table} />
+        </DataTableToolbar>
+      </DataTableHeader>
+    </DataTable>
   )
 }

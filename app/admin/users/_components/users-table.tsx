@@ -51,16 +51,14 @@ export function UsersTable({ usersPromise }: UsersTableProps) {
   })
 
   return (
-    <>
-      <DataTable table={table}>
-        <DataTableHeader title="Users" total={usersTotal}>
-          <DataTableToolbar table={table} filterFields={filterFields}>
-            <UsersTableToolbarActions table={table} />
-            <DateRangePicker align="end" />
-            <DataTableViewOptions table={table} />
-          </DataTableToolbar>
-        </DataTableHeader>
-      </DataTable>
-    </>
+    <DataTable table={table}>
+      <DataTableHeader title="Users" total={usersTotal}>
+        <DataTableToolbar table={table} filterFields={filterFields}>
+          <UsersTableToolbarActions table={table} />
+          <DateRangePicker align="end" />
+          <DataTableViewOptions table={table} />
+        </DataTableToolbar>
+      </DataTableHeader>
+    </DataTable>
   )
 }

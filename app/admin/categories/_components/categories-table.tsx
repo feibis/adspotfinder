@@ -54,26 +54,24 @@ export function CategoriesTable({ categoriesPromise }: CategoriesTableProps) {
   })
 
   return (
-    <>
-      <DataTable table={table}>
-        <DataTableHeader
-          title="Categories"
-          total={categoriesTotal}
-          callToAction={
-            <Button variant="primary" size="md" prefix={<PlusIcon />} asChild>
-              <Link href="/admin/categories/new">
-                <div className="max-sm:sr-only">New category</div>
-              </Link>
-            </Button>
-          }
-        >
-          <DataTableToolbar table={table} filterFields={filterFields}>
-            <CategoriesTableToolbarActions table={table} />
-            <DateRangePicker align="end" />
-            <DataTableViewOptions table={table} />
-          </DataTableToolbar>
-        </DataTableHeader>
-      </DataTable>
-    </>
+    <DataTable table={table}>
+      <DataTableHeader
+        title="Categories"
+        total={categoriesTotal}
+        callToAction={
+          <Button variant="primary" size="md" prefix={<PlusIcon />} asChild>
+            <Link href="/admin/categories/new">
+              <div className="max-sm:sr-only">New category</div>
+            </Link>
+          </Button>
+        }
+      >
+        <DataTableToolbar table={table} filterFields={filterFields}>
+          <CategoriesTableToolbarActions table={table} />
+          <DateRangePicker align="end" />
+          <DataTableViewOptions table={table} />
+        </DataTableToolbar>
+      </DataTableHeader>
+    </DataTable>
   )
 }

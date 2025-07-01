@@ -409,7 +409,7 @@ export function ToolForm({
                 <FormItem className="col-span-full">
                   <FormLabel>Submitter Note</FormLabel>
                   <FormControl>
-                    <TextArea {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -550,6 +550,7 @@ export function ToolForm({
                 relations={tags}
                 selectedIds={field.value ?? []}
                 setSelectedIds={field.onChange}
+                maxSuggestions={10}
                 prompt={
                   name &&
                   description &&
