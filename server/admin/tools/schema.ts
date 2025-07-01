@@ -41,6 +41,7 @@ export const toolSchema = z.object({
   publishedAt: z.coerce.date().nullish(),
   status: z.enum(ToolStatus).default("Draft"),
   categories: z.array(z.string()).optional(),
+  tags: z.array(z.string()).optional(),
   notifySubmitter: z.boolean().default(true),
 })
 

@@ -57,6 +57,8 @@ export const findTagList = async () => {
 export const findTagBySlug = async (slug: string) => {
   return db.tag.findUnique({
     where: { slug },
-    include: { tools: true },
+    include: {
+      tools: { select: { id: true } },
+    },
   })
 }

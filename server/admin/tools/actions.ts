@@ -13,8 +13,9 @@ import { db } from "~/services/db"
 
 export const upsertTool = adminActionClient
   .inputSchema(toolSchema)
-  .action(async ({ parsedInput: { id, categories, notifySubmitter, ...input } }) => {
+  .action(async ({ parsedInput: { id, categories, tags, notifySubmitter, ...input } }) => {
     const categoryIds = categories?.map(id => ({ id }))
+    const tagIds = tags?.map(id => ({ id }))
     const existingTool = id ? await db.tool.findUnique({ where: { id } }) : null
 
     const tool = id
@@ -25,6 +26,7 @@ export const upsertTool = adminActionClient
             ...input,
             slug: input.slug || slugify(input.name),
             categories: { set: categoryIds },
+            tags: { set: tagIds },
           },
         })
       : // Otherwise, create it
@@ -33,6 +35,7 @@ export const upsertTool = adminActionClient
             ...input,
             slug: input.slug || slugify(input.name),
             categories: { connect: categoryIds },
+            tags: { connect: tagIds },
           },
         })
 

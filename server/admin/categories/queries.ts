@@ -60,6 +60,8 @@ export const findCategoryList = async () => {
 export const findCategoryBySlug = async (slug: string) => {
   return db.category.findUnique({
     where: { slug },
-    include: { tools: true },
+    include: {
+      tools: { select: { id: true } },
+    },
   })
 }

@@ -35,14 +35,15 @@ export const findCategorySlugs = async ({
   })
 }
 
-export const findCategory = async ({ ...args }: Prisma.CategoryFindFirstArgs = {}) => {
+export const findCategory = async ({ where, ...args }: Prisma.CategoryFindFirstArgs = {}) => {
   "use cache"
 
-  cacheTag("category", `category-${args.where?.slug}`)
+  cacheTag("category", `category-${where?.slug}`)
   cacheLife("max")
 
   return db.category.findFirst({
     ...args,
+    where,
     select: categoryOnePayload,
   })
 }

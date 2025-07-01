@@ -133,7 +133,7 @@ export const findTool = async ({ where, ...args }: Prisma.ToolFindFirstArgs = {}
 
   return db.tool.findFirst({
     ...args,
-    where: { ...where },
+    where,
     select: toolOnePayload,
   })
 }

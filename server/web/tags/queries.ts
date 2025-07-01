@@ -49,14 +49,15 @@ export const findTagSlugs = async ({ where, orderBy, ...args }: Prisma.TagFindMa
   })
 }
 
-export const findTag = async ({ ...args }: Prisma.TagFindFirstArgs = {}) => {
+export const findTag = async ({ where, ...args }: Prisma.TagFindFirstArgs = {}) => {
   "use cache"
 
-  cacheTag("tag", `tag-${args.where?.slug}`)
+  cacheTag("tag", `tag-${where?.slug}`)
   cacheLife("max")
 
   return db.tag.findFirst({
     ...args,
+    where,
     select: tagOnePayload,
   })
 }

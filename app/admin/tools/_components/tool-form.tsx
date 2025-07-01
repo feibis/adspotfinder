@@ -5,6 +5,7 @@ import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hoo
 import { formatDateTime, getRandomString, isValidUrl, slugify } from "@primoui/utils"
 import { type Tool, ToolStatus } from "@prisma/client"
 import { EyeIcon, InfoIcon, PencilIcon, RefreshCwIcon } from "lucide-react"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useAction } from "next-safe-action/hooks"
 import { type ComponentProps, use, useRef, useState } from "react"
@@ -37,6 +38,7 @@ import { useComputedField } from "~/hooks/use-computed-field"
 import { isToolPublished } from "~/lib/tools"
 import type { findCategoryList } from "~/server/admin/categories/queries"
 import { contentSchema } from "~/server/admin/shared/schema"
+import type { findTagList } from "~/server/admin/tags/queries"
 import { upsertTool } from "~/server/admin/tools/actions"
 import type { findToolBySlug } from "~/server/admin/tools/queries"
 import { toolSchema } from "~/server/admin/tools/schema"
@@ -63,6 +65,7 @@ const ToolStatusChange = ({ tool }: { tool: Tool }) => {
 type ToolFormProps = ComponentProps<"form"> & {
   tool?: NonNullable<Awaited<ReturnType<typeof findToolBySlug>>>
   categoriesPromise: ReturnType<typeof findCategoryList>
+  tagsPromise: ReturnType<typeof findTagList>
 }
 
 export function ToolForm({
@@ -71,10 +74,12 @@ export function ToolForm({
   title,
   tool,
   categoriesPromise,
+  tagsPromise,
   ...props
 }: ToolFormProps) {
   const router = useRouter()
   const categories = use(categoriesPromise)
+  const tags = use(tagsPromise)
   const resolver = zodResolver(toolSchema)
   const [isPreviewing, setIsPreviewing] = useState(false)
   const [isStatusPending, setIsStatusPending] = useState(false)
@@ -100,6 +105,7 @@ export function ToolForm({
         status: tool?.status ?? ToolStatus.Draft,
         publishedAt: tool?.publishedAt ?? undefined,
         categories: tool?.categories.map(c => c.id) ?? [],
+        tags: tool?.tags.map(t => t.id) ?? [],
         notifySubmitter: true,
       },
     },
@@ -442,10 +448,13 @@ export function ToolForm({
 
               <Stack size="sm">
                 {field.value && (
-                  <img
+                  <Image
                     src={field.value}
                     alt="Favicon"
+                    width={32}
+                    height={32}
                     className="size-8 border box-content rounded-md object-contain"
+                    unoptimized
                   />
                 )}
 
@@ -488,10 +497,13 @@ export function ToolForm({
 
               <Stack size="sm">
                 {field.value && (
-                  <img
+                  <Image
                     src={field.value}
                     alt="Screenshot"
-                    className="h-8 max-w-32 border box-content rounded-md object-contain"
+                    height={72}
+                    width={128}
+                    unoptimized
+                    className="h-8 w-auto border box-content rounded-md aspect-video object-cover"
                   />
                 )}
 
@@ -518,6 +530,30 @@ export function ToolForm({
                   name &&
                   description &&
                   `From the list of available categories below, suggest relevant categories for this link: 
+                    
+                    - URL: ${websiteUrl}
+                    - Meta title: ${name}
+                    - Meta description: ${description}.`
+                }
+              />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="tags"
+          render={({ field }) => (
+            <FormItem className="col-span-full">
+              <FormLabel>Tags</FormLabel>
+              <RelationSelector
+                relations={tags}
+                selectedIds={field.value ?? []}
+                setSelectedIds={field.onChange}
+                prompt={
+                  name &&
+                  description &&
+                  `From the list of available tags below, suggest relevant tags for this link: 
                     
                     - URL: ${websiteUrl}
                     - Meta title: ${name}

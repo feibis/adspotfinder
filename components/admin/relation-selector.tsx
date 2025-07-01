@@ -1,6 +1,6 @@
 import { useCompletion } from "@ai-sdk/react"
 import { isTruthy } from "@primoui/utils"
-import { MousePointerClickIcon, SparklesIcon } from "lucide-react"
+import { MousePointerClickIcon, PlusIcon, SparklesIcon } from "lucide-react"
 import { type ReactNode, useEffect, useState } from "react"
 import { AnimatedContainer } from "~/components/common/animated-container"
 import { Badge } from "~/components/common/badge"
@@ -194,7 +194,13 @@ export const RelationSelector = <T extends Relation>({
 
               <Stack size="xs" className="flex-1">
                 {getDisplayRelations(suggestedRelations).map(relation => (
-                  <Badge key={relation.id} size="sm" variant="warning" asChild>
+                  <Badge
+                    key={relation.id}
+                    size="sm"
+                    variant="warning"
+                    prefix={<PlusIcon />}
+                    asChild
+                  >
                     <button
                       type="button"
                       onClick={() => {
