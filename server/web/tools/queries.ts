@@ -10,7 +10,7 @@ export const searchTools = async (search: FilterSchema, where?: Prisma.ToolWhere
   "use cache"
 
   cacheTag("tools")
-  cacheLife("max")
+  cacheLife("weeks")
 
   const { q, category, page, sort, perPage } = search
   const start = performance.now()
@@ -90,7 +90,7 @@ export const findTools = async ({ where, orderBy, ...args }: Prisma.ToolFindMany
   "use cache"
 
   cacheTag("tools")
-  cacheLife("max")
+  cacheLife("weeks")
 
   return db.tool.findMany({
     ...args,
@@ -104,7 +104,7 @@ export const findToolSlugs = async ({ where, orderBy, ...args }: Prisma.ToolFind
   "use cache"
 
   cacheTag("tools")
-  cacheLife("max")
+  cacheLife("weeks")
 
   return db.tool.findMany({
     ...args,
@@ -129,7 +129,7 @@ export const findTool = async ({ where, ...args }: Prisma.ToolFindFirstArgs = {}
   "use cache"
 
   cacheTag("tool", `tool-${where?.slug}`)
-  cacheLife("max")
+  cacheLife("weeks")
 
   return db.tool.findFirst({
     ...args,
