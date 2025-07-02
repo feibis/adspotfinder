@@ -1,13 +1,14 @@
 import type { ComponentProps } from "react"
 import { H6 } from "~/components/common/heading"
 import { Stack } from "~/components/common/stack"
+import { Wrapper } from "~/components/common/wrapper"
 import { Container } from "~/components/web/ui/container"
 import { NavLink } from "~/components/web/ui/nav-link"
 import { Tile, TileCaption, TileDivider } from "~/components/web/ui/tile"
 import { findCategories } from "~/server/web/categories/queries"
 import { cx } from "~/utils/cva"
 
-export const Bottom = async ({ className, ...props }: ComponentProps<"div">) => {
+export const Bottom = async ({ className, ...props }: ComponentProps<typeof Wrapper>) => {
   const categories = await findCategories({
     orderBy: { tools: { _count: "desc" } },
     take: 12,
@@ -19,10 +20,7 @@ export const Bottom = async ({ className, ...props }: ComponentProps<"div">) => 
 
   return (
     <Container>
-      <div
-        className={cx("flex flex-col gap-y-6 py-fluid-md border-t border-foreground/10", className)}
-        {...props}
-      >
+      <Wrapper className={cx("py-fluid-md border-t border-foreground/10", className)} {...props}>
         {!!categories?.length && (
           <Stack className="gap-x-4 text-sm">
             <H6 as="strong">Popular Categories:</H6>
@@ -42,7 +40,7 @@ export const Bottom = async ({ className, ...props }: ComponentProps<"div">) => 
             </div>
           </Stack>
         )}
-      </div>
+      </Wrapper>
     </Container>
   )
 }
