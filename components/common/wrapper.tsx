@@ -2,7 +2,7 @@ import type { ComponentProps } from "react"
 import { cva, cx, type VariantProps } from "~/utils/cva"
 
 const wrapperVariants = cva({
-  base: "@container flex flex-col w-full",
+  base: "flex flex-col w-full",
   variants: {
     alignment: {
       start: "mr-auto",

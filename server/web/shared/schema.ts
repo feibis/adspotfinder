@@ -54,6 +54,6 @@ export const adDetailsSchema = z.object({
   sessionId: z.string(),
   name: z.string().min(1, "Company name is required"),
   description: z.string().min(1, "Description is required").max(160),
-  websiteUrl: z.string().url("Please enter a valid website URL"),
+  websiteUrl: z.url("Please enter a valid website URL"),
   buttonLabel: z.string().optional(),
 })

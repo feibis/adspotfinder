@@ -1,27 +1,28 @@
 import type { ComponentProps } from "react"
+import { Link } from "~/components/common/link"
 import { Listing } from "~/components/web/listing"
 import { ToolList, ToolListSkeleton } from "~/components/web/tools/tool-list"
 import { findTools } from "~/server/web/tools/queries"
 
-type FeaturedToolsProps = ComponentProps<typeof Listing>
+type FeaturedToolsProps = Omit<ComponentProps<typeof Listing>, "title">
 
-const FeaturedTools = async ({ title = "Featured Tools", ...props }: FeaturedToolsProps) => {
-  const tools = await findTools({ where: { isFeatured: true } })
+const FeaturedTools = async ({ ...props }: FeaturedToolsProps) => {
+  const tools = await findTools({ where: { isFeatured: true }, take: 6 })
 
   if (!tools.length) {
     return null
   }
 
   return (
-    <Listing title={title} {...props}>
+    <Listing title="Featured Tools" button={<Link href="/tools">View all tools</Link>} {...props}>
       <ToolList tools={tools} enableAds={false} />
     </Listing>
   )
 }
 
-const FeaturedToolsSkeleton = ({ title = "Featured Tools", ...props }: FeaturedToolsProps) => {
+const FeaturedToolsSkeleton = ({ ...props }: FeaturedToolsProps) => {
   return (
-    <Listing title={title} {...props}>
+    <Listing title="Featured Tools" {...props}>
       <ToolListSkeleton />
     </Listing>
   )

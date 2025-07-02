@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/common/dropdown-menu"
 import { Link } from "~/components/common/link"
+import { ExternalLink } from "~/components/web/external-link"
 import { cx } from "~/utils/cva"
 
 type ToolActionsProps = ComponentProps<typeof Button> & {
@@ -54,9 +55,7 @@ export const ToolActions = ({ className, tool, ...props }: ToolActionsProps) => 
 
         {isValidUrl(tool.websiteUrl) && (
           <DropdownMenuItem asChild>
-            <Link href={tool.websiteUrl} target="_blank">
-              Visit website
-            </Link>
+            <ExternalLink href={tool.websiteUrl}>Visit website</ExternalLink>
           </DropdownMenuItem>
         )}
 

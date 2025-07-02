@@ -3,18 +3,18 @@ import { Wrapper } from "~/components/common/wrapper"
 import { Sticky } from "~/components/web/ui/sticky"
 import { cx } from "~/utils/cva"
 
-const SectionBase = ({ className, ...props }: ComponentProps<typeof Wrapper>) => {
+const SectionBase = ({ className, gap = "md", ...props }: ComponentProps<typeof Wrapper>) => {
   return (
     <Wrapper
-      gap="sm"
+      gap={gap}
       className={cx("items-start gap-x-6 md:grid md:grid-cols-3 lg:gap-x-8", className)}
       {...props}
     />
   )
 }
 
-const SectionContent = ({ className, ...props }: ComponentProps<typeof Wrapper>) => {
-  return <Wrapper gap="sm" className={cx("items-start md:col-span-2", className)} {...props} />
+const SectionContent = ({ className, gap = "md", ...props }: ComponentProps<typeof Wrapper>) => {
+  return <Wrapper gap={gap} className={cx("items-start md:col-span-2", className)} {...props} />
 }
 
 const SectionSidebar = ({ className, ...props }: ComponentProps<"div">) => {

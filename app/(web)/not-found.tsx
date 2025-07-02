@@ -26,7 +26,7 @@ export default function NotFound() {
           Search for tools
         </Button>
 
-        <Button variant="ghost" asChild>
+        <Button variant="soft" asChild>
           <Link href="/">Go back home</Link>
         </Button>
       </Stack>

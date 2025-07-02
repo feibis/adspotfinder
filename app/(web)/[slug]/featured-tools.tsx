@@ -43,7 +43,7 @@ export const FeaturedTools = async ({ ...props }: ComponentProps<typeof Card>) =
               <Favicon
                 src={tool.faviconUrl}
                 title={tool.name}
-                className="size-10 rounded-lg"
+                className="size-10 p-1.5 rounded-lg"
                 contained
               />
             </ExternalLink>

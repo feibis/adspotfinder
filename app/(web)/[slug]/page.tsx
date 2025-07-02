@@ -85,8 +85,8 @@ export default async function ToolPage(props: PageProps) {
 
   return (
     <>
-      <Section>
-        <Section.Content className="max-md:contents">
+      <Section gap="sm">
+        <Section.Content gap="sm" className="max-md:contents">
           <Sticky isOverlay>
             <Stack className="self-stretch">
               <Favicon src={tool.faviconUrl} title={tool.name} className="size-8" />
