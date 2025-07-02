@@ -1,8 +1,11 @@
+"use client"
+
 import type { ComponentProps } from "react"
 import { Badge } from "~/components/common/badge"
 import { Card, CardDescription, CardHeader } from "~/components/common/card"
 import { H4 } from "~/components/common/heading"
 import { Link } from "~/components/common/link"
+import { ShowMore } from "~/components/common/show-more"
 import { Skeleton } from "~/components/common/skeleton"
 import { Stack } from "~/components/common/stack"
 import { Favicon } from "~/components/web/ui/favicon"
@@ -14,10 +17,6 @@ type ToolCardProps = ComponentProps<typeof Card> & {
 }
 
 const ToolCard = ({ tool, ...props }: ToolCardProps) => {
-  const maxCategories = 1
-  const visibleCategories = tool.categories.slice(0, maxCategories)
-  const hiddenCount = tool.categories.length - maxCategories
-
   return (
     <Card isRevealed {...props}>
       <CardHeader wrap={false}>
@@ -37,17 +36,14 @@ const ToolCard = ({ tool, ...props }: ToolCardProps) => {
         <Stack size="lg" direction="column" className="flex-1 duration-200 group-hover:opacity-0">
           {tool.tagline && <CardDescription className="min-h-10">{tool.tagline}</CardDescription>}
 
-          {!!visibleCategories.length && (
-            <Stack className="mt-auto gap-1">
-              {visibleCategories.map(category => (
-                <Badge key={category.slug} variant="outline">
-                  {category.name}
-                </Badge>
-              ))}
-
-              {hiddenCount > 0 && <Badge variant="outline">+{hiddenCount} more</Badge>}
-            </Stack>
-          )}
+          <ShowMore
+            items={tool.categories}
+            limit={1}
+            renderItem={({ name }) => <Badge variant="outline">{name}</Badge>}
+            size="xs"
+            showMoreType="text"
+            className="mt-auto"
+          />
         </Stack>
 
         {tool.description && (
