@@ -26,7 +26,7 @@ export const notifySubmitterOfToolSubmitted = async (tool: Tool) => {
   return await sendEmail({
     to,
     subject,
-    react: EmailSubmission({ to, subject, tool, queueLength }),
+    react: EmailSubmission({ to, tool, queueLength }),
   })
 }
 
@@ -47,7 +47,7 @@ export const notifySubmitterOfToolScheduled = async (tool: Tool) => {
   return await sendEmail({
     to,
     subject,
-    react: EmailSubmissionScheduled({ to, subject, tool }),
+    react: EmailSubmissionScheduled({ to, tool }),
   })
 }
 
@@ -68,7 +68,7 @@ export const notifySubmitterOfToolPublished = async (tool: Tool) => {
   return await sendEmail({
     to,
     subject,
-    react: EmailSubmissionPublished({ to, subject, tool }),
+    react: EmailSubmissionPublished({ to, tool }),
   })
 }
 
@@ -89,7 +89,7 @@ export const notifySubmitterOfPremiumTool = async (tool: Tool) => {
   return await sendEmail({
     to,
     subject,
-    react: EmailSubmissionPremium({ to, subject, tool }),
+    react: EmailSubmissionPremium({ to, tool }),
   })
 }
 
@@ -107,6 +107,6 @@ export const notifyAdminOfPremiumTool = async (tool: Tool) => {
     to,
     subject,
     replyTo: tool.submitterEmail ?? undefined,
-    react: EmailAdminSubmissionPremium({ to, subject, tool }),
+    react: EmailAdminSubmissionPremium({ to, tool }),
   })
 }

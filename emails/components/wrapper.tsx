@@ -7,6 +7,7 @@ import {
   Html,
   Img,
   Link,
+  Preview,
   Tailwind,
   Text,
 } from "@react-email/components"
@@ -14,13 +15,15 @@ import { config } from "~/config"
 
 export type EmailWrapperProps = ContainerProps & {
   to: string
-  subject: string
+  preview?: string
 }
 
-export const EmailWrapper = ({ to, subject, children, ...props }: EmailWrapperProps) => {
+export const EmailWrapper = ({ to, preview, children, ...props }: EmailWrapperProps) => {
   return (
     <Html>
       <Head />
+      {preview && <Preview>{preview}</Preview>}
+
       <Tailwind>
         <Body className="mx-auto my-auto bg-background font-sans">
           <Container className="w-full max-w-[580px] mx-auto px-10" {...props}>

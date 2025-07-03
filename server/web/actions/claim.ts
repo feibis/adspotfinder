@@ -74,7 +74,7 @@ const generateAndSendOtp = async (email: string) => {
   after(async () => {
     const to = email
     const subject = `Your ${config.site.name} Verification Code`
-    await sendEmail({ to, subject, react: EmailVerifyDomain({ to, subject, otp }) })
+    await sendEmail({ to, subject, react: EmailVerifyDomain({ to, otp }) })
   })
 
   return otp
