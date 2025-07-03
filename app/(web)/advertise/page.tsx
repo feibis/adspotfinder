@@ -21,7 +21,7 @@ export default async function AdvertisePage() {
   const ads = await findAds({})
 
   return (
-    <Wrapper gap="lg">
+    <Wrapper gap="xl">
       <Intro alignment="center">
         <IntroTitle>{`${metadata.title}`}</IntroTitle>
         <IntroDescription>{metadata.description}</IntroDescription>

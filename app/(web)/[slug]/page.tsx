@@ -85,8 +85,8 @@ export default async function ToolPage(props: PageProps) {
 
   return (
     <>
-      <Section gap="sm">
-        <Section.Content gap="sm" className="max-md:contents">
+      <Section>
+        <Section.Content className="max-md:contents">
           <Sticky isOverlay>
             <Stack className="self-stretch">
               <Favicon src={tool.faviconUrl} title={tool.name} className="size-8" />
@@ -104,11 +104,11 @@ export default async function ToolPage(props: PageProps) {
           </Sticky>
 
           {tool.description && (
-            <IntroDescription className="-mt-fluid-sm pt-4">{tool.description}</IntroDescription>
+            <IntroDescription className="-mt-fluid-md pt-4">{tool.description}</IntroDescription>
           )}
 
           {isToolPublished(tool) && (
-            <Button suffix={<ArrowUpRightIcon />} className="md:min-w-36" asChild>
+            <Button suffix={<ArrowUpRightIcon />} className="-mt-fluid-xs md:min-w-36" asChild>
               <ExternalLink
                 href={tool.affiliateUrl || tool.websiteUrl}
                 doFollow={tool.isFeatured}
@@ -134,7 +134,7 @@ export default async function ToolPage(props: PageProps) {
               eventProps={{ url: tool.websiteUrl, isFeatured: tool.isFeatured, source: "image" }}
               src={tool.screenshotUrl}
               alt={`Screenshot of ${tool.name} website`}
-              className="self-stretch my-2 max-md:order-2"
+              className="self-stretch max-md:order-2"
             >
               Visit {tool.name}
             </OverlayImage>

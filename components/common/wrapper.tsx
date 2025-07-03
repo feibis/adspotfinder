@@ -15,9 +15,11 @@ const wrapperVariants = cva({
       lg: "max-w-(--breakpoint-lg)",
     },
     gap: {
+      xs: "gap-y-fluid-xs",
       sm: "gap-y-fluid-sm",
       md: "gap-y-fluid-md",
       lg: "gap-y-fluid-lg",
+      xl: "gap-y-fluid-xl",
     },
   },
   defaultVariants: {
