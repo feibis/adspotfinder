@@ -14,7 +14,7 @@ const FeaturedTools = async ({ ...props }: FeaturedToolsProps) => {
   }
 
   return (
-    <Listing title="Featured Tools" button={<Link href="/tools">View all tools</Link>} {...props}>
+    <Listing title="Featured Tools" button={<Link href="/">View all tools</Link>} {...props}>
       <ToolList tools={tools} enableAds={false} />
     </Listing>
   )

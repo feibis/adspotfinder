@@ -187,9 +187,9 @@ export const RelationSelector = <T extends Relation>({
       {(suggestedRelations.length || prompt) && (
         <AnimatedContainer height transition={{ ease: "linear", duration: 0.1 }}>
           {!!suggestedRelations.length && (
-            <Stack size="sm" direction="row">
+            <Stack size="sm" direction="row" className="items-start">
               <Tooltip tooltip="AI-suggested relations. Click on them to add to the selection.">
-                <span className="mt-px text-xs text-muted-foreground">Suggested:</span>
+                <span className="mt-0.5 text-xs text-muted-foreground">Suggested:</span>
               </Tooltip>
 
               <Stack size="xs" className="flex-1">

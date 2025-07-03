@@ -20,7 +20,7 @@ const RelatedTools = async ({ tool, ...props }: RelatedToolsProps) => {
   return (
     <Listing
       title={`Similar to ${tool.name}`}
-      button={<Link href="/tools">View all tools</Link>}
+      button={<Link href="/">View all tools</Link>}
       {...props}
     >
       <ToolList tools={tools} enableAds={false} />
