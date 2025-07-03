@@ -7,9 +7,9 @@ import { auth } from "~/lib/auth"
 import { notifySubmitterOfToolSubmitted } from "~/lib/notifications"
 import { getIP, isRateLimited } from "~/lib/rate-limiter"
 import { actionClient } from "~/lib/safe-actions"
-import { subscribeToNewsletter } from "~/server/web/actions/subscribe"
 import { submitToolSchema } from "~/server/web/shared/schema"
 import { db } from "~/services/db"
+import { createResendContact } from "~/services/resend"
 import { isDisposableEmail } from "~/utils/helpers"
 
 /**
@@ -57,8 +57,8 @@ export const submitTool = actionClient
     }
 
     if (newsletterOptIn) {
-      await subscribeToNewsletter({
-        value: data.submitterEmail,
+      await createResendContact({
+        email: data.submitterEmail,
         firstName: data.submitterName,
       })
     }

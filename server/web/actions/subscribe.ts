@@ -1,10 +1,9 @@
 "use server"
 
-import { env } from "~/env"
 import { getIP, isRateLimited } from "~/lib/rate-limiter"
 import { actionClient } from "~/lib/safe-actions"
 import { newsletterSchema } from "~/server/web/shared/schema"
-import { resend } from "~/services/resend"
+import { createResendContact } from "~/services/resend"
 import { isDisposableEmail } from "~/utils/helpers"
 
 /**
@@ -15,7 +14,6 @@ import { isDisposableEmail } from "~/utils/helpers"
 export const subscribeToNewsletter = actionClient
   .inputSchema(newsletterSchema)
   .action(async ({ parsedInput: { value: email, captcha, ...payload } }) => {
-    const audienceId = env.RESEND_AUDIENCE_ID
     const ip = await getIP()
     const rateLimitKey = `newsletter:${ip}`
 
@@ -29,11 +27,8 @@ export const subscribeToNewsletter = actionClient
       throw new Error("Invalid email address, please use a real one")
     }
 
-    const { error } = await resend.contacts.create({ audienceId, email, ...payload })
-
-    if (error) {
-      throw new Error("Failed to subscribe to newsletter. Please try again later.")
-    }
+    // Create a resend contact
+    await createResendContact({ email, ...payload })
 
     return "You've been subscribed to the newsletter."
   })
