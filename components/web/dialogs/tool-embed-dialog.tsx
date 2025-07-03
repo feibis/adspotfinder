@@ -110,11 +110,11 @@ export const ToolEmbedDialog = ({ tool, isOpen, setIsOpen }: ToolEmbedDialogProp
             <FormField
               control={form.control}
               name="theme"
-              render={({ field }) => (
+              render={({ field: { onChange, value, ...field } }) => (
                 <FormItem>
                   <FormLabel>Theme</FormLabel>
                   <FormControl>
-                    <Select value={field.value} onValueChange={field.onChange}>
+                    <Select value={value} onValueChange={onChange} {...field}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>

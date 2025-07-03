@@ -1,7 +1,7 @@
 "use client"
 
 import { formatDate } from "@primoui/utils"
-import type { Report, Tool, User } from "@prisma/client"
+import type { Report, Tool } from "@prisma/client"
 import type { ColumnDef } from "@tanstack/react-table"
 import { ReportActions } from "~/app/admin/reports/_components/report-actions"
 import { RowCheckbox } from "~/components/admin/row-checkbox"
@@ -41,7 +41,7 @@ export const getColumns = (): ColumnDef<Report>[] => {
       accessorKey: "id",
       enableSorting: false,
       enableHiding: false,
-      size: 160,
+      size: 80,
       header: ({ column }) => <DataTableColumnHeader column={column} title="ID" />,
       cell: ({ row }) => (
         <DataTableLink
@@ -68,15 +68,9 @@ export const getColumns = (): ColumnDef<Report>[] => {
       cell: ({ row }) => <Badge variant="outline">{row.getValue("type")}</Badge>,
     },
     {
-      accessorKey: "user",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="User" />,
-      cell: ({ row }) => {
-        const user = row.getValue<Pick<User, "id" | "name">>("user")
-
-        return (
-          <DataTableLink href={`/admin/users/${user?.id}`} title={user?.name} isOverlay={false} />
-        )
-      },
+      accessorKey: "email",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Email" />,
+      cell: ({ row }) => <Note>{row.getValue("email")}</Note>,
     },
     {
       accessorKey: "tool",

@@ -33,7 +33,7 @@ const DialogContent = ({
     <DialogPortal>
       <DialogOverlay />
 
-      <div className="fixed inset-0 z-50 flex h-screen items-start justify-center px-4 py-6 sm:pt-[25vh]">
+      <div className="fixed inset-0 z-50 flex h-screen items-start justify-center px-4 py-6 sm:items-center [@media(min-height:1000px)]:pt-[25vh] [@media(min-height:1000px)]:items-start">
         <DialogPrimitive.Content
           className={cx(
             "relative max-h-full w-full max-w-lg grid gap-4 border bg-background p-4 rounded-md shadow-lg overflow-y-auto overscroll-contain sm:p-6 sm:rounded-lg",

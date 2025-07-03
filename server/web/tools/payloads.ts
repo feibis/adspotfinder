@@ -17,6 +17,7 @@ export const toolOwnerPayload = Prisma.validator<Prisma.Tool$ownerArgs>()({
 })
 
 export const toolOnePayload = Prisma.validator<Prisma.ToolSelect>()({
+  id: true,
   name: true,
   slug: true,
   websiteUrl: true,
@@ -37,6 +38,7 @@ export const toolOnePayload = Prisma.validator<Prisma.ToolSelect>()({
 })
 
 export const toolManyPayload = Prisma.validator<Prisma.ToolSelect>()({
+  id: true,
   name: true,
   slug: true,
   websiteUrl: true,

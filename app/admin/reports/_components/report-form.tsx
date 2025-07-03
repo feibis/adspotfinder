@@ -2,8 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
-import { ReportType } from "@prisma/client"
-import { sentenceCase } from "change-case"
 import type { ComponentProps } from "react"
 import { toast } from "sonner"
 import { ReportActions } from "~/app/admin/reports/_components/report-actions"
@@ -17,6 +15,7 @@ import {
   FormMessage,
 } from "~/components/common/form"
 import { H3 } from "~/components/common/heading"
+import { Input } from "~/components/common/input"
 import { Link } from "~/components/common/link"
 import {
   Select,
@@ -27,6 +26,7 @@ import {
 } from "~/components/common/select"
 import { Stack } from "~/components/common/stack"
 import { TextArea } from "~/components/common/textarea"
+import { reportsConfig } from "~/config/reports"
 import { updateReport } from "~/server/admin/reports/actions"
 import type { findReportById } from "~/server/admin/reports/queries"
 import { reportSchema } from "~/server/admin/reports/schema"
@@ -43,7 +43,8 @@ export function ReportForm({ children, className, title, report, ...props }: Rep
     formProps: {
       defaultValues: {
         id: report?.id ?? "",
-        type: report?.type ?? ReportType.Other,
+        email: report?.email ?? "",
+        type: report?.type,
         message: report?.message ?? "",
       },
     },
@@ -78,19 +79,19 @@ export function ReportForm({ children, className, title, report, ...props }: Rep
         <FormField
           control={form.control}
           name="type"
-          render={({ field }) => (
+          render={({ field: { value, onChange, ...field } }) => (
             <FormItem>
-              <FormLabel>Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormLabel isRequired>Type</FormLabel>
+              <Select value={value} onValueChange={onChange} {...field}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a report type" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {Object.values(ReportType).map(type => (
+                  {reportsConfig.reportTypes.map(type => (
                     <SelectItem key={type} value={type}>
-                      {sentenceCase(type)}
+                      {type}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -102,9 +103,23 @@ export function ReportForm({ children, className, title, report, ...props }: Rep
 
         <FormField
           control={form.control}
-          name="message"
+          name="email"
           render={({ field }) => (
             <FormItem>
+              <FormLabel isRequired>Email</FormLabel>
+              <FormControl>
+                <Input type="email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="message"
+          render={({ field }) => (
+            <FormItem className="col-span-full">
               <FormLabel>Message</FormLabel>
               <FormControl>
                 <TextArea {...field} />

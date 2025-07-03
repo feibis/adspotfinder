@@ -1,6 +1,6 @@
 "use client"
 
-import { type Report, ReportType } from "@prisma/client"
+import type { Report } from "@prisma/client"
 import { useQueryStates } from "nuqs"
 import { use, useMemo } from "react"
 import { DateRangePicker } from "~/components/admin/date-range-picker"
@@ -8,6 +8,7 @@ import { DataTable } from "~/components/data-table/data-table"
 import { DataTableHeader } from "~/components/data-table/data-table-header"
 import { DataTableToolbar } from "~/components/data-table/data-table-toolbar"
 import { DataTableViewOptions } from "~/components/data-table/data-table-view-options"
+import { reportsConfig } from "~/config/reports"
 import { useDataTable } from "~/hooks/use-data-table"
 import type { findReports } from "~/server/admin/reports/queries"
 import { reportsTableParamsSchema } from "~/server/admin/reports/schema"
@@ -36,7 +37,7 @@ export function ReportsTable({ reportsPromise }: ReportsTableProps) {
     {
       id: "type",
       label: "Type",
-      options: Object.values(ReportType).map(type => ({
+      options: reportsConfig.reportTypes.map(type => ({
         label: type,
         value: type,
       })),

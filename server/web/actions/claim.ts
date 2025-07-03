@@ -30,9 +30,9 @@ const checkRateLimit = async (action: string) => {
 /**
  * Get tool by slug and verify it's claimable
  */
-const getClaimableTool = async (slug: string) => {
+const getClaimableTool = async (id: string) => {
   const tool = await db.tool.findUnique({
-    where: { slug },
+    where: { id },
   })
 
   if (!tool) {
@@ -83,8 +83,8 @@ const generateAndSendOtp = async (email: string) => {
 /**
  * Claim tool for a user and revalidate cache
  */
-const claimToolForUser = async (toolId: string, userId: string, slug: string) => {
-  await db.tool.update({
+const claimToolForUser = async (toolId: string, userId: string) => {
+  const tool = await db.tool.update({
     where: { id: toolId },
     data: { ownerId: userId },
   })
@@ -92,7 +92,7 @@ const claimToolForUser = async (toolId: string, userId: string, slug: string) =>
   // Revalidate tools
   after(async () => {
     revalidateTag("tools")
-    revalidateTag(`tool-${slug}`)
+    revalidateTag(`tool-${tool.slug}`)
   })
 }
 
@@ -101,12 +101,12 @@ const claimToolForUser = async (toolId: string, userId: string, slug: string) =>
  */
 export const sendToolClaimOtp = userActionClient
   .inputSchema(claimToolEmailSchema)
-  .action(async ({ parsedInput: { toolSlug: slug, email } }) => {
+  .action(async ({ parsedInput: { toolId, email } }) => {
     // Check rate limiting
     await checkRateLimit("otp")
 
     // Get and validate tool
-    const tool = await getClaimableTool(slug)
+    const tool = await getClaimableTool(toolId)
 
     // Verify email domain
     verifyEmailDomain(email, tool.websiteUrl)
@@ -122,12 +122,12 @@ export const sendToolClaimOtp = userActionClient
  */
 export const verifyToolClaimOtp = userActionClient
   .inputSchema(claimToolOtpSchema)
-  .action(async ({ parsedInput: { toolSlug: slug, otp } }) => {
+  .action(async ({ parsedInput: { toolId, otp } }) => {
     // Check rate limiting
     await checkRateLimit("verify")
 
     // Get and validate tool
-    const tool = await getClaimableTool(slug)
+    const tool = await getClaimableTool(toolId)
 
     // Verify otp
     const { user } = await auth.api.verifyOneTimeToken({
@@ -135,7 +135,7 @@ export const verifyToolClaimOtp = userActionClient
     })
 
     // Claim tool and revalidate
-    await claimToolForUser(tool.id, user.id, slug)
+    await claimToolForUser(tool.id, user.id)
 
     return { success: true }
   })

@@ -23,13 +23,6 @@ enum ToolStatus {
   Published
 }
 
-enum ReportType {
-  BrokenLink
-  WrongCategory
-  Outdated
-  Other
-}
-
 model User {
   id            String    @id @default(cuid())
   name          String
@@ -47,7 +40,6 @@ model User {
   accounts Account[]
   sessions Session[]
   tools    Tool[]
-  reports  Report[]
 
   // Indexes
   @@index([id])
@@ -182,15 +174,14 @@ model Tag {
 }
 
 model Report {
-  id        String     @id @default(cuid())
-  type      ReportType
+  id        String   @id @default(cuid())
+  type      String   @default("Other")
   message   String?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  email     String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relations
-  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
   tool   Tool?   @relation(fields: [toolId], references: [id], onDelete: Cascade)
   toolId String?
 

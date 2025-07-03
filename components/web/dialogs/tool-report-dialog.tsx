@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useHotkeys } from "@mantine/hooks"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
-import { ReportType } from "@prisma/client"
-import { sentenceCase } from "change-case"
 import type { Dispatch, SetStateAction } from "react"
 import { toast } from "sonner"
 import { Button } from "~/components/common/button"
@@ -21,9 +20,12 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/common/form"
+import { Input } from "~/components/common/input"
 import { RadioGroup, RadioGroupItem } from "~/components/common/radio-group"
+import { Stack } from "~/components/common/stack"
 import { TextArea } from "~/components/common/textarea"
 import { LoginDialog } from "~/components/web/auth/login-dialog"
+import { reportsConfig } from "~/config/reports"
 import { useSession } from "~/lib/auth-client"
 import { reportTool } from "~/server/web/actions/report"
 import { reportToolSchema } from "~/server/web/shared/schema"
@@ -42,8 +44,9 @@ export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogPr
   const { form, action, handleSubmitWithAction } = useHookFormAction(reportTool, resolver, {
     formProps: {
       defaultValues: {
-        toolSlug: tool.slug,
-        type: ReportType.BrokenLink,
+        toolId: tool.id,
+        email: session?.user?.email ?? "",
+        type: "",
         message: "",
       },
     },
@@ -61,7 +64,14 @@ export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogPr
     },
   })
 
-  if (!session?.user) {
+  // A hotkey to submit the form
+  useHotkeys([["mod+enter", () => handleSubmitWithAction()]], [], true)
+
+  if (!reportsConfig.enabled) {
+    return null
+  }
+
+  if (reportsConfig.requireSignIn && !session?.user) {
     return <LoginDialog isOpen={isOpen} setIsOpen={setIsOpen} />
   }
 
@@ -74,23 +84,46 @@ export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogPr
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={handleSubmitWithAction} className="grid gap-6" noValidate>
+          <form onSubmit={handleSubmitWithAction} className="grid gap-4" noValidate>
+            {!session?.user && (
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel isRequired>Email</FormLabel>
+                    <FormControl>
+                      <Input type="email" placeholder="Your email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
             <FormField
               control={form.control}
               name="type"
-              render={({ field }) => (
+              render={({ field: { value, onChange, ...field } }) => (
                 <FormItem>
+                  <FormLabel isRequired>Type</FormLabel>
                   <FormControl>
                     <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="grid gap-3"
+                      value={value}
+                      onValueChange={onChange}
+                      className="grid gap-2.5"
+                      {...field}
                     >
-                      {Object.values(ReportType).map(type => (
-                        <div key={type} className="flex items-center space-x-2">
-                          <RadioGroupItem value={type} id={`r${type}`} />
-                          <FormLabel htmlFor={`r${type}`}>{sentenceCase(type)}</FormLabel>
-                        </div>
+                      {reportsConfig.reportTypes.map(type => (
+                        <Stack key={type} size="sm" asChild>
+                          <FormLabel
+                            htmlFor={`r${type}`}
+                            className="font-normal text-secondary-foreground overflow-visible"
+                          >
+                            <RadioGroupItem value={type} id={`r${type}`} />
+                            {type}
+                          </FormLabel>
+                        </Stack>
                       ))}
                     </RadioGroup>
                   </FormControl>
@@ -105,7 +138,7 @@ export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogPr
               name="message"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Message (optional)</FormLabel>
+                  <FormLabel>Message</FormLabel>
                   <FormControl>
                     <TextArea
                       placeholder="Provide additional details about the issue..."

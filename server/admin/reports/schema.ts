@@ -1,4 +1,4 @@
-import { type Report, ReportType } from "@prisma/client"
+import type { Report } from "@prisma/client"
 import {
   createSearchParamsCache,
   parseAsArrayOf,
@@ -17,7 +17,7 @@ export const reportsTableParamsSchema = {
   from: parseAsString.withDefault(""),
   to: parseAsString.withDefault(""),
   operator: parseAsStringEnum(["and", "or"]).withDefault("and"),
-  type: parseAsArrayOf(z.enum(ReportType)).withDefault([]),
+  type: parseAsArrayOf(z.string()).withDefault([]),
 }
 
 export const reportsTableParamsCache = createSearchParamsCache(reportsTableParamsSchema)
@@ -25,9 +25,9 @@ export type ReportsTableSchema = Awaited<ReturnType<typeof reportsTableParamsCac
 
 export const reportSchema = z.object({
   id: z.string().optional(),
-  type: z.enum(ReportType),
+  email: z.email().optional(),
+  type: z.string(),
   message: z.string().optional(),
-  userId: z.string().optional(),
   toolId: z.string().optional(),
 })
 

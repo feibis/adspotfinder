@@ -39,10 +39,7 @@ export const findReports = async (search: ReportsTableSchema) => {
       orderBy,
       take: perPage,
       skip: offset,
-      include: {
-        user: { select: { id: true, name: true } },
-        tool: { select: { slug: true, name: true } },
-      },
+      include: { tool: { select: { slug: true, name: true } } },
     }),
 
     db.report.count({

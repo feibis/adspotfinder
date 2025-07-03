@@ -1,4 +1,3 @@
-import { ReportType } from "@prisma/client"
 import { createSearchParamsCache, parseAsInteger, parseAsString } from "nuqs/server"
 import { z } from "zod/v4"
 import { config } from "~/config"
@@ -31,22 +30,25 @@ export const newsletterSchema = z.object({
   lastName: z.string().optional(),
 })
 
-export const reportSchema = z.object({
-  type: z.enum(ReportType),
+export const reportToolSchema = z.object({
+  type: z.string().min(1, "Type is required"),
+  email: z.email("Please enter a valid email address"),
   message: z.string().optional(),
+  toolId: z.string(),
 })
 
-export const reportToolSchema = reportSchema.extend({
-  toolSlug: z.string(),
+export const feedbackSchema = z.object({
+  email: z.email("Please enter a valid email address"),
+  message: z.string().min(1, "Message is required"),
 })
 
 export const claimToolEmailSchema = z.object({
-  toolSlug: z.string(),
+  toolId: z.string(),
   email: z.email("Please enter a valid email address"),
 })
 
 export const claimToolOtpSchema = z.object({
-  toolSlug: z.string(),
+  toolId: z.string(),
   otp: z.string().min(6, "Please enter a valid OTP code"),
 })
 

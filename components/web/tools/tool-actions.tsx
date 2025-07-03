@@ -10,6 +10,7 @@ import { Tooltip } from "~/components/common/tooltip"
 import { ToolClaimDialog } from "~/components/web/dialogs/tool-claim-dialog"
 import { ToolEmbedDialog } from "~/components/web/dialogs/tool-embed-dialog"
 import { ToolReportDialog } from "~/components/web/dialogs/tool-report-dialog"
+import { reportsConfig } from "~/config/reports"
 import { useSession } from "~/lib/auth-client"
 import type { ToolOne } from "~/server/web/tools/payloads"
 import { cx } from "~/utils/cva"
@@ -56,15 +57,17 @@ export const ToolActions = ({ tool, children, className, ...props }: ToolActions
         </Tooltip>
       )}
 
-      <Tooltip tooltip="Send a report/suggestion">
-        <Button
-          size="md"
-          variant="secondary"
-          prefix={<FlagIcon />}
-          onClick={() => setOpenDialog("report")}
-          aria-label="Report"
-        />
-      </Tooltip>
+      {reportsConfig.enabled && (
+        <Tooltip tooltip="Send a report/suggestion">
+          <Button
+            size="md"
+            variant="secondary"
+            prefix={<FlagIcon />}
+            onClick={() => setOpenDialog("report")}
+            aria-label="Report"
+          />
+        </Tooltip>
+      )}
 
       <Tooltip tooltip="Embed this tool on your website">
         <Button

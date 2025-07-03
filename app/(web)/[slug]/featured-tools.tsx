@@ -39,6 +39,7 @@ export const FeaturedTools = async ({ ...props }: ComponentProps<typeof Card>) =
                 isFeatured: tool.isFeatured,
                 source: "supporter",
               }}
+              className="hover:*:bg-muted"
             >
               <Favicon
                 src={tool.faviconUrl}

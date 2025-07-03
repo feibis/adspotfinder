@@ -51,7 +51,7 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
   const sendOtpAction = useHookFormAction(sendToolClaimOtp, emailResolver, {
     formProps: {
       defaultValues: {
-        toolSlug: tool.slug,
+        toolId: tool.id,
         email: "",
       },
     },
@@ -73,7 +73,7 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
   const verifyOtpAction = useHookFormAction(verifyToolClaimOtp, otpResolver, {
     formProps: {
       defaultValues: {
-        toolSlug: tool.slug,
+        toolId: tool.id,
         otp: "",
       },
     },
