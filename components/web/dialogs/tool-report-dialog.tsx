@@ -128,7 +128,7 @@ export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogPr
                     </RadioGroup>
                   </FormControl>
 
-                  <FormMessage />
+                  <FormMessage className="mt-1" />
                 </FormItem>
               )}
             />

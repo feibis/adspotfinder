@@ -33,7 +33,7 @@ const DialogContent = ({
     <DialogPortal>
       <DialogOverlay />
 
-      <div className="fixed inset-0 z-50 flex h-screen items-start justify-center px-4 py-6 sm:items-center [@media(min-height:1000px)]:pt-[25vh] [@media(min-height:1000px)]:items-start">
+      <div className="fixed inset-0 z-50 flex h-screen items-start justify-center px-4 py-6 sm:pt-[12.5vh] sm:[@media(min-height:1000px)]:pt-[25vh]">
         <DialogPrimitive.Content
           className={cx(
             "relative max-h-full w-full max-w-lg grid gap-4 border bg-background p-4 rounded-md shadow-lg overflow-y-auto overscroll-contain sm:p-6 sm:rounded-lg",
@@ -63,7 +63,7 @@ const DialogFooter = ({ className, ...props }: ComponentProps<"div">) => {
   return (
     <div
       className={cx(
-        "flex flex-col-reverse gap-2 -m-4 mt-0 px-4 py-3 border-t md:flex-row md:justify-between sm:-m-6 sm:mt-0 sm:px-6 sm:py-4",
+        "flex flex-col-reverse gap-2 -m-4 mt-0 px-4 py-3 border-t md:flex-row md:justify-between sm:-m-6 sm:mt-0 sm:px-6 sm:py-4 sm:sticky sm:-bottom-6 sm:bg-background",
         className,
       )}
       {...props}
