@@ -108,20 +108,22 @@ export default async function ToolPage(props: PageProps) {
           )}
 
           {isToolPublished(tool) && (
-            <Button suffix={<ArrowUpRightIcon />} className="-mt-fluid-xs md:min-w-36" asChild>
-              <ExternalLink
-                href={tool.affiliateUrl || tool.websiteUrl}
-                doFollow={tool.isFeatured}
-                eventName="click_website"
-                eventProps={{
-                  url: tool.websiteUrl,
-                  isFeatured: tool.isFeatured,
-                  source: "button",
-                }}
-              >
-                Visit {tool.name}
-              </ExternalLink>
-            </Button>
+            <Stack className="w-full -mt-fluid-md pt-8">
+              <Button suffix={<ArrowUpRightIcon />} className="md:min-w-36" asChild>
+                <ExternalLink
+                  href={tool.affiliateUrl || tool.websiteUrl}
+                  doFollow={tool.isFeatured}
+                  eventName="click_website"
+                  eventProps={{
+                    url: tool.websiteUrl,
+                    isFeatured: tool.isFeatured,
+                    source: "button",
+                  }}
+                >
+                  Visit {tool.name}
+                </ExternalLink>
+              </Button>
+            </Stack>
           )}
 
           <ToolPreviewAlert tool={tool} className="self-stretch max-md:order-2" />
