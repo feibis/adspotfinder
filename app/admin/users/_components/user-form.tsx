@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { useAction } from "next-safe-action/hooks"
-import type { ComponentProps } from "react"
+import { type ChangeEvent, type ComponentProps, useState } from "react"
 import { toast } from "sonner"
 import { UserActions } from "~/app/admin/users/_components/user-actions"
 import { Avatar, AvatarImage } from "~/components/common/avatar"
@@ -17,12 +17,14 @@ import {
   FormMessage,
 } from "~/components/common/form"
 import { H3 } from "~/components/common/heading"
+import { Hint } from "~/components/common/hint"
 import { Input } from "~/components/common/input"
 import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
 import { updateUser } from "~/server/admin/users/actions"
 import type { findUserById } from "~/server/admin/users/queries"
 import { userSchema } from "~/server/admin/users/schema"
+import { fileSchema, VALID_IMAGE_TYPES } from "~/server/web/shared/schema"
 import { uploadUserImage } from "~/server/web/users/actions"
 import { cx } from "~/utils/cva"
 
@@ -32,6 +34,7 @@ type UserFormProps = ComponentProps<"form"> & {
 
 export function UserForm({ children, className, title, user, ...props }: UserFormProps) {
   const resolver = zodResolver(userSchema)
+  const [imageError, setImageError] = useState<string | null>(null)
 
   // Update user
   const { form, action, handleSubmitWithAction } = useHookFormAction(updateUser, resolver, {
@@ -58,14 +61,31 @@ export function UserForm({ children, className, title, user, ...props }: UserFor
   // Upload user image
   const uploadAction = useAction(uploadUserImage, {
     onSuccess: ({ data }) => {
-      toast.success("User image successfully uploaded")
+      setImageError(null)
+      toast.success("User image successfully uploaded. Please save the user to update.")
       form.setValue("image", data)
     },
 
     onError: ({ error }) => {
-      toast.error(error.serverError)
+      const { serverError, validationErrors } = error
+
+      serverError && toast.error(serverError)
+      validationErrors?.file?._errors?.[0] && setImageError(validationErrors.file._errors[0])
     },
   })
+
+  const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    const { data, error } = await fileSchema.safeParseAsync(file)
+
+    if (error) {
+      setImageError(JSON.parse(error.message)[0]?.message)
+      return
+    }
+
+    setImageError(null)
+    uploadAction.execute({ id: user.id, file: data })
+  }
 
   return (
     <Form {...form}>
@@ -124,9 +144,9 @@ export function UserForm({ children, className, title, user, ...props }: UserFor
                 <Input {...field} type="hidden" />
               </FormControl>
 
-              <Stack className="w-full">
+              <Stack size="sm" className="w-full">
                 {field.value && (
-                  <Avatar className="size-6">
+                  <Avatar className="size-8 border box-content">
                     <AvatarImage src={field.value} />
                   </Avatar>
                 )}
@@ -135,17 +155,15 @@ export function UserForm({ children, className, title, user, ...props }: UserFor
                   <FormControl>
                     <Input
                       type="file"
-                      accept="image/*"
+                      accept={VALID_IMAGE_TYPES.join(",")}
                       hover
-                      onChange={e => {
-                        const file = e.target.files?.[0]
-                        if (file) uploadAction.execute({ id: user.id, file })
-                      }}
+                      onChange={handleImageChange}
                     />
                   </FormControl>
                 </div>
               </Stack>
 
+              {imageError && <Hint>{imageError}</Hint>}
               <FormMessage />
             </FormItem>
           )}

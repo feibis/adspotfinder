@@ -13,6 +13,14 @@ export const filterParamsSchema = {
 export const filterParamsCache = createSearchParamsCache(filterParamsSchema)
 export type FilterSchema = Awaited<ReturnType<typeof filterParamsCache.parse>>
 
+export const VALID_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"]
+
+export const fileSchema = z
+  .instanceof(File)
+  .refine(async ({ size }) => size > 0, "File cannot be empty")
+  .refine(async ({ size }) => size < 1024 * 512, "File size must be less than 512KB")
+  .refine(async ({ type }) => VALID_IMAGE_TYPES.includes(type), "File must be a valid image")
+
 export const submitToolSchema = z.object({
   name: z.string().min(1, "Name is required"),
   websiteUrl: z.url("Invalid URL").min(1, "Website is required").trim(),
