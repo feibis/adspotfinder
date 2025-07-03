@@ -1,7 +1,8 @@
 import { getRandomDigits } from "@primoui/utils"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
-import { admin, magicLink, oneTimeToken } from "better-auth/plugins"
+import { admin, createAuthMiddleware, magicLink, oneTimeToken } from "better-auth/plugins"
+import { revalidatePath } from "next/cache"
 import { headers } from "next/headers"
 import { cache } from "react"
 import { config } from "~/config"
@@ -37,6 +38,21 @@ export const auth = betterAuth({
 
   onAPIError: {
     onError: error => console.error(error),
+  },
+
+  hooks: {
+    after: createAuthMiddleware(async ({ path, context }) => {
+      const { responseHeaders } = context
+
+      // Revalidate the callback URL after login
+      if (path.startsWith("/callback/:id")) {
+        const callbackURL = responseHeaders?.get("location")
+
+        if (callbackURL) {
+          revalidatePath(callbackURL)
+        }
+      }
+    }),
   },
 
   plugins: [
