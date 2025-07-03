@@ -7,7 +7,7 @@ export const findCategories = async ({ where, orderBy, ...args }: Prisma.Categor
   "use cache"
 
   cacheTag("categories")
-  cacheLife("weeks")
+  cacheLife("max")
 
   return db.category.findMany({
     ...args,
@@ -25,7 +25,7 @@ export const findCategorySlugs = async ({
   "use cache"
 
   cacheTag("categories")
-  cacheLife("weeks")
+  cacheLife("max")
 
   return db.category.findMany({
     ...args,
@@ -39,7 +39,7 @@ export const findCategory = async ({ where, ...args }: Prisma.CategoryFindFirstA
   "use cache"
 
   cacheTag("category", `category-${where?.slug}`)
-  cacheLife("weeks")
+  cacheLife("max")
 
   return db.category.findFirst({
     ...args,

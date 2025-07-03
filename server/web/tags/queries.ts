@@ -8,7 +8,7 @@ export const searchTags = async (search: TagsSearchParams, where?: Prisma.TagWhe
   "use cache"
 
   cacheTag("tags")
-  cacheLife("weeks")
+  cacheLife("max")
 
   const { page, perPage } = search
   const skip = (page - 1) * perPage
@@ -39,7 +39,7 @@ export const findTagSlugs = async ({ where, orderBy, ...args }: Prisma.TagFindMa
   "use cache"
 
   cacheTag("tags")
-  cacheLife("weeks")
+  cacheLife("max")
 
   return db.tag.findMany({
     ...args,
@@ -53,7 +53,7 @@ export const findTag = async ({ where, ...args }: Prisma.TagFindFirstArgs = {}) 
   "use cache"
 
   cacheTag("tag", `tag-${where?.slug}`)
-  cacheLife("weeks")
+  cacheLife("max")
 
   return db.tag.findFirst({
     ...args,
