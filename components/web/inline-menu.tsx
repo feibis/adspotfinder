@@ -27,16 +27,17 @@ export const InlineMenu = ({ children, className, items, ...props }: InlineMenuP
       {...props}
     >
       <nav>
-        {items.map(({ id, title, ...props }) => (
+        {items.map(({ id, title, className, ...props }) => (
           <Button
             key={id}
             size="lg"
             variant="ghost"
             className={cx(
-              "py-2 hover:ring-transparent! focus-visible:ring-transparent",
+              "py-2 *:only:text-start hover:ring-transparent! focus-visible:ring-transparent",
               activeId === id
                 ? "bg-accent text-foreground"
                 : "text-muted-foreground font-normal hover:text-foreground",
+              className,
             )}
             onClick={e => {
               e.preventDefault()

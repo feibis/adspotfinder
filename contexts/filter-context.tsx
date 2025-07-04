@@ -30,9 +30,12 @@ const FiltersProvider = ({
 
   const [filters, setFilters] = useQueryStates(filterParamsSchema, {
     shallow: false,
-    throttleMs: 300,
     history: "push",
     startTransition,
+    limitUrlUpdates: {
+      method: "debounce",
+      timeMs: 250,
+    },
   })
 
   const isDefault = isDefaultState(filterParamsSchema, filters, ["page", "perPage"])
