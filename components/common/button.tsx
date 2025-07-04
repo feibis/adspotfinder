@@ -4,7 +4,7 @@ import type { ComponentProps, ReactNode } from "react"
 import { Children, isValidElement } from "react"
 import { boxVariants } from "~/components/common/box"
 import { Slottable } from "~/components/common/slottable"
-import { cva, cx, type VariantProps } from "~/utils/cva"
+import { cva, cx, type VariantProps } from "~/lib/utils"
 
 const buttonVariants = cva({
   base: [

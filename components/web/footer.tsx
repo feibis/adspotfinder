@@ -14,7 +14,7 @@ import { ExternalLink } from "~/components/web/external-link"
 import { ThemeSwitcher } from "~/components/web/theme-switcher"
 import { NavLink, navLinkVariants } from "~/components/web/ui/nav-link"
 import { config } from "~/config"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 type FooterProps = ComponentProps<"div"> & {
   hideCTA?: boolean

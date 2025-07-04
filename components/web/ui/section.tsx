@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react"
 import { Wrapper } from "~/components/common/wrapper"
 import { Sticky } from "~/components/web/ui/sticky"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 const SectionBase = ({ className, gap = "md", ...props }: ComponentProps<typeof Wrapper>) => {
   return (

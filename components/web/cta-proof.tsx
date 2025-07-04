@@ -3,7 +3,7 @@ import Image from "next/image"
 import type { ComponentProps } from "react"
 import { Note } from "~/components/common/note"
 import { Stack } from "~/components/common/stack"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 export const CTAProof = ({ className, ...props }: ComponentProps<typeof Stack>) => {
   return (

@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react"
 import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 type DataTableLinkProps = ComponentProps<typeof Link> & {
   image?: string | null

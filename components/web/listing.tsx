@@ -3,7 +3,7 @@ import type { ComponentProps, ReactNode } from "react"
 import { Button } from "~/components/common/button"
 import { H4 } from "~/components/common/heading"
 import { Stack } from "~/components/common/stack"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 type ListingProps = ComponentProps<typeof Stack> & {
   title?: string

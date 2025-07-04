@@ -4,7 +4,7 @@ import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react"
 import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui"
 import type { ComponentProps } from "react"
 import { Kbd } from "~/components/common/kbd"
-import { cx, popoverAnimationClasses } from "~/utils/cva"
+import { cx, popoverAnimationClasses } from "~/lib/utils"
 
 const DropdownMenu = DropdownMenuPrimitive.Root
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger

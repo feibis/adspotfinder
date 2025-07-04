@@ -10,7 +10,7 @@ import {
 } from "~/components/common/table"
 import { DataTablePagination } from "~/components/data-table/data-table-pagination"
 import { getColumnPinningStyle } from "~/lib/data-table"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 type DataTableProps<TData> = ComponentProps<typeof Table> & {
   /**

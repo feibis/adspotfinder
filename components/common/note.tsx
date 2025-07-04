@@ -1,5 +1,5 @@
 import type { ComponentProps, ElementType } from "react"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 type NoteProps = ComponentProps<"p"> & {
   as?: ElementType

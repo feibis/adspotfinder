@@ -8,7 +8,7 @@ import type { ComponentProps } from "react"
 import { Note } from "~/components/common/note"
 import { PaginationLink } from "~/components/web/pagination-link"
 import { navLinkVariants } from "~/components/web/ui/nav-link"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 export type PaginationProps = ComponentProps<"nav"> & {
   total: number

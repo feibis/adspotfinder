@@ -14,7 +14,7 @@ import {
   CommandList,
 } from "~/components/common/command"
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/common/popover"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 type DataTableViewOptionsProps<TData> = {
   table: Table<TData>

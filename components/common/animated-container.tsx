@@ -4,7 +4,7 @@ import { useReducedMotion, useResizeObserver } from "@mantine/hooks"
 import { type HTMLMotionProps, motion } from "motion/react"
 import { Slot } from "radix-ui"
 import type { PropsWithChildren } from "react"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 type AnimatedContainerProps = Omit<HTMLMotionProps<"div">, "animate" | "children"> &
   PropsWithChildren<{

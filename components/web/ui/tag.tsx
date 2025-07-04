@@ -1,7 +1,7 @@
 import { Slot } from "radix-ui"
 import { type ComponentProps, isValidElement, type ReactNode } from "react"
 import { Slottable } from "~/components/common/slottable"
-import { cva, cx, type VariantProps } from "~/utils/cva"
+import { cva, cx, type VariantProps } from "~/lib/utils"
 
 const tagVariants = cva({
   base: "flex items-center gap-0.5 text-muted-foreground text-sm hover:[&[href]]:text-foreground",

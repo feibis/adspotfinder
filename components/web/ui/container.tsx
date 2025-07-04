@@ -1,6 +1,6 @@
 import { Slot } from "radix-ui"
 import type { ComponentProps } from "react"
-import { cva, cx, type VariantProps } from "~/utils/cva"
+import { cva, cx, type VariantProps } from "~/lib/utils"
 
 const containerVariants = cva({
   base: "relative w-full max-w-272 mx-auto px-6 lg:px-8",

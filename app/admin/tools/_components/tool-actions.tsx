@@ -16,7 +16,7 @@ import {
 } from "~/components/common/dropdown-menu"
 import { Link } from "~/components/common/link"
 import { ExternalLink } from "~/components/web/external-link"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 type ToolActionsProps = ComponentProps<typeof Button> & {
   tool: Tool

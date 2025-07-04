@@ -5,7 +5,7 @@ import { Dialog as DialogPrimitive } from "radix-ui"
 import type { ComponentProps } from "react"
 import { H4 } from "~/components/common/heading"
 import { Prose } from "~/components/common/prose"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 const Dialog = DialogPrimitive.Root
 const DialogTrigger = DialogPrimitive.Trigger

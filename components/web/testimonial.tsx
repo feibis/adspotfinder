@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react"
 import { Markdown } from "~/components/web/markdown"
 import { Author, type AuthorProps } from "~/components/web/ui/author"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 type TestimonialProps = ComponentProps<"blockquote"> & {
   quote: string

@@ -5,7 +5,7 @@ import { Select as SelectPrimitive } from "radix-ui"
 import type { ComponentProps } from "react"
 import { Box } from "~/components/common/box"
 import { inputVariants } from "~/components/common/input"
-import { cva, cx, popoverAnimationClasses, type VariantProps } from "~/utils/cva"
+import { cva, cx, popoverAnimationClasses, type VariantProps } from "~/lib/utils"
 
 const Select = SelectPrimitive.Root
 const SelectGroup = SelectPrimitive.Group

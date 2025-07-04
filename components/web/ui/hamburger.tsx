@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 export const Hamburger = ({ className, ...props }: ComponentProps<"svg">) => {
   return (

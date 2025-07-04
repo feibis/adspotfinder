@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/common/dropdown-menu"
 import { Link } from "~/components/common/link"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 type CategoryActionsProps = ComponentProps<typeof Button> & {
   category: Category

@@ -1,7 +1,7 @@
 import Image from "next/image"
 import type { ComponentProps } from "react"
-import type { VariantProps } from "~/utils/cva"
-import { cva, cx } from "~/utils/cva"
+import type { VariantProps } from "~/lib/utils"
+import { cva, cx } from "~/lib/utils"
 
 const faviconVariants = cva({
   base: "size-9 rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal",

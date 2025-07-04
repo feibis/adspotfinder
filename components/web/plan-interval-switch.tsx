@@ -8,7 +8,7 @@ import {
 } from "react"
 import { Ping } from "~/components/common/ping"
 import type { ProductInterval } from "~/hooks/use-plan-prices"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 type Interval = {
   label: ReactNode

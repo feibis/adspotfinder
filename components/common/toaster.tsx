@@ -3,7 +3,7 @@
 import { CircleCheckIcon, CircleHelpIcon, CircleXIcon, LoaderIcon } from "lucide-react"
 import type { ComponentProps } from "react"
 import { Toaster as Sonner } from "sonner"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 const Toaster = ({ className, ...props }: ComponentProps<typeof Sonner>) => {
   return (

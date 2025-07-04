@@ -4,7 +4,7 @@ import { CTAForm } from "~/components/web/cta-form"
 import { CTAProof } from "~/components/web/cta-proof"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { config } from "~/config"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 export const Hero = ({ className, ...props }: ComponentProps<"section">) => {
   return (

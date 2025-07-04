@@ -2,7 +2,7 @@
 
 import { Label as LabelPrimitive } from "radix-ui"
 import type { ComponentProps } from "react"
-import { cva, cx, type VariantProps } from "~/utils/cva"
+import { cva, cx, type VariantProps } from "~/lib/utils"
 
 const labelVariants = cva({
   base: "self-start text-sm font-medium text-foreground [&[for]]:cursor-pointer",

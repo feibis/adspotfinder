@@ -6,7 +6,7 @@ import type { ComponentProps } from "react"
 import { toast } from "sonner"
 import { navLinkVariants } from "~/components/web/ui/nav-link"
 import { signOut } from "~/lib/auth-client"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 export const UserLogout = ({ className, ...props }: ComponentProps<"button">) => {
   const router = useRouter()

@@ -1,7 +1,7 @@
 import { BadgeCheckIcon } from "lucide-react"
 import type { ComponentProps } from "react"
 import { Tooltip } from "~/components/common/tooltip"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 type VerifiedBadgeProps = ComponentProps<typeof BadgeCheckIcon> & {
   size?: "sm" | "md" | "lg"

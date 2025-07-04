@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/common/table"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 type DataTableSkeletonProps = ComponentProps<"div"> & {
   /**

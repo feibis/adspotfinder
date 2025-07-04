@@ -8,7 +8,7 @@ import { Link } from "~/components/common/link"
 import { Separator } from "~/components/common/separator"
 import { Stack } from "~/components/common/stack"
 import { Tooltip } from "~/components/common/tooltip"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 type NavLink = ButtonProps & {
   title: string

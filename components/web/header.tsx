@@ -27,7 +27,7 @@ import { NavLink, navLinkVariants } from "~/components/web/ui/nav-link"
 import { UserMenu } from "~/components/web/user-menu"
 import { useSearch } from "~/contexts/search-context"
 import type { Session } from "~/lib/auth"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 type HeaderProps = ComponentProps<"div"> & {
   session: Session | null

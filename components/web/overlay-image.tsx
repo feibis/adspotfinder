@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react"
 import { Box } from "~/components/common/box"
 import { ExternalLink } from "~/components/web/external-link"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 type OverlayImageProps = ComponentProps<typeof ExternalLink> & {
   src: string

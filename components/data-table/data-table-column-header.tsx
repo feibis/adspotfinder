@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/common/dropdown-menu"
-import { cva, cx } from "~/utils/cva"
+import { cva, cx } from "~/lib/utils"
 
 const dataTableColumnHeaderVariants = cva({
   base: "text-start font-medium text-muted-foreground whitespace-nowrap",

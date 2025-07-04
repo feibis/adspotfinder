@@ -4,7 +4,7 @@ import { Check } from "lucide-react"
 import { Checkbox as CheckboxPrimitive } from "radix-ui"
 import type { ComponentProps } from "react"
 import { Box } from "~/components/common/box"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 const Checkbox = ({ className, ...props }: ComponentProps<typeof CheckboxPrimitive.Root>) => (
   <Box focusWithin>

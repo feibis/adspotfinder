@@ -2,7 +2,7 @@ import { ArrowUpRightIcon } from "lucide-react"
 import type { ComponentProps } from "react"
 import { Link } from "~/components/common/link"
 import { ExternalLink } from "~/components/web/external-link"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 const a = ({ href, ...props }: ComponentProps<"a">) => {
   if (typeof href !== "string") {

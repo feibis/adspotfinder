@@ -4,7 +4,7 @@ import type { ComponentProps } from "react"
 import { Button, type ButtonProps } from "~/components/common/button"
 import { Stack } from "~/components/common/stack"
 import { type InlineMenuItem, useInlineMenu } from "~/hooks/use-inline-menu"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 type InlineMenuProps = ComponentProps<typeof Stack> & {
   items: (InlineMenuItem & ButtonProps)[]

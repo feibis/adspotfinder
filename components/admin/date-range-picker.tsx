@@ -9,7 +9,7 @@ import type { DateRange } from "react-day-picker"
 import { Button, type ButtonProps } from "~/components/common/button"
 import { Calendar } from "~/components/common/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/common/popover"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 type DateRangePickerProps = ComponentProps<typeof PopoverContent> & {
   /**

@@ -6,7 +6,7 @@ import type { Graph } from "schema-dts"
 import { Stack } from "~/components/common/stack"
 import { NavLink } from "~/components/web/ui/nav-link"
 import { config } from "~/config"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 const BreadcrumbsSeparator = ({ ...props }: ComponentProps<"span">) => {
   return (

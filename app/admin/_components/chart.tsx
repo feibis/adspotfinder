@@ -6,7 +6,7 @@ import type { ComponentProps } from "react"
 import { Note } from "~/components/common/note"
 import { Stack } from "~/components/common/stack"
 import { Tooltip } from "~/components/common/tooltip"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 export type ChartData = {
   date: string

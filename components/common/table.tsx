@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react"
 import { Note } from "~/components/common/note"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 const Table = ({ className, ...props }: ComponentProps<"table">) => {
   return (

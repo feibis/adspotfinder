@@ -3,7 +3,7 @@ import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
 import { LogoSymbol } from "~/components/web/ui/logo-symbol"
 import { config } from "~/config"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 export const Logo = ({ className, ...props }: ComponentProps<typeof Stack>) => {
   return (

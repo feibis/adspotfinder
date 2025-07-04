@@ -6,7 +6,7 @@ import { Button } from "~/components/common/button"
 import { Input } from "~/components/common/input"
 import { Stack } from "~/components/common/stack"
 import { useFilters } from "~/contexts/filter-context"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 export type FiltersProps = ComponentProps<typeof Stack> & {
   placeholder: string

@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react"
 import { MDXComponents } from "~/components/web/mdx-components"
 import { Stat } from "~/components/web/ui/stat"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 export const Stats = ({ className, ...props }: ComponentProps<"div">) => {
   const stats = [

@@ -2,7 +2,7 @@
 
 import { HoverCard as HoverCardPrimitive } from "radix-ui"
 import type { ComponentProps } from "react"
-import { cx, popoverAnimationClasses } from "~/utils/cva"
+import { cx, popoverAnimationClasses } from "~/lib/utils"
 
 const HoverCard = HoverCardPrimitive.Root
 const HoverCardTrigger = HoverCardPrimitive.Trigger
