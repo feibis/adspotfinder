@@ -27,10 +27,10 @@ import {
 import { Stack } from "~/components/common/stack"
 import { TextArea } from "~/components/common/textarea"
 import { reportsConfig } from "~/config/reports"
+import { cx } from "~/lib/utils"
 import { updateReport } from "~/server/admin/reports/actions"
 import type { findReportById } from "~/server/admin/reports/queries"
 import { reportSchema } from "~/server/admin/reports/schema"
-import { cx } from "~/utils/cva"
 
 type ReportFormProps = ComponentProps<"form"> & {
   report: NonNullable<Awaited<ReturnType<typeof findReportById>>>

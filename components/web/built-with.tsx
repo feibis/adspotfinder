@@ -1,10 +1,9 @@
-import { getUrlHostname } from "@primoui/utils"
+import { addSearchParams, getUrlHostname } from "@primoui/utils"
 import type { ComponentProps } from "react"
 import { Stack } from "~/components/common/stack"
 import { ExternalLink } from "~/components/web/external-link"
 import { config } from "~/config"
-import { cx } from "~/utils/cva"
-import { addSearchParams } from "~/utils/search-params"
+import { cx } from "~/lib/utils"
 
 type BuiltWithProps = ComponentProps<typeof Stack> & {
   medium?: string

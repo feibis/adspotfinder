@@ -1,8 +1,8 @@
+import { addSearchParams } from "@primoui/utils"
 import { ToolStatus } from "@prisma/client"
 import RSS from "rss"
 import { config } from "~/config"
 import { db } from "~/services/db"
-import { addSearchParams } from "~/utils/search-params"
 
 export const GET = async () => {
   const { url, domain, name, tagline } = config.site

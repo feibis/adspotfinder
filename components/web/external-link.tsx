@@ -1,10 +1,9 @@
 "use client"
 
-import { getUrlHostname, isExternalUrl } from "@primoui/utils"
+import { addSearchParams, getUrlHostname, isExternalUrl } from "@primoui/utils"
 import { type Properties, posthog } from "posthog-js"
 import type { ComponentProps } from "react"
 import { siteConfig } from "~/config/site"
-import { addSearchParams } from "~/utils/search-params"
 
 type ExternalLinkProps = ComponentProps<"a"> & {
   doTrack?: boolean

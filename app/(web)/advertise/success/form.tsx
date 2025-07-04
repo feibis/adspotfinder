@@ -17,10 +17,10 @@ import { Input } from "~/components/common/input"
 import { Note } from "~/components/common/note"
 import { Stack } from "~/components/common/stack"
 import { TextArea } from "~/components/common/textarea"
+import { cx } from "~/lib/utils"
 import { createAdFromCheckout } from "~/server/web/actions/stripe"
 import type { AdOne } from "~/server/web/ads/payloads"
 import { adDetailsSchema } from "~/server/web/shared/schema"
-import { cx } from "~/utils/cva"
 
 type AdDetailsFormProps = ComponentProps<"form"> & {
   sessionId: string

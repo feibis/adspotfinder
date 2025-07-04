@@ -18,8 +18,8 @@ import { Button } from "~/components/common/button"
 import { H5 } from "~/components/common/heading"
 import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
+import { cx } from "~/lib/utils"
 import type { findScheduledTools } from "~/server/admin/tools/queries"
-import { cx } from "~/utils/cva"
 
 type Tools = Awaited<ReturnType<typeof findScheduledTools>>
 

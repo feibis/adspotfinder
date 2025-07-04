@@ -18,9 +18,9 @@ import { ExternalLink } from "~/components/web/external-link"
 import { Favicon } from "~/components/web/ui/favicon"
 import { LogoSymbol } from "~/components/web/ui/logo-symbol"
 import { config } from "~/config"
+import { cx } from "~/lib/utils"
 import type { AdOne } from "~/server/web/ads/payloads"
 import { findAd } from "~/server/web/ads/queries"
-import { cx } from "~/utils/cva"
 
 type AdCardProps = CardProps & {
   // Database query conditions to find a specific ad

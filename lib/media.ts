@@ -1,11 +1,10 @@
 import { DeleteObjectCommand, ListObjectsV2Command } from "@aws-sdk/client-s3"
 import { Upload } from "@aws-sdk/lib-storage"
-import { stripURLSubpath } from "@primoui/utils"
+import { stripURLSubpath, tryCatch } from "@primoui/utils"
 import wretch from "wretch"
 import QueryStringAddon from "wretch/addons/queryString"
 import { env, isProd } from "~/env"
 import { s3Client } from "~/services/s3"
-import { tryCatch } from "~/utils/helpers"
 
 /**
  * Uploads a file to S3 and returns the S3 location.

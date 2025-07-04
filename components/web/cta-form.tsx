@@ -9,9 +9,9 @@ import { Button } from "~/components/common/button"
 import { Form, FormControl, FormField } from "~/components/common/form"
 import { Hint } from "~/components/common/hint"
 import { Input } from "~/components/common/input"
+import { cx } from "~/lib/utils"
 import { subscribeToNewsletter as subscribe } from "~/server/web/actions/subscribe"
 import { newsletterSchema } from "~/server/web/shared/schema"
-import { cx } from "~/utils/cva"
 
 type ButtonProps = ComponentProps<typeof Button>
 type InputProps = ComponentProps<typeof Input>

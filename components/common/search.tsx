@@ -62,6 +62,7 @@ type CommandSection = {
     label: string
     shortcut?: ComponentProps<typeof CommandShortcut>
     icon?: ReactNode
+    isPending?: boolean
     onSelect: () => void
   }[]
 }
@@ -212,10 +213,16 @@ export const Search = () => {
         {!hasQuery &&
           commandSections.map(({ name, items }) => (
             <CommandGroup key={name} heading={name}>
-              {items.map(({ value, label, shortcut, icon, onSelect }) => (
-                <CommandItem key={value || label} onSelect={onSelect} value={value || label}>
+              {items.map(({ value, label, shortcut, icon, isPending, onSelect }) => (
+                <CommandItem
+                  key={value || label}
+                  onSelect={onSelect}
+                  value={value || label}
+                  disabled={isPending}
+                >
                   {icon}
-                  {label}
+                  <span className="flex-1 truncate">{label}</span>
+                  {isPending && <LoaderIcon className="animate-spin" />}
                   {shortcut && <CommandShortcut {...shortcut} />}
                 </CommandItem>
               ))}

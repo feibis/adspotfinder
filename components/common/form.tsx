@@ -13,7 +13,7 @@ import {
 import { Hint } from "~/components/common/hint"
 import { Label } from "~/components/common/label"
 import { Stack } from "~/components/common/stack"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 const Form = FormProvider
 

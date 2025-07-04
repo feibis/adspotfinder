@@ -17,7 +17,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "~/components/common/pop
 import { Separator } from "~/components/common/separator"
 import { Stack } from "~/components/common/stack"
 import { Tooltip } from "~/components/common/tooltip"
-import { cx } from "~/utils/cva"
+import { cx } from "~/lib/utils"
 
 type Relation = {
   id: string

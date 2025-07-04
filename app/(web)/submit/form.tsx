@@ -22,9 +22,9 @@ import { TextArea } from "~/components/common/textarea"
 import { FeatureNudge } from "~/components/web/feature-nudge"
 import { useSession } from "~/lib/auth-client"
 import { isToolPublished } from "~/lib/tools"
+import { cx } from "~/lib/utils"
 import { submitTool } from "~/server/web/actions/submit"
 import { submitToolSchema } from "~/server/web/shared/schema"
-import { cx } from "~/utils/cva"
 
 export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
   const router = useRouter()

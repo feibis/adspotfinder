@@ -10,8 +10,8 @@ import { Input } from "~/components/common/input"
 import { Kbd } from "~/components/common/kbd"
 import { Stack } from "~/components/common/stack"
 import { DataTableFacetedFilter } from "~/components/data-table/data-table-faceted-filter"
+import { cx } from "~/lib/utils"
 import type { DataTableFilterField } from "~/types"
-import { cx } from "~/utils/cva"
 
 type DataTableToolbarProps<TData> = ComponentProps<"div"> & {
   table: Table<TData>

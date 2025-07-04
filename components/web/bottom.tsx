@@ -5,8 +5,8 @@ import { Wrapper } from "~/components/common/wrapper"
 import { Container } from "~/components/web/ui/container"
 import { NavLink } from "~/components/web/ui/nav-link"
 import { Tile, TileCaption, TileDivider } from "~/components/web/ui/tile"
+import { cx } from "~/lib/utils"
 import { findCategories } from "~/server/web/categories/queries"
-import { cx } from "~/utils/cva"
 
 export const Bottom = async ({ className, ...props }: ComponentProps<typeof Wrapper>) => {
   const categories = await findCategories({

@@ -31,8 +31,8 @@ import {
 } from "~/components/common/select"
 import { TextArea } from "~/components/common/textarea"
 import { siteConfig } from "~/config/site"
+import { cx } from "~/lib/utils"
 import type { ToolOne } from "~/server/web/tools/payloads"
-import { cx } from "~/utils/cva"
 
 const THEMES = [
   { value: "light", label: "Light" },

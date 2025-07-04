@@ -12,8 +12,8 @@ import { ToolEmbedDialog } from "~/components/web/dialogs/tool-embed-dialog"
 import { ToolReportDialog } from "~/components/web/dialogs/tool-report-dialog"
 import { reportsConfig } from "~/config/reports"
 import { useSession } from "~/lib/auth-client"
+import { cx } from "~/lib/utils"
 import type { ToolOne } from "~/server/web/tools/payloads"
-import { cx } from "~/utils/cva"
 
 type ToolActionsProps = ComponentProps<typeof Stack> & {
   tool: ToolOne

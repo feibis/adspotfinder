@@ -7,8 +7,8 @@ import { H5 } from "~/components/common/heading"
 import { Link } from "~/components/common/link"
 import { Note } from "~/components/common/note"
 import { isToolPublished } from "~/lib/tools"
+import { cx } from "~/lib/utils"
 import type { ToolOne } from "~/server/web/tools/payloads"
-import { cx } from "~/utils/cva"
 
 type ToolPreviewAlertProps = ComponentProps<typeof Card> & {
   tool: ToolOne

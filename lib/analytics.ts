@@ -1,7 +1,7 @@
+import { tryCatch } from "@primoui/utils"
 import { eachDayOfInterval, format, startOfDay, subDays } from "date-fns"
 import { env } from "~/env"
 import { getPlausibleApi } from "~/services/plausible"
-import { tryCatch } from "~/utils/helpers"
 
 type AnalyticsPageResponse = {
   results: { metrics: [number, number]; dimensions: [] }[]

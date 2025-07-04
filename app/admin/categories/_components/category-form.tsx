@@ -23,12 +23,12 @@ import { Input } from "~/components/common/input"
 import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
 import { useComputedField } from "~/hooks/use-computed-field"
+import { cx } from "~/lib/utils"
 import { upsertCategory } from "~/server/admin/categories/actions"
 import type { findCategoryBySlug } from "~/server/admin/categories/queries"
 import { categorySchema } from "~/server/admin/categories/schema"
 import { descriptionSchema } from "~/server/admin/shared/schema"
 import type { findToolList } from "~/server/admin/tools/queries"
-import { cx } from "~/utils/cva"
 
 type CategoryFormProps = ComponentProps<"form"> & {
   category?: Awaited<ReturnType<typeof findCategoryBySlug>>

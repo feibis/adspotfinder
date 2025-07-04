@@ -21,8 +21,8 @@ import {
 } from "~/components/common/dropdown-menu"
 import { Link } from "~/components/common/link"
 import { admin, useSession } from "~/lib/auth-client"
+import { cx } from "~/lib/utils"
 import { updateUserRole } from "~/server/admin/users/actions"
-import { cx } from "~/utils/cva"
 
 type UserActionsProps = ComponentProps<typeof Button> & {
   user: User

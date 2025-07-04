@@ -2,8 +2,8 @@ import type { ComponentProps } from "react"
 import { CategoryCard, CategoryCardSkeleton } from "~/components/web/categories/category-card"
 import { EmptyList } from "~/components/web/empty-list"
 import { Grid } from "~/components/web/ui/grid"
+import { cx } from "~/lib/utils"
 import type { CategoryMany } from "~/server/web/categories/payloads"
-import { cx } from "~/utils/cva"
 
 type CategoryListProps = ComponentProps<typeof Grid> & {
   categories: CategoryMany[]

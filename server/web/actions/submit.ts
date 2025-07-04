@@ -4,13 +4,13 @@ import { getUrlHostname, slugify } from "@primoui/utils"
 import { headers } from "next/headers"
 import { after } from "next/server"
 import { auth } from "~/lib/auth"
+import { isDisposableEmail } from "~/lib/email"
 import { notifySubmitterOfToolSubmitted } from "~/lib/notifications"
 import { getIP, isRateLimited } from "~/lib/rate-limiter"
 import { actionClient } from "~/lib/safe-actions"
 import { submitToolSchema } from "~/server/web/shared/schema"
 import { db } from "~/services/db"
 import { createResendContact } from "~/services/resend"
-import { isDisposableEmail } from "~/utils/helpers"
 
 /**
  * Generates a unique slug by adding a numeric suffix if needed

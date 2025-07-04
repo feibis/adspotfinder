@@ -13,8 +13,8 @@ import { Price } from "~/components/web/price"
 import type { AdSpot } from "~/config/ads"
 import type { AdsSelection, useAds } from "~/hooks/use-ads"
 import { getFirstAvailableMonth } from "~/lib/ads"
+import { cx } from "~/lib/utils"
 import type { AdMany } from "~/server/web/ads/payloads"
-import { cx } from "~/utils/cva"
 
 type AdsCalendarProps = ComponentProps<"div"> & {
   adSpot: AdSpot

@@ -2,8 +2,8 @@ import type { ComponentProps } from "react"
 import { EmptyList } from "~/components/web/empty-list"
 import { TagCard, TagCardSkeleton } from "~/components/web/tags/tag-card"
 import { Grid } from "~/components/web/ui/grid"
+import { cx } from "~/lib/utils"
 import type { TagMany } from "~/server/web/tags/payloads"
-import { cx } from "~/utils/cva"
 
 type TagListProps = ComponentProps<typeof Grid> & {
   tags: TagMany[]

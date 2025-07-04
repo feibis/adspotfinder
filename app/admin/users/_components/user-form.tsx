@@ -21,12 +21,12 @@ import { Hint } from "~/components/common/hint"
 import { Input } from "~/components/common/input"
 import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
+import { cx } from "~/lib/utils"
 import { updateUser } from "~/server/admin/users/actions"
 import type { findUserById } from "~/server/admin/users/queries"
 import { userSchema } from "~/server/admin/users/schema"
 import { fileSchema, VALID_IMAGE_TYPES } from "~/server/web/shared/schema"
 import { uploadUserImage } from "~/server/web/users/actions"
-import { cx } from "~/utils/cva"
 
 type UserFormProps = ComponentProps<"form"> & {
   user: NonNullable<Awaited<ReturnType<typeof findUserById>>>

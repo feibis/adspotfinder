@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react"
-import { cva, cx, type VariantProps } from "~/utils/cva"
+import { cva, cx, type VariantProps } from "~/lib/utils"
 
 const wrapperVariants = cva({
   base: "@container flex flex-col w-full",

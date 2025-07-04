@@ -18,9 +18,9 @@ import { PlanIntervalSwitch } from "~/components/web/plan-interval-switch"
 import { Price } from "~/components/web/price"
 import { usePlanPrices } from "~/hooks/use-plan-prices"
 import { isToolPublished } from "~/lib/tools"
+import { cva, cx, type VariantProps } from "~/lib/utils"
 import { createStripeToolCheckout } from "~/server/web/actions/stripe"
 import type { ToolOne } from "~/server/web/tools/payloads"
-import { cva, cx, type VariantProps } from "~/utils/cva"
 
 const planVariants = cva({
   base: "items-stretch gap-8 basis-72 grow max-w-80 bg-transparent overflow-clip",

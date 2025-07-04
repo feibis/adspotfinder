@@ -1,10 +1,10 @@
 "use server"
 
+import { isDisposableEmail } from "~/lib/email"
 import { getIP, isRateLimited } from "~/lib/rate-limiter"
 import { actionClient } from "~/lib/safe-actions"
 import { newsletterSchema } from "~/server/web/shared/schema"
 import { createResendContact } from "~/services/resend"
-import { isDisposableEmail } from "~/utils/helpers"
 
 /**
  * Subscribe to the newsletter

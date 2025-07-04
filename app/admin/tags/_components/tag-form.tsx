@@ -22,11 +22,11 @@ import { Input } from "~/components/common/input"
 import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
 import { useComputedField } from "~/hooks/use-computed-field"
+import { cx } from "~/lib/utils"
 import { upsertTag } from "~/server/admin/tags/actions"
 import type { findTagBySlug } from "~/server/admin/tags/queries"
 import { tagSchema } from "~/server/admin/tags/schema"
 import type { findToolList } from "~/server/admin/tools/queries"
-import { cx } from "~/utils/cva"
 
 type TagFormProps = ComponentProps<"form"> & {
   tag?: Awaited<ReturnType<typeof findTagBySlug>>

@@ -1,6 +1,6 @@
+import { tryCatch } from "@primoui/utils"
 import wretch from "wretch"
 import { env } from "~/env"
-import { tryCatch } from "~/utils/helpers"
 
 type JinaResponse = {
   data: {

@@ -5,8 +5,8 @@ import { Card } from "~/components/common/card"
 import { ExternalLink } from "~/components/web/external-link"
 import { Container } from "~/components/web/ui/container"
 import { config } from "~/config"
+import { cx } from "~/lib/utils"
 import { findAd } from "~/server/web/ads/queries"
-import { cx } from "~/utils/cva"
 
 export const AdBanner = async ({ className, ...props }: ComponentProps<typeof Card>) => {
   if (!config.ads.enabled) {
