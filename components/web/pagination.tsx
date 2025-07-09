@@ -12,8 +12,8 @@ import { cx } from "~/lib/utils"
 
 export type PaginationProps = ComponentProps<"nav"> & {
   total: number
-  pageSize?: number
-  currentPage?: number
+  perPage?: number
+  page?: number
   siblings?: number
   boundaries?: number
 }
@@ -21,8 +21,8 @@ export type PaginationProps = ComponentProps<"nav"> & {
 export const Pagination = ({
   className,
   total,
-  pageSize = 1,
-  currentPage = 1,
+  perPage = 1,
+  page = 1,
   siblings,
   boundaries,
   ...props
@@ -30,11 +30,11 @@ export const Pagination = ({
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const params = new URLSearchParams(searchParams)
-  const pageCount = Math.ceil(total / pageSize)
+  const pageCount = Math.ceil(total / perPage)
 
   const pagination = usePagination({
     total: pageCount,
-    page: currentPage,
+    page,
     siblings,
     boundaries,
   })
@@ -49,8 +49,8 @@ export const Pagination = ({
       {...props}
     >
       <PaginationLink
-        href={getPageLink(params, pathname, currentPage - 1)}
-        isDisabled={currentPage <= 1}
+        href={getPageLink(params, pathname, page - 1)}
+        isDisabled={page <= 1}
         prefix={<ArrowLeftIcon />}
         rel="prev"
       >
@@ -58,23 +58,23 @@ export const Pagination = ({
       </PaginationLink>
 
       <Note className="md:hidden">
-        Page {currentPage} of {pageCount}
+        Page {page} of {pageCount}
       </Note>
 
       <div className="flex items-center flex-wrap gap-3 max-md:hidden">
         <Note as="span">Page:</Note>
 
-        {pagination.range.map((page, index) => (
+        {pagination.range.map((value, index) => (
           <div key={`page-${index}`}>
-            {page === "dots" && <span className={navLinkVariants()}>...</span>}
+            {value === "dots" && <span className={navLinkVariants()}>...</span>}
 
-            {typeof page === "number" && (
+            {typeof value === "number" && (
               <PaginationLink
-                href={getPageLink(params, pathname, page)}
-                isActive={currentPage === page}
+                href={getPageLink(params, pathname, value)}
+                isActive={value === page}
                 className="min-w-5 justify-center"
               >
-                {page}
+                {value}
               </PaginationLink>
             )}
           </div>
@@ -82,8 +82,8 @@ export const Pagination = ({
       </div>
 
       <PaginationLink
-        href={getPageLink(params, pathname, currentPage + 1)}
-        isDisabled={currentPage >= pageCount}
+        href={getPageLink(params, pathname, page + 1)}
+        isDisabled={page >= pageCount}
         suffix={<ArrowRightIcon />}
         rel="next"
       >

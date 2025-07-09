@@ -82,6 +82,7 @@ export default async function CategoryPage(props: PageProps) {
           searchParams={props.searchParams}
           where={{ categories: { some: { slug: category.slug } } }}
           search={{ placeholder: `Search ${String(title).toLowerCase()}...` }}
+          ad={{ type: "Tools" }}
         />
       </Suspense>
     </>

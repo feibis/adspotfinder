@@ -4,19 +4,22 @@ import type { ComponentProps } from "react"
 import { Button } from "~/components/common/button"
 import { config } from "~/config"
 import { useFilters } from "~/contexts/filter-context"
+import { cx } from "~/lib/utils"
 import type { TagsFilterSchema } from "~/server/web/tags/schema"
-import { cx } from "~/utils/cva"
 
 export const TagFilters = ({ className, ...props }: ComponentProps<"div">) => {
   const { filters, updateFilters } = useFilters<TagsFilterSchema>()
 
   return (
-    <div className={cx("flex flex-wrap gap-1 w-full md:justify-between", className)} {...props}>
+    <div
+      className={cx("grid grid-cols-[repeat(auto-fit,minmax(2rem,1fr))] gap-1 w-full", className)}
+      {...props}
+    >
       {config.site.alphabet.split("").map(letter => (
         <Button
           key={letter}
           variant={filters.letter === letter ? "primary" : "secondary"}
-          className="px-2 py-1 text-sm font-medium text-center rounded-sm uppercase md:flex-1"
+          className="px-2 py-1 text-sm font-medium text-center uppercase"
           onClick={() => updateFilters({ letter })}
         >
           {letter}

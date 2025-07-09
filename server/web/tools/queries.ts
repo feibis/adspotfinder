@@ -47,7 +47,7 @@ export const searchTools = async (search: ToolFilterParams, where?: Prisma.ToolW
 
   console.log(`Tools search: ${Math.round(performance.now() - start)}ms`)
 
-  return { tools, total }
+  return { tools, total, page, perPage }
 }
 
 export const findRelatedTools = async ({

@@ -55,7 +55,7 @@ export const searchTags = async (search: TagsFilterParams, where?: Prisma.TagWhe
 
   console.log(`Tags search: ${Math.round(performance.now() - start)}ms`)
 
-  return { tags, total }
+  return { tags, total, page, perPage }
 }
 
 export const findTagSlugs = async ({ where, orderBy, ...args }: Prisma.TagFindManyArgs) => {

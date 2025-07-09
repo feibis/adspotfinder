@@ -23,7 +23,7 @@ const RelatedTools = async ({ tool, ...props }: RelatedToolsProps) => {
       button={<Link href="/">View all tools</Link>}
       {...props}
     >
-      <ToolList tools={tools} enableAds={false} />
+      <ToolList tools={tools} />
     </Listing>
   )
 }

@@ -1,7 +1,9 @@
 import type { Prisma } from "@prisma/client"
 import type { SearchParams } from "nuqs"
+import { Suspense } from "react"
+import { AdCard, AdCardSkeleton } from "~/components/web/ads/ad-card"
 import type { PaginationProps } from "~/components/web/pagination"
-import type { ToolListProps } from "~/components/web/tools/tool-list"
+import { ToolList, type ToolListProps } from "~/components/web/tools/tool-list"
 import { ToolListing, type ToolListingProps } from "~/components/web/tools/tool-listing"
 import { searchTools } from "~/server/web/tools/queries"
 import { type ToolFilterParams, toolFilterParamsCache } from "~/server/web/tools/schema"
@@ -12,6 +14,7 @@ type ToolQueryProps = Omit<ToolListingProps, "list" | "pagination"> & {
   where?: Prisma.ToolWhereInput
   list?: Partial<Omit<ToolListProps, "tools">>
   pagination?: Partial<Omit<PaginationProps, "total" | "pageSize">>
+  ad?: Prisma.AdWhereInput
 }
 
 const ToolQuery = async ({
@@ -20,18 +23,23 @@ const ToolQuery = async ({
   where,
   list,
   pagination,
+  ad,
   ...props
 }: ToolQueryProps) => {
   const parsedParams = toolFilterParamsCache.parse(await searchParams)
   const params = { ...parsedParams, ...overrideParams }
-  const { tools, total } = await searchTools(params, where)
+  const { tools, total, page, perPage } = await searchTools(params, where)
 
   return (
-    <ToolListing
-      list={{ tools, ...list }}
-      pagination={{ total, pageSize: params.perPage, currentPage: params.page, ...pagination }}
-      {...props}
-    />
+    <ToolListing pagination={{ total, perPage, page, ...pagination }} {...props}>
+      <ToolList tools={tools} {...list}>
+        {ad && (
+          <Suspense fallback={<AdCardSkeleton isRevealed className="lg:order-1" />}>
+            <AdCard where={ad} isRevealed className="lg:order-1" />
+          </Suspense>
+        )}
+      </ToolList>
+    </ToolListing>
   )
 }
 

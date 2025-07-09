@@ -1,6 +1,4 @@
-import type { AdType } from "@prisma/client"
-import { type ComponentProps, Fragment, Suspense } from "react"
-import { AdCard, AdCardSkeleton } from "~/components/web/ads/ad-card"
+import type { ComponentProps } from "react"
 import { EmptyList } from "~/components/web/empty-list"
 import { ToolCard, ToolCardSkeleton } from "~/components/web/tools/tool-card"
 import { Grid } from "~/components/web/ui/grid"
@@ -8,26 +6,16 @@ import type { ToolMany } from "~/server/web/tools/payloads"
 
 type ToolListProps = ComponentProps<typeof Grid> & {
   tools: ToolMany[]
-  adType?: AdType
-  enableAds?: boolean
 }
 
-const ToolList = ({ tools, adType = "Tools", enableAds = true, ...props }: ToolListProps) => {
+const ToolList = ({ children, tools, ...props }: ToolListProps) => {
   return (
     <Grid {...props}>
       {tools.map((tool, order) => (
-        <Fragment key={tool.slug}>
-          {enableAds && Math.min(2, tools.length - 1) === order && (
-            <Suspense fallback={<AdCardSkeleton isRevealed className="lg:order-2" />}>
-              <AdCard where={{ type: adType }} isRevealed className="lg:order-2" />
-            </Suspense>
-          )}
-
-          <ToolCard tool={tool} style={{ order }} />
-        </Fragment>
+        <ToolCard key={tool.slug} tool={tool} style={{ order }} />
       ))}
 
-      {!tools.length && <EmptyList>No tools found for the given filters.</EmptyList>}
+      {tools.length ? children : <EmptyList>No tools found for the given filters.</EmptyList>}
     </Grid>
   )
 }

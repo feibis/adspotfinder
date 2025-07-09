@@ -14,7 +14,11 @@ export default function Home(props: PageProps) {
       <Hero />
 
       <Suspense fallback={<ToolListingSkeleton />}>
-        <ToolQuery searchParams={props.searchParams} options={{ enableFilters: true }} />
+        <ToolQuery
+          searchParams={props.searchParams}
+          options={{ enableFilters: true }}
+          ad={{ type: "Tools" }}
+        />
       </Suspense>
     </>
   )

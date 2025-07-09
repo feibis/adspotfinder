@@ -24,12 +24,12 @@ const TagQuery = async ({
 }: TagQueryProps) => {
   const parsedParams = tagsSearchParamsCache.parse(await searchParams)
   const params = { ...parsedParams, ...overrideParams }
-  const { tags, total } = await searchTags(params, where)
+  const { tags, total, page, perPage } = await searchTags(params, where)
 
   return (
     <TagListing
       list={{ tags, ...list }}
-      pagination={{ total, pageSize: params.perPage, currentPage: params.page, ...pagination }}
+      pagination={{ total, perPage, page, ...pagination }}
       {...props}
     />
   )

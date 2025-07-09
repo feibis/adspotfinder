@@ -16,7 +16,7 @@ export const Filters = ({ children, className, placeholder, ...props }: FiltersP
   const { filters, isLoading, isDefault, updateFilters } = useFilters()
 
   return (
-    <Stack className={cx("w-full", className)} {...props}>
+    <Stack className={cx("w-full gap-2", className)} {...props}>
       <div className="relative grow min-w-0">
         <div className="absolute left-4 top-1/2 -translate-y-1/2 opacity-50 pointer-events-none">
           {isLoading ? <LoaderIcon className="animate-spin" /> : <SearchIcon />}
