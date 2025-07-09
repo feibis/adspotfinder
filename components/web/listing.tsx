@@ -25,7 +25,12 @@ export const Listing = ({
     <>
       {separated && <hr />}
 
-      <Stack size="lg" direction="column" className={cx("items-stretch", className)} {...props}>
+      <Stack
+        size="lg"
+        direction="column"
+        className={cx("items-stretch gap-4", className)}
+        {...props}
+      >
         <Stack className="w-full justify-between">
           {title && <H4 as="h3">{title}</H4>}
 

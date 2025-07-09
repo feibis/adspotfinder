@@ -1,8 +1,9 @@
 "use server"
 
-import { getUrlHostname, slugify } from "@primoui/utils"
+import { getUrlHostname, slugify, tryCatch } from "@primoui/utils"
 import { headers } from "next/headers"
 import { after } from "next/server"
+import { isDev } from "~/env"
 import { auth } from "~/lib/auth"
 import { isDisposableEmail } from "~/lib/email"
 import { notifySubmitterOfToolSubmitted } from "~/lib/notifications"
@@ -80,9 +81,13 @@ export const submitTool = actionClient
     const ownerId = session?.user.email.includes(hostname) ? session?.user.id : undefined
 
     // Save the tool to the database
-    const tool = await db.tool.create({
-      data: { ...data, slug, ownerId },
-    })
+    const { data: tool, error } = await tryCatch(
+      db.tool.create({ data: { ...data, slug, ownerId } }),
+    )
+
+    if (error) {
+      throw isDev ? error : new Error("Failed to submit tool")
+    }
 
     // Notify the submitter of the tool submitted
     after(async () => await notifySubmitterOfToolSubmitted(tool))
