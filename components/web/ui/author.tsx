@@ -11,13 +11,13 @@ export type AuthorProps = ComponentProps<typeof Stack> & {
 
 export const Author = ({ name, image, title, ...props }: AuthorProps) => {
   return (
-    <Stack size="sm" {...props}>
+    <Stack {...props}>
       <Image
         src={image}
         alt={`${name}'s profile`}
         width={48}
         height={48}
-        className="size-12 rounded-full group-hover:[&[href]]:brightness-90"
+        className="size-12 rounded-lg group-hover:[&[href]]:brightness-90"
       />
 
       <div>

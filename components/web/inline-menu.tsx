@@ -1,21 +1,36 @@
 "use client"
 
+import { useScrollIntoView, useScrollSpy } from "@mantine/hooks"
 import type { ComponentProps } from "react"
+import { useEffect, useMemo } from "react"
 import { Button, type ButtonProps } from "~/components/common/button"
 import { Stack } from "~/components/common/stack"
-import { type InlineMenuItem, useInlineMenu } from "~/hooks/use-inline-menu"
 import { cx } from "~/lib/utils"
 
 type InlineMenuProps = ComponentProps<typeof Stack> & {
-  items: (InlineMenuItem & ButtonProps)[]
+  items: ({ id: string } & ButtonProps)[]
 }
 
 export const InlineMenu = ({ children, className, items, ...props }: InlineMenuProps) => {
-  const activeId = useInlineMenu(items)
+  const ids = useMemo(() => items.map(item => item.id), [items])
+  const selector = useMemo(() => ids.map(id => `[id="${id}"]`).join(","), [ids])
 
-  if (!items.length) {
-    return null
-  }
+  const { scrollIntoView, targetRef, cancel, scrollableRef } = useScrollIntoView<HTMLElement>()
+  const { active, data } = useScrollSpy({ selector })
+
+  const activeId = data[active]?.id
+
+  useEffect(() => {
+    if (!activeId) return
+    const activeMenuElement = document.querySelector<HTMLAnchorElement>(`a[href="#${activeId}"]`)
+
+    if (activeMenuElement) {
+      targetRef.current = activeMenuElement
+      scrollIntoView({ alignment: "center" })
+    }
+
+    return cancel
+  }, [activeId, cancel, scrollIntoView])
 
   return (
     <Stack
@@ -23,11 +38,12 @@ export const InlineMenu = ({ children, className, items, ...props }: InlineMenuP
       direction="column"
       wrap={false}
       className={cx("items-stretch overflow-y-auto overscroll-contain scroll-smooth", className)}
+      ref={scrollableRef}
       asChild
       {...props}
     >
       <nav>
-        {items.map(({ id, title, className, ...props }) => (
+        {items.map(({ id, children, className, ...props }) => (
           <Button
             key={id}
             size="lg"
@@ -39,14 +55,10 @@ export const InlineMenu = ({ children, className, items, ...props }: InlineMenuP
                 : "text-muted-foreground font-normal hover:text-foreground",
               className,
             )}
-            onClick={e => {
-              e.preventDefault()
-              document.querySelector(`#${id}`)?.scrollIntoView()
-            }}
             {...props}
             asChild
           >
-            <a href={`#${id}`}>{title}</a>
+            <a href={`#${id}`}>{children}</a>
           </Button>
         ))}
 
