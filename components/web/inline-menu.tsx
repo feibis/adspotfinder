@@ -1,6 +1,6 @@
 "use client"
 
-import { useScrollIntoView, useScrollSpy } from "@mantine/hooks"
+import { useScrollSpy } from "@mantine/hooks"
 import type { ComponentProps } from "react"
 import { useEffect, useMemo } from "react"
 import { Button, type ButtonProps } from "~/components/common/button"
@@ -12,25 +12,16 @@ type InlineMenuProps = ComponentProps<typeof Stack> & {
 }
 
 export const InlineMenu = ({ children, className, items, ...props }: InlineMenuProps) => {
-  const ids = useMemo(() => items.map(item => item.id), [items])
-  const selector = useMemo(() => ids.map(id => `[id="${id}"]`).join(","), [ids])
-
-  const { scrollIntoView, targetRef, cancel, scrollableRef } = useScrollIntoView<HTMLElement>()
+  const selector = useMemo(() => items.map(item => `[id="${item.id}"]`).join(","), [items])
   const { active, data } = useScrollSpy({ selector })
-
   const activeId = data[active]?.id
 
   useEffect(() => {
     if (!activeId) return
-    const activeMenuElement = document.querySelector<HTMLAnchorElement>(`a[href="#${activeId}"]`)
 
-    if (activeMenuElement) {
-      targetRef.current = activeMenuElement
-      scrollIntoView({ alignment: "center" })
-    }
-
-    return cancel
-  }, [activeId, cancel, scrollIntoView])
+    const activeMenuElement = document.querySelector(`a[href="#${activeId}"]`)
+    activeMenuElement?.scrollIntoView({ block: "nearest", inline: "nearest" })
+  }, [activeId])
 
   return (
     <Stack
@@ -38,7 +29,6 @@ export const InlineMenu = ({ children, className, items, ...props }: InlineMenuP
       direction="column"
       wrap={false}
       className={cx("items-stretch overflow-y-auto overscroll-contain scroll-smooth", className)}
-      ref={scrollableRef}
       asChild
       {...props}
     >
