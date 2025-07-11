@@ -5,6 +5,7 @@ import { cx } from "cva"
 import { endOfDay, startOfDay } from "date-fns"
 import { XIcon } from "lucide-react"
 import { useAction } from "next-safe-action/hooks"
+import { parseAsString, useQueryState } from "nuqs"
 import plur from "plur"
 import posthog from "posthog-js"
 import type { ComponentProps } from "react"
@@ -28,6 +29,7 @@ type AdsCalendarProps = ComponentProps<"div"> & {
 
 export const AdsPicker = ({ className, ads, ...props }: AdsCalendarProps) => {
   const { price, selections, hasSelections, findAdSpot, clearSelection, updateSelection } = useAds()
+  const [type] = useQueryState("type", parseAsString)
 
   const { execute, isPending } = useAction(createStripeAdsCheckout, {
     onSuccess: () => {
@@ -74,7 +76,10 @@ export const AdsPicker = ({ className, ads, ...props }: AdsCalendarProps) => {
             price={price}
             selections={selections}
             updateSelection={updateSelection}
-            className="border-l border-t -ml-px -mt-px"
+            className={cx(
+              "border-l border-t -ml-px -mt-px",
+              type && type !== adSpot.type && "bg-card",
+            )}
           />
         ))}
       </div>

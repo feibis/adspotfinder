@@ -51,7 +51,7 @@ const AdCard = async ({ className, type, overrideAd, defaultOverride, ...props }
   return (
     <Card className={cx("group/button", className)} asChild {...props}>
       <ExternalLink
-        href={ad.websiteUrl}
+        href={`${ad.websiteUrl}${isInternalAd ? `?type=${type}` : ""}`}
         target={isInternalAd ? "_self" : undefined}
         eventName="click_ad"
         eventProps={{ url: ad.websiteUrl, type: ad.type, source: "card" }}
