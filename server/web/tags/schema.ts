@@ -7,7 +7,7 @@ import {
 
 export const tagsSearchParams = {
   q: parseAsString.withDefault(""),
-  sort: parseAsString.withDefault("name.asc"),
+  sort: parseAsString.withDefault(""),
   page: parseAsInteger.withDefault(1),
   perPage: parseAsInteger.withDefault(96),
   letter: parseAsString.withDefault(""),

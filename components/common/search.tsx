@@ -74,12 +74,12 @@ export const Search = () => {
   const search = useSearch()
   const [results, setResults] = useState<InferSafeActionFnResult<typeof searchItems>["data"]>()
   const { resolvedTheme, setTheme, forcedTheme } = useTheme()
-  const [query, setQuery] = useDebouncedState("", 250)
+  const [q, setQuery] = useDebouncedState("", 250)
   const listRef = useRef<HTMLDivElement>(null)
 
   const isAdmin = session?.user.role === "admin"
   const isAdminPath = pathname.startsWith("/admin")
-  const hasQuery = !!query.length
+  const hasQuery = !!q.length
 
   const clearSearch = () => {
     setTimeout(() => {
@@ -170,12 +170,6 @@ export const Search = () => {
   const { execute, isPending } = useAction(searchItems, {
     onSuccess: ({ data }) => {
       setResults(data)
-
-      const q = query.toLowerCase().trim()
-
-      if (q.length > 1) {
-        posthog.capture("search", { query: q })
-      }
     },
 
     onError: ({ error }) => {
@@ -187,15 +181,21 @@ export const Search = () => {
   useEffect(() => {
     const performSearch = async () => {
       if (hasQuery) {
+        const query = q.toLowerCase().trim()
+
         execute({ query })
         listRef.current?.scrollTo({ top: 0, behavior: "smooth" })
+
+        if (query.length > 1) {
+          posthog.capture("search", { query })
+        }
       } else {
         setResults(undefined)
       }
     }
 
     performSearch()
-  }, [query, execute])
+  }, [q, execute])
 
   return (
     <CommandDialog open={search.isOpen} onOpenChange={handleOpenChange} shouldFilter={false}>
