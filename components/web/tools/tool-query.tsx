@@ -1,4 +1,4 @@
-import type { Prisma } from "@prisma/client"
+import type { AdType, Prisma } from "@prisma/client"
 import type { SearchParams } from "nuqs"
 import { Suspense } from "react"
 import { AdCard, AdCardSkeleton } from "~/components/web/ads/ad-card"
@@ -14,7 +14,7 @@ type ToolQueryProps = Omit<ToolListingProps, "list" | "pagination"> & {
   where?: Prisma.ToolWhereInput
   list?: Partial<Omit<ToolListProps, "tools">>
   pagination?: Partial<Omit<PaginationProps, "total" | "pageSize">>
-  ad?: Prisma.AdWhereInput
+  ad?: AdType
 }
 
 const ToolQuery = async ({
@@ -35,7 +35,7 @@ const ToolQuery = async ({
       <ToolList tools={tools} {...list}>
         {ad && (
           <Suspense fallback={<AdCardSkeleton isRevealed className="lg:order-1" />}>
-            <AdCard where={ad} isRevealed className="lg:order-1" />
+            <AdCard type={ad} isRevealed className="lg:order-1" />
           </Suspense>
         )}
       </ToolList>

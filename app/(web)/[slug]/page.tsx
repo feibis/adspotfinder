@@ -191,7 +191,7 @@ export default async function ToolPage(props: PageProps) {
         <Section.Sidebar className="max-md:contents">
           {/* Advertisement */}
           <Suspense fallback={<AdCardSkeleton className="max-md:order-3" />}>
-            <AdCard where={{ type: "ToolPage" }} className="max-md:order-3" />
+            <AdCard type="ToolPage" className="max-md:order-3" />
           </Suspense>
 
           {/* Featured */}

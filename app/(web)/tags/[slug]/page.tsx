@@ -77,7 +77,7 @@ export default async function TagPage(props: PageProps) {
           searchParams={props.searchParams}
           where={{ tags: { some: { slug: tag.slug } } }}
           search={{ placeholder: `Search in "${tag.name}"...` }}
-          ad={{ type: "Tools" }}
+          ad="Tools"
         />
       </Suspense>
     </>

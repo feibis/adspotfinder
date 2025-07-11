@@ -1,5 +1,5 @@
 import { isExternalUrl } from "@primoui/utils"
-import type { Prisma } from "@prisma/client"
+import type { AdType } from "@prisma/client"
 import { ArrowUpRightIcon } from "lucide-react"
 import type { ComponentProps } from "react"
 import { Badge } from "~/components/common/badge"
@@ -24,14 +24,14 @@ import { findAd } from "~/server/web/ads/queries"
 
 type AdCardProps = CardProps & {
   // Database query conditions to find a specific ad
-  where?: Prisma.AdWhereInput
+  type?: AdType
   // Override ad data without database query
   overrideAd?: AdOne | null
   // Default values to merge with the fallback ad
   defaultOverride?: Partial<AdOne>
 }
 
-const AdCard = async ({ className, where, overrideAd, defaultOverride, ...props }: AdCardProps) => {
+const AdCard = async ({ className, type, overrideAd, defaultOverride, ...props }: AdCardProps) => {
   if (!config.ads.enabled) {
     return null
   }
@@ -40,7 +40,7 @@ const AdCard = async ({ className, where, overrideAd, defaultOverride, ...props 
   const defaultAd = { ...config.ads.defaultAd, ...defaultOverride }
 
   // Resolve the ad data from the override or database (don't query if override is defined)
-  const resolvedAd = overrideAd !== undefined ? overrideAd : await findAd({ where })
+  const resolvedAd = overrideAd !== undefined ? overrideAd : await findAd({ where: { type } })
 
   // Final ad data to display
   const ad = resolvedAd ?? defaultAd
