@@ -1,7 +1,7 @@
 "use server"
 
 import { getRandomString } from "@primoui/utils"
-import { z } from "zod/v4"
+import { z } from "zod"
 import { uploadToS3Storage } from "~/lib/media"
 import { userActionClient } from "~/lib/safe-actions"
 import { fileSchema } from "~/server/web/shared/schema"

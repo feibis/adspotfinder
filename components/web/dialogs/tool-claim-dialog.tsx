@@ -4,7 +4,7 @@ import { getUrlHostname } from "@primoui/utils"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import type { z } from "zod/v4"
+import type { z } from "zod"
 import { Button } from "~/components/common/button"
 import {
   Dialog,

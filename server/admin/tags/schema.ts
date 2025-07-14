@@ -5,7 +5,7 @@ import {
   parseAsString,
   parseAsStringEnum,
 } from "nuqs/server"
-import * as z from "zod/v4"
+import * as z from "zod"
 import { getSortingStateParser } from "~/lib/parsers"
 
 export const tagsTableParamsSchema = {

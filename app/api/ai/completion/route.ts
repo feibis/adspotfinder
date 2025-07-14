@@ -1,6 +1,6 @@
 import { google } from "@ai-sdk/google"
 import { streamText } from "ai"
-import { z } from "zod/v4"
+import { z } from "zod"
 import { withAdminAuth } from "~/lib/auth-hoc"
 
 const completionSchema = z.object({

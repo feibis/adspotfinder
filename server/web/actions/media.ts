@@ -1,6 +1,6 @@
 "use server"
 
-import { z } from "zod/v4"
+import { z } from "zod"
 import { uploadFavicon, uploadScreenshot } from "~/lib/media"
 import { adminActionClient } from "~/lib/safe-actions"
 

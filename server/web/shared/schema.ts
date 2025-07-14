@@ -1,4 +1,4 @@
-import { z } from "zod/v4"
+import { z } from "zod"
 
 export const VALID_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"]
 

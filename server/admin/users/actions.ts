@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { after } from "next/server"
-import { z } from "zod/v4"
+import { z } from "zod"
 import { removeS3Directories } from "~/lib/media"
 import { adminActionClient } from "~/lib/safe-actions"
 import { userSchema } from "~/server/admin/users/schema"

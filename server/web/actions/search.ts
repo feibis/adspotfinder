@@ -1,7 +1,7 @@
 "use server"
 
 import { ToolStatus } from "@prisma/client"
-import { z } from "zod/v4"
+import { z } from "zod"
 import { actionClient } from "~/lib/safe-actions"
 import { db } from "~/services/db"
 

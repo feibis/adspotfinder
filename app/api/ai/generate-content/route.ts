@@ -1,6 +1,6 @@
 import { google } from "@ai-sdk/google"
 import { streamObject } from "ai"
-import { z } from "zod/v4"
+import { z } from "zod"
 import { withAdminAuth } from "~/lib/auth-hoc"
 import { scrapeWebsiteData } from "~/lib/scraper"
 import { contentSchema } from "~/server/admin/shared/schema"

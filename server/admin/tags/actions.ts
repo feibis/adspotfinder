@@ -3,7 +3,7 @@
 import { slugify } from "@primoui/utils"
 import { revalidatePath, revalidateTag } from "next/cache"
 import { after } from "next/server"
-import { z } from "zod/v4"
+import { z } from "zod"
 import { adminActionClient } from "~/lib/safe-actions"
 import { tagSchema } from "~/server/admin/tags/schema"
 import { db } from "~/services/db"

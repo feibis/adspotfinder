@@ -1,7 +1,7 @@
 import { experimental_useObject as useObject } from "@ai-sdk/react"
 import { useEffect } from "react"
 import { toast } from "sonner"
-import type { z } from "zod/v4"
+import type { z } from "zod"
 import { AIGenerate } from "~/components/admin/ai/generate"
 
 type AIGenerateDescriptionProps<T extends z.ZodSchema> = {
