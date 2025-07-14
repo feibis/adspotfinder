@@ -2,6 +2,7 @@
 
 import { formatNumber } from "@primoui/utils"
 import { AtSignIcon, RssIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import { H5, H6 } from "~/components/common/heading"
 import { BrandGitHubIcon } from "~/components/common/icons/brand-github"
@@ -22,6 +23,8 @@ type FooterProps = ComponentProps<"div"> & {
 }
 
 export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) => {
+  const t = useTranslations()
+
   return (
     <footer className="flex flex-col gap-y-8 mt-auto pt-fluid-md border-t border-foreground/10">
       <div
@@ -34,35 +37,34 @@ export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) 
         >
           <Stack size="lg" direction="column" className="min-w-0 max-w-64">
             <H5 as="strong" className="px-0.5">
-              Subscribe to our newsletter
+              {t("footer.subscribe_title")}
             </H5>
 
             <Note className="-mt-2 px-0.5 first:mt-0">
-              Join {formatNumber(5000, "standard")}+ other members and get updates straight to your
-              inbox.
+              {t("footer.subscribe_description", { count: formatNumber(5000, "standard") })}
             </Note>
 
             <CTAForm />
           </Stack>
 
           <Stack className="text-lg opacity-75">
-            <Tooltip tooltip="Toggle theme">
+            <Tooltip tooltip={t("navigation.toggle_theme")}>
               <ThemeSwitcher />
             </Tooltip>
 
-            <Tooltip tooltip="RSS Feed">
+            <Tooltip tooltip={t("footer.rss_feed")}>
               <ExternalLink href={linksConfig.feed} className={navLinkVariants()}>
                 <RssIcon />
               </ExternalLink>
             </Tooltip>
 
-            <Tooltip tooltip="Contact us">
+            <Tooltip tooltip={t("footer.contact_us")}>
               <ExternalLink href={`mailto:${siteConfig.email}`} className={navLinkVariants()}>
                 <AtSignIcon />
               </ExternalLink>
             </Tooltip>
 
-            <Tooltip tooltip="View source code">
+            <Tooltip tooltip={t("footer.source_code")}>
               <ExternalLink href={linksConfig.github} className={navLinkVariants()}>
                 <BrandGitHubIcon />
               </ExternalLink>
