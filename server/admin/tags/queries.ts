@@ -36,6 +36,7 @@ export const findTags = async (search: TagsTableSchema, where?: Prisma.TagWhereI
       orderBy,
       take: perPage,
       skip: offset,
+      include: { _count: { select: { tools: true } } },
     }),
 
     db.tag.count({

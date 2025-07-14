@@ -42,7 +42,9 @@ next-env.d.ts
 .content-collections
 
 # IDE Rules
-.cursor/rules
+.cursor
+.claude
+claude.md
 
 # sitemap
 public/sitemap*.xml

@@ -3,13 +3,15 @@
 import { formatDate } from "@primoui/utils"
 import type { Tag } from "@prisma/client"
 import type { ColumnDef } from "@tanstack/react-table"
+import { HashIcon } from "lucide-react"
 import { TagActions } from "~/app/admin/tags/_components/tag-actions"
 import { RowCheckbox } from "~/components/admin/row-checkbox"
+import { Badge } from "~/components/common/badge"
 import { Note } from "~/components/common/note"
 import { DataTableColumnHeader } from "~/components/data-table/data-table-column-header"
 import { DataTableLink } from "~/components/data-table/data-table-link"
 
-export const getColumns = (): ColumnDef<Tag>[] => {
+export const getColumns = (): ColumnDef<Tag & { _count?: { tools: number } }>[] => {
   return [
     {
       id: "select",
@@ -43,6 +45,16 @@ export const getColumns = (): ColumnDef<Tag>[] => {
       header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
       cell: ({ row }) => (
         <DataTableLink href={`/admin/tags/${row.original.slug}`} title={row.original.name} />
+      ),
+    },
+    {
+      accessorKey: "_count.tools",
+      enableSorting: false,
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Tools" />,
+      cell: ({ row }) => (
+        <Badge prefix={<HashIcon className="opacity-50 size-3!" />} className="tabular-nums">
+          {row.original._count?.tools || 0}
+        </Badge>
       ),
     },
     {

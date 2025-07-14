@@ -3,13 +3,15 @@
 import { formatDate } from "@primoui/utils"
 import type { Category } from "@prisma/client"
 import type { ColumnDef } from "@tanstack/react-table"
+import { HashIcon } from "lucide-react"
 import { CategoryActions } from "~/app/admin/categories/_components/category-actions"
 import { RowCheckbox } from "~/components/admin/row-checkbox"
+import { Badge } from "~/components/common/badge"
 import { Note } from "~/components/common/note"
 import { DataTableColumnHeader } from "~/components/data-table/data-table-column-header"
 import { DataTableLink } from "~/components/data-table/data-table-link"
 
-export const getColumns = (): ColumnDef<Category>[] => {
+export const getColumns = (): ColumnDef<Category & { _count?: { tools: number } }>[] => {
   return [
     {
       id: "select",
@@ -49,6 +51,16 @@ export const getColumns = (): ColumnDef<Category>[] => {
       accessorKey: "label",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Label" />,
       cell: ({ row }) => <Note className="max-w-96 truncate">{row.original.label}</Note>,
+    },
+    {
+      accessorKey: "_count.tools",
+      enableSorting: false,
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Tools" />,
+      cell: ({ row }) => (
+        <Badge prefix={<HashIcon className="opacity-50 size-3!" />} className="tabular-nums">
+          {row.original._count?.tools || 0}
+        </Badge>
+      ),
     },
     {
       accessorKey: "createdAt",

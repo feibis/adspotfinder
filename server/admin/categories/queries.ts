@@ -39,6 +39,7 @@ export const findCategories = async (
       orderBy,
       take: perPage,
       skip: offset,
+      include: { _count: { select: { tools: true } } },
     }),
 
     db.category.count({
