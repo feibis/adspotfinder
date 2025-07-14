@@ -81,16 +81,13 @@ export const Search = () => {
   const isAdminPath = pathname.startsWith("/admin")
   const hasQuery = !!q.length
 
-  const clearSearch = () => {
-    setTimeout(() => {
-      setResults(undefined)
-      setQuery("")
-    }, 250)
-  }
-
   const handleOpenChange = (open: boolean) => {
     open ? search.open() : search.close()
-    if (!open) clearSearch()
+
+    if (!open) {
+      setResults(undefined)
+      setQuery("")
+    }
   }
 
   const navigateTo = (path: string) => {
