@@ -1,7 +1,7 @@
 "use client"
 
 import { getInitials } from "@primoui/utils"
-import { ShieldHalfIcon, UserIcon } from "lucide-react"
+import { LogOutIcon, ShieldHalfIcon, UserIcon } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/common/avatar"
 import { Box } from "~/components/common/box"
 import { Button } from "~/components/common/button"
@@ -59,20 +59,22 @@ const UserMenu = (props: UserMenuProps) => {
 
         {session.user.role === "admin" && (
           <DropdownMenuItem asChild>
-            <NavLink href="/admin">
-              <ShieldHalfIcon className="shrink-0 size-4 opacity-75" /> Admin Panel
+            <NavLink href="/admin" prefix={<ShieldHalfIcon />}>
+              Admin Panel
             </NavLink>
           </DropdownMenuItem>
         )}
 
         <DropdownMenuItem asChild>
-          <NavLink href="/dashboard">
-            <UserIcon className="shrink-0 size-4 opacity-75" /> Dashboard
+          <NavLink href="/dashboard" prefix={<UserIcon />}>
+            Dashboard
           </NavLink>
         </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
-          <UserLogout />
+          <NavLink prefix={<LogOutIcon />} asChild>
+            <UserLogout>Logout</UserLogout>
+          </NavLink>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

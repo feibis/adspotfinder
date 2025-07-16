@@ -164,10 +164,7 @@
     @apply size-[1em]!;
   }
 
-  [href] svg[class*="arrow-up-right"],
-  [href] svg[class*="arrow-right"],
-  [type] svg[class*="arrow-up-right"],
-  [type] svg[class*="arrow-right"] {
+  [href] svg[class*="arrow-"] {
     @apply will-change-transform;
     @apply duration-150;
   }
@@ -177,9 +174,20 @@
     @apply translate-x-[0.1em];
   }
 
+  [href]:hover svg[class*="arrow-left"],
+  [type]:hover svg[class*="arrow-left"] {
+    @apply -translate-x-[0.1em];
+  }
+
   [href]:hover svg[class*="arrow-up-right"],
   [type]:hover svg[class*="arrow-up-right"] {
     @apply translate-x-[0.1em];
+    @apply -translate-y-[0.1em];
+  }
+
+  [href]:hover svg[class*="arrow-up-left"],
+  [type]:hover svg[class*="arrow-up-left"] {
+    @apply -translate-x-[0.1em];
     @apply -translate-y-[0.1em];
   }
 }

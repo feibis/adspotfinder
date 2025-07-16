@@ -23,7 +23,7 @@ import { ThemeSwitcher } from "~/components/web/theme-switcher"
 import { Container } from "~/components/web/ui/container"
 import { Hamburger } from "~/components/web/ui/hamburger"
 import { Logo } from "~/components/web/ui/logo"
-import { NavLink, navLinkVariants } from "~/components/web/ui/nav-link"
+import { NavLink } from "~/components/web/ui/nav-link"
 import { UserMenu } from "~/components/web/user-menu"
 import { useSearch } from "~/contexts/search-context"
 import type { Session } from "~/lib/auth"
@@ -66,25 +66,27 @@ const Header = ({ className, session, ...props }: HeaderProps) => {
 
           <nav className="flex flex-wrap gap-x-4 gap-y-0.5 flex-1 max-lg:hidden">
             <DropdownMenu>
-              <DropdownMenuTrigger className={cx(navLinkVariants({ className: "gap-1" }))}>
-                Browse{" "}
-                <ChevronDownIcon className="group-data-[state=open]:-rotate-180 duration-200" />
-              </DropdownMenuTrigger>
+              <NavLink className="gap-1" asChild>
+                <DropdownMenuTrigger>
+                  Browse{" "}
+                  <ChevronDownIcon className="group-data-[state=open]:-rotate-180 duration-200" />
+                </DropdownMenuTrigger>
+              </NavLink>
 
               <DropdownMenuContent align="start">
                 <DropdownMenuItem asChild>
-                  <NavLink href="/?sort=publishedAt.desc">
-                    <CalendarDaysIcon className="shrink-0 size-4 opacity-75" /> Latest tools
+                  <NavLink href="/?sort=publishedAt.desc" prefix={<CalendarDaysIcon />}>
+                    Latest tools
                   </NavLink>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <NavLink href="/categories">
-                    <GalleryHorizontalEndIcon className="shrink-0 size-4 opacity-75" /> Categories
+                  <NavLink href="/categories" prefix={<GalleryHorizontalEndIcon />}>
+                    Categories
                   </NavLink>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <NavLink href="/tags">
-                    <TagIcon className="shrink-0 size-4 opacity-75" /> Tags
+                  <NavLink href="/tags" prefix={<TagIcon />}>
+                    Tags
                   </NavLink>
                 </DropdownMenuItem>
               </DropdownMenuContent>

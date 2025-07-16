@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/common/dropdown-menu"
-import { navLinkVariants } from "~/components/web/ui/nav-link"
+import { NavLink } from "~/components/web/ui/nav-link"
 
 type ThemeSwitcherProps = ComponentProps<typeof DropdownMenuTrigger>
 
@@ -21,8 +21,8 @@ export const ThemeSwitcher = ({ className, ...props }: ThemeSwitcherProps) => {
 
   if (!mounted || forcedTheme) return null
 
-  const getThemeIcon = (themeName: string) => {
-    switch (themeName) {
+  const getThemeIcon = (theme: string) => {
+    switch (theme) {
       case "light":
         return <SunIcon />
       case "dark":
@@ -34,20 +34,17 @@ export const ThemeSwitcher = ({ className, ...props }: ThemeSwitcherProps) => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className={navLinkVariants({ className })} {...props}>
-        {getThemeIcon(resolvedTheme ?? "system")}
-      </DropdownMenuTrigger>
+      <NavLink className={className} asChild>
+        <DropdownMenuTrigger {...props}>
+          {getThemeIcon(resolvedTheme ?? "system")}
+        </DropdownMenuTrigger>
+      </NavLink>
 
       <DropdownMenuContent align="start">
         {themes.map(t => (
-          <DropdownMenuItem
-            key={t}
-            onClick={() => setTheme(t)}
-            className={navLinkVariants({ isActive: theme === t, isPadded: false })}
-          >
-            {getThemeIcon(t)}
-            {capitalCase(t)}
-          </DropdownMenuItem>
+          <NavLink key={t} isActive={theme === t} isPadded={false} prefix={getThemeIcon(t)} asChild>
+            <DropdownMenuItem onClick={() => setTheme(t)}>{capitalCase(t)}</DropdownMenuItem>
+          </NavLink>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>

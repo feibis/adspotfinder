@@ -6,9 +6,36 @@ import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react"
 import { usePathname, useSearchParams } from "next/navigation"
 import type { ComponentProps } from "react"
 import { Note } from "~/components/common/note"
-import { PaginationLink } from "~/components/web/pagination-link"
-import { navLinkVariants } from "~/components/web/ui/nav-link"
+import { NavLink, navLinkVariants } from "~/components/web/ui/nav-link"
 import { cx } from "~/lib/utils"
+
+type PaginationLinkProps = ComponentProps<typeof NavLink> & {
+  isDisabled?: boolean
+}
+
+const PaginationLink = ({
+  isDisabled,
+  children,
+  prefix,
+  suffix,
+  ...props
+}: PaginationLinkProps) => {
+  if (isDisabled) {
+    return (
+      <NavLink prefix={prefix} suffix={suffix} asChild>
+        <button type="button" disabled>
+          {children}
+        </button>
+      </NavLink>
+    )
+  }
+
+  return (
+    <NavLink prefix={prefix} suffix={suffix} {...props}>
+      {children}
+    </NavLink>
+  )
+}
 
 export type PaginationProps = ComponentProps<"nav"> & {
   total: number
@@ -49,8 +76,8 @@ export const Pagination = ({
       {...props}
     >
       <PaginationLink
-        href={getPageLink(params, pathname, page - 1)}
         isDisabled={page <= 1}
+        href={getPageLink(params, pathname, page - 1)}
         prefix={<ArrowLeftIcon />}
         rel="prev"
       >
@@ -69,21 +96,21 @@ export const Pagination = ({
             {value === "dots" && <span className={navLinkVariants()}>...</span>}
 
             {typeof value === "number" && (
-              <PaginationLink
+              <NavLink
                 href={getPageLink(params, pathname, value)}
                 isActive={value === page}
-                className="min-w-5 justify-center"
+                className={cx("min-w-5 justify-center", value === page && "bg-accent rounded-xs")}
               >
                 {value}
-              </PaginationLink>
+              </NavLink>
             )}
           </div>
         ))}
       </div>
 
       <PaginationLink
-        href={getPageLink(params, pathname, page + 1)}
         isDisabled={page >= pageCount}
+        href={getPageLink(params, pathname, page + 1)}
         suffix={<ArrowRightIcon />}
         rel="next"
       >
