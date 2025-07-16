@@ -13,6 +13,7 @@ export const OverlayImage = ({ children, className, src, alt, ...props }: Overla
     <Box hover>
       <ExternalLink
         className={cx("not-prose group relative rounded-md overflow-clip", className)}
+        doTrack
         {...props}
       >
         <img

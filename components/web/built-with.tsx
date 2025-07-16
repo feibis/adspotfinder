@@ -23,7 +23,7 @@ export const BuiltWith = ({ className, medium, ...props }: BuiltWithProps) => {
         className="font-medium text-foreground hover:text-secondary-foreground"
         asChild
       >
-        <ExternalLink href={href} doFollow>
+        <ExternalLink href={href} doTrack doFollow>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 216 251"

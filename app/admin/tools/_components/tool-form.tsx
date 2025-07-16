@@ -31,7 +31,6 @@ import { Stack } from "~/components/common/stack"
 import { Switch } from "~/components/common/switch"
 import { TextArea } from "~/components/common/textarea"
 import { Tooltip } from "~/components/common/tooltip"
-import { ExternalLink } from "~/components/web/external-link"
 import { Markdown } from "~/components/web/markdown"
 import { siteConfig } from "~/config/site"
 import { useComputedField } from "~/hooks/use-computed-field"
@@ -48,9 +47,9 @@ import { generateFavicon, generateScreenshot } from "~/server/web/actions/media"
 const ToolStatusChange = ({ tool }: { tool: Tool }) => {
   return (
     <>
-      <ExternalLink href={`/${tool.slug}`} className="font-semibold underline inline-block">
+      <Link href={`/${tool.slug}`} target="_blank" className="font-semibold underline inline-block">
         {tool.name}
-      </ExternalLink>{" "}
+      </Link>{" "}
       is now {tool.status.toLowerCase()}.{" "}
       {tool.status === "Scheduled" && (
         <>
@@ -214,9 +213,9 @@ export function ToolForm({
         {tool && (
           <Note className="w-full">
             {isToolPublished(tool) ? "View:" : "Preview:"}{" "}
-            <ExternalLink href={`/${tool.slug}`} className="text-primary underline">
+            <Link href={`/${tool.slug}`} target="_blank" className="text-primary underline">
               {siteConfig.url}/{tool.slug}
-            </ExternalLink>
+            </Link>
             {tool.status === ToolStatus.Scheduled && tool.publishedAt && (
               <>
                 <br />

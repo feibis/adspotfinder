@@ -15,7 +15,7 @@ type ExternalLinkProps = ComponentProps<"a"> & {
 export const ExternalLink = ({
   href,
   target = "_blank",
-  doTrack = true,
+  doTrack = false,
   doFollow = false,
   eventName,
   eventProps,

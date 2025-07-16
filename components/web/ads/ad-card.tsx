@@ -53,6 +53,7 @@ const AdCard = async ({ className, type, overrideAd, defaultOverride, ...props }
       <ExternalLink
         href={`${ad.websiteUrl}${isInternalAd ? `?type=${type}` : ""}`}
         target={isInternalAd ? "_self" : undefined}
+        doTrack
         eventName="click_ad"
         eventProps={{ url: ad.websiteUrl, type: ad.type, source: "card" }}
       >

@@ -33,6 +33,7 @@ export const FeaturedTools = async ({ ...props }: ComponentProps<typeof Card>) =
             <ExternalLink
               href={tool.affiliateUrl || tool.websiteUrl}
               doFollow={tool.isFeatured}
+              doTrack
               eventName="click_website"
               eventProps={{
                 url: tool.websiteUrl,

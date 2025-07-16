@@ -57,7 +57,9 @@ export const ToolActions = ({ className, tool, ...props }: ToolActionsProps) => 
 
         {isValidUrl(tool.websiteUrl) && (
           <DropdownMenuItem asChild>
-            <ExternalLink href={tool.websiteUrl}>Visit website</ExternalLink>
+            <ExternalLink href={tool.websiteUrl} doTrack>
+              Visit website
+            </ExternalLink>
           </DropdownMenuItem>
         )}
 

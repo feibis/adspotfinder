@@ -28,6 +28,7 @@ export const AdBanner = async ({ className, ...props }: ComponentProps<typeof Ca
       >
         <ExternalLink
           href={ad.websiteUrl}
+          doTrack
           eventName="click_ad"
           eventProps={{ url: ad.websiteUrl, type: ad.type, source: "banner" }}
         >

@@ -14,7 +14,7 @@ const a = ({ href, ...props }: ComponentProps<"a">) => {
   }
 
   return (
-    <ExternalLink {...props} href={href}>
+    <ExternalLink doTrack {...props} href={href}>
       {props.children}
       <ArrowUpRightIcon className="inline-block ml-0.5 mb-0.5 size-3.5" />
     </ExternalLink>

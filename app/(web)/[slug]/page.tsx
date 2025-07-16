@@ -113,6 +113,7 @@ export default async function ToolPage(props: PageProps) {
                 <ExternalLink
                   href={tool.affiliateUrl || tool.websiteUrl}
                   doFollow={tool.isFeatured}
+                  doTrack
                   eventName="click_website"
                   eventProps={{
                     url: tool.websiteUrl,
