@@ -4,8 +4,6 @@ import { type UseQueryStatesKeysMap, useQueryStates, type Values } from "nuqs"
 import { createContext, type PropsWithChildren, use, useTransition } from "react"
 import { isDefaultState } from "~/lib/parsers"
 
-// TODO: Add basic nuqs schema containing q, sort, page, perPage and extend it with the schema passed to the provider
-
 export type FiltersContextType<T extends UseQueryStatesKeysMap> = {
   filters: Values<T>
   isLoading: boolean
