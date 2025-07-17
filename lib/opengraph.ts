@@ -1,4 +1,4 @@
-import { createSerializer, parseAsString } from "nuqs/server"
+import { createSerializer, type inferParserType, parseAsString } from "nuqs/server"
 import { siteConfig } from "~/config/site"
 
 export const openGraphSearchParams = {
@@ -6,6 +6,8 @@ export const openGraphSearchParams = {
   description: parseAsString.withDefault(siteConfig.description),
   faviconUrl: parseAsString.withDefault(`${siteConfig.url}/favicon.png`),
 }
+
+export type OpenGraphParams = inferParserType<typeof openGraphSearchParams>
 
 /**
  * Get the URL for the OpenGraph image.

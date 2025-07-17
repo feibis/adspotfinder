@@ -1,15 +1,9 @@
 import { getExcerpt } from "@primoui/utils"
-import type { PropsWithChildren } from "react"
 import { LogoSymbol } from "~/components/web/ui/logo-symbol"
 import { config } from "~/config"
+import type { OpenGraphParams } from "~/lib/opengraph"
 
-type OgBaseProps = PropsWithChildren<{
-  title: string
-  description: string | null
-  faviconUrl: string | null
-}>
-
-export const OgBase = ({ title, description, faviconUrl, children }: OgBaseProps) => {
+export const OgBase = ({ title, description, faviconUrl }: OpenGraphParams) => {
   return (
     <div
       style={{
@@ -69,8 +63,6 @@ export const OgBase = ({ title, description, faviconUrl, children }: OgBaseProps
           >
             {title}
           </p>
-
-          {children}
         </div>
 
         <p
