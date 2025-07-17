@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { linksConfig } from "~/config/links"
 import { siteConfig } from "~/config/site"
+import { getOpenGraphImageUrl } from "~/lib/opengraph"
 
 export const metadataConfig: Metadata = {
   openGraph: {
@@ -8,7 +9,7 @@ export const metadataConfig: Metadata = {
     siteName: siteConfig.name,
     locale: "en_US",
     type: "website",
-    images: { url: `${siteConfig.url}/opengraph.png`, width: 1200, height: 630 },
+    images: { url: getOpenGraphImageUrl({}), width: 1200, height: 630 },
   },
   twitter: {
     site: "@dirstarter",

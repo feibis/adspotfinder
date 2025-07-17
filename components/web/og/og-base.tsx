@@ -4,12 +4,12 @@ import { LogoSymbol } from "~/components/web/ui/logo-symbol"
 import { config } from "~/config"
 
 type OgBaseProps = PropsWithChildren<{
-  name: string
+  title: string
   description: string | null
   faviconUrl: string | null
 }>
 
-export const OgBase = ({ faviconUrl, name, description, children }: OgBaseProps) => {
+export const OgBase = ({ title, description, faviconUrl, children }: OgBaseProps) => {
   return (
     <div
       style={{
@@ -39,8 +39,9 @@ export const OgBase = ({ faviconUrl, name, description, children }: OgBaseProps)
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          gap: "3rem",
+          gap: "4rem",
           padding: "3.5rem 4rem",
+          width: "100%",
           backgroundImage: "linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.05))",
         }}
       >
@@ -55,7 +56,19 @@ export const OgBase = ({ faviconUrl, name, description, children }: OgBaseProps)
             />
           )}
 
-          <p style={{ fontSize: "3.4rem", fontFamily: "GeistBold", lineHeight: "1.05" }}>{name}</p>
+          <p
+            style={{
+              maxWidth: "90%",
+              marginTop: "-1%",
+              marginBottom: "-1%",
+              fontSize: "3.4rem",
+              fontFamily: "GeistBold",
+              lineHeight: "1.05",
+              textWrap: "balance",
+            }}
+          >
+            {title}
+          </p>
 
           {children}
         </div>

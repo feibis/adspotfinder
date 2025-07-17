@@ -25,6 +25,7 @@ import { Sticky } from "~/components/web/ui/sticky"
 import { Tag } from "~/components/web/ui/tag"
 import { VerifiedBadge } from "~/components/web/verified-badge"
 import { metadataConfig } from "~/config/metadata"
+import { getOpenGraphImageUrl } from "~/lib/opengraph"
 import { isToolPublished } from "~/lib/tools"
 import type { ToolOne } from "~/server/web/tools/payloads"
 import { findTool, findToolSlugs } from "~/server/web/tools/queries"
@@ -59,11 +60,13 @@ export const generateStaticParams = async () => {
 export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
   const tool = await getTool(props)
   const url = `/${tool.slug}`
+  const { name, description, faviconUrl } = tool
+  const ogImageUrl = getOpenGraphImageUrl({ title: name, description, faviconUrl })
 
   return {
     ...getMetadata(tool),
     alternates: { ...metadataConfig.alternates, canonical: url },
-    openGraph: { url, type: "website" },
+    openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
   }
 }
 

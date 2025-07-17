@@ -5,13 +5,19 @@ import { Breadcrumbs } from "~/components/web/ui/breadcrumbs"
 import { Grid } from "~/components/web/ui/grid"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { metadataConfig } from "~/config/metadata"
+import { getOpenGraphImageUrl } from "~/lib/opengraph"
+
+const url = "/blog"
+const title = "Blog"
+const description =
+  "A collection of useful articles for developers and software enthusiasts. Learn about the latest trends and technologies in the community."
+const ogImageUrl = getOpenGraphImageUrl({ title, description })
 
 export const metadata: Metadata = {
-  title: "Blog",
-  description:
-    "A collection of useful articles for developers and software enthusiasts. Learn about the latest trends and technologies in the community.",
-  openGraph: { ...metadataConfig.openGraph, url: "/blog" },
-  alternates: { ...metadataConfig.alternates, canonical: "/blog" },
+  title,
+  description,
+  alternates: { ...metadataConfig.alternates, canonical: url },
+  openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
 }
 
 export default function BlogPage() {
@@ -29,8 +35,8 @@ export default function BlogPage() {
       />
 
       <Intro>
-        <IntroTitle>{`${metadata.title}`}</IntroTitle>
-        <IntroDescription>{metadata.description}</IntroDescription>
+        <IntroTitle>{title}</IntroTitle>
+        <IntroDescription>{description}</IntroDescription>
       </Intro>
 
       {posts.length ? (

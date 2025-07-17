@@ -9,6 +9,7 @@ import { ToolQuery } from "~/components/web/tools/tool-query"
 import { Breadcrumbs } from "~/components/web/ui/breadcrumbs"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { metadataConfig } from "~/config/metadata"
+import { getOpenGraphImageUrl } from "~/lib/opengraph"
 import type { CategoryOne } from "~/server/web/categories/payloads"
 import { findCategory, findCategorySlugs } from "~/server/web/categories/queries"
 
@@ -45,11 +46,17 @@ export const generateStaticParams = async () => {
 export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
   const category = await getCategory(props)
   const url = `/categories/${category.slug}`
+  const metadata = getMetadata(category)
+
+  const ogImageUrl = getOpenGraphImageUrl({
+    title: String(metadata.title),
+    description: metadata.description,
+  })
 
   return {
-    ...getMetadata(category),
+    ...metadata,
     alternates: { ...metadataConfig.alternates, canonical: url },
-    openGraph: { ...metadataConfig.openGraph, url },
+    openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
   }
 }
 

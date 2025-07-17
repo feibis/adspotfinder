@@ -6,15 +6,20 @@ import { TagQuery } from "~/components/web/tags/tag-query"
 import { Breadcrumbs } from "~/components/web/ui/breadcrumbs"
 import { Intro, IntroTitle } from "~/components/web/ui/intro"
 import { metadataConfig } from "~/config/metadata"
+import { getOpenGraphImageUrl } from "~/lib/opengraph"
 
 type PageProps = {
   searchParams: Promise<SearchParams>
 }
 
+const url = "/tags"
+const title = "Browse Tags"
+const ogImageUrl = getOpenGraphImageUrl({ title })
+
 export const metadata: Metadata = {
-  title: "Browse Tags",
-  openGraph: { ...metadataConfig.openGraph, url: "/tags" },
-  alternates: { ...metadataConfig.alternates, canonical: "/tags" },
+  title,
+  alternates: { ...metadataConfig.alternates, canonical: url },
+  openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
 }
 
 export default function Tags(props: PageProps) {
@@ -30,7 +35,7 @@ export default function Tags(props: PageProps) {
       />
 
       <Intro>
-        <IntroTitle>{`${metadata.title}`}</IntroTitle>
+        <IntroTitle>{title}</IntroTitle>
       </Intro>
 
       <Suspense fallback={<TagListSkeleton />}>

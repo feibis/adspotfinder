@@ -8,13 +8,19 @@ import { Testimonial } from "~/components/web/testimonial"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { config } from "~/config"
 import { metadataConfig } from "~/config/metadata"
+import { getOpenGraphImageUrl } from "~/lib/opengraph"
 import { findAds } from "~/server/web/ads/queries"
 
+const url = "/advertise"
+const title = "Advertise"
+const description = `Promote your business or software on ${config.site.name} and reach a wide audience of software enthusiasts.`
+const ogImageUrl = getOpenGraphImageUrl({ title, description })
+
 export const metadata: Metadata = {
-  title: "Advertise",
-  description: `Promote your business or software on ${config.site.name} and reach a wide audience of software enthusiasts.`,
-  openGraph: { ...metadataConfig.openGraph, url: "/advertise" },
-  alternates: { ...metadataConfig.alternates, canonical: "/advertise" },
+  title,
+  description,
+  alternates: { ...metadataConfig.alternates, canonical: url },
+  openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
 }
 
 export default async function AdvertisePage() {
@@ -23,8 +29,8 @@ export default async function AdvertisePage() {
   return (
     <Wrapper gap="xl">
       <Intro alignment="center">
-        <IntroTitle>{`${metadata.title}`}</IntroTitle>
-        <IntroDescription>{metadata.description}</IntroDescription>
+        <IntroTitle>{title}</IntroTitle>
+        <IntroDescription>{description}</IntroDescription>
       </Intro>
 
       <AdsPicker ads={ads} className="mx-auto" />

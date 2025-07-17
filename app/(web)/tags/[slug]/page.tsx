@@ -8,6 +8,7 @@ import { ToolQuery } from "~/components/web/tools/tool-query"
 import { Breadcrumbs } from "~/components/web/ui/breadcrumbs"
 import { Intro, IntroTitle } from "~/components/web/ui/intro"
 import { metadataConfig } from "~/config/metadata"
+import { getOpenGraphImageUrl } from "~/lib/opengraph"
 import type { TagOne } from "~/server/web/tags/payloads"
 import { findTag, findTagSlugs } from "~/server/web/tags/queries"
 
@@ -41,11 +42,17 @@ export const generateStaticParams = async () => {
 export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
   const tag = await getTag(props)
   const url = `/tags/${tag.slug}`
+  const metadata = getMetadata(tag)
+
+  const ogImageUrl = getOpenGraphImageUrl({
+    title: String(metadata.title),
+    description: metadata.description,
+  })
 
   return {
-    ...getMetadata(tag),
+    ...metadata,
     alternates: { ...metadataConfig.alternates, canonical: url },
-    openGraph: { ...metadataConfig.openGraph, url },
+    openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
   }
 }
 

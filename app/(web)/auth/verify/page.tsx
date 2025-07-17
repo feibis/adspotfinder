@@ -4,16 +4,22 @@ import { Link } from "~/components/common/link"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { config } from "~/config"
 import { metadataConfig } from "~/config/metadata"
+import { getOpenGraphImageUrl } from "~/lib/opengraph"
 
 type PageProps = {
   searchParams: Promise<SearchParams>
 }
 
+const url = "/check-inbox"
+const title = "Check your inbox"
+const description = `Check your inbox to sign in to ${config.site.name}.`
+const ogImageUrl = getOpenGraphImageUrl({ title, description })
+
 export const metadata: Metadata = {
-  title: "Check your inbox",
-  description: `Check your inbox to sign in to ${config.site.name}.`,
-  openGraph: { ...metadataConfig.openGraph, url: "/check-inbox" },
-  alternates: { ...metadataConfig.alternates, canonical: "/check-inbox" },
+  title,
+  description,
+  alternates: { ...metadataConfig.alternates, canonical: url },
+  openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
 }
 
 export default async function VerifyPage({ searchParams }: PageProps) {
@@ -22,7 +28,7 @@ export default async function VerifyPage({ searchParams }: PageProps) {
   return (
     <>
       <Intro>
-        <IntroTitle size="h3">{`${metadata.title}`}</IntroTitle>
+        <IntroTitle size="h3">{title}</IntroTitle>
         <IntroDescription className="md:text-sm">
           We've sent you a magic link to <strong className="text-foreground">{email}</strong>.
           Please click the link to confirm your address.

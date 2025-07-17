@@ -4,20 +4,26 @@ import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { Section } from "~/components/web/ui/section"
 import { config } from "~/config"
 import { metadataConfig } from "~/config/metadata"
+import { getOpenGraphImageUrl } from "~/lib/opengraph"
+
+const url = "/submit"
+const title = "Add a free listing"
+const description = `Listing on ${config.site.name} is a great way to get more exposure for your tool. We only list high-quality tools that are useful for directory owners.`
+const ogImageUrl = getOpenGraphImageUrl({ title, description })
 
 export const metadata: Metadata = {
-  title: "Add a free listing",
-  description: `Listing on ${config.site.name} is a great way to get more exposure for your tool. We only list high-quality tools that are useful for directory owners.`,
-  openGraph: { ...metadataConfig.openGraph, url: "/submit" },
-  alternates: { ...metadataConfig.alternates, canonical: "/submit" },
+  title,
+  description,
+  alternates: { ...metadataConfig.alternates, canonical: url },
+  openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
 }
 
 export default async function SubmitPage() {
   return (
     <>
       <Intro>
-        <IntroTitle>{`${metadata.title}`}</IntroTitle>
-        <IntroDescription>{metadata.description}</IntroDescription>
+        <IntroTitle>{title}</IntroTitle>
+        <IntroDescription>{description}</IntroDescription>
       </Intro>
 
       <Section>
