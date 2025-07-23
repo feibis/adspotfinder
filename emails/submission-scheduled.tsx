@@ -2,6 +2,7 @@ import type { Tool } from "@prisma/client"
 import { Text } from "@react-email/components"
 import { addHours, differenceInDays, format, formatDistanceToNowStrict } from "date-fns"
 import { config } from "~/config"
+import { EmailActionNudge } from "~/emails/components/action-nudge"
 import { EmailExpediteNudge } from "~/emails/components/expedite-nudge"
 import { EmailWrapper, type EmailWrapperProps } from "~/emails/components/wrapper"
 
@@ -33,6 +34,8 @@ const EmailSubmissionScheduled = ({ tool, ...props }: EmailProps) => {
           {tool.name} is scheduled to be added <strong>{dateRelative}</strong>.
         </Text>
       )}
+
+      <EmailActionNudge tool={tool} />
     </EmailWrapper>
   )
 }

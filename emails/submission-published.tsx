@@ -1,6 +1,7 @@
 import type { Tool } from "@prisma/client"
 import { Text } from "@react-email/components"
 import { config } from "~/config"
+import { EmailActionNudge } from "~/emails/components/action-nudge"
 import { EmailButton } from "~/emails/components/button"
 import { EmailFeatureNudge } from "~/emails/components/feature-nudge"
 import { EmailWrapper, type EmailWrapperProps } from "~/emails/components/wrapper"
@@ -34,19 +35,7 @@ const EmailSubmissionPublished = ({ tool, ...props }: EmailProps) => {
         Check out {tool.name} on {config.site.name}
       </EmailButton>
 
-      <Text>
-        Want to build credibility with your users? You can now{" "}
-        <a href={`${toolUrl}?dialog=embed`}>add a "Featured on {config.site.name}" badge</a> to your
-        website, showing visitors that {tool.name} is recognized by our community.
-        {!tool.ownerId && (
-          <>
-            {" "}
-            And don't forget to <a href={`${toolUrl}?dialog=claim`}>claim your tool</a> to get a{" "}
-            <strong>verified badge</strong> that helps establish trust with potential users.
-          </>
-        )}
-      </Text>
-
+      <EmailActionNudge tool={tool} />
       <EmailFeatureNudge tool={tool} />
     </EmailWrapper>
   )
