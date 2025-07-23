@@ -19,5 +19,5 @@ export const UserLogout = ({ ...props }: ComponentProps<"button">) => {
     })
   }
 
-  return <button type="button" onClick={handleSignOut} {...props} />
+  return <button type="button" onMouseUp={handleSignOut} {...props} />
 }
