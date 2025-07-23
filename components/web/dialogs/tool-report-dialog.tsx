@@ -93,7 +93,7 @@ export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogPr
                   <FormItem>
                     <FormLabel isRequired>Email</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="Your email" {...field} />
+                      <Input type="email" placeholder="Your email" data-1p-ignore {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

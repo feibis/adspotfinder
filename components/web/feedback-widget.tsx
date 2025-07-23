@@ -77,6 +77,7 @@ const FeedbackWidgetForm = ({ toastId, setDismissed }: FeedbackWidgetFormProps) 
                       size="sm"
                       placeholder="Your email"
                       className="text-xs"
+                      data-1p-ignore
                       {...field}
                     />
                   </FormControl>

@@ -394,7 +394,7 @@ export function ToolForm({
                 <FormItem>
                   <FormLabel>Submitter Email</FormLabel>
                   <FormControl>
-                    <Input type="email" {...field} />
+                    <Input type="email" data-1p-ignore {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

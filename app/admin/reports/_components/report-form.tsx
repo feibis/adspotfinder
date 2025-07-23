@@ -108,7 +108,7 @@ export function ReportForm({ children, className, title, report, ...props }: Rep
             <FormItem>
               <FormLabel isRequired>Email</FormLabel>
               <FormControl>
-                <Input type="email" {...field} />
+                <Input type="email" data-1p-ignore {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
