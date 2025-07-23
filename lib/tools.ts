@@ -1,4 +1,4 @@
-import { type Tool, ToolStatus } from "@prisma/client"
+import type { Tool } from "@prisma/client"
 import { differenceInDays } from "date-fns"
 import { config } from "~/config"
 
@@ -9,7 +9,17 @@ import { config } from "~/config"
  * @returns Whether the tool is published.
  */
 export const isToolPublished = (tool: Pick<Tool, "status">) => {
-  return tool.status === ToolStatus.Published
+  return ["Published"].includes(tool.status)
+}
+
+/**
+ * Check if a tool is approved (scheduled or published)
+ *
+ * @param tool - The tool to check.
+ * @returns Whether the tool is published.
+ */
+export const isToolApproved = (tool: Pick<Tool, "status">) => {
+  return ["Scheduled", "Published"].includes(tool.status)
 }
 
 /**

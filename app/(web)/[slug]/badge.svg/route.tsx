@@ -6,6 +6,8 @@ import satori from "satori"
 import { LogoSymbol } from "~/components/web/ui/logo-symbol"
 import { siteConfig } from "~/config/site"
 import { loadGoogleFont } from "~/lib/fonts"
+import { isToolPublished } from "~/lib/tools"
+import type { ToolOne } from "~/server/web/tools/payloads"
 import { findTool } from "~/server/web/tools/queries"
 
 const THEMES = {
@@ -23,7 +25,12 @@ const THEMES = {
   },
 } as const
 
-const SvgBadge = ({ theme }: { theme: keyof typeof THEMES }) => {
+type SvgBadgeProps = {
+  theme: keyof typeof THEMES
+  tool: ToolOne
+}
+
+const SvgBadge = ({ theme, tool }: SvgBadgeProps) => {
   const colors = THEMES[theme]
 
   return (
@@ -70,7 +77,7 @@ const SvgBadge = ({ theme }: { theme: keyof typeof THEMES }) => {
             opacity: 0.75,
           }}
         >
-          Featured on
+          {isToolPublished(tool) ? "Featured on" : "Coming soon on"}
         </span>
 
         <span
@@ -117,10 +124,16 @@ export const GET = async ({ url }: NextRequest, { params }: PageProps) => {
   const { slug } = await params
   const { theme, width, height } = searchParamsLoader(url)
 
-  const tool = await findTool({ where: { slug, status: ToolStatus.Published } })
+  const tool = await findTool({
+    where: {
+      slug,
+      status: { in: [ToolStatus.Published, ToolStatus.Scheduled] },
+    },
+  })
+
   if (!tool) notFound()
 
-  const svg = await satori(<SvgBadge theme={theme} />, {
+  const svg = await satori(<SvgBadge theme={theme} tool={tool} />, {
     width,
     height,
     fonts: [
