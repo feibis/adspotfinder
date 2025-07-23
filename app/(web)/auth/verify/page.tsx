@@ -1,44 +1,49 @@
 import type { Metadata } from "next"
-import { Link } from "~/components/common/link"
+import { createLoader, parseAsString } from "nuqs/server"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
-import { metadataConfig } from "~/config/metadata"
+import { NavLink } from "~/components/web/ui/nav-link"
 import { siteConfig } from "~/config/site"
-import { getOpenGraphImageUrl } from "~/lib/opengraph"
+import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
 
-const url = "/check-inbox"
-const title = "Check your inbox"
-const description = `Check your inbox to sign in to ${siteConfig.name}.`
-const ogImageUrl = getOpenGraphImageUrl({ title, description })
+const searchParamsLoader = createLoader({
+  email: parseAsString.withDefault(""),
+})
 
-export const metadata: Metadata = {
-  title,
-  description,
-  alternates: { ...metadataConfig.alternates, canonical: url },
-  openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
+const getPageData = async () => {
+  const url = "/auth/verify"
+
+  const metadata = await getI18nMetadata("pages.auth.verify", t => ({
+    title: t("meta.title"),
+    description: t("meta.description", { siteName: siteConfig.name }),
+  }))
+
+  return { url, metadata }
+}
+
+export const generateMetadata = async (): Promise<Metadata> => {
+  return getPageMetadata(await getPageData())
 }
 
 export default async function ({ searchParams }: PageProps<"/auth/verify">) {
-  const { email } = await searchParams
+  const { email } = await searchParamsLoader(searchParams)
+  const { metadata } = await getPageData()
+  const { t, title } = metadata
 
   return (
     <>
       <Intro>
         <IntroTitle size="h3">{title}</IntroTitle>
-        <IntroDescription className="md:text-sm">
-          We've sent you a magic link to <strong className="text-foreground">{email}</strong>.
-          Please click the link to confirm your address.
-        </IntroDescription>
+        <IntroDescription className="text-sm!">{t("description", { email })}</IntroDescription>
       </Intro>
 
       <p className="text-xs text-muted-foreground/75">
-        No email in your inbox? Check your spam folder or{" "}
-        <Link
-          href="/auth/login"
-          className="text-muted-foreground font-medium hover:text-foreground"
-        >
-          try a different email address
-        </Link>
-        .
+        {t.rich("no_email", {
+          link: chunks => (
+            <NavLink href="/auth/login" className="inline font-medium">
+              {chunks}
+            </NavLink>
+          ),
+        })}
       </p>
     </>
   )

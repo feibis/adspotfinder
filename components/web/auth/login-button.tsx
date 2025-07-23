@@ -1,6 +1,7 @@
 "use client"
 
 import { capitalCase } from "change-case"
+import { useTranslations } from "next-intl"
 import { type ComponentProps, useState } from "react"
 import { toast } from "sonner"
 import { Button } from "~/components/common/button"
@@ -12,6 +13,7 @@ type LoginButtonProps = ComponentProps<typeof Button> & {
 }
 
 export const LoginButton = ({ provider, ...props }: LoginButtonProps) => {
+  const t = useTranslations()
   const [isPending, setIsPending] = useState(false)
   const callbackURL = useAuthCallbackUrl()
 
@@ -32,7 +34,7 @@ export const LoginButton = ({ provider, ...props }: LoginButtonProps) => {
 
   return (
     <Button size="lg" variant="secondary" onClick={handleSignIn} isPending={isPending} {...props}>
-      Continue with {capitalCase(provider)}
+      {t("forms.sign_in.continue_with", { provider: capitalCase(provider) })}
     </Button>
   )
 }

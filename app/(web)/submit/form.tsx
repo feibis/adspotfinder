@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { posthog } from "posthog-js"
 import type { ComponentProps } from "react"
 import { toast } from "sonner"
@@ -27,6 +28,7 @@ import { submitTool } from "~/server/web/actions/submit"
 import { submitToolSchema } from "~/server/web/shared/schema"
 
 export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
+  const t = useTranslations("pages.submit.form")
   const router = useRouter()
   const { data: session } = useSession()
   const resolver = zodResolver(submitToolSchema)
@@ -54,15 +56,15 @@ export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
 
         if (isToolPublished(data)) {
           if (data.isFeatured) {
-            toast.info(`${data.name} has already been published.`)
+            toast.info(t("already_published", { name: data.name }))
           } else {
-            toast.custom(t => <FeatureNudge tool={data} t={t} />, {
+            toast.custom(toastT => <FeatureNudge tool={data} t={toastT} />, {
               duration: Number.POSITIVE_INFINITY,
             })
           }
           router.push(`/${data.slug}`)
         } else {
-          toast.success(`${data.name} has been submitted.`)
+          toast.success(t("submitted_success", { name: data.name }))
           router.push(`/submit/${data.slug}`)
         }
       },
@@ -82,9 +84,9 @@ export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
           name="submitterName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel isRequired>Your Name:</FormLabel>
+              <FormLabel isRequired>{t("your_name_label")}</FormLabel>
               <FormControl>
-                <Input size="lg" placeholder="John Doe" {...field} />
+                <Input size="lg" placeholder={t("your_name_placeholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -96,9 +98,14 @@ export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
           name="submitterEmail"
           render={({ field }) => (
             <FormItem>
-              <FormLabel isRequired>Your Email:</FormLabel>
+              <FormLabel isRequired>{t("your_email_label")}</FormLabel>
               <FormControl>
-                <Input type="email" size="lg" placeholder="john@doe.com" {...field} />
+                <Input
+                  type="email"
+                  size="lg"
+                  placeholder={t("your_email_placeholder")}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -110,9 +117,9 @@ export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel isRequired>Name:</FormLabel>
+              <FormLabel isRequired>{t("name_label")}</FormLabel>
               <FormControl>
-                <Input size="lg" placeholder="PostHog" data-1p-ignore {...field} />
+                <Input size="lg" placeholder={t("name_placeholder")} data-1p-ignore {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -124,9 +131,9 @@ export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
           name="websiteUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel isRequired>Website URL:</FormLabel>
+              <FormLabel isRequired>{t("website_label")}</FormLabel>
               <FormControl>
-                <Input type="url" size="lg" placeholder="https://posthog.com" {...field} />
+                <Input type="url" size="lg" placeholder={t("website_placeholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -138,9 +145,9 @@ export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
           name="submitterNote"
           render={({ field }) => (
             <FormItem className="col-span-full">
-              <FormLabel>Note:</FormLabel>
+              <FormLabel>{t("note_label")}</FormLabel>
               <FormControl>
-                <TextArea size="lg" placeholder="Any additional information..." {...field} />
+                <TextArea size="lg" placeholder={t("note_placeholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -155,7 +162,7 @@ export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
               <FormControl>
                 <Checkbox checked={field.value} onCheckedChange={field.onChange} />
               </FormControl>
-              <FormLabel className="font-normal">I'd like to receive free email updates</FormLabel>
+              <FormLabel className="font-normal">{t("newsletter_label")}</FormLabel>
               <FormMessage />
             </FormItem>
           )}
@@ -163,7 +170,7 @@ export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
 
         <div className="col-span-full">
           <Button variant="primary" isPending={action.isPending} className="flex min-w-32">
-            Submit
+            {t("submit_button")}
           </Button>
         </div>
 

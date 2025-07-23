@@ -2,6 +2,7 @@
 
 import { useClipboard, useHotkeys } from "@mantine/hooks"
 import { usePathname } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Slot } from "radix-ui"
 import type { ComponentProps, ReactNode } from "react"
 import { toast } from "sonner"
@@ -90,6 +91,7 @@ type NavProps = ComponentProps<"div"> & {
 }
 
 export const Nav = ({ className, title, previous, next, ...props }: NavProps) => {
+  const t = useTranslations("tools.nav")
   const pathname = usePathname()
   const clipboard = useClipboard({ timeout: 2000 })
 
@@ -98,7 +100,7 @@ export const Nav = ({ className, title, previous, next, ...props }: NavProps) =>
 
   const handleCopyLink = () => {
     clipboard.copy(window.location.href)
-    toast.success("Link copied to clipboard")
+    toast.success(t("link_copied"))
   }
 
   useHotkeys([["C", handleCopyLink, { preventDefault: true }]])
@@ -115,10 +117,10 @@ export const Nav = ({ className, title, previous, next, ...props }: NavProps) =>
 
         <div className="w-px h-4 mx-1.5 bg-ring" />
 
-        <Note className="mx-1 text-xs font-medium max-lg:hidden">Share:</Note>
+        <Note className="mx-1 text-xs font-medium max-lg:hidden">{t("share")}:</Note>
 
         {shareOptions.map(({ platform, url, icon }) => (
-          <Tooltip key={platform} tooltip={`Share on ${platform}`} sideOffset={0}>
+          <Tooltip key={platform} tooltip={t("share_on", { platform })} sideOffset={0}>
             <ExternalLink
               href={url(currentUrl, shareTitle)}
               className={navItemVariants()}

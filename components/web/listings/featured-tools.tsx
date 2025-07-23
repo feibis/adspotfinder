@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server"
 import type { ComponentProps } from "react"
 import { Link } from "~/components/common/link"
 import { Listing } from "~/components/web/listing"
@@ -13,16 +14,24 @@ const FeaturedTools = async ({ ...props }: FeaturedToolsProps) => {
     return null
   }
 
+  const t = await getTranslations("components.listings")
+
   return (
-    <Listing title="Featured Tools" button={<Link href="/">View all tools</Link>} {...props}>
+    <Listing
+      title={t("featured_tools")}
+      button={<Link href="/">{t("view_all_tools")}</Link>}
+      {...props}
+    >
       <ToolList tools={tools} />
     </Listing>
   )
 }
 
-const FeaturedToolsSkeleton = ({ ...props }: FeaturedToolsProps) => {
+const FeaturedToolsSkeleton = async ({ ...props }: FeaturedToolsProps) => {
+  const t = await getTranslations("components.listings")
+
   return (
-    <Listing title="Featured Tools" {...props}>
+    <Listing title={t("featured_tools")} {...props}>
       <ToolListSkeleton />
     </Listing>
   )

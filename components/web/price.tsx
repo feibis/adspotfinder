@@ -1,6 +1,9 @@
+"use client"
+
 import NumberFlow, { continuous, type Format } from "@number-flow/react"
 import { formatNumber } from "@primoui/utils"
 import { AnimatePresence, motion, type Variants } from "motion/react"
+import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import type Stripe from "stripe"
 import { Badge } from "~/components/common/badge"
@@ -35,6 +38,7 @@ export const Price = ({
   priceClassName,
   ...props
 }: PriceProps) => {
+  const t = useTranslations("components.price")
   const MotionBadge = motion.create(Badge)
   const maxRedemptions = coupon?.max_redemptions || 0
   const timesRedeemed = coupon?.times_redeemed || 0
@@ -90,11 +94,12 @@ export const Price = ({
             animate="visible"
             exit="hidden"
           >
-            {discount}% off
+            {discount}% {t("off")}
             {!!maxRedemptions && (
               <span className="text-foreground/65">
                 ({maxRedemptions - timesRedeemed}
-                {maxRedemptions > maxRedemptions - timesRedeemed && `/${maxRedemptions}`} left)
+                {maxRedemptions > maxRedemptions - timesRedeemed && `/${maxRedemptions}`}{" "}
+                {t("left")})
               </span>
             )}
           </MotionBadge>

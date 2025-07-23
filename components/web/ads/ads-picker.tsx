@@ -4,8 +4,8 @@ import { formatDateRange } from "@primoui/utils"
 import { cx } from "cva"
 import { endOfDay, startOfDay } from "date-fns"
 import { XIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useAction } from "next-safe-action/hooks"
-import plur from "plur"
 import posthog from "posthog-js"
 import type { ComponentProps } from "react"
 import { toast } from "sonner"
@@ -29,6 +29,7 @@ type AdsCalendarProps = ComponentProps<"div"> & {
 }
 
 export const AdsPicker = ({ className, ads, type, ...props }: AdsCalendarProps) => {
+  const t = useTranslations("ads")
   const { price, selections, hasSelections, findAdSpot, clearSelection, updateSelection } = useAds()
 
   const { execute, isPending } = useAction(createStripeCheckout, {
@@ -115,14 +116,14 @@ export const AdsPicker = ({ className, ads, type, ...props }: AdsCalendarProps) 
                     <Button
                       variant="secondary"
                       size="sm"
-                      aria-label={`Clear ${adSpot.label} selection`}
+                      aria-label={t("clear_selection", { adSpot: adSpot.label })}
                       prefix={<XIcon />}
                       onClick={() => clearSelection(selection.type)}
                     />
 
                     <div>
                       <strong className="font-medium text-foreground">{adSpot.label}</strong> – (
-                      {selection.duration} {plur("day", selection.duration)})
+                      {selection.duration} {t("day", { count: selection.duration })})
                     </div>
                   </span>
 
@@ -138,24 +139,24 @@ export const AdsPicker = ({ className, ads, type, ...props }: AdsCalendarProps) 
         {price ? (
           <>
             <Stack size="sm" className="mr-auto">
-              <Note>Total:</Note>
+              <Note>{t("total")}</Note>
               <Price price={price.discountedPrice} fullPrice={price.totalPrice} />
             </Stack>
 
             {price.discountPercentage > 0 && (
-              <Tooltip tooltip="Discount applied based on the order value. Max 30% off.">
+              <Tooltip tooltip={t("discount_tooltip", { discount: adsConfig.maxDiscount })}>
                 <Badge
                   size="lg"
                   variant="outline"
                   className="-my-1.5 text-green-700/90 dark:text-green-300/90"
                 >
-                  {price.discountPercentage}% off
+                  {t("discount_label", { discount: price.discountPercentage })}
                 </Badge>
               </Tooltip>
             )}
           </>
         ) : (
-          <Note>Please select dates for at least one ad type</Note>
+          <Note>{t("select_dates_error")}</Note>
         )}
 
         <Button
@@ -166,7 +167,7 @@ export const AdsPicker = ({ className, ads, type, ...props }: AdsCalendarProps) 
           className="max-sm:w-full sm:-my-2"
           onClick={handleCheckout}
         >
-          Purchase Now
+          {t("purchase_button")}
         </Button>
       </Stack>
     </div>

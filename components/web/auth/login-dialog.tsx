@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl"
 import type { Dispatch, SetStateAction } from "react"
 import {
   Dialog,
@@ -16,6 +17,7 @@ type LoginDialogProps = {
 }
 
 export const LoginDialog = ({ description, isOpen, setIsOpen }: LoginDialogProps) => {
+  const t = useTranslations()
   const { data: session } = useSession()
 
   if (session?.user) {
@@ -26,10 +28,10 @@ export const LoginDialog = ({ description, isOpen, setIsOpen }: LoginDialogProps
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-xs">
         <DialogHeader>
-          <DialogTitle>Sign In</DialogTitle>
+          <DialogTitle>{t("forms.sign_in.title")}</DialogTitle>
 
           <DialogDescription>
-            <p>{description || "Get access to the dashboard and manage your submitted tools."}</p>
+            <p>{description || t("forms.sign_in.description")}</p>
           </DialogDescription>
         </DialogHeader>
 

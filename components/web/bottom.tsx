@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server"
 import type { ComponentProps } from "react"
 import { H6 } from "~/components/common/heading"
 import { Stack } from "~/components/common/stack"
@@ -9,6 +10,8 @@ import { cx } from "~/lib/utils"
 import { findCategories } from "~/server/web/categories/queries"
 
 export const Bottom = async ({ className, ...props }: ComponentProps<typeof Wrapper>) => {
+  const t = await getTranslations("components.bottom")
+
   const categories = await findCategories({
     orderBy: { tools: { _count: "desc" } },
     take: 12,
@@ -23,7 +26,7 @@ export const Bottom = async ({ className, ...props }: ComponentProps<typeof Wrap
       <Wrapper className={cx("py-fluid-md border-t border-foreground/10", className)} {...props}>
         {!!categories?.length && (
           <Stack className="gap-x-4 text-sm">
-            <H6 as="strong">Popular Categories:</H6>
+            <H6 as="strong">{t("popular_categories")}</H6>
 
             <div className="grid grid-cols-2xs gap-x-4 gap-y-2 w-full sm:grid-cols-xs md:grid-cols-sm">
               {categories.map(category => (

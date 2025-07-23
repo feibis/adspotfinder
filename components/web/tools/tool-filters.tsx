@@ -1,7 +1,7 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { useAction } from "next-safe-action/hooks"
-import plur from "plur"
 import { type ComponentProps, useEffect } from "react"
 import {
   Select,
@@ -15,6 +15,7 @@ import { findFilterOptions } from "~/server/web/actions/filters"
 import type { ToolFilterSchema } from "~/server/web/tools/schema"
 
 export const ToolFilters = ({ ...props }: ComponentProps<typeof Select>) => {
+  const t = useTranslations("filters")
   const { filters, updateFilters } = useFilters<ToolFilterSchema>()
   const { result, execute } = useAction(findFilterOptions)
 
@@ -32,7 +33,7 @@ export const ToolFilters = ({ ...props }: ComponentProps<typeof Select>) => {
           {...props}
         >
           <SelectTrigger size="lg" className="w-auto min-w-40 max-sm:flex-1">
-            <SelectValue placeholder={`All ${plur(type)}`} />
+            <SelectValue placeholder={t(`all_${type}` as keyof typeof t)} />
           </SelectTrigger>
 
           <SelectContent align="end">

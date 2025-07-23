@@ -24,60 +24,48 @@ import { Section } from "~/components/web/ui/section"
 import { Sticky } from "~/components/web/ui/sticky"
 import { Tag } from "~/components/web/ui/tag"
 import { VerifiedBadge } from "~/components/web/verified-badge"
-import { metadataConfig } from "~/config/metadata"
-import { getOpenGraphImageUrl } from "~/lib/opengraph"
+import { getPageMetadata } from "~/lib/metadata"
 import {
   createGraph,
   generateBreadcrumbs,
-  generateSoftwareApplication,
+  generateCollectionPage,
   generateWebPage,
   getOrganization,
   getWebSite,
 } from "~/lib/structured-data"
 import { isToolPublished } from "~/lib/tools"
-import type { ToolOne } from "~/server/web/tools/payloads"
 import { findTool, findToolSlugs } from "~/server/web/tools/queries"
 
 type Props = PageProps<"/[slug]">
 
-const getTool = cache(async ({ params }: Props) => {
+const getPageData = cache(async ({ params }: Props) => {
   const { slug } = await params
   const tool = await findTool({ where: { slug } })
 
-  if (!tool) {
-    notFound()
-  }
+  if (!tool) notFound()
 
-  return tool
-})
+  const url = `/${tool.slug}`
 
-const getMetadata = (tool: ToolOne) => {
-  return {
-    url: `/${tool.slug}`,
+  const metadata = {
     title: `${tool.name}: ${tool.tagline}`,
     description: tool.description,
   }
-}
 
-const getBreadcrumbs = (tool: ToolOne) => {
-  return [
+  const breadcrumbs = [
     { name: "Tools", url: "/" },
-    { name: tool.name, url: `/${tool.slug}` },
+    { name: tool.name, url },
   ]
-}
 
-const getStructuredData = (tool: ToolOne) => {
-  const breadcrumbs = getBreadcrumbs(tool)
-  const { url, title, description } = getMetadata(tool)
-
-  return createGraph([
+  const structuredData = createGraph([
     getOrganization(),
     getWebSite(),
     generateBreadcrumbs(breadcrumbs),
-    generateSoftwareApplication(tool),
-    generateWebPage(url, title, description, `${url}#software`),
+    generateCollectionPage(url, metadata.title, metadata.description),
+    generateWebPage(url, metadata.title, metadata.description),
   ])
-}
+
+  return { tool, url, metadata, breadcrumbs, structuredData }
+})
 
 export const generateStaticParams = async () => {
   const tools = await findToolSlugs({})
@@ -85,23 +73,19 @@ export const generateStaticParams = async () => {
 }
 
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
-  const tool = await getTool(props)
-  const { url, title, description } = getMetadata(tool)
-  const { name, faviconUrl } = tool
-  const ogImageUrl = getOpenGraphImageUrl({ title: name, description, faviconUrl })
+  const { tool, url, metadata } = await getPageData(props)
 
-  return {
-    title,
-    description,
-    alternates: { ...metadataConfig.alternates, canonical: url },
-    openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
+  const ogImage = {
+    title: tool.name,
+    description: String(tool.description),
+    faviconUrl: String(tool.faviconUrl),
   }
+
+  return getPageMetadata({ url, metadata, ogImage })
 }
 
 export default async function (props: Props) {
-  const tool = await getTool(props)
-  const structuredData = getStructuredData(tool)
-  const { title } = getMetadata(tool)
+  const { tool, metadata, structuredData } = await getPageData(props)
 
   return (
     <>
@@ -201,7 +185,7 @@ export default async function (props: Props) {
           <Stack className="w-full md:sticky md:bottom-2 md:z-10 max-md:order-7">
             <div className="absolute -inset-x-1 -bottom-3 -top-8 -z-1 pointer-events-none bg-background mask-t-from-66% max-md:hidden" />
 
-            <Nav className="mr-auto" title={title} />
+            <Nav className="mr-auto" title={metadata.title} />
 
             <Suspense>
               <ToolActions tool={tool} />

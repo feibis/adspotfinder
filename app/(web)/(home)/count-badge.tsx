@@ -1,7 +1,7 @@
 import { formatNumber } from "@primoui/utils"
 import { subDays } from "date-fns"
 import { cacheLife, cacheTag } from "next/cache"
-import plur from "plur"
+import { getTranslations } from "next-intl/server"
 import { ToolStatus } from "~/.generated/prisma/client"
 import { Badge } from "~/components/common/badge"
 import { Link } from "~/components/common/link"
@@ -27,13 +27,14 @@ const getCounts = async () => {
 
 const CountBadge = async () => {
   const [count, newCount] = await getCounts()
+  const t = await getTranslations("components.count_badge")
 
   return (
     <Badge prefix={<Ping />} className="order-first" asChild>
       <Link href="/?sort=publishedAt.desc">
         {newCount
-          ? `${formatNumber(newCount)} new ${plur("tool", newCount)} added`
-          : `${formatNumber(count)}+ tools collected`}
+          ? t("new_tools", { count: formatNumber(newCount) })
+          : t("total_tools", { count: formatNumber(count) })}
       </Link>
     </Badge>
   )

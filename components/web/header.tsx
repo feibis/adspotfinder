@@ -9,6 +9,7 @@ import {
   TagIcon,
 } from "lucide-react"
 import { usePathname } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { type ComponentProps, useEffect, useState } from "react"
 import { Button } from "~/components/common/button"
 import {
@@ -31,6 +32,7 @@ import { cx } from "~/lib/utils"
 const Header = ({ className, ...props }: ComponentProps<"div">) => {
   const pathname = usePathname()
   const search = useSearch()
+  const t = useTranslations()
   const [isNavOpen, setNavOpen] = useState(false)
 
   // Close the mobile navigation when the user presses the "Escape" key
@@ -61,34 +63,35 @@ const Header = ({ className, ...props }: ComponentProps<"div">) => {
 
           <nav className="flex flex-wrap gap-x-4 gap-y-0.5 flex-1 max-lg:hidden">
             <DropdownMenu>
-              <NavLink className="gap-1" asChild>
-                <DropdownMenuTrigger>
-                  Browse{" "}
-                  <ChevronDownIcon className="group-data-[state=open]:-rotate-180 duration-200" />
-                </DropdownMenuTrigger>
+              <NavLink
+                className="gap-1"
+                suffix={<ChevronDownIcon className="group-data-[state=open]:-rotate-180" />}
+                asChild
+              >
+                <DropdownMenuTrigger>{t("common.browse")}</DropdownMenuTrigger>
               </NavLink>
 
               <DropdownMenuContent align="start">
                 <DropdownMenuItem asChild>
                   <NavLink href="/?sort=publishedAt.desc" prefix={<CalendarDaysIcon />}>
-                    Latest tools
+                    {t("navigation.browse_tools")}
                   </NavLink>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <NavLink href="/categories" prefix={<GalleryHorizontalEndIcon />}>
-                    Categories
+                    {t("navigation.categories")}
                   </NavLink>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <NavLink href="/tags" prefix={<TagIcon />}>
-                    Tags
+                    {t("navigation.tags")}
                   </NavLink>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <NavLink href="/advertise">Advertise</NavLink>
-            <NavLink href="/about">About Us</NavLink>
+            <NavLink href="/advertise">{t("navigation.advertise")}</NavLink>
+            <NavLink href="/about">{t("navigation.about")}</NavLink>
           </nav>
 
           <Stack size="sm" wrap={false} className="justify-end max-lg:grow">
@@ -101,7 +104,7 @@ const Header = ({ className, ...props }: ComponentProps<"div">) => {
             </Button>
 
             <Button size="sm" variant="secondary" asChild>
-              <Link href="/submit">Submit</Link>
+              <Link href="/submit">{t("navigation.submit")}</Link>
             </Button>
 
             <UserMenu />
@@ -115,22 +118,22 @@ const Header = ({ className, ...props }: ComponentProps<"div">) => {
           )}
         >
           <NavLink href="/?sort=publishedAt.desc" className="text-base">
-            Latest
+            {t("navigation.browse_tools")}
           </NavLink>
           <NavLink href="/categories" className="text-base">
-            Categories
+            {t("navigation.categories")}
           </NavLink>
           <NavLink href="/tags" className="text-base">
-            Tags
+            {t("navigation.tags")}
           </NavLink>
           <NavLink href="/submit" className="text-base">
-            Submit
+            {t("navigation.submit")}
           </NavLink>
           <NavLink href="/advertise" className="text-base">
-            Advertise
+            {t("navigation.advertise")}
           </NavLink>
           <NavLink href="/about" className="text-base">
-            About
+            {t("navigation.about")}
           </NavLink>
         </nav>
       </Container>

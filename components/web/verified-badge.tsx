@@ -1,4 +1,7 @@
+"use client"
+
 import { BadgeCheckIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import { Tooltip } from "~/components/common/tooltip"
 import { cx } from "~/lib/utils"
@@ -8,8 +11,10 @@ type VerifiedBadgeProps = ComponentProps<typeof BadgeCheckIcon> & {
 }
 
 export const VerifiedBadge = ({ className, size = "md", ...props }: VerifiedBadgeProps) => {
+  const t = useTranslations()
+
   return (
-    <Tooltip tooltip="Verified">
+    <Tooltip tooltip={t("common.verified")}>
       <BadgeCheckIcon
         className={cx(
           "relative z-10 -ml-1 shrink-0 fill-blue-500 stroke-background",

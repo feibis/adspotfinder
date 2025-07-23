@@ -1,6 +1,7 @@
 "use client"
 
 import { LoaderIcon, SearchIcon, XIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import { Button } from "~/components/common/button"
 import { Input } from "~/components/common/input"
@@ -13,6 +14,7 @@ export type FiltersProps = ComponentProps<typeof Stack> & {
 }
 
 export const Filters = ({ children, className, placeholder, ...props }: FiltersProps) => {
+  const t = useTranslations("tools.filters")
   const { filters, isLoading, isDefault, updateFilters } = useFilters()
 
   return (
@@ -26,7 +28,7 @@ export const Filters = ({ children, className, placeholder, ...props }: FiltersP
           size="lg"
           value={filters.q || ""}
           onChange={e => updateFilters({ q: e.target.value })}
-          placeholder={isLoading ? "Loading..." : placeholder}
+          placeholder={isLoading ? t("loading") : placeholder}
           className={cx("w-full truncate pl-10", !isDefault && "pr-12 sm:pr-20")}
         />
 
@@ -37,9 +39,9 @@ export const Filters = ({ children, className, placeholder, ...props }: FiltersP
             className="absolute right-2 inset-y-2"
             onClick={() => updateFilters(null)}
             prefix={<XIcon />}
-            aria-label="Reset filters"
+            aria-label={t("reset")}
           >
-            <span className="max-md:sr-only">Reset</span>
+            <span className="max-md:sr-only">{t("reset")}</span>
           </Button>
         )}
       </div>

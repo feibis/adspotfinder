@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
+import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import { toast } from "sonner"
 import { Button } from "~/components/common/button"
@@ -28,6 +29,7 @@ type AdFormProps = ComponentProps<"form"> & {
 }
 
 export const AdForm = ({ className, sessionId, ad, ...props }: AdFormProps) => {
+  const t = useTranslations("forms.ad_details")
   const formAaction = createAdFromCheckout
   const resolver = zodResolver(adDetailsSchema)
 
@@ -44,7 +46,7 @@ export const AdForm = ({ className, sessionId, ad, ...props }: AdFormProps) => {
 
     actionProps: {
       onSuccess: () => {
-        toast.success(`Advertisement ${ad ? "updated" : "created"} successfully!`)
+        toast.success(t(`${ad ? "update" : "create"}.success_message`))
       },
 
       onError: ({ error }) => {
@@ -66,9 +68,9 @@ export const AdForm = ({ className, sessionId, ad, ...props }: AdFormProps) => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel isRequired>Name</FormLabel>
+              <FormLabel isRequired>{t("name_label")}</FormLabel>
               <FormControl>
-                <Input type="text" size="lg" placeholder="Product name" {...field} />
+                <Input type="text" size="lg" placeholder={t("name_placeholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -80,9 +82,9 @@ export const AdForm = ({ className, sessionId, ad, ...props }: AdFormProps) => {
           name="websiteUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel isRequired>Website URL</FormLabel>
+              <FormLabel isRequired>{t("website_url_label")}</FormLabel>
               <FormControl>
-                <Input type="url" size="lg" placeholder="https://yourwebsite.com" {...field} />
+                <Input type="url" size="lg" placeholder={t("website_url_placeholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -95,11 +97,11 @@ export const AdForm = ({ className, sessionId, ad, ...props }: AdFormProps) => {
           render={({ field }) => (
             <FormItem>
               <Stack className="w-full justify-between">
-                <FormLabel isRequired>Description</FormLabel>
-                <Note className="text-xs">Max. 160 chars</Note>
+                <FormLabel isRequired>{t("description_label")}</FormLabel>
+                <Note className="text-xs">{t("description_note")}</Note>
               </Stack>
               <FormControl>
-                <TextArea size="lg" placeholder="Brief description of your product" {...field} />
+                <TextArea size="lg" placeholder={t("description_placeholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -111,9 +113,9 @@ export const AdForm = ({ className, sessionId, ad, ...props }: AdFormProps) => {
           name="buttonLabel"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Button Label</FormLabel>
+              <FormLabel>{t("button_label")}</FormLabel>
               <FormControl>
-                <Input type="text" size="lg" placeholder="Get started for free" {...field} />
+                <Input type="text" size="lg" placeholder={t("button_placeholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -121,7 +123,7 @@ export const AdForm = ({ className, sessionId, ad, ...props }: AdFormProps) => {
         />
 
         <Button type="submit" className="col-span-full" isPending={action.isPending}>
-          {ad ? "Update Ad" : "Create Ad"}
+          {t(`${ad ? "update" : "create"}.button_label`)}
         </Button>
       </form>
     </Form>

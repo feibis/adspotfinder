@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server"
 import type { ComponentProps } from "react"
 import { Link } from "~/components/common/link"
 import { Listing } from "~/components/web/listing"
@@ -17,10 +18,12 @@ const RelatedTools = async ({ tool, ...props }: RelatedToolsProps) => {
     return <FeaturedTools />
   }
 
+  const t = await getTranslations("components.listings")
+
   return (
     <Listing
-      title={`Similar to ${tool.name}`}
-      button={<Link href="/">View all tools</Link>}
+      title={t("similar_to", { tool: tool.name })}
+      button={<Link href="/">{t("view_all_tools")}</Link>}
       {...props}
     >
       <ToolList tools={tools} />

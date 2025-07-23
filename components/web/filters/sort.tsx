@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import {
   Select,
@@ -15,12 +16,13 @@ export type SortProps = ComponentProps<typeof Select> & {
 }
 
 export const Sort = ({ options, ...props }: SortProps) => {
+  const t = useTranslations("tools.filters")
   const { filters, updateFilters } = useFilters()
 
   return (
     <Select value={filters.sort} onValueChange={sort => updateFilters({ sort })} {...props}>
       <SelectTrigger size="lg" className="w-auto min-w-36 max-sm:flex-1">
-        <SelectValue placeholder="Order by" />
+        <SelectValue placeholder={t("order_by")} />
       </SelectTrigger>
 
       <SelectContent align="end">

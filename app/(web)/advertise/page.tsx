@@ -1,6 +1,6 @@
 import { LoaderIcon } from "lucide-react"
 import type { Metadata } from "next"
-import { Suspense } from "react"
+import { cache, Suspense } from "react"
 import { AdvertisePickers } from "~/app/(web)/advertise/pickers"
 import { Button } from "~/components/common/button"
 import { Wrapper } from "~/components/common/wrapper"
@@ -8,23 +8,44 @@ import { ExternalLink } from "~/components/web/external-link"
 import { Stats } from "~/components/web/stats"
 import { Testimonial } from "~/components/web/testimonial"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
-import { metadataConfig } from "~/config/metadata"
 import { siteConfig } from "~/config/site"
-import { getOpenGraphImageUrl } from "~/lib/opengraph"
+import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
+import {
+  createGraph,
+  generateBreadcrumbs,
+  generateWebPage,
+  getOrganization,
+  getWebSite,
+} from "~/lib/structured-data"
 
-const url = "/advertise"
-const title = "Advertise"
-const description = `Promote your business or software on ${siteConfig.name} and reach a wide audience of software enthusiasts.`
-const ogImageUrl = getOpenGraphImageUrl({ title, description })
+const getPageData = cache(async () => {
+  const url = "/advertise"
 
-export const metadata: Metadata = {
-  title,
-  description,
-  alternates: { ...metadataConfig.alternates, canonical: url },
-  openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
+  const metadata = await getI18nMetadata("pages.advertise", t => ({
+    title: t("meta.title"),
+    description: t("meta.description", { siteName: siteConfig.name }),
+  }))
+
+  const breadcrumbs = [{ name: "Advertise", url }]
+
+  const structuredData = createGraph([
+    getOrganization(),
+    getWebSite(),
+    generateBreadcrumbs(breadcrumbs),
+    generateWebPage(url, metadata.title, metadata.description),
+  ])
+
+  return { url, metadata, breadcrumbs, structuredData }
+})
+
+export const generateMetadata = async (): Promise<Metadata> => {
+  return getPageMetadata(await getPageData())
 }
 
-export default function ({ searchParams }: PageProps<"/advertise">) {
+export default async function ({ searchParams }: PageProps<"/advertise">) {
+  const { metadata, structuredData } = await getPageData()
+  const { t, title, description } = metadata
+
   return (
     <Wrapper gap="xl">
       <Intro alignment="center">
@@ -51,17 +72,20 @@ export default function ({ searchParams }: PageProps<"/advertise">) {
 
       <Intro alignment="center">
         <IntroTitle size="h2" as="h3">
-          Need a custom partnership?
+          {t("cta.title")}
         </IntroTitle>
 
-        <IntroDescription className="max-w-lg">
-          Tell us more about your company and we will get back to you as soon as possible.
-        </IntroDescription>
+        <IntroDescription className="max-w-lg">{t("cta.description")}</IntroDescription>
 
         <Button className="mt-4 min-w-40" asChild>
-          <ExternalLink href={`mailto:${siteConfig.email}`}>Contact us</ExternalLink>
+          <ExternalLink href={`mailto:${siteConfig.email}`}>{t("cta.button")}</ExternalLink>
         </Button>
       </Intro>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
     </Wrapper>
   )
 }

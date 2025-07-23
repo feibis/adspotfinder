@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server"
 import type { ComponentProps } from "react"
 import { Button } from "~/components/common/button"
 import { Card } from "~/components/common/card"
@@ -9,6 +10,7 @@ import { findAdWithFallback } from "~/server/web/ads/actions"
 
 export const AdBanner = async ({ className, ...props }: ComponentProps<typeof Card>) => {
   const type = "Banner"
+  const t = await getTranslations("components.ads")
   const { data: ad } = await findAdWithFallback({ type })
 
   if (!ad) {
@@ -41,7 +43,7 @@ export const AdBanner = async ({ className, ...props }: ComponentProps<typeof Ca
             className="shrink-0 leading-none pointer-events-none max-sm:hidden"
             asChild
           >
-            <span>{ad.buttonLabel ?? "Learn More"}</span>
+            <span>{ad.buttonLabel ?? t("learn_more")}</span>
           </Button>
         </AdLink>
       </Card>

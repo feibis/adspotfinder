@@ -1,6 +1,7 @@
 import { ArrowUpRightIcon } from "lucide-react"
-import type { InferSafeActionFnInput } from "next-safe-action"
 import Image from "next/image"
+import { getTranslations } from "next-intl/server"
+import type { InferSafeActionFnInput } from "next-safe-action"
 import type { ComponentProps } from "react"
 import { Button } from "~/components/common/button"
 import {
@@ -21,6 +22,7 @@ import { findAdWithFallback } from "~/server/web/ads/actions"
 type AdCardProps = CardProps & InferSafeActionFnInput<typeof findAdWithFallback>["clientInput"]
 
 const AdCard = async ({ className, type, explicitAd, fallback, ...props }: AdCardProps) => {
+  const t = await getTranslations("components.ads")
   const { data: ad } = await findAdWithFallback({ type, explicitAd, fallback })
 
   if (!ad) {
@@ -58,7 +60,7 @@ const AdCard = async ({ className, type, explicitAd, fallback, ...props }: AdCar
             </CardDescription>
 
             <Button className="pointer-events-none md:w-full" suffix={<ArrowUpRightIcon />} asChild>
-              <span>{ad.buttonLabel ?? `Visit ${ad.name}`}</span>
+              <span>{ad.buttonLabel ?? t("visit_button", { name: ad.name })}</span>
             </Button>
 
             <CardIcon>
@@ -71,7 +73,7 @@ const AdCard = async ({ className, type, explicitAd, fallback, ...props }: AdCar
   )
 }
 
-const AdCardSkeleton = ({ className, ...props }: ComponentProps<typeof Card>) => {
+const AdCardSkeleton = async ({ className, ...props }: ComponentProps<typeof Card>) => {
   return (
     <Card hover={false} className={cx("items-stretch select-none", className)} {...props}>
       <CardBadges>

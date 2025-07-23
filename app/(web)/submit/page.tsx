@@ -2,23 +2,28 @@ import type { Metadata } from "next"
 import { SubmitForm } from "~/app/(web)/submit/form"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { Section } from "~/components/web/ui/section"
-import { metadataConfig } from "~/config/metadata"
 import { siteConfig } from "~/config/site"
-import { getOpenGraphImageUrl } from "~/lib/opengraph"
+import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
 
-const url = "/submit"
-const title = "Add a free listing"
-const description = `Listing on ${siteConfig.name} is a great way to get more exposure for your tool. We only list high-quality tools that are useful for directory owners.`
-const ogImageUrl = getOpenGraphImageUrl({ title, description })
+const getPageData = async () => {
+  const url = "/submit"
 
-export const metadata: Metadata = {
-  title,
-  description,
-  alternates: { ...metadataConfig.alternates, canonical: url },
-  openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
+  const metadata = await getI18nMetadata("pages.submit", t => ({
+    title: t("meta.title"),
+    description: t("meta.description", { siteName: siteConfig.name }),
+  }))
+
+  return { url, metadata }
+}
+
+export const generateMetadata = async (): Promise<Metadata> => {
+  return getPageMetadata(await getPageData())
 }
 
 export default async function () {
+  const { metadata } = await getPageData()
+  const { title, description } = metadata
+
   return (
     <>
       <Intro>

@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { getDomain } from "@primoui/utils"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import type { z } from "zod"
@@ -41,6 +42,7 @@ type ToolClaimDialogProps = {
 export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProps) => {
   const { data: session } = useSession()
   const router = useRouter()
+  const t = useTranslations("dialogs.claim")
   const [step, setStep] = useState<"email" | "otp">("email")
   const [verificationEmail, setVerificationEmail] = useState("")
   const [cooldownRemaining, setCooldownRemaining] = useState(0)
@@ -60,7 +62,7 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
 
     actionProps: {
       onSuccess: () => {
-        toast.success("OTP code sent to your email")
+        toast.success(t("otp_sent"))
         setVerificationEmail(sendOtpAction.form.getValues().email)
         setStep("otp")
         setCooldownRemaining(claimsConfig.resendCooldown)
@@ -82,7 +84,7 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
 
     actionProps: {
       onSuccess: () => {
-        toast.success(`You've successfully claimed ${tool.name}`)
+        toast.success(t("success_message", { toolName: tool.name }))
         router.refresh()
       },
 
@@ -118,7 +120,7 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
     if (toolDomain !== email.split("@")[1]) {
       sendOtpAction.form.setError("email", {
         type: "manual",
-        message: `Email must match the website domain (${toolDomain})`,
+        message: t("email_domain_error", { domain: toolDomain }),
       })
 
       return
@@ -136,10 +138,10 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
 
   const getResendButtonText = () => {
     if (cooldownRemaining > 0) {
-      return `Resend in ${cooldownRemaining}s`
+      return t("resend_in", { seconds: cooldownRemaining })
     }
 
-    return "Resend code"
+    return t("resend_code")
   }
 
   if (!session?.user) {
@@ -150,7 +152,7 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-sm">
         <DialogHeader>
-          <DialogTitle>Claim {tool.name}</DialogTitle>
+          <DialogTitle>{t("title", { toolName: tool.name })}</DialogTitle>
         </DialogHeader>
 
         {step === "email" ? (
@@ -161,21 +163,14 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
               noValidate
             >
               <DialogDescription>
-                <p>
-                  To claim this listing, you need to verify the ownership of the{" "}
-                  <strong>{toolDomain}</strong> domain. This helps us to ensure that you represent
-                  the organization.
-                </p>
+                <p>{t("intro", { domain: toolDomain })}</p>
 
-                <p>
-                  By claiming this tool, it will get a <strong>verified badge</strong> and you'll be
-                  able to:
-                </p>
+                <p>{t("benefits_title")}</p>
 
                 <ul className="mt-2 list-disc pl-4">
-                  <li>Update tool information</li>
-                  <li>Manage its categories and alternatives</li>
-                  <li>Promote it on {siteConfig.name}</li>
+                  <li>{t("benefit_update")}</li>
+                  <li>{t("benefit_manage")}</li>
+                  <li>{t("benefit_promote", { siteName: siteConfig.name })}</li>
                 </ul>
               </DialogDescription>
 
@@ -184,12 +179,12 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email Address</FormLabel>
+                    <FormLabel>{t("email_label")}</FormLabel>
                     <FormControl>
                       <Input
                         type="email"
                         data-1p-ignore
-                        placeholder={`e.g. hello@${toolDomain}`}
+                        placeholder={t("email_placeholder", { domain: toolDomain })}
                         {...field}
                       />
                     </FormControl>
@@ -200,7 +195,7 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
 
               <DialogFooter>
                 <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
-                  Cancel
+                  {t("cancel_button")}
                 </Button>
 
                 <Button
@@ -208,7 +203,7 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
                   className="min-w-28"
                   isPending={sendOtpAction.action.isPending}
                 >
-                  Send Verification Code
+                  {t("send_code_button")}
                 </Button>
               </DialogFooter>
             </form>
@@ -221,10 +216,7 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
               noValidate
             >
               <DialogDescription>
-                <p>
-                  We've sent a verification code to <strong>{verificationEmail}</strong>. Enter the
-                  code below to complete the verification process.
-                </p>
+                <p>{t("verification_intro", { email: verificationEmail })}</p>
               </DialogDescription>
 
               <Stack direction="column">
@@ -233,10 +225,12 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
                   name="otp"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>Verification Code</FormLabel>
+                      <FormLabel>{t("verification_label")}</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder={`Enter the ${claimsConfig.otpLength}-digit code`}
+                          placeholder={t("verification_placeholder", {
+                            length: claimsConfig.otpLength,
+                          })}
                           {...field}
                         />
                       </FormControl>
@@ -255,7 +249,7 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
                       verifyOtpAction.form.reset()
                     }}
                   >
-                    Change email
+                    {t("change_email_button")}
                   </Button>
 
                   <Button
@@ -273,7 +267,7 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
 
               <DialogFooter>
                 <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
-                  Cancel
+                  {t("cancel_button")}
                 </Button>
 
                 <Button
@@ -281,7 +275,7 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
                   className="min-w-28"
                   isPending={verifyOtpAction.action.isPending}
                 >
-                  Claim {tool.name}
+                  {t("title", { toolName: tool.name })}
                 </Button>
               </DialogFooter>
             </form>

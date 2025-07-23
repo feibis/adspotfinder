@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import { EmptyList } from "~/components/web/empty-list"
 import { ToolCard, ToolCardSkeleton } from "~/components/web/tools/tool-card"
@@ -9,13 +10,15 @@ type ToolListProps = ComponentProps<typeof Grid> & {
 }
 
 const ToolList = ({ children, tools, ...props }: ToolListProps) => {
+  const t = useTranslations()
+
   return (
     <Grid {...props}>
       {tools.map((tool, order) => (
         <ToolCard key={tool.slug} tool={tool} style={{ order }} />
       ))}
 
-      {tools.length ? children : <EmptyList>No tools found for the given filters.</EmptyList>}
+      {tools.length ? children : <EmptyList>{t("empty_states.no_tools")}</EmptyList>}
     </Grid>
   )
 }

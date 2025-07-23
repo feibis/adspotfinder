@@ -1,5 +1,5 @@
 import { formatDate, getReadTime } from "@primoui/utils"
-import { allPosts, type Post } from "content-collections"
+import { allPosts } from "content-collections"
 import type { Metadata } from "next"
 import Image from "next/image"
 import { notFound } from "next/navigation"
@@ -15,8 +15,7 @@ import { Author } from "~/components/web/ui/author"
 import { Breadcrumbs } from "~/components/web/ui/breadcrumbs"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { Section } from "~/components/web/ui/section"
-import { metadataConfig } from "~/config/metadata"
-import { getOpenGraphImageUrl } from "~/lib/opengraph"
+import { getPageMetadata } from "~/lib/metadata"
 import {
   createGraph,
   generateArticle,
@@ -28,7 +27,9 @@ import {
 
 export const dynamicParams = false
 
-const findPostBySlug = cache(async ({ params }: PageProps<"/blog/[slug]">) => {
+type Props = PageProps<"/blog/[slug]">
+
+const getPageData = cache(async ({ params }: Props) => {
   const { slug } = await params
   const post = allPosts.find(({ _meta }) => _meta.path === slug)
 
@@ -36,39 +37,28 @@ const findPostBySlug = cache(async ({ params }: PageProps<"/blog/[slug]">) => {
     notFound()
   }
 
-  return post
-})
+  const url = `/blog/${post._meta.path}`
+  const wordCount = post.content.split(/\s+/).length
 
-const getMetadata = (post: Post) => {
-  return {
-    url: `/blog/${post._meta.path}`,
+  const metadata = {
     title: post.title,
     description: post.description,
   }
-}
 
-const getBreadcrumbs = (post: Post) => {
-  return [
+  const breadcrumbs = [
     { name: "Blog", url: "/blog" },
-    { name: post.title, url: `/blog/${post._meta.path}` },
+    { name: post.title, url },
   ]
-}
 
-const getStructuredData = (post: Post) => {
-  const breadcrumbs = getBreadcrumbs(post)
-  const { url, title, description } = getMetadata(post)
-
-  // Calculate word count from MDX content
-  const wordCount = post.content.split(/\s+/).length
-
-  return createGraph([
+  const structuredData = createGraph([
     getOrganization(),
     getWebSite(),
     generateBreadcrumbs(breadcrumbs),
+    generateWebPage(url, metadata.title, metadata.description),
     generateArticle(
       url,
-      title,
-      description,
+      metadata.title,
+      metadata.description,
       post.publishedAt,
       post.author
         ? {
@@ -79,31 +69,21 @@ const getStructuredData = (post: Post) => {
       post.image,
       wordCount,
     ),
-    generateWebPage(url, title, description),
   ])
-}
+
+  return { post, url, metadata, breadcrumbs, structuredData }
+})
 
 export const generateStaticParams = () => {
   return allPosts.map(({ _meta }) => ({ slug: _meta.path }))
 }
 
-export const generateMetadata = async (props: PageProps<"/blog/[slug]">): Promise<Metadata> => {
-  const post = await findPostBySlug(props)
-  const { url, title, description } = getMetadata(post)
-  const ogImageUrl = getOpenGraphImageUrl({ title, description })
-
-  return {
-    title,
-    description,
-    alternates: { ...metadataConfig.alternates, canonical: url },
-    openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
-  }
+export const generateMetadata = async (props: Props): Promise<Metadata> => {
+  return getPageMetadata(await getPageData(props))
 }
 
-export default async function (props: PageProps<"/blog/[slug]">) {
-  const post = await findPostBySlug(props)
-  const breadcrumbs = getBreadcrumbs(post)
-  const structuredData = getStructuredData(post)
+export default async function (props: Props) {
+  const { post, breadcrumbs, structuredData } = await getPageData(props)
 
   return (
     <>

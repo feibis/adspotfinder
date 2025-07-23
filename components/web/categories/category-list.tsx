@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import { CategoryCard, CategoryCardSkeleton } from "~/components/web/categories/category-card"
 import { EmptyList } from "~/components/web/empty-list"
@@ -10,13 +11,15 @@ type CategoryListProps = ComponentProps<typeof Grid> & {
 }
 
 const CategoryList = ({ categories, className, ...props }: CategoryListProps) => {
+  const t = useTranslations()
+
   return (
     <Grid className={cx("gap-x-8", className)} {...props}>
       {categories.map(category => (
         <CategoryCard key={category.slug} category={category} />
       ))}
 
-      {!categories.length && <EmptyList>No categories found.</EmptyList>}
+      {!categories.length && <EmptyList>{t("empty_states.no_categories")}</EmptyList>}
     </Grid>
   )
 }

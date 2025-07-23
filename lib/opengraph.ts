@@ -7,7 +7,7 @@ export const openGraphSearchParams = {
   faviconUrl: parseAsString.withDefault(`${siteConfig.url}/favicon.png`),
 }
 
-export type OpenGraphParams = inferParserType<typeof openGraphSearchParams>
+export type OpenGraphParams = Partial<inferParserType<typeof openGraphSearchParams>>
 
 /**
  * Get the URL for the OpenGraph image.

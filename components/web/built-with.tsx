@@ -1,4 +1,7 @@
+"use client"
+
 import { setQueryParams } from "@primoui/utils"
+import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import { Stack } from "~/components/common/stack"
 import { ExternalLink } from "~/components/web/external-link"
@@ -11,6 +14,7 @@ type BuiltWithProps = ComponentProps<typeof Stack> & {
 }
 
 export const BuiltWith = ({ className, medium, ...props }: BuiltWithProps) => {
+  const t = useTranslations()
   const rssSearchParams = { utm_source: siteConfig.domain, utm_medium: medium ?? "" }
   const href = setQueryParams(linksConfig.builtWith, rssSearchParams)
 
@@ -23,7 +27,7 @@ export const BuiltWith = ({ className, medium, ...props }: BuiltWithProps) => {
       {...props}
     >
       <ExternalLink href={href} doTrack doFollow>
-        Built with
+        {t("common.built_with")}
         <Stack wrap={false} className="gap-[0.35em] font-medium text-foreground" asChild>
           <svg
             xmlns="http://www.w3.org/2000/svg"

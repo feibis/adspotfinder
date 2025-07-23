@@ -4,6 +4,7 @@ import { usePagination } from "@mantine/hooks"
 import { getPageLink } from "@primoui/utils"
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react"
 import { usePathname, useSearchParams } from "next/navigation"
+import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import { Note } from "~/components/common/note"
 import { NavLink, navLinkVariants } from "~/components/web/ui/nav-link"
@@ -54,6 +55,7 @@ export const Pagination = ({
   boundaries,
   ...props
 }: PaginationProps) => {
+  const t = useTranslations("components.pagination")
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const params = new URLSearchParams(searchParams)
@@ -81,15 +83,13 @@ export const Pagination = ({
         prefix={<ArrowLeftIcon />}
         rel="prev"
       >
-        Prev
+        {t("prev")}
       </PaginationLink>
 
-      <Note className="md:hidden">
-        Page {page} of {pageCount}
-      </Note>
+      <Note className="md:hidden">{t("page_of", { page, pageCount })}</Note>
 
       <div className="flex items-center flex-wrap gap-3 max-md:hidden">
-        <Note as="span">Page:</Note>
+        <Note as="span">{t("page_label")}</Note>
 
         {pagination.range.map((value, index) => (
           <div key={`page-${index}`}>
@@ -114,7 +114,7 @@ export const Pagination = ({
         suffix={<ArrowRightIcon />}
         rel="next"
       >
-        Next
+        {t("next")}
       </PaginationLink>
     </nav>
   )

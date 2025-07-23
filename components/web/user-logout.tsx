@@ -1,11 +1,13 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import { toast } from "sonner"
 import { signOut } from "~/lib/auth-client"
 
 export const UserLogout = ({ ...props }: ComponentProps<"button">) => {
+  const t = useTranslations()
   const router = useRouter()
 
   const handleSignOut = async () => {
@@ -13,7 +15,7 @@ export const UserLogout = ({ ...props }: ComponentProps<"button">) => {
       fetchOptions: {
         onSuccess: () => {
           router.refresh()
-          toast.success("You've been signed out successfully")
+          toast.success(t("forms.sign_out.success_message"))
         },
       },
     })

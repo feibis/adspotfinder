@@ -1,6 +1,7 @@
 import { getInitials } from "@primoui/utils"
 import { LogOutIcon, ShieldHalfIcon, UserIcon } from "lucide-react"
 import { motion } from "motion/react"
+import { useTranslations } from "next-intl"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/common/avatar"
 import { Box } from "~/components/common/box"
 import { Button } from "~/components/common/button"
@@ -19,11 +20,12 @@ import { useSession } from "~/lib/auth-client"
 
 export const UserMenu = () => {
   const { data: session, isPending } = useSession()
+  const t = useTranslations()
 
   if (isPending) {
     return (
       <Button size="sm" variant="secondary" disabled>
-        Sign In
+        {t("navigation.sign_in")}
       </Button>
     )
   }
@@ -36,7 +38,7 @@ export const UserMenu = () => {
         transition={{ duration: 0.2, ease: "easeOut" }}
       >
         <Button size="sm" variant="secondary" asChild>
-          <Link href="/auth/login">Sign In</Link>
+          <Link href="/auth/login">{t("navigation.sign_in")}</Link>
         </Button>
       </motion.div>
     )
@@ -72,20 +74,20 @@ export const UserMenu = () => {
           {session.user.role === "admin" && (
             <DropdownMenuItem asChild>
               <NavLink href="/admin" prefix={<ShieldHalfIcon />}>
-                Admin Panel
+                {t("navigation.admin_panel")}
               </NavLink>
             </DropdownMenuItem>
           )}
 
           <DropdownMenuItem asChild>
             <NavLink href="/dashboard" prefix={<UserIcon />}>
-              Dashboard
+              {t("navigation.dashboard")}
             </NavLink>
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild>
             <NavLink prefix={<LogOutIcon />} asChild>
-              <UserLogout>Logout</UserLogout>
+              <UserLogout>{t("navigation.sign_out")}</UserLogout>
             </NavLink>
           </DropdownMenuItem>
         </DropdownMenuContent>

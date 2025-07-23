@@ -1,5 +1,6 @@
 import { differenceInDays, endOfDay, startOfDay } from "date-fns"
 import { EyeIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { type ComponentProps, useCallback, useMemo } from "react"
 import type { DateRange } from "react-day-picker"
 import type { AdType } from "~/.generated/prisma/client"
@@ -34,6 +35,7 @@ export const AdsCalendar = ({
   updateSelection,
   ...props
 }: AdsCalendarProps) => {
+  const t = useTranslations("components.ads")
   const selection = selections.find(s => s.type === adSpot.type)
 
   const booked = useMemo(
@@ -108,7 +110,7 @@ export const AdsCalendar = ({
 
         <Stack size="sm">
           {adSpot.preview && (
-            <Tooltip tooltip="Preview this ad">
+            <Tooltip tooltip={t("preview_ad")}>
               <Button variant="secondary" size="sm" prefix={<EyeIcon />} asChild>
                 <ExternalLink href={adSpot.preview} />
               </Button>

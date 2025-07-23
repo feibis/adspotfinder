@@ -7,8 +7,7 @@ import { ToolListingSkeleton } from "~/components/web/tools/tool-listing"
 import { ToolQuery } from "~/components/web/tools/tool-query"
 import { Breadcrumbs } from "~/components/web/ui/breadcrumbs"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
-import { metadataConfig } from "~/config/metadata"
-import { getOpenGraphImageUrl } from "~/lib/opengraph"
+import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
 import {
   createGraph,
   generateBreadcrumbs,
@@ -17,14 +16,13 @@ import {
   getOrganization,
   getWebSite,
 } from "~/lib/structured-data"
-import type { CategoryOne } from "~/server/web/categories/payloads"
 import { findCategory, findCategorySlugs } from "~/server/web/categories/queries"
 
 export const dynamicParams = false
 
 type Props = PageProps<"/categories/[slug]">
 
-const getCategory = cache(async ({ params }: Props) => {
+const getPageData = cache(async ({ params }: Props) => {
   const { slug } = await params
   const category = await findCategory({ where: { slug } })
 
@@ -32,38 +30,30 @@ const getCategory = cache(async ({ params }: Props) => {
     notFound()
   }
 
-  return category
-})
+  const url = `/categories/${category.slug}`
 
-const getMetadata = (category: CategoryOne) => {
-  const title = category.label || `${category.name} Tools`
+  const metadata = await getI18nMetadata("pages.categories", t => {
+    const title = category.label || t("meta.title", { name: category.name })
+    const description = lcFirst(category.description ?? noCase(title))
 
-  return {
-    url: `/categories/${category.slug}`,
-    title,
-    description: `A curated collection of the best ${lcFirst(category.description ?? noCase(title))}`,
-  }
-}
+    return { title, description: t("meta.description", { description }) }
+  })
 
-const getBreadcrumbs = (category: CategoryOne) => {
-  return [
+  const breadcrumbs = [
     { name: "Categories", url: "/categories" },
-    { name: category.name, url: `/categories/${category.slug}` },
+    { name: category.name, url },
   ]
-}
 
-const getStructuredData = (category: CategoryOne) => {
-  const breadcrumbs = getBreadcrumbs(category)
-  const { url, title, description } = getMetadata(category)
-
-  return createGraph([
+  const structuredData = createGraph([
     getOrganization(),
     getWebSite(),
     generateBreadcrumbs(breadcrumbs),
-    generateWebPage(url, title, description),
-    generateCollectionPage(url, title, description),
+    generateCollectionPage(url, metadata.title, metadata.description),
+    generateWebPage(url, metadata.title, metadata.description),
   ])
-}
+
+  return { category, url, metadata, breadcrumbs, structuredData }
+})
 
 export const generateStaticParams = async () => {
   const categories = await findCategorySlugs({})
@@ -71,23 +61,12 @@ export const generateStaticParams = async () => {
 }
 
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
-  const category = await getCategory(props)
-  const { url, title, description } = getMetadata(category)
-  const ogImageUrl = getOpenGraphImageUrl({ title, description })
-
-  return {
-    title,
-    description,
-    alternates: { ...metadataConfig.alternates, canonical: url },
-    openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
-  }
+  return getPageMetadata(await getPageData(props))
 }
 
 export default async function (props: Props) {
-  const category = await getCategory(props)
-  const breadcrumbs = getBreadcrumbs(category)
-  const structuredData = getStructuredData(category)
-  const { title, description } = getMetadata(category)
+  const { category, metadata, breadcrumbs, structuredData } = await getPageData(props)
+  const { title, description } = metadata
 
   return (
     <>

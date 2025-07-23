@@ -73,20 +73,20 @@ export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) 
         </Stack>
 
         <Stack direction="column" className="text-sm md:col-span-3 md:col-start-8">
-          <H6 as="strong">Browse:</H6>
+          <H6 as="strong">{t("common.browse")}:</H6>
 
-          <NavLink href="/">Tools</NavLink>
-          <NavLink href="/categories">Categories</NavLink>
-          <NavLink href="/tags">Tags</NavLink>
-          <NavLink href="/blog">Blog</NavLink>
+          <NavLink href="/">{t("navigation.browse_tools")}</NavLink>
+          <NavLink href="/categories">{t("navigation.categories")}</NavLink>
+          <NavLink href="/tags">{t("navigation.tags")}</NavLink>
+          <NavLink href="/blog">{t("navigation.blog")}</NavLink>
         </Stack>
 
         <Stack direction="column" className="text-sm md:col-span-3">
-          <H6 as="strong">Quick Links:</H6>
+          <H6 as="strong">{t("common.quick_links")}:</H6>
 
-          <NavLink href="/submit">Submit</NavLink>
-          <NavLink href="/about">About Us</NavLink>
-          <NavLink href="/advertise">Advertise</NavLink>
+          <NavLink href="/submit">{t("navigation.submit")}</NavLink>
+          <NavLink href="/about">{t("navigation.about")}</NavLink>
+          <NavLink href="/advertise">{t("navigation.advertise")}</NavLink>
         </Stack>
       </div>
 

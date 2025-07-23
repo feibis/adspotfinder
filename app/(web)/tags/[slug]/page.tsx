@@ -6,8 +6,8 @@ import { ToolListingSkeleton } from "~/components/web/tools/tool-listing"
 import { ToolQuery } from "~/components/web/tools/tool-query"
 import { Breadcrumbs } from "~/components/web/ui/breadcrumbs"
 import { Intro, IntroTitle } from "~/components/web/ui/intro"
-import { metadataConfig } from "~/config/metadata"
-import { getOpenGraphImageUrl } from "~/lib/opengraph"
+import { siteConfig } from "~/config/site"
+import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
 import {
   createGraph,
   generateBreadcrumbs,
@@ -16,14 +16,13 @@ import {
   getOrganization,
   getWebSite,
 } from "~/lib/structured-data"
-import type { TagOne } from "~/server/web/tags/payloads"
 import { findTag, findTagSlugs } from "~/server/web/tags/queries"
 
 export const dynamicParams = false
 
 type Props = PageProps<"/tags/[slug]">
 
-const getTag = cache(async ({ params }: Props) => {
+const getPageData = cache(async ({ params }: Props) => {
   const { slug } = await params
   const tag = await findTag({ where: { slug } })
 
@@ -31,34 +30,28 @@ const getTag = cache(async ({ params }: Props) => {
     notFound()
   }
 
-  return tag
-})
+  const url = `/tags/${tag.slug}`
 
-const getMetadata = (tag: TagOne) => {
-  return {
-    url: `/tags/${tag.slug}`,
-    title: `Tools tagged "${tag.name}"`,
-    description: `Explore tools and software tagged with ${tag.name} to find solutions that match your specific needs.`,
-  }
-}
+  const metadata = await getI18nMetadata("pages.tags", t => ({
+    title: t("meta.title", { name: tag.name }),
+    description: t("meta.description", { name: tag.name, siteName: siteConfig.name }),
+  }))
 
-const getBreadcrumbs = (tag: TagOne) => [
-  { name: "Tags", url: "/tags" },
-  { name: capitalCase(tag.slug), url: `/tags/${tag.slug}` },
-]
+  const breadcrumbs = [
+    { name: "Tags", url: "/tags" },
+    { name: capitalCase(tag.slug), url },
+  ]
 
-const getStructuredData = (tag: TagOne) => {
-  const breadcrumbs = getBreadcrumbs(tag)
-  const { url, title, description } = getMetadata(tag)
-
-  return createGraph([
+  const structuredData = createGraph([
     getOrganization(),
     getWebSite(),
     generateBreadcrumbs(breadcrumbs),
-    generateCollectionPage(url, title, description),
-    generateWebPage(url, title, description),
+    generateCollectionPage(url, metadata.title, metadata.description),
+    generateWebPage(url, metadata.title, metadata.description),
   ])
-}
+
+  return { tag, url, metadata, breadcrumbs, structuredData }
+})
 
 export const generateStaticParams = async () => {
   const tags = await findTagSlugs({})
@@ -66,24 +59,12 @@ export const generateStaticParams = async () => {
 }
 
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
-  const tag = await getTag(props)
-  const url = `/tags/${tag.slug}`
-  const { title, description } = getMetadata(tag)
-  const ogImageUrl = getOpenGraphImageUrl({ title, description })
-
-  return {
-    title,
-    description,
-    alternates: { ...metadataConfig.alternates, canonical: url },
-    openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
-  }
+  return getPageMetadata(await getPageData(props))
 }
 
 export default async function (props: Props) {
-  const tag = await getTag(props)
-  const breadcrumbs = getBreadcrumbs(tag)
-  const structuredData = getStructuredData(tag)
-  const { title } = getMetadata(tag)
+  const { tag, metadata, breadcrumbs, structuredData } = await getPageData(props)
+  const { title } = metadata
 
   return (
     <>

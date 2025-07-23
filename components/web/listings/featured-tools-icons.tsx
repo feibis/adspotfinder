@@ -1,5 +1,6 @@
 import { removeQueryParams } from "@primoui/utils"
 import { PlusIcon } from "lucide-react"
+import { getTranslations } from "next-intl/server"
 import type { ComponentProps } from "react"
 import { Card } from "~/components/common/card"
 import { H5 } from "~/components/common/heading"
@@ -14,6 +15,7 @@ import { siteConfig } from "~/config/site"
 import { findTools } from "~/server/web/tools/queries"
 
 export const FeaturedToolsIcons = async ({ ...props }: ComponentProps<typeof Card>) => {
+  const t = await getTranslations("components.featured_tools")
   const tools = await findTools({ where: { isFeatured: true } })
   const showAddButton = tools.length < 12
 
@@ -24,8 +26,8 @@ export const FeaturedToolsIcons = async ({ ...props }: ComponentProps<typeof Car
   return (
     <Card hover={false} focus={false} {...props}>
       <Stack size="sm" direction="column">
-        <H5 as="strong">Featured projects</H5>
-        <Note>{siteConfig.name} is made possible by the following supporters:</Note>
+        <H5 as="strong">{t("title")}</H5>
+        <Note>{t("description", { siteName: siteConfig.name })}</Note>
       </Stack>
 
       <Stack className="gap-[7px]">
@@ -54,7 +56,7 @@ export const FeaturedToolsIcons = async ({ ...props }: ComponentProps<typeof Car
         ))}
 
         {showAddButton && (
-          <Tooltip tooltip="Get your project featured">
+          <Tooltip tooltip={t("add_tooltip")}>
             <Link
               href="/submit"
               className="grid place-items-center size-10 p-1 rounded-lg border hover:bg-muted"

@@ -6,6 +6,7 @@ import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hoo
 import { getRandomDigits } from "@primoui/utils"
 import { millisecondsInSecond } from "date-fns/constants"
 import debounce from "debounce"
+import { useTranslations } from "next-intl"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { toast } from "sonner"
 import { Button } from "~/components/common/button"
@@ -25,6 +26,7 @@ type FeedbackWidgetFormProps = {
 }
 
 const FeedbackWidgetForm = ({ toastId, setDismissed }: FeedbackWidgetFormProps) => {
+  const t = useTranslations("components.feedback_widget")
   const { data: session } = useSession()
   const resolver = useMemo(() => zodResolver(feedbackSchema), [])
 
@@ -38,7 +40,7 @@ const FeedbackWidgetForm = ({ toastId, setDismissed }: FeedbackWidgetFormProps) 
 
     actionProps: {
       onSuccess: () => {
-        toast.success("Thanks for your feedback!", {
+        toast.success(t("success_message"), {
           id: toastId,
           duration: 3000,
         })
@@ -63,7 +65,7 @@ const FeedbackWidgetForm = ({ toastId, setDismissed }: FeedbackWidgetFormProps) 
     <Form {...form}>
       <Stack direction="column" className="items-stretch w-full" asChild>
         <form onSubmit={handleSubmitWithAction} noValidate>
-          <p className="mb-1 text-xs">What can we do to improve {siteConfig.name}?</p>
+          <p className="mb-1 text-xs">{t("question", { siteName: siteConfig.name })}</p>
 
           {!session?.user && (
             <FormField
@@ -75,7 +77,7 @@ const FeedbackWidgetForm = ({ toastId, setDismissed }: FeedbackWidgetFormProps) 
                     <Input
                       type="email"
                       size="sm"
-                      placeholder="Your email"
+                      placeholder={t("email_placeholder")}
                       className="text-xs"
                       data-1p-ignore
                       {...field}
@@ -94,7 +96,7 @@ const FeedbackWidgetForm = ({ toastId, setDismissed }: FeedbackWidgetFormProps) 
                 <FormControl>
                   <TextArea
                     size="sm"
-                    placeholder="Write your feedback here..."
+                    placeholder={t("feedback_placeholder")}
                     className="h-20 text-xs"
                     {...field}
                   />
@@ -114,11 +116,11 @@ const FeedbackWidgetForm = ({ toastId, setDismissed }: FeedbackWidgetFormProps) 
                 setDismissed(true)
               }}
             >
-              Dismiss
+              {t("dismiss_button")}
             </Button>
 
             <Button size="sm" className="text-xs flex-1" isPending={action.isPending}>
-              Send feedback
+              {t("send_button")}
             </Button>
           </Stack>
         </form>

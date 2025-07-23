@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { useEffect } from "react"
 import { Button } from "~/components/common/button"
 import { Link } from "~/components/common/link"
@@ -13,6 +14,9 @@ type ErrorProps = {
 }
 
 export default function ({ error, reset }: ErrorProps) {
+  const t = useTranslations("pages.error")
+  const email = env.NEXT_PUBLIC_SITE_EMAIL
+
   useEffect(() => {
     // Log the error to an error reporting service
     console.error(error)
@@ -20,21 +24,21 @@ export default function ({ error, reset }: ErrorProps) {
 
   return (
     <Intro alignment="center">
-      <IntroTitle>Something went wrong!</IntroTitle>
+      <IntroTitle>{t("meta.title")}</IntroTitle>
 
       <IntroDescription className="max-w-xl">
+        {t("meta.description", { email })}
         We're sorry, but we encountered an error. Please try again, and if the problem persists,
-        contact support at{" "}
-        <Link href={`mailto:${env.NEXT_PUBLIC_SITE_EMAIL}`}>{env.NEXT_PUBLIC_SITE_EMAIL}</Link>.
+        contact support at <Link href={`mailto:${email}`}>{email}</Link>.
       </IntroDescription>
 
       <Stack className="mt-4">
         <Button variant="fancy" onClick={reset}>
-          Reload the page
+          {t("reload_button")}
         </Button>
 
         <Button variant="soft" asChild>
-          <Link href="/">Go back home</Link>
+          <Link href="/">{t("home_button")}</Link>
         </Button>
       </Stack>
     </Intro>

@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useHotkeys } from "@mantine/hooks"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
+import { useTranslations } from "next-intl"
 import type { Dispatch, SetStateAction } from "react"
 import { toast } from "sonner"
 import { Button } from "~/components/common/button"
@@ -40,6 +41,7 @@ type ToolReportDialogProps = {
 export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogProps) => {
   const { data: session } = useSession()
   const resolver = zodResolver(reportToolSchema)
+  const t = useTranslations("dialogs.report")
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(reportTool, resolver, {
     formProps: {
@@ -53,7 +55,7 @@ export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogPr
 
     actionProps: {
       onSuccess: () => {
-        toast.success("Thank you for your report. We'll take a look at it shortly.")
+        toast.success(t("success_message"))
         setIsOpen(false)
         form.reset()
       },
@@ -79,8 +81,8 @@ export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogPr
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-sm">
         <DialogHeader>
-          <DialogTitle>Report {tool.name}</DialogTitle>
-          <DialogDescription>What is happening with this tool?</DialogDescription>
+          <DialogTitle>{t("title", { toolName: tool.name })}</DialogTitle>
+          <DialogDescription>{t("question")}</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
@@ -91,9 +93,14 @@ export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogPr
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel isRequired>Email</FormLabel>
+                    <FormLabel isRequired>{t("email_label")}</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="Your email" data-1p-ignore {...field} />
+                      <Input
+                        type="email"
+                        placeholder={t("email_placeholder")}
+                        data-1p-ignore
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -106,7 +113,7 @@ export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogPr
               name="type"
               render={({ field: { value, onChange, ...field } }) => (
                 <FormItem>
-                  <FormLabel isRequired>Type</FormLabel>
+                  <FormLabel isRequired>{t("type_label")}</FormLabel>
                   <FormControl>
                     <RadioGroup
                       value={value}
@@ -138,10 +145,10 @@ export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogPr
               name="message"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Message</FormLabel>
+                  <FormLabel>{t("message_label")}</FormLabel>
                   <FormControl>
                     <TextArea
-                      placeholder="Provide additional details about the issue..."
+                      placeholder={t("message_placeholder")}
                       className="min-h-20"
                       {...field}
                     />
@@ -153,11 +160,11 @@ export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogPr
 
             <DialogFooter>
               <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
-                Cancel
+                {t("cancel_button")}
               </Button>
 
               <Button type="submit" className="min-w-28" isPending={action.isPending}>
-                Send
+                {t("send_button")}
               </Button>
             </DialogFooter>
           </form>

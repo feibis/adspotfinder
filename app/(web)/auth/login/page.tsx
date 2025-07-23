@@ -3,22 +3,28 @@ import type { Metadata } from "next"
 import { Suspense } from "react"
 import { Login } from "~/components/web/auth/login"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
-import { metadataConfig } from "~/config/metadata"
-import { getOpenGraphImageUrl } from "~/lib/opengraph"
+import { siteConfig } from "~/config/site"
+import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
 
-const url = "/auth/login"
-const title = "Sign in"
-const description = "Get access to the dashboard and manage your submitted tools."
-const ogImageUrl = getOpenGraphImageUrl({ title, description })
+const getPageData = async () => {
+  const url = "/auth/login"
 
-export const metadata: Metadata = {
-  title,
-  description,
-  alternates: { ...metadataConfig.alternates, canonical: url },
-  openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
+  const metadata = await getI18nMetadata("pages.auth", t => ({
+    title: t("meta.title"),
+    description: t("meta.description", { siteName: siteConfig.name }),
+  }))
+
+  return { url, metadata }
 }
 
-export default function () {
+export const generateMetadata = async (): Promise<Metadata> => {
+  return getPageMetadata(await getPageData())
+}
+
+export default async function () {
+  const { metadata } = await getPageData()
+  const { title, description } = metadata
+
   return (
     <>
       <Intro>

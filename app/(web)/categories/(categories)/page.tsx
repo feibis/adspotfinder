@@ -4,8 +4,8 @@ import { CategoryListSkeleton } from "~/components/web/categories/category-list"
 import { CategoryQuery } from "~/components/web/categories/category-query"
 import { Breadcrumbs } from "~/components/web/ui/breadcrumbs"
 import { Intro, IntroTitle } from "~/components/web/ui/intro"
-import { metadataConfig } from "~/config/metadata"
-import { getOpenGraphImageUrl } from "~/lib/opengraph"
+import { siteConfig } from "~/config/site"
+import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
 import {
   createGraph,
   generateBreadcrumbs,
@@ -15,31 +15,34 @@ import {
   getWebSite,
 } from "~/lib/structured-data"
 
-const url = "/categories"
-const title = "Browse Categories"
-const description = "Browse all tool categories to find the perfect software for your needs."
-const ogImageUrl = getOpenGraphImageUrl({ title, description })
-const breadcrumbs = [{ name: "Categories", url }]
+const getPageData = async () => {
+  const url = "/categories"
 
-export const metadata: Metadata = {
-  title,
-  description,
-  alternates: { ...metadataConfig.alternates, canonical: url },
-  openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
-}
+  const metadata = await getI18nMetadata("pages.categories", t => ({
+    title: t("meta.title"),
+    description: t("meta.description", { siteName: siteConfig.name }),
+  }))
 
-const getStructuredData = () => {
-  return createGraph([
+  const breadcrumbs = [{ name: "Categories", url }]
+
+  const structuredData = createGraph([
     getOrganization(),
     getWebSite(),
     generateBreadcrumbs(breadcrumbs),
-    generateWebPage(url, title, description),
-    generateCollectionPage(url, title, description),
+    generateCollectionPage(url, metadata.title, metadata.description),
+    generateWebPage(url, metadata.title, metadata.description),
   ])
+
+  return { url, metadata, breadcrumbs, structuredData }
 }
 
-export default function () {
-  const structuredData = getStructuredData()
+export const generateMetadata = async (): Promise<Metadata> => {
+  return getPageMetadata(await getPageData())
+}
+
+export default async function () {
+  const { metadata, breadcrumbs, structuredData } = await getPageData()
+  const { title } = metadata
 
   return (
     <>

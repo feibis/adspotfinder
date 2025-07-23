@@ -1,22 +1,27 @@
 import type { Metadata } from "next"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
-import { metadataConfig } from "~/config/metadata"
 import { siteConfig } from "~/config/site"
-import { getOpenGraphImageUrl } from "~/lib/opengraph"
+import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
 
-const url = "/dashboard"
-const title = "Dashboard"
-const description = `Manage your account and tools on ${siteConfig.name}.`
-const ogImageUrl = getOpenGraphImageUrl({ title, description })
+const getPageData = async () => {
+  const url = "/dashboard"
 
-export const metadata: Metadata = {
-  title,
-  description,
-  alternates: { ...metadataConfig.alternates, canonical: url },
-  openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
+  const metadata = await getI18nMetadata("pages.dashboard", t => ({
+    title: t("meta.title"),
+    description: t("meta.description", { siteName: siteConfig.name }),
+  }))
+
+  return { url, metadata }
 }
 
-export default function ({ children }: LayoutProps<"/dashboard">) {
+export const generateMetadata = async (): Promise<Metadata> => {
+  return getPageMetadata(await getPageData())
+}
+
+export default async function ({ children }: LayoutProps<"/dashboard">) {
+  const { metadata } = await getPageData()
+  const { title, description } = metadata
+
   return (
     <>
       <Intro>

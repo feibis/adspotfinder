@@ -1,6 +1,7 @@
 "use client"
 
 import { BadgeCheckIcon, CodeXmlIcon, FlagIcon, SparklesIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { parseAsStringEnum, useQueryState } from "nuqs"
 import type { ComponentProps, SetStateAction } from "react"
 import { Button } from "~/components/common/button"
@@ -27,6 +28,7 @@ enum Dialog {
 }
 
 export const ToolActions = ({ tool, children, className, ...props }: ToolActionsProps) => {
+  const t = useTranslations("tools.actions")
   const { data: session } = useSession()
   const [dialog, setDialog] = useQueryState("dialog", parseAsStringEnum(Object.values(Dialog)))
 
@@ -37,7 +39,7 @@ export const ToolActions = ({ tool, children, className, ...props }: ToolActions
   return (
     <Stack size="sm" wrap={false} className={cx("justify-end", className)} {...props}>
       {!tool.isFeatured && tool.ownerId && tool.ownerId === session?.user.id && (
-        <Tooltip tooltip="Promote this tool to get more visibility">
+        <Tooltip tooltip={t("promote_tooltip")}>
           <Button
             size="md"
             variant="secondary"
@@ -45,13 +47,13 @@ export const ToolActions = ({ tool, children, className, ...props }: ToolActions
             className="text-blue-600 dark:text-blue-400"
             asChild
           >
-            <Link href={`/submit/${tool.slug}`}>Promote</Link>
+            <Link href={`/submit/${tool.slug}`}>{t("promote_button")}</Link>
           </Button>
         </Tooltip>
       )}
 
       {!tool.ownerId && (
-        <Tooltip tooltip="Claim this tool to get a verified badge">
+        <Tooltip tooltip={t("claim_tooltip")}>
           <Button
             size="md"
             variant="secondary"
@@ -59,31 +61,31 @@ export const ToolActions = ({ tool, children, className, ...props }: ToolActions
             onClick={() => setDialog(Dialog.claim)}
             className="text-blue-600 dark:text-blue-400"
           >
-            Claim
+            {t("claim_button")}
           </Button>
         </Tooltip>
       )}
 
       {reportsConfig.enabled && (
-        <Tooltip tooltip="Send a report/suggestion">
+        <Tooltip tooltip={t("report_tooltip")}>
           <Button
             size="md"
             variant="secondary"
             prefix={<FlagIcon />}
             onClick={() => setDialog(Dialog.report)}
-            aria-label="Report"
+            aria-label={t("report_button")}
           />
         </Tooltip>
       )}
 
       {isToolApproved(tool) && (
-        <Tooltip tooltip="Embed this tool on your website">
+        <Tooltip tooltip={t("embed_tooltip")}>
           <Button
             size="md"
             variant="secondary"
             prefix={<CodeXmlIcon />}
             onClick={() => setDialog(Dialog.embed)}
-            aria-label="Embed"
+            aria-label={t("embed_button")}
           />
         </Tooltip>
       )}

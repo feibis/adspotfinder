@@ -1,4 +1,7 @@
+"use client"
+
 import { removeQueryParams, setQueryParams } from "@primoui/utils"
+import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import type { AdType } from "~/.generated/prisma/client"
 import { Badge } from "~/components/common/badge"
@@ -38,9 +41,11 @@ const AdLink = ({ ad, type, source, params, ...props }: AdLinkProps) => {
  * Consistent ad badge component
  */
 const AdBadge = ({ className, ...props }: ComponentProps<typeof Badge>) => {
+  const t = useTranslations("components.ads")
+
   return (
     <Badge variant="outline" className={cx("text-muted-foreground/75", className)} {...props}>
-      Ad
+      {t("ad_label")}
     </Badge>
   )
 }

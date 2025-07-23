@@ -3,15 +3,14 @@ import Image from "next/image"
 import { notFound } from "next/navigation"
 import { cache } from "react"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
-import { metadataConfig } from "~/config/metadata"
 import { siteConfig } from "~/config/site"
-import { getOpenGraphImageUrl } from "~/lib/opengraph"
-import { type ToolOne, toolOnePayload } from "~/server/web/tools/payloads"
+import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
+import { toolOnePayload } from "~/server/web/tools/payloads"
 import { db } from "~/services/db"
 
 type Props = PageProps<"/submit/[slug]/success">
 
-const getTool = cache(async ({ params }: Props) => {
+const getPageData = cache(async ({ params }: Props) => {
   const { slug } = await params
 
   const tool = await db.tool.findFirst({
@@ -19,41 +18,26 @@ const getTool = cache(async ({ params }: Props) => {
     select: toolOnePayload,
   })
 
-  if (!tool) {
-    notFound()
-  }
+  if (!tool) notFound()
 
-  return tool
+  const url = `/submit/${tool.slug}/success`
+  const namespace = tool.isFeatured ? "featured" : "success"
+
+  const metadata = await getI18nMetadata(`pages.submit.${namespace}`, t => ({
+    title: t("meta.title", { name: tool.name }),
+    description: t("meta.description", { name: tool.name, siteName: siteConfig.name }),
+  }))
+
+  return { tool, url, metadata }
 })
 
-const getMetadata = (tool: ToolOne) => {
-  let title = `Thank you for submitting ${tool.name}!`
-  let description = `We'll review ${tool.name}'s submission and publish it on ${siteConfig.name} soon.`
-
-  if (tool.isFeatured) {
-    title = "Thank you for your payment!"
-    description = `We've received your payment. ${tool.name} should be featured on ${siteConfig.name} shortly.`
-  }
-
-  return { url: `/submit/${tool.slug}/success`, title, description }
-}
-
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
-  const tool = await getTool(props)
-  const { url, title, description } = getMetadata(tool)
-  const ogImageUrl = getOpenGraphImageUrl({ title, description })
-
-  return {
-    title,
-    description,
-    alternates: { ...metadataConfig.alternates, canonical: url },
-    openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
-  }
+  return getPageMetadata(await getPageData(props))
 }
 
 export default async function (props: Props) {
-  const tool = await getTool(props)
-  const { title, description } = getMetadata(tool)
+  const { metadata } = await getPageData(props)
+  const { title, description } = metadata
 
   return (
     <>

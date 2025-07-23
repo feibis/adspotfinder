@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
+import { useTranslations } from "next-intl"
 import { posthog } from "posthog-js"
 import type { ComponentProps } from "react"
 import { Box } from "~/components/common/box"
@@ -25,12 +26,16 @@ type CTAFormProps = ComponentProps<"form"> & {
 export const CTAForm = ({
   children,
   className,
-  placeholder = "Enter your email",
+  placeholder,
   size = "md",
-  buttonProps = { size: "sm", children: "Subscribe" },
+  buttonProps,
   ...props
 }: CTAFormProps) => {
+  const t = useTranslations("forms.cta")
   const resolver = zodResolver(newsletterSchema)
+
+  const defaultPlaceholder = placeholder || t("email_placeholder")
+  const defaultButtonProps = buttonProps || { size: "sm" }
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(subscribe, resolver, {
     formProps: {
@@ -78,7 +83,7 @@ export const CTAForm = ({
                 <FormControl>
                   <Input
                     type="email"
-                    placeholder={placeholder}
+                    placeholder={defaultPlaceholder}
                     size={size}
                     className="flex-1 min-w-0 border-0 focus-visible:outline-none"
                     data-1p-ignore
@@ -94,8 +99,10 @@ export const CTAForm = ({
                 "shrink-0",
                 size === "lg" ? "text-sm/tight px-4 py-2 m-1" : "px-3 py-1.5 m-0.5",
               )}
-              {...buttonProps}
-            />
+              {...defaultButtonProps}
+            >
+              {t(`button_${size}`)}
+            </Button>
           </div>
         </Box>
 

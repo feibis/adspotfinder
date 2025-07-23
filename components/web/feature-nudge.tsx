@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl"
 import { toast } from "sonner"
 import type { Tool } from "~/.generated/prisma/client"
 import { Button } from "~/components/common/button"
@@ -10,21 +11,22 @@ type FeatureNudgeProps = {
   t: string | number
 }
 
-export const FeatureNudge = ({ tool, t }: FeatureNudgeProps) => {
+export const FeatureNudge = ({ tool, t: toastId }: FeatureNudgeProps) => {
+  const t = useTranslations("components.feature_nudge")
+
   return (
     <>
       <p className="text-sm text-secondary-foreground">
-        <strong>{tool.name}</strong> has already been published on {siteConfig.name}. If you want,
-        you can feature it for extra exposure.
+        {t("message", { name: tool.name, siteName: siteConfig.name })}
       </p>
 
       <Stack size="sm" className="w-full mt-4">
-        <Button size="md" className="flex-1" onClick={() => toast.dismiss(t)} asChild>
-          <Link href={`/submit/${tool.slug}`}>Feature {tool.name}</Link>
+        <Button size="md" className="flex-1" onClick={() => toast.dismiss(toastId)} asChild>
+          <Link href={`/submit/${tool.slug}`}>{t("feature_button", { toolName: tool.name })}</Link>
         </Button>
 
-        <Button size="md" variant="secondary" onClick={() => toast.dismiss(t)}>
-          Dismiss
+        <Button size="md" variant="secondary" onClick={() => toast.dismiss(toastId)}>
+          {t("dismiss_button")}
         </Button>
       </Stack>
     </>

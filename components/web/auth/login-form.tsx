@@ -2,6 +2,7 @@
 
 import { InboxIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import { toast } from "sonner"
 import { Button } from "~/components/common/button"
@@ -11,11 +12,13 @@ import { Stack } from "~/components/common/stack"
 import { useMagicLink } from "~/hooks/use-magic-link"
 
 export const LoginForm = ({ ...props }: ComponentProps<"form">) => {
+  const t = useTranslations()
   const router = useRouter()
 
   const { form, handleSignIn, isPending } = useMagicLink({
     onSuccess: email => {
       router.push(`/auth/verify?email=${email}`)
+      toast.success(t("forms.sign_in.success_message"))
     },
 
     onError: ({ error }) => {
@@ -36,7 +39,7 @@ export const LoginForm = ({ ...props }: ComponentProps<"form">) => {
                   <Input
                     type="email"
                     size="lg"
-                    placeholder="Enter your email"
+                    placeholder={t("forms.sign_in.email_placeholder")}
                     data-1p-ignore
                     {...field}
                   />
@@ -48,7 +51,7 @@ export const LoginForm = ({ ...props }: ComponentProps<"form">) => {
           />
 
           <Button suffix={<InboxIcon />} isPending={isPending}>
-            Send me a Magic Link
+            {t("forms.sign_in.magic_link_button")}
           </Button>
         </form>
       </Stack>

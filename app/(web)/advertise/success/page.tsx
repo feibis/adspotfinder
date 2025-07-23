@@ -2,40 +2,49 @@ import { tryCatch } from "@primoui/utils"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { createLoader, parseAsString } from "nuqs/server"
+import { cache } from "react"
 import { AdForm } from "~/app/(web)/advertise/success/ad-form"
 import { AdCard } from "~/components/web/ads/ad-card"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { Section } from "~/components/web/ui/section"
-import { metadataConfig } from "~/config/metadata"
-import { getOpenGraphImageUrl } from "~/lib/opengraph"
+import { siteConfig } from "~/config/site"
+import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
 import { cx } from "~/lib/utils"
 import { adOnePayload } from "~/server/web/ads/payloads"
 import { db } from "~/services/db"
 import { stripe } from "~/services/stripe"
 
-const url = "/advertise/success"
-const title = "Thank you for your payment!"
-const description = "Please complete your advertisement setup by providing your company details."
-const ogImageUrl = getOpenGraphImageUrl({ title, description })
+type Props = PageProps<"/advertise/success">
 
-export const metadata: Metadata = {
-  title,
-  description,
-  alternates: { ...metadataConfig.alternates, canonical: url },
-  openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
-}
+const getPageData = cache(async ({ searchParams }: Props) => {
+  const url = "/advertise/success"
 
-export default async function ({ searchParams }: PageProps<"/advertise/success">) {
   const searchParamsLoader = createLoader({ sessionId: parseAsString.withDefault("") })
   const { sessionId } = await searchParamsLoader(searchParams)
   const { data, error } = await tryCatch(stripe.checkout.sessions.retrieve(sessionId))
 
   if (error || data.status !== "complete") {
-    return notFound()
+    notFound()
   }
 
+  const metadata = await getI18nMetadata("pages.advertise.success", t => ({
+    title: t("meta.title"),
+    description: t("meta.description", { siteName: siteConfig.name }),
+  }))
+
+  return { session: data, url, metadata }
+})
+
+export const generateMetadata = async (props: Props): Promise<Metadata> => {
+  return getPageMetadata(await getPageData(props))
+}
+
+export default async function (props: PageProps<"/advertise/success">) {
+  const { session, metadata } = await getPageData(props)
+  const { title, description } = metadata
+
   const existingAd = await db.ad.findFirst({
-    where: { sessionId: data.id },
+    where: { sessionId: session.id },
     select: adOnePayload,
   })
 
@@ -48,7 +57,7 @@ export default async function ({ searchParams }: PageProps<"/advertise/success">
 
       <Section>
         <Section.Content className={cx(!existingAd && "md:col-span-full")}>
-          <AdForm sessionId={data.id} ad={existingAd} className="w-full max-w-xl mx-auto" />
+          <AdForm sessionId={session.id} ad={existingAd} className="w-full max-w-xl mx-auto" />
         </Section.Content>
 
         {existingAd && (

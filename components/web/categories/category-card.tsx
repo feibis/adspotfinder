@@ -1,4 +1,4 @@
-import plur from "plur"
+import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import { Link } from "~/components/common/link"
 import { Skeleton } from "~/components/common/skeleton"
@@ -10,6 +10,8 @@ type CategoryCardProps = ComponentProps<typeof Tile> & {
 }
 
 const CategoryCard = ({ category, ...props }: CategoryCardProps) => {
+  const t = useTranslations("counts")
+
   return (
     <Tile asChild {...props}>
       <Link href={`/categories/${category.slug}`}>
@@ -18,7 +20,7 @@ const CategoryCard = ({ category, ...props }: CategoryCardProps) => {
         <TileDivider />
 
         <TileCaption>
-          {`${category._count.tools} ${plur("tool", category._count.tools)}`}
+          {`${category._count.tools} ${t("tools", { count: category._count.tools })}`}
         </TileCaption>
       </Link>
     </Tile>

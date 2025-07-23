@@ -1,5 +1,6 @@
 import { useClipboard } from "@mantine/hooks"
 import { CheckIcon, ClipboardIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useTheme } from "next-themes"
 import type { Dispatch, SetStateAction } from "react"
 import { useMemo } from "react"
@@ -35,8 +36,8 @@ import { cx } from "~/lib/utils"
 import type { ToolOne } from "~/server/web/tools/payloads"
 
 const THEMES = [
-  { value: "light", label: "Light" },
-  { value: "dark", label: "Dark" },
+  { value: "light", label: "theme_light" },
+  { value: "dark", label: "theme_dark" },
 ] as const
 
 type Theme = (typeof THEMES)[number]["value"]
@@ -56,6 +57,7 @@ type ToolEmbedDialogProps = {
 export const ToolEmbedDialog = ({ tool, isOpen, setIsOpen }: ToolEmbedDialogProps) => {
   const { resolvedTheme } = useTheme()
   const clipboard = useClipboard({ timeout: 2000 })
+  const t = useTranslations("dialogs.embed")
 
   const form = useForm<EmbedForm>({
     defaultValues: { theme: resolvedTheme as Theme, width: 200, height: 50 },
@@ -95,10 +97,8 @@ export const ToolEmbedDialog = ({ tool, isOpen, setIsOpen }: ToolEmbedDialogProp
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Embed the {tool.name} badge</DialogTitle>
-          <DialogDescription>
-            Use the following badge to showcase your tool on your website or documentation.
-          </DialogDescription>
+          <DialogTitle>{t("title", { toolName: tool.name })}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
@@ -112,7 +112,7 @@ export const ToolEmbedDialog = ({ tool, isOpen, setIsOpen }: ToolEmbedDialogProp
               name="theme"
               render={({ field: { onChange, value, ...field } }) => (
                 <FormItem>
-                  <FormLabel>Theme</FormLabel>
+                  <FormLabel>{t("theme_label")}</FormLabel>
                   <FormControl>
                     <Select value={value} onValueChange={onChange} {...field}>
                       <SelectTrigger>
@@ -121,7 +121,7 @@ export const ToolEmbedDialog = ({ tool, isOpen, setIsOpen }: ToolEmbedDialogProp
                       <SelectContent>
                         {THEMES.map(opt => (
                           <SelectItem key={opt.value} value={opt.value}>
-                            {opt.label}
+                            {t(opt.label)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -136,7 +136,7 @@ export const ToolEmbedDialog = ({ tool, isOpen, setIsOpen }: ToolEmbedDialogProp
               name="width"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Width</FormLabel>
+                  <FormLabel>{t("width_label")}</FormLabel>
                   <FormControl>
                     <Input type="number" min={100} max={600} step={10} {...field} />
                   </FormControl>
@@ -150,7 +150,7 @@ export const ToolEmbedDialog = ({ tool, isOpen, setIsOpen }: ToolEmbedDialogProp
               name="height"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Height</FormLabel>
+                  <FormLabel>{t("height_label")}</FormLabel>
                   <FormControl>
                     <Input type="number" min={30} max={200} step={5} {...field} />
                   </FormControl>
@@ -160,7 +160,7 @@ export const ToolEmbedDialog = ({ tool, isOpen, setIsOpen }: ToolEmbedDialogProp
             />
 
             <div className="col-span-full">
-              <div className="text-xs mb-1 text-foreground/60">Preview</div>
+              <div className="text-xs mb-1 text-foreground/60">{t("preview_label")}</div>
               <Card
                 className={cx(
                   "flex items-center justify-center min-h-20 bg-background overflow-clip",
@@ -181,7 +181,7 @@ export const ToolEmbedDialog = ({ tool, isOpen, setIsOpen }: ToolEmbedDialogProp
 
             <div className="col-span-full">
               <div className="flex items-center justify-between gap-2 mb-1">
-                <div className="text-xs text-foreground/60">Embed code</div>
+                <div className="text-xs text-foreground/60">{t("code_label")}</div>
 
                 <Button
                   type="button"
@@ -191,7 +191,7 @@ export const ToolEmbedDialog = ({ tool, isOpen, setIsOpen }: ToolEmbedDialogProp
                   prefix={clipboard.copied ? <CheckIcon /> : <ClipboardIcon />}
                   className={cx(clipboard.copied && "text-green-600")}
                 >
-                  {clipboard.copied ? "Copied!" : "Copy"}
+                  {clipboard.copied ? t("copied") : t("copy_button")}
                 </Button>
               </div>
 

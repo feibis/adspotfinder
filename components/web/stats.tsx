@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import { MDXComponents } from "~/components/web/mdx-components"
 import { Stat } from "~/components/web/ui/stat"
@@ -22,10 +23,11 @@ const statsVariants = cva({
 type StatsProps = ComponentProps<"div"> & VariantProps<typeof statsVariants>
 
 export const Stats = ({ alignment, className, ...props }: StatsProps) => {
+  const t = useTranslations("stats")
   const stats = [
-    { value: 250000, label: "Monthly Pageviews" },
-    { value: 2000, label: "Listed Tools" },
-    { value: 5000, label: "Newsletter Subscribers" },
+    { value: 250000, label: t("monthly_pageviews") },
+    { value: 2000, label: t("listed_tools") },
+    { value: 5000, label: t("newsletter_subscribers") },
   ]
 
   return (

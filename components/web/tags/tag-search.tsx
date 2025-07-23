@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import type { Stack } from "~/components/common/stack"
 import { Filters } from "~/components/web/filters/filters"
@@ -14,14 +15,15 @@ export type TagSearchProps = ComponentProps<typeof Stack> & {
 
 export const TagSearch = ({ placeholder, ...props }: TagSearchProps) => {
   const { enableSort, enableFilters } = useFilters<TagsFilterSchema>()
+  const t = useTranslations("components.tags")
 
   const sortOptions = [
-    { value: "name.asc", label: "Name (A to Z)" },
-    { value: "name.desc", label: "Name (Z to A)" },
+    { value: "name.asc", label: t("name_asc") },
+    { value: "name.desc", label: t("name_desc") },
   ]
 
   return (
-    <Filters placeholder={placeholder || "Search tags..."} {...props}>
+    <Filters placeholder={placeholder || t("search_placeholder")} {...props}>
       {enableSort && <Sort options={sortOptions} />}
       {enableFilters && <TagFilters />}
     </Filters>
