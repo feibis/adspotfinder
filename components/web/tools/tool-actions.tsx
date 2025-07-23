@@ -1,8 +1,8 @@
 "use client"
 
 import { BadgeCheckIcon, CodeXmlIcon, FlagIcon, SparklesIcon } from "lucide-react"
+import { parseAsStringEnum, useQueryState } from "nuqs"
 import type { ComponentProps, SetStateAction } from "react"
-import { useState } from "react"
 import { Button } from "~/components/common/button"
 import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
@@ -19,12 +19,18 @@ type ToolActionsProps = ComponentProps<typeof Stack> & {
   tool: ToolOne
 }
 
+enum Dialog {
+  report = "report",
+  embed = "embed",
+  claim = "claim",
+}
+
 export const ToolActions = ({ tool, children, className, ...props }: ToolActionsProps) => {
   const { data: session } = useSession()
-  const [openDialog, setOpenDialog] = useState<null | "report" | "embed" | "claim">(null)
+  const [dialog, setDialog] = useQueryState("dialog", parseAsStringEnum(Object.values(Dialog)))
 
   const handleClose = (isOpen: SetStateAction<boolean>) => {
-    !isOpen && setOpenDialog(null)
+    !isOpen && setDialog(null)
   }
 
   return (
@@ -49,7 +55,7 @@ export const ToolActions = ({ tool, children, className, ...props }: ToolActions
             size="md"
             variant="secondary"
             prefix={<BadgeCheckIcon className="text-inherit" />}
-            onClick={() => setOpenDialog("claim")}
+            onClick={() => setDialog(Dialog.claim)}
             className="text-blue-600 dark:text-blue-400"
           >
             Claim
@@ -63,7 +69,7 @@ export const ToolActions = ({ tool, children, className, ...props }: ToolActions
             size="md"
             variant="secondary"
             prefix={<FlagIcon />}
-            onClick={() => setOpenDialog("report")}
+            onClick={() => setDialog(Dialog.report)}
             aria-label="Report"
           />
         </Tooltip>
@@ -74,18 +80,18 @@ export const ToolActions = ({ tool, children, className, ...props }: ToolActions
           size="md"
           variant="secondary"
           prefix={<CodeXmlIcon />}
-          onClick={() => setOpenDialog("embed")}
+          onClick={() => setDialog(Dialog.embed)}
           aria-label="Embed"
         />
       </Tooltip>
 
       {children}
 
-      <ToolReportDialog tool={tool} isOpen={openDialog === "report"} setIsOpen={handleClose} />
-      <ToolEmbedDialog tool={tool} isOpen={openDialog === "embed"} setIsOpen={handleClose} />
+      <ToolReportDialog tool={tool} isOpen={dialog === Dialog.report} setIsOpen={handleClose} />
+      <ToolEmbedDialog tool={tool} isOpen={dialog === Dialog.embed} setIsOpen={handleClose} />
 
       {!tool.ownerId && (
-        <ToolClaimDialog tool={tool} isOpen={openDialog === "claim"} setIsOpen={handleClose} />
+        <ToolClaimDialog tool={tool} isOpen={dialog === Dialog.claim} setIsOpen={handleClose} />
       )}
     </Stack>
   )
