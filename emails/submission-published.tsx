@@ -10,6 +10,8 @@ export type EmailProps = EmailWrapperProps & {
 }
 
 const EmailSubmissionPublished = ({ tool, ...props }: EmailProps) => {
+  const toolUrl = `${config.site.url}/${tool.slug}`
+
   return (
     <EmailWrapper {...props}>
       <Text>Hey {tool.submitterName?.trim()}!</Text>
@@ -28,9 +30,22 @@ const EmailSubmissionPublished = ({ tool, ...props }: EmailProps) => {
         tools like yours!
       </Text>
 
-      <EmailButton href={`${config.site.url}/${tool.slug}`}>
+      <EmailButton href={toolUrl}>
         Check out {tool.name} on {config.site.name}
       </EmailButton>
+
+      <Text>
+        Want to build credibility with your users? You can now{" "}
+        <a href={`${toolUrl}?dialog=embed`}>add a "Featured on {config.site.name}" badge</a> to your
+        website, showing visitors that {tool.name} is recognized by our community.
+        {!tool.ownerId && (
+          <>
+            {" "}
+            And don't forget to <a href={`${toolUrl}?dialog=claim`}>claim your tool</a> to get a{" "}
+            <strong>verified badge</strong> that helps establish trust with potential users.
+          </>
+        )}
+      </Text>
 
       <EmailFeatureNudge tool={tool} />
     </EmailWrapper>

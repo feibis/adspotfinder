@@ -1,4 +1,4 @@
-import type { Tool } from "@prisma/client"
+import { type Tool, ToolStatus } from "@prisma/client"
 import { differenceInDays } from "date-fns"
 import { config } from "~/config"
 
@@ -9,7 +9,7 @@ import { config } from "~/config"
  * @returns Whether the tool is published.
  */
 export const isToolPublished = (tool: Pick<Tool, "status">) => {
-  return ["Published"].includes(tool.status)
+  return tool.status === ToolStatus.Published
 }
 
 /**

@@ -1,3 +1,4 @@
+import { ToolStatus } from "@prisma/client"
 import { notFound } from "next/navigation"
 import type { NextRequest } from "next/server"
 import { createLoader, parseAsInteger, parseAsStringEnum } from "nuqs/server"
@@ -116,7 +117,7 @@ export const GET = async ({ url }: NextRequest, { params }: PageProps) => {
   const { slug } = await params
   const { theme, width, height } = searchParamsLoader(url)
 
-  const tool = await findTool({ where: { slug } })
+  const tool = await findTool({ where: { slug, status: ToolStatus.Published } })
   if (!tool) notFound()
 
   const svg = await satori(<SvgBadge theme={theme} />, {

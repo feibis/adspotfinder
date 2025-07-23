@@ -12,6 +12,7 @@ import { ToolEmbedDialog } from "~/components/web/dialogs/tool-embed-dialog"
 import { ToolReportDialog } from "~/components/web/dialogs/tool-report-dialog"
 import { reportsConfig } from "~/config/reports"
 import { useSession } from "~/lib/auth-client"
+import { isToolPublished } from "~/lib/tools"
 import { cx } from "~/lib/utils"
 import type { ToolOne } from "~/server/web/tools/payloads"
 
@@ -75,20 +76,27 @@ export const ToolActions = ({ tool, children, className, ...props }: ToolActions
         </Tooltip>
       )}
 
-      <Tooltip tooltip="Embed this tool on your website">
-        <Button
-          size="md"
-          variant="secondary"
-          prefix={<CodeXmlIcon />}
-          onClick={() => setDialog(Dialog.embed)}
-          aria-label="Embed"
-        />
-      </Tooltip>
+      {isToolPublished(tool) && (
+        <Tooltip tooltip="Embed this tool on your website">
+          <Button
+            size="md"
+            variant="secondary"
+            prefix={<CodeXmlIcon />}
+            onClick={() => setDialog(Dialog.embed)}
+            aria-label="Embed"
+          />
+        </Tooltip>
+      )}
 
       {children}
 
-      <ToolReportDialog tool={tool} isOpen={dialog === Dialog.report} setIsOpen={handleClose} />
-      <ToolEmbedDialog tool={tool} isOpen={dialog === Dialog.embed} setIsOpen={handleClose} />
+      {reportsConfig.enabled && (
+        <ToolReportDialog tool={tool} isOpen={dialog === Dialog.report} setIsOpen={handleClose} />
+      )}
+
+      {isToolPublished(tool) && (
+        <ToolEmbedDialog tool={tool} isOpen={dialog === Dialog.embed} setIsOpen={handleClose} />
+      )}
 
       {!tool.ownerId && (
         <ToolClaimDialog tool={tool} isOpen={dialog === Dialog.claim} setIsOpen={handleClose} />
