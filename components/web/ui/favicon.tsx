@@ -18,7 +18,6 @@ const faviconVariants = cva({
 type FaviconProps = Omit<ComponentProps<"img">, "src" | "alt" | "width" | "height"> &
   VariantProps<typeof faviconVariants> & {
     src?: string | null
-    name?: string
     size?: number
   }
 

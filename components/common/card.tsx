@@ -15,7 +15,19 @@ const cardVariants = cva({
     isRevealed: {
       true: "animate-reveal",
     },
+
+    isHighlighted: {
+      true: "bg-yellow-500/10",
+    },
   },
+
+  compoundVariants: [
+    {
+      hover: true,
+      isHighlighted: true,
+      className: "hover:bg-yellow-500/15",
+    },
+  ],
 })
 
 type CardProps = ComponentProps<"div"> &
@@ -33,6 +45,7 @@ const Card = ({
   hover = true,
   focus = true,
   isRevealed,
+  isHighlighted,
   asChild,
   ...props
 }: CardProps) => {
@@ -41,7 +54,10 @@ const Card = ({
 
   return (
     <Comp
-      className={cx(boxVariants({ hover, focus }), cardVariants({ hover, isRevealed, className }))}
+      className={cx(
+        boxVariants({ hover, focus }),
+        cardVariants({ hover, isRevealed, isHighlighted, className }),
+      )}
       {...props}
     />
   )

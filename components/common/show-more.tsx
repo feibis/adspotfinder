@@ -1,3 +1,5 @@
+"use client"
+
 import { type ComponentProps, Fragment, type ReactNode, useState } from "react"
 import { Note } from "~/components/common/note"
 import { Stack } from "~/components/common/stack"
