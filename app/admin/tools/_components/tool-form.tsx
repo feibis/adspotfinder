@@ -82,6 +82,7 @@ export function ToolForm({
   const resolver = zodResolver(toolSchema)
   const [isPreviewing, setIsPreviewing] = useState(false)
   const [isStatusPending, setIsStatusPending] = useState(false)
+  const [isGenerationComplete, setIsGenerationComplete] = useState(true)
   const originalStatus = useRef(tool?.status ?? ToolStatus.Draft)
 
   const { form, action } = useHookFormAction(upsertTool, resolver, {
@@ -200,7 +201,9 @@ export function ToolForm({
           <AIGenerateContent
             url={websiteUrl}
             schema={contentSchema}
-            onFinish={object => {
+            onGenerate={() => setIsGenerationComplete(false)}
+            onFinish={() => setIsGenerationComplete(true)}
+            onStream={object => {
               form.setValue("tagline", object.tagline)
               form.setValue("description", object.description)
               form.setValue("content", object.content)
@@ -526,13 +529,13 @@ export function ToolForm({
                 selectedIds={field.value ?? []}
                 setSelectedIds={field.onChange}
                 prompt={
-                  name &&
-                  description &&
-                  `From the list of available categories below, suggest relevant categories for this link: 
+                  isGenerationComplete && name && description
+                    ? `From the list of available categories below, suggest relevant categories for this link: 
                     
                     - URL: ${websiteUrl}
                     - Meta title: ${name}
                     - Meta description: ${description}.`
+                    : undefined
                 }
               />
             </FormItem>
@@ -551,13 +554,13 @@ export function ToolForm({
                 setSelectedIds={field.onChange}
                 maxSuggestions={10}
                 prompt={
-                  name &&
-                  description &&
-                  `From the list of available tags below, suggest relevant tags for this link: 
+                  isGenerationComplete && name && description
+                    ? `From the list of available tags below, suggest relevant tags for this link: 
                     
                     - URL: ${websiteUrl}
                     - Meta title: ${name}
                     - Meta description: ${description}.`
+                    : undefined
                 }
               />
             </FormItem>

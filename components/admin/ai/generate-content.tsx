@@ -1,4 +1,5 @@
 import { experimental_useObject as useObject } from "@ai-sdk/react"
+import { TypeValidationError } from "ai"
 import { useEffect } from "react"
 import { toast } from "sonner"
 import type { z } from "zod"
@@ -7,13 +8,17 @@ import { AIGenerate } from "~/components/admin/ai/generate"
 type AIGenerateContentProps<T extends z.ZodSchema> = {
   url: string
   schema: T
-  onFinish: (object: z.infer<T>) => void
+  onGenerate?: () => void
+  onFinish?: () => void
+  onStream: (object: z.infer<T>) => void
 }
 
 export const AIGenerateContent = <T extends z.ZodSchema>({
   url,
   schema,
+  onGenerate,
   onFinish,
+  onStream,
 }: AIGenerateContentProps<T>) => {
   const errorMessage = "Something went wrong. Please check the console for more details."
   const successMessage = "Content generated successfully. Please save the page to update."
@@ -23,20 +28,35 @@ export const AIGenerateContent = <T extends z.ZodSchema>({
     schema,
 
     onFinish: ({ error }) => {
-      error ? toast.error(errorMessage) : toast.success(successMessage)
-    },
+      onFinish?.()
 
-    onError: () => {
-      toast.error(errorMessage)
+      if (error) {
+        console.error(error)
+
+        // TypeValidationError means content was generated but doesn't match schema perfectly
+        // We still consider this a success since partial content is usually usable
+        if (!TypeValidationError.isInstance(error)) {
+          toast.error(errorMessage)
+        }
+
+        return
+      }
+
+      toast.success(successMessage)
     },
   })
 
   // Handle streaming updates from AI SDK
-  useEffect(() => object && onFinish(object), [object])
+  useEffect(() => object && onStream(object), [object])
+
+  const handleGenerate = () => {
+    onGenerate?.()
+    submit({ url })
+  }
 
   return (
     <AIGenerate
-      onGenerate={() => submit({ url })}
+      onGenerate={handleGenerate}
       stop={stop}
       isLoading={isLoading}
       buttonText="Generate Content"

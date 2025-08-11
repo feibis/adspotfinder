@@ -1,6 +1,6 @@
 import { useCompletion } from "@ai-sdk/react"
 import { isTruthy } from "@primoui/utils"
-import { MousePointerClickIcon, PlusIcon, SparklesIcon } from "lucide-react"
+import { LoaderIcon, MousePointerClickIcon, PlusIcon, SparklesIcon } from "lucide-react"
 import { type ReactNode, useEffect, useState } from "react"
 import { AnimatedContainer } from "~/components/common/animated-container"
 import { Badge } from "~/components/common/badge"
@@ -49,7 +49,7 @@ export const RelationSelector = <T extends Relation>({
   const [suggestedRelations, setSuggestedRelations] = useState<T[]>(suggestRelations)
   const selectedRelations = relations?.filter(({ id }) => selectedIds.includes(id))
 
-  const { complete } = useCompletion({
+  const { complete, isLoading } = useCompletion({
     api: "/api/ai/completion",
     experimental_throttle: 1000,
 
@@ -183,6 +183,15 @@ export const RelationSelector = <T extends Relation>({
           </Command>
         </PopoverContent>
       </Popover>
+
+      {isLoading && (
+        <AnimatedContainer height transition={{ ease: "linear", duration: 0.1 }}>
+          <Stack size="xs" className="text-xs">
+            <LoaderIcon className="animate-spin" />
+            <span className="text-muted-foreground">Generating suggestions...</span>
+          </Stack>
+        </AnimatedContainer>
+      )}
 
       {(suggestedRelations.length || prompt) && (
         <AnimatedContainer height transition={{ ease: "linear", duration: 0.1 }}>
