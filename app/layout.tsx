@@ -25,7 +25,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
-    <html lang="en" className={`${fontSans.variable} scroll-smooth`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${fontSans.variable} scroll-smooth`}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <body className="min-h-dvh flex flex-col bg-background text-foreground font-sans">
         <NuqsAdapter>
           <TooltipProvider delayDuration={250}>
