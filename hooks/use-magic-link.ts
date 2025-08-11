@@ -1,9 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { ErrorContext } from "better-auth/react"
-import { usePathname, useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { useAuthCallbackUrl } from "~/hooks/use-auth-callback-url"
 import { signIn } from "~/lib/auth-client"
 
 type UseMagicLinkProps = {
@@ -12,10 +12,8 @@ type UseMagicLinkProps = {
 }
 
 export const useMagicLink = ({ onSuccess, onError }: UseMagicLinkProps = {}) => {
-  const searchParams = useSearchParams()
-  const pathname = usePathname()
   const [isPending, setIsPending] = useState(false)
-  const callbackURL = searchParams.get("next") || pathname
+  const callbackURL = useAuthCallbackUrl()
 
   const schema = z.object({
     email: z.email("Please enter a valid email address"),

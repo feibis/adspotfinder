@@ -28,16 +28,17 @@ import { submitToolSchema } from "~/server/web/shared/schema"
 
 export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
   const router = useRouter()
-  const { data: session } = useSession()
+  const session = useSession()
   const resolver = zodResolver(submitToolSchema)
+  const { name, email } = session.data?.user || {}
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(submitTool, resolver, {
     formProps: {
       defaultValues: {
         name: "",
         websiteUrl: "",
-        submitterName: session?.user.name || "",
-        submitterEmail: session?.user.email || "",
+        submitterName: name || "",
+        submitterEmail: email || "",
         submitterNote: "",
         newsletterOptIn: true,
       },
@@ -77,42 +78,36 @@ export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
         noValidate
         {...props}
       >
-        {!session?.user && (
-          <>
-            <FormField
-              control={form.control}
-              name="submitterName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel isRequired>Your Name:</FormLabel>
-                  <FormControl>
-                    <Input size="lg" placeholder="John Doe" data-1p-ignore {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        {!name && (
+          <FormField
+            control={form.control}
+            name="submitterName"
+            render={({ field }) => (
+              <FormItem className={email ? "col-span-full" : ""}>
+                <FormLabel isRequired>Your Name:</FormLabel>
+                <FormControl>
+                  <Input size="lg" placeholder="John Doe" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
-            <FormField
-              control={form.control}
-              name="submitterEmail"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel isRequired>Your Email:</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      size="lg"
-                      placeholder="john@doe.com"
-                      data-1p-ignore
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </>
+        {!email && (
+          <FormField
+            control={form.control}
+            name="submitterEmail"
+            render={({ field }) => (
+              <FormItem className={name ? "col-span-full" : ""}>
+                <FormLabel isRequired>Your Email:</FormLabel>
+                <FormControl>
+                  <Input type="email" size="lg" placeholder="john@doe.com" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         )}
 
         <FormField

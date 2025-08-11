@@ -1,10 +1,10 @@
 "use client"
 
 import { capitalCase } from "change-case"
-import { usePathname, useSearchParams } from "next/navigation"
 import { type ComponentProps, useState } from "react"
 import { toast } from "sonner"
 import { Button } from "~/components/common/button"
+import { useAuthCallbackUrl } from "~/hooks/use-auth-callback-url"
 import { signIn } from "~/lib/auth-client"
 
 type LoginButtonProps = ComponentProps<typeof Button> & {
@@ -12,10 +12,8 @@ type LoginButtonProps = ComponentProps<typeof Button> & {
 }
 
 export const LoginButton = ({ provider, ...props }: LoginButtonProps) => {
-  const searchParams = useSearchParams()
-  const pathname = usePathname()
   const [isPending, setIsPending] = useState(false)
-  const callbackURL = searchParams.get("next") || pathname
+  const callbackURL = useAuthCallbackUrl()
 
   const handleSignIn = () => {
     signIn.social({
