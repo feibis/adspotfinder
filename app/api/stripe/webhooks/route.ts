@@ -31,10 +31,9 @@ export const POST = async (req: Request) => {
   try {
     switch (event.type) {
       case "checkout.session.completed": {
-        const session = event.data.object
-        const { metadata } = session
+        const { mode, subscription, metadata } = event.data.object
 
-        switch (session.mode) {
+        switch (mode) {
           case "payment": {
             // Handle tool expedited payment
             if (metadata?.tool) {
@@ -53,12 +52,12 @@ export const POST = async (req: Request) => {
           }
 
           case "subscription": {
-            const subscription = await stripe.subscriptions.retrieve(session.subscription as string)
+            const { metadata } = await stripe.subscriptions.retrieve(subscription as string)
 
             // Handle tool featured listing
-            if (subscription.metadata?.tool) {
+            if (metadata?.tool) {
               const tool = await db.tool.update({
-                where: { slug: subscription.metadata.tool },
+                where: { slug: metadata.tool },
                 data: { isFeatured: true },
               })
 
@@ -80,8 +79,7 @@ export const POST = async (req: Request) => {
       }
 
       case "customer.subscription.deleted": {
-        const subscription = event.data.object
-        const metadata = subscription.metadata
+        const { metadata } = event.data.object
 
         // Handle tool featured listing
         if (metadata?.tool) {
