@@ -28,7 +28,7 @@ const getTag = cache(async ({ params }: PageProps) => {
   return tag
 })
 
-const getMetadata = (tag: TagOne): Metadata => {
+const getMetadata = (tag: TagOne) => {
   return {
     title: `Tools tagged "${tag.name}"`,
   }
@@ -46,7 +46,6 @@ export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
 
   const ogImageUrl = getOpenGraphImageUrl({
     title: String(metadata.title),
-    description: metadata.description,
   })
 
   return {

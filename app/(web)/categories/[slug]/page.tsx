@@ -29,7 +29,7 @@ const getCategory = cache(async ({ params }: PageProps) => {
   return category
 })
 
-const getMetadata = (category: CategoryOne): Metadata => {
+const getMetadata = (category: CategoryOne) => {
   const title = category.label || `${category.name} Tools`
 
   return {

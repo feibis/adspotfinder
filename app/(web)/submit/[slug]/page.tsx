@@ -33,7 +33,7 @@ const getTool = cache(async ({ params }: PageProps) => {
   return tool
 })
 
-const getMetadata = (tool: ToolOne): Metadata => {
+const getMetadata = (tool: ToolOne) => {
   if (isToolPublished(tool)) {
     return {
       title: `Boost ${tool.name}'s Visibility`,

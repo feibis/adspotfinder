@@ -37,7 +37,7 @@ export const generateStaticParams = () => {
   return allPosts.map(({ _meta }) => ({ slug: _meta.path }))
 }
 
-const getMetadata = (post: Post): Metadata => {
+const getMetadata = (post: Post) => {
   return {
     title: post.title,
     description: post.description,
