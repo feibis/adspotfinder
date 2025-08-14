@@ -43,11 +43,11 @@ export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogPr
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(reportTool, resolver, {
     formProps: {
-      defaultValues: {
-        toolId: tool.id,
-        email: session?.user?.email ?? "",
+      values: {
         type: "",
         message: "",
+        toolId: tool.id,
+        email: session?.user.email || "",
       },
     },
 

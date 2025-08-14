@@ -31,7 +31,7 @@ const FeedbackWidgetForm = ({ toastId, setDismissed }: FeedbackWidgetFormProps) 
   const { form, action, handleSubmitWithAction } = useHookFormAction(reportFeedback, resolver, {
     formProps: {
       defaultValues: {
-        email: session?.user?.email ?? "",
+        email: session?.user.email || "",
         message: "",
       },
     },
