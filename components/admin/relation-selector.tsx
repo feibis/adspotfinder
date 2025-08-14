@@ -1,4 +1,5 @@
 import { useCompletion } from "@ai-sdk/react"
+import { useDebouncedValue } from "@mantine/hooks"
 import { isTruthy } from "@primoui/utils"
 import { LoaderIcon, MousePointerClickIcon, PlusIcon, SparklesIcon } from "lucide-react"
 import { type ReactNode, useEffect, useState } from "react"
@@ -48,11 +49,10 @@ export const RelationSelector = <T extends Relation>({
   const suggestRelations = suggestedIds ? relations.filter(r => suggestedIds.includes(r.id)) : []
   const [suggestedRelations, setSuggestedRelations] = useState<T[]>(suggestRelations)
   const selectedRelations = relations?.filter(({ id }) => selectedIds.includes(id))
+  const [debouncedPrompt] = useDebouncedValue(prompt, 500)
 
   const { complete, isLoading } = useCompletion({
     api: "/api/ai/completion",
-    experimental_throttle: 1000,
-
     onFinish: (_, completion) => {
       if (completion) {
         const suggestions = completion
@@ -69,8 +69,13 @@ export const RelationSelector = <T extends Relation>({
   })
 
   useEffect(() => {
-    if (prompt && !!relations.length && !selectedIds.length && !suggestedRelations.length) {
-      complete(`${prompt}
+    if (
+      debouncedPrompt &&
+      !!relations.length &&
+      !selectedIds.length &&
+      !suggestedRelations.length
+    ) {
+      complete(`${debouncedPrompt}
         
         Only return the relation names in comma-separated format, and nothing else. If there are no relevant relations, return an empty string.
         Sort the relations by relevance to the link.
@@ -79,7 +84,7 @@ export const RelationSelector = <T extends Relation>({
         Available relations: ${relations.map(({ name }) => name).join(", ")}
       `)
     }
-  }, [prompt, selectedIds])
+  }, [debouncedPrompt, selectedIds])
 
   const handleFilter = (value: string, search: string) => {
     const normalizedValue = value.toLowerCase()
