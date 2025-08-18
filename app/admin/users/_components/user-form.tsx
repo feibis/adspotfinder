@@ -15,16 +15,15 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/common/form"
+import { FormMedia } from "~/components/common/form-media"
 import { H3 } from "~/components/common/heading"
 import { Input } from "~/components/common/input"
 import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
-import { useMediaAction } from "~/hooks/use-media-action"
 import { cx } from "~/lib/utils"
 import { updateUser } from "~/server/admin/users/actions"
 import type { findUserById } from "~/server/admin/users/queries"
 import { userSchema } from "~/server/admin/users/schema"
-import { VALID_IMAGE_TYPES } from "~/server/web/shared/schema"
 
 type UserFormProps = ComponentProps<"form"> & {
   user: NonNullable<Awaited<ReturnType<typeof findUserById>>>
@@ -53,13 +52,6 @@ export function UserForm({ children, className, title, user, ...props }: UserFor
         toast.error(error.serverError)
       },
     },
-  })
-
-  // Media action for user image
-  const imageAction = useMediaAction({
-    form,
-    path: `users/${user.id}/avatar`,
-    fieldName: "image",
   })
 
   return (
@@ -112,34 +104,13 @@ export function UserForm({ children, className, title, user, ...props }: UserFor
           control={form.control}
           name="image"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Image</FormLabel>
-
-              <FormControl>
-                <Input {...field} type="hidden" />
-              </FormControl>
-
-              <Stack size="sm" className="w-full">
-                {field.value && (
-                  <Avatar className="size-8 border box-content">
-                    <AvatarImage src={field.value} />
-                  </Avatar>
-                )}
-
-                <div className="flex-1">
-                  <FormControl>
-                    <Input
-                      type="file"
-                      accept={VALID_IMAGE_TYPES.join(",")}
-                      hover
-                      onChange={imageAction.handleUpload}
-                    />
-                  </FormControl>
-                </div>
-              </Stack>
-
-              <FormMessage />
-            </FormItem>
+            <FormMedia form={form} field={field} path={`users/${user.id}/avatar`}>
+              {field.value && (
+                <Avatar className="size-8 border box-content">
+                  <AvatarImage src={field.value} />
+                </Avatar>
+              )}
+            </FormMedia>
           )}
         />
 
@@ -148,7 +119,7 @@ export function UserForm({ children, className, title, user, ...props }: UserFor
             <Link href="/admin/users">Cancel</Link>
           </Button>
 
-          <Button size="md" isPending={action.isPending || imageAction.upload.isPending}>
+          <Button size="md" isPending={action.isPending}>
             Update user
           </Button>
         </div>

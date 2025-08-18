@@ -2,9 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
-import { formatDateTime, getRandomString, isValidUrl, slugify } from "@primoui/utils"
+import { formatDateTime, getRandomString, slugify } from "@primoui/utils"
 import { type Tool, ToolStatus } from "@prisma/client"
-import { DownloadCloudIcon, EyeIcon, InfoIcon, PencilIcon, UploadIcon } from "lucide-react"
+import { EyeIcon, InfoIcon, PencilIcon } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { type ComponentProps, use, useMemo, useRef, useState } from "react"
@@ -22,6 +22,7 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/common/form"
+import { FormMedia } from "~/components/common/form-media"
 import { H3 } from "~/components/common/heading"
 import { Input, inputVariants } from "~/components/common/input"
 import { Link } from "~/components/common/link"
@@ -33,7 +34,6 @@ import { Tooltip } from "~/components/common/tooltip"
 import { Markdown } from "~/components/web/markdown"
 import { siteConfig } from "~/config/site"
 import { useComputedField } from "~/hooks/use-computed-field"
-import { useMediaAction } from "~/hooks/use-media-action"
 import { isToolPublished } from "~/lib/tools"
 import { cx } from "~/lib/utils"
 import type { findCategoryList } from "~/server/admin/categories/queries"
@@ -42,7 +42,6 @@ import type { findTagList } from "~/server/admin/tags/queries"
 import { upsertTool } from "~/server/admin/tools/actions"
 import type { findToolBySlug } from "~/server/admin/tools/queries"
 import { toolSchema } from "~/server/admin/tools/schema"
-import { VALID_IMAGE_TYPES } from "~/server/web/shared/schema"
 
 const ToolStatusChange = ({ tool }: { tool: Tool }) => {
   return (
@@ -83,8 +82,6 @@ export function ToolForm({
   const [isPreviewing, setIsPreviewing] = useState(false)
   const [isStatusPending, setIsStatusPending] = useState(false)
   const [isGenerationComplete, setIsGenerationComplete] = useState(true)
-  const faviconInputRef = useRef<HTMLInputElement>(null)
-  const screenshotInputRef = useRef<HTMLInputElement>(null)
   const originalStatus = useRef(tool?.status ?? ToolStatus.Draft)
 
   const { form, action } = useHookFormAction(upsertTool, resolver, {
@@ -156,21 +153,6 @@ export function ToolForm({
 
   // Store the upload path in a memoized value
   const path = useMemo(() => `tools/${slug || getRandomString(12)}`, [slug])
-
-  // Media actions
-  const faviconAction = useMediaAction({
-    form,
-    path: `${path}/favicon`,
-    fieldName: "faviconUrl",
-    fetchType: "favicon",
-  })
-
-  const screenshotAction = useMediaAction({
-    form,
-    path: `${path}/screenshot`,
-    fieldName: "screenshotUrl",
-    fetchType: "screenshot",
-  })
 
   // Handle form submission
   const handleSubmit = form.handleSubmit((data, event) => {
@@ -426,62 +408,24 @@ export function ToolForm({
           control={form.control}
           name="faviconUrl"
           render={({ field }) => (
-            <FormItem className="items-stretch">
-              <Stack className="justify-between">
-                <FormLabel className="flex-1">Favicon URL</FormLabel>
-
-                <Stack size="xs" className="-my-1">
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="secondary"
-                    prefix={<UploadIcon />}
-                    isPending={faviconAction.upload.isPending}
-                    onClick={() => faviconInputRef.current?.click()}
-                  >
-                    Upload
-                  </Button>
-
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="secondary"
-                    prefix={<DownloadCloudIcon />}
-                    isPending={faviconAction.fetch?.isPending}
-                    disabled={!isValidUrl(websiteUrl) || faviconAction.fetch?.isPending}
-                    onClick={() => faviconAction.handleFetch(websiteUrl)}
-                  >
-                    Fetch
-                  </Button>
-                </Stack>
-              </Stack>
-
-              <input
-                ref={faviconInputRef}
-                type="file"
-                accept={VALID_IMAGE_TYPES.join(",")}
-                onChange={faviconAction.handleUpload}
-                className="hidden"
-              />
-
-              <Stack size="sm">
-                {field.value && (
-                  <Image
-                    src={field.value}
-                    alt="Favicon"
-                    width={32}
-                    height={32}
-                    className="size-8 border box-content rounded-md object-contain"
-                    unoptimized
-                  />
-                )}
-
-                <FormControl>
-                  <Input type="url" className="flex-1" {...field} />
-                </FormControl>
-              </Stack>
-              <FormMessage />
-            </FormItem>
+            <FormMedia
+              form={form}
+              field={field}
+              path={`${path}/favicon`}
+              fetchType="favicon"
+              websiteUrl={websiteUrl}
+            >
+              {field.value && (
+                <Image
+                  src={field.value}
+                  alt="Favicon"
+                  width={32}
+                  height={32}
+                  className="size-8 border box-content rounded-md object-contain"
+                  unoptimized
+                />
+              )}
+            </FormMedia>
           )}
         />
 
@@ -489,62 +433,24 @@ export function ToolForm({
           control={form.control}
           name="screenshotUrl"
           render={({ field }) => (
-            <FormItem className="items-stretch">
-              <Stack className="justify-between">
-                <FormLabel className="flex-1">Screenshot URL</FormLabel>
-
-                <Stack size="xs" className="-my-1">
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="secondary"
-                    prefix={<UploadIcon />}
-                    isPending={screenshotAction.upload.isPending}
-                    onClick={() => screenshotInputRef.current?.click()}
-                  >
-                    Upload
-                  </Button>
-
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="secondary"
-                    prefix={<DownloadCloudIcon />}
-                    isPending={screenshotAction.fetch?.isPending}
-                    disabled={!isValidUrl(websiteUrl) || screenshotAction.fetch?.isPending}
-                    onClick={() => screenshotAction.handleFetch(websiteUrl)}
-                  >
-                    Fetch
-                  </Button>
-                </Stack>
-              </Stack>
-
-              <input
-                ref={screenshotInputRef}
-                type="file"
-                accept={VALID_IMAGE_TYPES.join(",")}
-                onChange={screenshotAction.handleUpload}
-                className="hidden"
-              />
-
-              <Stack size="sm">
-                {field.value && (
-                  <Image
-                    src={field.value}
-                    alt="Screenshot"
-                    height={72}
-                    width={128}
-                    unoptimized
-                    className="h-8 w-auto border box-content rounded-md aspect-video object-cover"
-                  />
-                )}
-
-                <FormControl>
-                  <Input type="url" className="flex-1" {...field} />
-                </FormControl>
-              </Stack>
-              <FormMessage />
-            </FormItem>
+            <FormMedia
+              form={form}
+              field={field}
+              path={`${path}/screenshot`}
+              fetchType="screenshot"
+              websiteUrl={websiteUrl}
+            >
+              {field.value && (
+                <Image
+                  src={field.value}
+                  alt="Screenshot"
+                  height={72}
+                  width={128}
+                  unoptimized
+                  className="h-8 w-auto border box-content rounded-md aspect-video object-cover"
+                />
+              )}
+            </FormMedia>
           )}
         />
 

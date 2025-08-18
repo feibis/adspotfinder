@@ -67,5 +67,11 @@ export const useMediaAction = <T extends FieldValues>({
     upload.execute({ path, file: data })
   }
 
-  return { fetch, upload, handleFetch, handleUpload }
+  return {
+    fetch,
+    upload,
+    handleFetch,
+    handleUpload,
+    isPending: fetch.isPending || upload.isPending,
+  }
 }
