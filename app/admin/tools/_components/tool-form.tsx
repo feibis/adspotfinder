@@ -232,7 +232,7 @@ export function ToolForm({
 
       <form
         onSubmit={handleSubmit}
-        className={cx("grid gap-4 @sm:grid-cols-2", className)}
+        className={cx("grid gap-4 @lg:grid-cols-2", className)}
         noValidate
         {...props}
       >

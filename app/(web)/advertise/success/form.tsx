@@ -57,7 +57,7 @@ export const AdDetailsForm = ({ className, sessionId, ad, ...props }: AdDetailsF
     <Form {...form}>
       <form
         onSubmit={handleSubmitWithAction}
-        className={cx("grid w-full gap-5 sm:grid-cols-2", className)}
+        className={cx("grid w-full gap-5 @md:grid-cols-2", className)}
         noValidate
         {...props}
       >

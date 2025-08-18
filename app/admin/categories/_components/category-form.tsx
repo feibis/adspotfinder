@@ -109,11 +109,11 @@ export function CategoryForm({
 
       <form
         onSubmit={handleSubmitWithAction}
-        className={cx("grid gap-4 @sm:grid-cols-2", className)}
+        className={cx("grid gap-4 @lg:grid-cols-2", className)}
         noValidate
         {...props}
       >
-        <div className="grid gap-4 @sm:grid-cols-2">
+        <div className="grid gap-4 @lg:grid-cols-2">
           <FormField
             control={form.control}
             name="name"

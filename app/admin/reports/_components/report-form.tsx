@@ -72,7 +72,7 @@ export function ReportForm({ children, className, title, report, ...props }: Rep
 
       <form
         onSubmit={handleSubmitWithAction}
-        className={cx("grid gap-4 @sm:grid-cols-2", className)}
+        className={cx("grid gap-4 @md:grid-cols-2", className)}
         noValidate
         {...props}
       >

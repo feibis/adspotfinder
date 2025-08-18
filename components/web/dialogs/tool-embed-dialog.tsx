@@ -85,7 +85,7 @@ export const ToolEmbedDialog = ({ tool, isOpen, setIsOpen }: ToolEmbedDialogProp
 
   const embedCode = useMemo(
     () =>
-      `<a href=\"${toolLink}?${utm.toString()}\" target=\"_blank\"><img src=\"${badgeUrl}\" width=\"${width}\" height=\"${height}\" alt=\"${tool.name} badge\" loading=\"lazy\" /></a>`,
+      `<a href="${toolLink}?${utm.toString()}" target="_blank"><img src="${badgeUrl}" width="${width}" height="${height}" alt="${tool.name} badge" loading="lazy" /></a>`,
     [badgeUrl, width, height, tool.name, toolLink, utm],
   )
 
