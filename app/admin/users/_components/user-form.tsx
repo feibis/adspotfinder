@@ -2,8 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
-import { useAction } from "next-safe-action/hooks"
-import { type ChangeEvent, type ComponentProps, useState } from "react"
+import type { ComponentProps } from "react"
 import { toast } from "sonner"
 import { UserActions } from "~/app/admin/users/_components/user-actions"
 import { Avatar, AvatarImage } from "~/components/common/avatar"
@@ -17,16 +16,15 @@ import {
   FormMessage,
 } from "~/components/common/form"
 import { H3 } from "~/components/common/heading"
-import { Hint } from "~/components/common/hint"
 import { Input } from "~/components/common/input"
 import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
+import { useMediaAction } from "~/hooks/use-media-action"
 import { cx } from "~/lib/utils"
 import { updateUser } from "~/server/admin/users/actions"
 import type { findUserById } from "~/server/admin/users/queries"
 import { userSchema } from "~/server/admin/users/schema"
-import { fileSchema, VALID_IMAGE_TYPES } from "~/server/web/shared/schema"
-import { uploadUserImage } from "~/server/web/users/actions"
+import { VALID_IMAGE_TYPES } from "~/server/web/shared/schema"
 
 type UserFormProps = ComponentProps<"form"> & {
   user: NonNullable<Awaited<ReturnType<typeof findUserById>>>
@@ -34,16 +32,15 @@ type UserFormProps = ComponentProps<"form"> & {
 
 export function UserForm({ children, className, title, user, ...props }: UserFormProps) {
   const resolver = zodResolver(userSchema)
-  const [imageError, setImageError] = useState<string | null>(null)
 
   // Update user
   const { form, action, handleSubmitWithAction } = useHookFormAction(updateUser, resolver, {
     formProps: {
       defaultValues: {
-        id: user?.id ?? "",
-        name: user?.name ?? "",
-        email: user?.email ?? "",
-        image: user?.image ?? "",
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        image: user.image ?? "",
       },
     },
 
@@ -58,34 +55,12 @@ export function UserForm({ children, className, title, user, ...props }: UserFor
     },
   })
 
-  // Upload user image
-  const uploadAction = useAction(uploadUserImage, {
-    onSuccess: ({ data }) => {
-      setImageError(null)
-      toast.success("User image successfully uploaded. Please save the user to update.")
-      form.setValue("image", data)
-    },
-
-    onError: ({ error }) => {
-      const { serverError, validationErrors } = error
-
-      serverError && toast.error(serverError)
-      validationErrors?.file?._errors?.[0] && setImageError(validationErrors.file._errors[0])
-    },
+  // Media action for user image
+  const imageAction = useMediaAction({
+    form,
+    path: `users/${user.id}/avatar`,
+    fieldName: "image",
   })
-
-  const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    const { data, error } = await fileSchema.safeParseAsync(file)
-
-    if (error) {
-      setImageError(JSON.parse(error.message)[0]?.message)
-      return
-    }
-
-    setImageError(null)
-    uploadAction.execute({ id: user.id, file: data })
-  }
 
   return (
     <Form {...form}>
@@ -157,13 +132,12 @@ export function UserForm({ children, className, title, user, ...props }: UserFor
                       type="file"
                       accept={VALID_IMAGE_TYPES.join(",")}
                       hover
-                      onChange={handleImageChange}
+                      onChange={imageAction.handleUpload}
                     />
                   </FormControl>
                 </div>
               </Stack>
 
-              {imageError && <Hint>{imageError}</Hint>}
               <FormMessage />
             </FormItem>
           )}
@@ -174,7 +148,7 @@ export function UserForm({ children, className, title, user, ...props }: UserFor
             <Link href="/admin/users">Cancel</Link>
           </Button>
 
-          <Button size="md" isPending={action.isPending || uploadAction.isPending}>
+          <Button size="md" isPending={action.isPending || imageAction.upload.isPending}>
             Update user
           </Button>
         </div>

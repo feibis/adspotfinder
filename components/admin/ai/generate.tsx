@@ -1,8 +1,6 @@
 import { useLocalStorage } from "@mantine/hooks"
 import { LoaderIcon, SparklesIcon } from "lucide-react"
-import { useState } from "react"
-import { useFormContext } from "react-hook-form"
-import { toast } from "sonner"
+import { type ComponentProps, useState } from "react"
 import { Button } from "~/components/common/button"
 import {
   Dialog,
@@ -15,18 +13,23 @@ import {
 } from "~/components/common/dialog"
 import { siteConfig } from "~/config/site"
 
-type AIGenerateProps = {
+type AIGenerateProps = ComponentProps<typeof Button> & {
   stop: () => void
   isLoading: boolean
   buttonText?: string
   onGenerate: () => void
 }
 
-export const AIGenerate = ({ stop, isLoading, buttonText, onGenerate }: AIGenerateProps) => {
+export const AIGenerate = ({
+  stop,
+  isLoading,
+  buttonText,
+  onGenerate,
+  ...props
+}: AIGenerateProps) => {
   const key = siteConfig.slug
   const [isAlertOpen, setIsAlertOpen] = useState(false)
   const [consent, setConsent] = useLocalStorage({ key: `${key}-ai-consent`, defaultValue: false })
-  const { formState } = useFormContext()
 
   const handleGenerate = (force = false) => {
     if (!consent && !force) {
@@ -37,11 +40,7 @@ export const AIGenerate = ({ stop, isLoading, buttonText, onGenerate }: AIGenera
     setIsAlertOpen(false)
     setConsent(true)
 
-    if (!formState.isValid) {
-      toast.error("Invalid form data. Please check the console for more details.")
-      return
-    }
-
+    // Generate content
     onGenerate()
   }
 
@@ -51,9 +50,9 @@ export const AIGenerate = ({ stop, isLoading, buttonText, onGenerate }: AIGenera
         type="button"
         variant="secondary"
         size="md"
-        disabled={!formState.isValid}
         prefix={isLoading ? <LoaderIcon className="animate-spin" /> : <SparklesIcon />}
         onClick={() => (isLoading ? stop() : handleGenerate())}
+        {...props}
       >
         <span className="max-md:sr-only">
           {isLoading ? "Stop Generating" : buttonText || "Generate"}

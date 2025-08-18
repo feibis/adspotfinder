@@ -1,13 +1,14 @@
 "use server"
 
-import { getUrlHostname, tryCatch } from "@primoui/utils"
+import { getUrlHostname } from "@primoui/utils"
 import { AdType, type Prisma } from "@prisma/client"
 import { revalidateTag } from "next/cache"
 import { redirect } from "next/navigation"
 import { z } from "zod"
 import { env } from "~/env"
-import { uploadFavicon } from "~/lib/media"
+import { getFaviconFetchUrl } from "~/lib/media"
 import { actionClient } from "~/lib/safe-actions"
+import { fetchMedia } from "~/server/web/actions/media"
 import { adDetailsSchema } from "~/server/web/shared/schema"
 import { db } from "~/services/db"
 import { stripe } from "~/services/stripe"
@@ -104,9 +105,12 @@ export const createAdFromCheckout = actionClient
       throw new Error("Checkout session is not complete")
     }
 
-    // Upload favicon
     const websiteUrl = getUrlHostname(adDetails.websiteUrl)
-    const { data: faviconUrl } = await tryCatch(uploadFavicon(websiteUrl, `ads/${websiteUrl}`))
+    const faviconFetchUrl = getFaviconFetchUrl(websiteUrl)
+    const faviconPath = `ads/${websiteUrl}/favicon`
+
+    // Upload favicon
+    const { data: faviconUrl } = await fetchMedia({ url: faviconFetchUrl, path: faviconPath })
 
     // Check if ads already exist for specific sessionId
     const existingAds = await db.ad.findMany({

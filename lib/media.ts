@@ -1,25 +1,26 @@
 import { DeleteObjectCommand, ListObjectsV2Command } from "@aws-sdk/client-s3"
 import { Upload } from "@aws-sdk/lib-storage"
 import { stripURLSubpath, tryCatch } from "@primoui/utils"
-import wretch from "wretch"
-import QueryStringAddon from "wretch/addons/queryString"
+import { fileTypeFromBuffer } from "file-type"
 import { env, isProd } from "~/env"
 import { s3Client } from "~/services/s3"
 
 /**
  * Uploads a file to S3 and returns the S3 location.
  * @param file - The file to upload.
- * @param key - The S3 key to upload the file to.
+ * @param key - The S3 key to upload the file to (without extension)
  * @returns The S3 location of the uploaded file.
  */
 export const uploadToS3Storage = async (file: Buffer, key: string) => {
   const endpoint = env.S3_PUBLIC_URL ?? `https://${env.S3_BUCKET}.s3.${env.S3_REGION}.amazonaws.com`
+  const fileType = await fileTypeFromBuffer(file)
+  const s3Key = `${key}.${fileType?.ext ?? "png"}`
 
   const upload = new Upload({
     client: s3Client,
     params: {
       Bucket: env.S3_BUCKET,
-      Key: key,
+      Key: s3Key,
       Body: file,
       StorageClass: "STANDARD",
     },
@@ -28,13 +29,18 @@ export const uploadToS3Storage = async (file: Buffer, key: string) => {
     leavePartsOnError: false,
   })
 
-  const result = await upload.done()
+  const { data, error } = await tryCatch(upload.done())
 
-  if (!result.Key) {
+  if (error) {
+    console.error("Failed to upload:", error)
+    throw error
+  }
+
+  if (!data.Key) {
     throw new Error("Failed to upload")
   }
 
-  return `${endpoint}/${key}?v=${Date.now()}`
+  return `${endpoint}/${data.Key}?v=${Date.now()}`
 }
 
 /**
@@ -88,73 +94,26 @@ export const removeS3File = async (key: string) => {
 }
 
 /**
- * Types for media upload
- */
-type MediaUploadParams = {
-  endpointUrl: string
-  s3Key: string
-  options?: Record<string, string>
-}
-
-/**
- * Uploads media to S3 and returns the S3 location.
- * @param params - The parameters for uploading media.
- * @returns The S3 location of the uploaded media.
- */
-export const uploadMedia = async ({ endpointUrl, s3Key, options = {} }: MediaUploadParams) => {
-  const response = await tryCatch(
-    wretch(endpointUrl)
-      .addon(QueryStringAddon)
-      .query(options)
-      .get()
-      .badRequest(console.error)
-      .arrayBuffer()
-      .then(buffer => Buffer.from(buffer)),
-  )
-
-  if (response.error) {
-    console.error("Error fetching media:", response.error)
-    throw response.error
-  }
-
-  // Upload to S3
-  const { data, error } = await tryCatch(uploadToS3Storage(response.data, s3Key))
-
-  if (error) {
-    console.error("Error uploading media:", error)
-    throw error
-  }
-
-  return data
-}
-
-/**
- * Uploads a favicon to S3 and returns the S3 location.
+ * Gets the URL of the favicon API endpoint.
  * @param url - The URL of the website to fetch the favicon from.
- * @param s3Key - The S3 key to upload the favicon to.
- * @returns The S3 location of the uploaded favicon.
+ * @returns The URL of the favicon API endpoint.
  */
-export const uploadFavicon = async (url: string, s3Key: string) => {
-  const options = {
+export const getFaviconFetchUrl = (url: string) => {
+  const options = new URLSearchParams({
     domain_url: stripURLSubpath(url),
     sz: "128",
-  }
-
-  return uploadMedia({
-    endpointUrl: "https://www.google.com/s2/favicons",
-    s3Key: `${s3Key}/favicon.png`,
-    options,
   })
+
+  return `https://www.google.com/s2/favicons?${options.toString()}`
 }
 
 /**
- * Uploads a screenshot to S3 and returns the S3 location.
+ * Gets the URL of the screenshot API endpoint.
  * @param url - The URL of the website to fetch the screenshot from.
- * @param s3Key - The S3 key to upload the screenshot to.
- * @returns The S3 location of the uploaded screenshot.
+ * @returns The URL of the screenshot API endpoint.
  */
-export const uploadScreenshot = async (url: string, s3Key: string) => {
-  const options = {
+export const getScreenshotFetchUrl = (url: string) => {
+  const params = new URLSearchParams({
     url,
     access_key: env.SCREENSHOTONE_ACCESS_KEY,
 
@@ -170,11 +129,7 @@ export const uploadScreenshot = async (url: string, s3Key: string) => {
     viewport_width: "1280",
     viewport_height: "720",
     image_quality: "90",
-  }
-
-  return uploadMedia({
-    endpointUrl: "https://api.screenshotone.com/take",
-    s3Key: `${s3Key}/screenshot.webp`,
-    options,
   })
+
+  return `https://api.screenshotone.com/take?${params.toString()}`
 }

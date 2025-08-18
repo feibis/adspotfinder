@@ -1,5 +1,6 @@
 import { experimental_useObject as useObject } from "@ai-sdk/react"
 import { useEffect } from "react"
+import { useFormContext } from "react-hook-form"
 import { toast } from "sonner"
 import type { z } from "zod"
 import { AIGenerate } from "~/components/admin/ai/generate"
@@ -15,6 +16,7 @@ export const AIGenerateDescription = <T extends z.ZodSchema>({
   schema,
   onFinish,
 }: AIGenerateDescriptionProps<T>) => {
+  const { formState } = useFormContext()
   const errorMessage = "Something went wrong. Please check the console for more details."
   const successMessage = "Content generated successfully. Please save the page to update."
 
@@ -40,6 +42,7 @@ export const AIGenerateDescription = <T extends z.ZodSchema>({
       stop={stop}
       isLoading={isLoading}
       buttonText="Generate Description"
+      disabled={!formState.isValid}
     />
   )
 }

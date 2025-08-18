@@ -4,11 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { formatDateTime, getRandomString, isValidUrl, slugify } from "@primoui/utils"
 import { type Tool, ToolStatus } from "@prisma/client"
-import { EyeIcon, InfoIcon, PencilIcon, RefreshCwIcon } from "lucide-react"
+import { DownloadCloudIcon, EyeIcon, InfoIcon, PencilIcon, UploadIcon } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { useAction } from "next-safe-action/hooks"
-import { type ComponentProps, use, useRef, useState } from "react"
+import { type ComponentProps, use, useMemo, useRef, useState } from "react"
 import { toast } from "sonner"
 import { ToolActions } from "~/app/admin/tools/_components/tool-actions"
 import { ToolPublishActions } from "~/app/admin/tools/_components/tool-publish-actions"
@@ -34,6 +33,7 @@ import { Tooltip } from "~/components/common/tooltip"
 import { Markdown } from "~/components/web/markdown"
 import { siteConfig } from "~/config/site"
 import { useComputedField } from "~/hooks/use-computed-field"
+import { useMediaAction } from "~/hooks/use-media-action"
 import { isToolPublished } from "~/lib/tools"
 import { cx } from "~/lib/utils"
 import type { findCategoryList } from "~/server/admin/categories/queries"
@@ -42,7 +42,7 @@ import type { findTagList } from "~/server/admin/tags/queries"
 import { upsertTool } from "~/server/admin/tools/actions"
 import type { findToolBySlug } from "~/server/admin/tools/queries"
 import { toolSchema } from "~/server/admin/tools/schema"
-import { generateFavicon, generateScreenshot } from "~/server/web/actions/media"
+import { VALID_IMAGE_TYPES } from "~/server/web/shared/schema"
 
 const ToolStatusChange = ({ tool }: { tool: Tool }) => {
   return (
@@ -83,6 +83,8 @@ export function ToolForm({
   const [isPreviewing, setIsPreviewing] = useState(false)
   const [isStatusPending, setIsStatusPending] = useState(false)
   const [isGenerationComplete, setIsGenerationComplete] = useState(true)
+  const faviconInputRef = useRef<HTMLInputElement>(null)
+  const screenshotInputRef = useRef<HTMLInputElement>(null)
   const originalStatus = useRef(tool?.status ?? ToolStatus.Draft)
 
   const { form, action } = useHookFormAction(upsertTool, resolver, {
@@ -152,26 +154,25 @@ export function ToolForm({
     "description",
   ])
 
-  // Generate favicon
-  const faviconAction = useAction(generateFavicon, {
-    onSuccess: ({ data }) => {
-      toast.success("Favicon successfully generated. Please save the tool to update.")
-      form.setValue("faviconUrl", data)
-    },
+  // Store the upload path in a memoized value
+  const path = useMemo(() => `tools/${slug || getRandomString(12)}`, [slug])
 
-    onError: ({ error }) => toast.error(error.serverError),
+  // Media actions
+  const faviconAction = useMediaAction({
+    form,
+    path: `${path}/favicon`,
+    fieldName: "faviconUrl",
+    fetchType: "favicon",
   })
 
-  // Generate screenshot
-  const screenshotAction = useAction(generateScreenshot, {
-    onSuccess: ({ data }) => {
-      toast.success("Screenshot successfully generated. Please save the tool to update.")
-      form.setValue("screenshotUrl", data)
-    },
-
-    onError: ({ error }) => toast.error(error.serverError),
+  const screenshotAction = useMediaAction({
+    form,
+    path: `${path}/screenshot`,
+    fieldName: "screenshotUrl",
+    fetchType: "screenshot",
   })
 
+  // Handle form submission
   const handleSubmit = form.handleSubmit((data, event) => {
     const submitter = (event?.nativeEvent as SubmitEvent)?.submitter
     const isStatusChange = submitter?.getAttribute("name") !== "submit"
@@ -183,6 +184,7 @@ export function ToolForm({
     action.execute(data)
   })
 
+  // Handle status change
   const handleStatusSubmit = (status: ToolStatus, publishedAt: Date | null) => {
     // Update form values
     form.setValue("status", status)
@@ -428,25 +430,39 @@ export function ToolForm({
               <Stack className="justify-between">
                 <FormLabel className="flex-1">Favicon URL</FormLabel>
 
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="secondary"
-                  prefix={
-                    <RefreshCwIcon className={cx(faviconAction.isPending && "animate-spin")} />
-                  }
-                  className="-my-1"
-                  disabled={!isValidUrl(websiteUrl) || faviconAction.isPending}
-                  onClick={() => {
-                    faviconAction.execute({
-                      url: websiteUrl,
-                      path: `tools/${slug || getRandomString(12)}`,
-                    })
-                  }}
-                >
-                  {field.value ? "Regenerate" : "Generate"}
-                </Button>
+                <Stack size="xs" className="-my-1">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    prefix={<UploadIcon />}
+                    isPending={faviconAction.upload.isPending}
+                    onClick={() => faviconInputRef.current?.click()}
+                  >
+                    Upload
+                  </Button>
+
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    prefix={<DownloadCloudIcon />}
+                    isPending={faviconAction.fetch?.isPending}
+                    disabled={!isValidUrl(websiteUrl) || faviconAction.fetch?.isPending}
+                    onClick={() => faviconAction.handleFetch(websiteUrl)}
+                  >
+                    Fetch
+                  </Button>
+                </Stack>
               </Stack>
+
+              <input
+                ref={faviconInputRef}
+                type="file"
+                accept={VALID_IMAGE_TYPES.join(",")}
+                onChange={faviconAction.handleUpload}
+                className="hidden"
+              />
 
               <Stack size="sm">
                 {field.value && (
@@ -477,25 +493,39 @@ export function ToolForm({
               <Stack className="justify-between">
                 <FormLabel className="flex-1">Screenshot URL</FormLabel>
 
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="secondary"
-                  prefix={
-                    <RefreshCwIcon className={cx(screenshotAction.isPending && "animate-spin")} />
-                  }
-                  className="-my-1"
-                  disabled={!isValidUrl(websiteUrl) || screenshotAction.isPending}
-                  onClick={() => {
-                    screenshotAction.execute({
-                      url: websiteUrl,
-                      path: `tools/${slug || getRandomString(12)}`,
-                    })
-                  }}
-                >
-                  {field.value ? "Regenerate" : "Generate"}
-                </Button>
+                <Stack size="xs" className="-my-1">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    prefix={<UploadIcon />}
+                    isPending={screenshotAction.upload.isPending}
+                    onClick={() => screenshotInputRef.current?.click()}
+                  >
+                    Upload
+                  </Button>
+
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    prefix={<DownloadCloudIcon />}
+                    isPending={screenshotAction.fetch?.isPending}
+                    disabled={!isValidUrl(websiteUrl) || screenshotAction.fetch?.isPending}
+                    onClick={() => screenshotAction.handleFetch(websiteUrl)}
+                  >
+                    Fetch
+                  </Button>
+                </Stack>
               </Stack>
+
+              <input
+                ref={screenshotInputRef}
+                type="file"
+                accept={VALID_IMAGE_TYPES.join(",")}
+                onChange={screenshotAction.handleUpload}
+                className="hidden"
+              />
 
               <Stack size="sm">
                 {field.value && (

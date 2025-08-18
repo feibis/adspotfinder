@@ -1,4 +1,5 @@
 import { experimental_useObject as useObject } from "@ai-sdk/react"
+import { isValidUrl } from "@primoui/utils"
 import { TypeValidationError } from "ai"
 import { useEffect } from "react"
 import { toast } from "sonner"
@@ -60,6 +61,7 @@ export const AIGenerateContent = <T extends z.ZodSchema>({
       stop={stop}
       isLoading={isLoading}
       buttonText="Generate Content"
+      disabled={!isValidUrl(url)}
     />
   )
 }
