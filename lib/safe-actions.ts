@@ -3,6 +3,16 @@ import { noCase } from "change-case"
 import { headers } from "next/headers"
 import { createSafeActionClient } from "next-safe-action"
 import { auth } from "~/lib/auth"
+import { queueRevalidation, type RevalidateOptions } from "~/lib/revalidation"
+import { db } from "~/services/db"
+
+/**
+ * Queue revalidation for the given options
+ * @param options - The options to queue revalidation for
+ */
+const revalidate = (options: RevalidateOptions) => {
+  queueRevalidation(options)
+}
 
 // -----------------------------------------------------------------------------
 // 1. Base action client – put global error handling / metadata here if needed
@@ -28,6 +38,10 @@ export const actionClient = createSafeActionClient({
 
     return "Something went wrong while executing the operation."
   },
+}).use(async ({ next, ctx }) => {
+  return next({
+    ctx: { ...ctx, db, revalidate },
+  })
 })
 
 // -----------------------------------------------------------------------------

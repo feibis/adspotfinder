@@ -1,16 +1,13 @@
 "use server"
 
 import { slugify } from "@primoui/utils"
-import { revalidatePath, revalidateTag } from "next/cache"
-import { after } from "next/server"
 import { z } from "zod"
 import { adminActionClient } from "~/lib/safe-actions"
 import { categorySchema } from "~/server/admin/categories/schema"
-import { db } from "~/services/db"
 
 export const upsertCategory = adminActionClient
   .inputSchema(categorySchema)
-  .action(async ({ parsedInput: { id, tools, ...input } }) => {
+  .action(async ({ parsedInput: { id, tools, ...input }, ctx: { db, revalidate } }) => {
     const toolIds = tools?.map(id => ({ id }))
 
     const category = id
@@ -30,10 +27,9 @@ export const upsertCategory = adminActionClient
           },
         })
 
-    after(() => {
-      revalidatePath("/admin/categories")
-      revalidateTag("categories")
-      revalidateTag(`category-${category.slug}`)
+    revalidate({
+      paths: ["/admin/categories"],
+      tags: ["categories", `category-${category.slug}`],
     })
 
     return category
@@ -41,14 +37,14 @@ export const upsertCategory = adminActionClient
 
 export const deleteCategories = adminActionClient
   .inputSchema(z.object({ ids: z.array(z.string()) }))
-  .action(async ({ parsedInput: { ids } }) => {
+  .action(async ({ parsedInput: { ids }, ctx: { db, revalidate } }) => {
     await db.category.deleteMany({
       where: { id: { in: ids } },
     })
 
-    after(() => {
-      revalidatePath("/admin/categories")
-      revalidateTag("categories")
+    revalidate({
+      paths: ["/admin/categories"],
+      tags: ["categories"],
     })
 
     return true

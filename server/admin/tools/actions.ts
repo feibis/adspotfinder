@@ -1,19 +1,17 @@
 "use server"
 
 import { slugify } from "@primoui/utils"
-import { ToolStatus } from "@prisma/client"
-import { revalidatePath, revalidateTag } from "next/cache"
 import { after } from "next/server"
 import { z } from "zod"
 import { removeS3Directories } from "~/lib/media"
 import { notifySubmitterOfToolPublished, notifySubmitterOfToolScheduled } from "~/lib/notifications"
 import { adminActionClient } from "~/lib/safe-actions"
 import { toolSchema } from "~/server/admin/tools/schema"
-import { db } from "~/services/db"
 
 export const upsertTool = adminActionClient
   .inputSchema(toolSchema)
-  .action(async ({ parsedInput: { id, categories, tags, notifySubmitter, ...input } }) => {
+  .action(async ({ parsedInput, ctx: { db, revalidate } }) => {
+    const { id, categories, tags, notifySubmitter, ...input } = parsedInput
     const categoryIds = categories?.map(id => ({ id }))
     const tagIds = tags?.map(id => ({ id }))
     const existingTool = id ? await db.tool.findUnique({ where: { id } }) : null
@@ -39,18 +37,7 @@ export const upsertTool = adminActionClient
           },
         })
 
-    // Revalidate the tools
-    after(() => {
-      revalidatePath("/admin/tools")
-      revalidateTag("tools")
-      revalidateTag(`tool-${tool.slug}`)
-
-      if (tool.status === ToolStatus.Scheduled) {
-        // Revalidate the schedule if the tool is scheduled
-        revalidateTag("schedule")
-      }
-    })
-
+    // Handle notifications asynchronously
     after(async () => {
       if (notifySubmitter && (!existingTool || existingTool.status !== tool.status)) {
         // Notify the submitter of the tool published
@@ -61,12 +48,17 @@ export const upsertTool = adminActionClient
       }
     })
 
+    revalidate({
+      paths: ["/admin/tools"],
+      tags: ["tools", `tool-${tool.slug}`, "schedule"],
+    })
+
     return tool
   })
 
 export const deleteTools = adminActionClient
   .inputSchema(z.object({ ids: z.array(z.string()) }))
-  .action(async ({ parsedInput: { ids } }) => {
+  .action(async ({ parsedInput: { ids }, ctx: { db, revalidate } }) => {
     const tools = await db.tool.findMany({
       where: { id: { in: ids } },
       select: { slug: true },
@@ -76,13 +68,15 @@ export const deleteTools = adminActionClient
       where: { id: { in: ids } },
     })
 
-    after(() => {
-      revalidatePath("/admin/tools")
-      revalidateTag("tools")
+    // Remove the tool images from S3 asynchronously
+    after(async () => {
+      await removeS3Directories(tools.map(({ slug }) => `tools/${slug}`))
     })
 
-    // Remove the tool images from S3 asynchronously
-    after(async () => await removeS3Directories(tools.map(({ slug }) => `tools/${slug}`)))
+    revalidate({
+      paths: ["/admin/tools"],
+      tags: ["tools"],
+    })
 
     return true
   })

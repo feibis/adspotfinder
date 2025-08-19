@@ -13,6 +13,16 @@ export const isToolPublished = (tool: Pick<Tool, "status">) => {
 }
 
 /**
+ * Check if a tool is scheduled.
+ *
+ * @param tool - The tool to check.
+ * @returns Whether the tool is scheduled.
+ */
+export const isToolScheduled = (tool: Pick<Tool, "status">) => {
+  return ["Scheduled"].includes(tool.status)
+}
+
+/**
  * Check if a tool is approved (scheduled or published)
  *
  * @param tool - The tool to check.
