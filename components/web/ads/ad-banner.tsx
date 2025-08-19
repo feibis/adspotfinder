@@ -1,3 +1,4 @@
+import { isExternalUrl } from "@primoui/utils"
 import type { ComponentProps } from "react"
 import { Badge } from "~/components/common/badge"
 import { Button } from "~/components/common/button"
@@ -13,11 +14,15 @@ export const AdBanner = async ({ className, ...props }: ComponentProps<typeof Ca
     return null
   }
 
-  const ad = await findAd({ where: { type: "Banner" } })
+  // Resolve the ad data from database
+  const resolvedAd =
+    (await findAd({ where: { type: "Banner" } })) ?? (await findAd({ where: { type: "All" } }))
 
-  if (!ad) {
-    return null
-  }
+  // Final ad data to display
+  const ad = resolvedAd ?? config.ads.defaultAd
+
+  // Determine if the ad is internal or external
+  const isInternalAd = !isExternalUrl(ad.websiteUrl)
 
   return (
     <Container className="z-49 mt-1">
@@ -27,7 +32,8 @@ export const AdBanner = async ({ className, ...props }: ComponentProps<typeof Ca
         {...props}
       >
         <ExternalLink
-          href={ad.websiteUrl}
+          href={`${ad.websiteUrl}${isInternalAd ? `?type=${ad.type}` : ""}`}
+          target={isInternalAd ? "_self" : undefined}
           doTrack
           eventName="click_ad"
           eventProps={{ url: ad.websiteUrl, type: ad.type, source: "banner" }}

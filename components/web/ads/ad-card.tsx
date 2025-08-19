@@ -23,13 +23,22 @@ import type { AdOne } from "~/server/web/ads/payloads"
 import { findAd } from "~/server/web/ads/queries"
 
 type AdCardProps = CardProps & {
-  // Database query conditions to find a specific ad
-  type?: AdType
-  // Override ad data without database query
-  overrideAd?: AdOne | null
   // Default values to merge with the fallback ad
   defaultOverride?: Partial<AdOne>
-}
+} & (
+    | {
+        // Database query conditions to find a specific ad
+        type: AdType
+        // Override ad data without database query
+        overrideAd?: AdOne | null
+      }
+    | {
+        // Database query conditions to find a specific ad
+        type?: AdType
+        // Override ad data without database query
+        overrideAd: AdOne | null
+      }
+  )
 
 const AdCard = async ({ className, type, overrideAd, defaultOverride, ...props }: AdCardProps) => {
   if (!config.ads.enabled) {
@@ -40,7 +49,10 @@ const AdCard = async ({ className, type, overrideAd, defaultOverride, ...props }
   const defaultAd = { ...config.ads.defaultAd, ...defaultOverride }
 
   // Resolve the ad data from the override or database (don't query if override is defined)
-  const resolvedAd = overrideAd !== undefined ? overrideAd : await findAd({ where: { type } })
+  const resolvedAd =
+    overrideAd !== undefined
+      ? overrideAd
+      : ((await findAd({ where: { type } })) ?? (await findAd({ where: { type: "All" } })))
 
   // Final ad data to display
   const ad = resolvedAd ?? defaultAd
@@ -51,7 +63,7 @@ const AdCard = async ({ className, type, overrideAd, defaultOverride, ...props }
   return (
     <Card className={cx("group/button", className)} asChild {...props}>
       <ExternalLink
-        href={`${ad.websiteUrl}${isInternalAd ? `?type=${type}` : ""}`}
+        href={`${ad.websiteUrl}${isInternalAd ? `?type=${ad.type}` : ""}`}
         target={isInternalAd ? "_self" : undefined}
         doTrack
         eventName="click_ad"
