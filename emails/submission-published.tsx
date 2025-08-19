@@ -18,11 +18,9 @@ const EmailSubmissionPublished = ({ tool, ...props }: EmailProps) => {
       <Text>Hey {tool.submitterName?.trim()}!</Text>
 
       <Text>
-        Great news! Your submitted tool,{" "}
-        <strong>
-          {tool.name}, is now live on {config.site.name}
-        </strong>
-        . Thank you for sharing this awesome resource with our community!
+        Great news! Your submitted tool, <strong>{tool.name}</strong>, is now{" "}
+        <strong>live on {config.site.name}</strong>. Thank you for sharing this awesome resource
+        with our community!
       </Text>
 
       <Text>
