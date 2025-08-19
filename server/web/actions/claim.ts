@@ -90,10 +90,8 @@ const claimToolForUser = async (toolId: string, userId: string) => {
   })
 
   // Revalidate tools
-  after(async () => {
-    revalidateTag("tools")
-    revalidateTag(`tool-${tool.slug}`)
-  })
+  revalidateTag("tools")
+  revalidateTag(`tool-${tool.slug}`)
 }
 
 /**
