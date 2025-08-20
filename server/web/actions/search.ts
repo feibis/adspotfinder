@@ -1,7 +1,9 @@
 "use server"
 
 import { ToolStatus } from "@prisma/client"
+import { headers } from "next/headers"
 import { z } from "zod"
+import { auth } from "~/lib/auth"
 import { actionClient } from "~/lib/safe-actions"
 import { db } from "~/services/db"
 
@@ -9,11 +11,12 @@ export const searchItems = actionClient
   .inputSchema(z.object({ query: z.string() }))
   .action(async ({ parsedInput: { query } }) => {
     const start = performance.now()
+    const session = await auth.api.getSession({ headers: await headers() })
 
     const [tools, categories, tags] = await Promise.all([
       db.tool.findMany({
         where: {
-          status: ToolStatus.Published,
+          status: session?.user.role === "admin" ? undefined : ToolStatus.Published,
           OR: [
             { name: { contains: query, mode: "insensitive" } },
             { tagline: { contains: query, mode: "insensitive" } },
