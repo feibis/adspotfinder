@@ -6,16 +6,20 @@ import { deleteTags } from "~/server/admin/tags/actions"
 
 type TagsDeleteDialogProps = PropsWithChildren<{
   tags: Tag[]
+  onExecute?: () => void
 }>
 
-export const TagsDeleteDialog = ({ tags, ...props }: TagsDeleteDialogProps) => {
+export const TagsDeleteDialog = ({ tags, onExecute, ...props }: TagsDeleteDialogProps) => {
   return (
     <DeleteDialog
       ids={tags.map(({ id }) => id)}
       label="tag"
       action={deleteTags}
       callbacks={{
-        onNavigation: () => toast.success("Tag(s) deleted successfully"),
+        onExecute: () => {
+          toast.success("Tag(s) deleted successfully")
+          onExecute?.()
+        },
         onError: ({ error }) => toast.error(error.serverError),
       }}
       {...props}

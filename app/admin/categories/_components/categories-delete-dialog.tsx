@@ -6,16 +6,24 @@ import { deleteCategories } from "~/server/admin/categories/actions"
 
 type CategoriesDeleteDialogProps = PropsWithChildren<{
   categories: Category[]
+  onExecute?: () => void
 }>
 
-export const CategoriesDeleteDialog = ({ categories, ...props }: CategoriesDeleteDialogProps) => {
+export const CategoriesDeleteDialog = ({
+  categories,
+  onExecute,
+  ...props
+}: CategoriesDeleteDialogProps) => {
   return (
     <DeleteDialog
       ids={categories.map(({ id }) => id)}
       label="category"
       action={deleteCategories}
       callbacks={{
-        onNavigation: () => toast.success("Categories deleted successfully"),
+        onExecute: () => {
+          toast.success("Categories deleted successfully")
+          onExecute?.()
+        },
         onError: ({ error }) => toast.error(error.serverError),
       }}
       {...props}

@@ -2,7 +2,7 @@
 
 import type { Report } from "@prisma/client"
 import { EllipsisIcon, TrashIcon } from "lucide-react"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import type { ComponentProps } from "react"
 import { ReportsDeleteDialog } from "~/app/admin/reports/_components/reports-delete-dialog"
 import { Button } from "~/components/common/button"
@@ -22,6 +22,7 @@ type ReportActionsProps = ComponentProps<typeof Button> & {
 
 export const ReportActions = ({ report, className, ...props }: ReportActionsProps) => {
   const pathname = usePathname()
+  const router = useRouter()
 
   return (
     <Stack size="sm" wrap={false}>
@@ -46,7 +47,7 @@ export const ReportActions = ({ report, className, ...props }: ReportActionsProp
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <ReportsDeleteDialog reports={[report]}>
+      <ReportsDeleteDialog reports={[report]} onExecute={() => router.push("/admin/reports")}>
         <Button
           variant="secondary"
           size="sm"

@@ -2,7 +2,7 @@
 
 import type { Tag } from "@prisma/client"
 import { EllipsisIcon, TrashIcon } from "lucide-react"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import type { ComponentProps } from "react"
 import { TagsDeleteDialog } from "~/app/admin/tags/_components/tags-delete-dialog"
 import { Button } from "~/components/common/button"
@@ -22,6 +22,7 @@ type TagActionsProps = ComponentProps<typeof Button> & {
 
 export const TagActions = ({ tag, className, ...props }: TagActionsProps) => {
   const pathname = usePathname()
+  const router = useRouter()
 
   return (
     <Stack size="sm" wrap={false}>
@@ -52,7 +53,7 @@ export const TagActions = ({ tag, className, ...props }: TagActionsProps) => {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <TagsDeleteDialog tags={[tag]}>
+      <TagsDeleteDialog tags={[tag]} onExecute={() => router.push("/admin/tags")}>
         <Button
           variant="secondary"
           size="sm"

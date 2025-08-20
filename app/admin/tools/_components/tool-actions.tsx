@@ -3,7 +3,7 @@
 import { isValidUrl } from "@primoui/utils"
 import type { Tool } from "@prisma/client"
 import { EllipsisIcon, TrashIcon } from "lucide-react"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import type { ComponentProps } from "react"
 import { ToolsDeleteDialog } from "~/app/admin/tools/_components/tools-delete-dialog"
 import { Button } from "~/components/common/button"
@@ -25,6 +25,7 @@ type ToolActionsProps = ComponentProps<typeof Button> & {
 
 export const ToolActions = ({ className, tool, ...props }: ToolActionsProps) => {
   const pathname = usePathname()
+  const router = useRouter()
 
   return (
     <Stack size="sm" wrap={false}>
@@ -65,7 +66,7 @@ export const ToolActions = ({ className, tool, ...props }: ToolActionsProps) => 
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <ToolsDeleteDialog tools={[tool]}>
+      <ToolsDeleteDialog tools={[tool]} onExecute={() => router.push("/admin/tools")}>
         <Button
           variant="secondary"
           size="sm"

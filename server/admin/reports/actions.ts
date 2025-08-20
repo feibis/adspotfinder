@@ -1,6 +1,5 @@
 "use server"
 
-import { redirect } from "next/navigation"
 import { adminActionClient } from "~/lib/safe-actions"
 import { reportSchema } from "~/server/admin/reports/schema"
 import { idsSchema } from "~/server/admin/shared/schema"
@@ -31,5 +30,5 @@ export const deleteReports = adminActionClient
       paths: ["/admin/reports"],
     })
 
-    throw redirect("/admin/reports")
+    return true
   })

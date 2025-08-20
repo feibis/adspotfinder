@@ -2,7 +2,7 @@
 
 import type { Category } from "@prisma/client"
 import { EllipsisIcon, TrashIcon } from "lucide-react"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import type { ComponentProps } from "react"
 import { CategoriesDeleteDialog } from "~/app/admin/categories/_components/categories-delete-dialog"
 import { Button } from "~/components/common/button"
@@ -22,6 +22,7 @@ type CategoryActionsProps = ComponentProps<typeof Button> & {
 
 export const CategoryActions = ({ category, className, ...props }: CategoryActionsProps) => {
   const pathname = usePathname()
+  const router = useRouter()
 
   return (
     <Stack size="sm" wrap={false}>
@@ -52,7 +53,10 @@ export const CategoryActions = ({ category, className, ...props }: CategoryActio
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <CategoriesDeleteDialog categories={[category]}>
+      <CategoriesDeleteDialog
+        categories={[category]}
+        onExecute={() => router.push("/admin/categories")}
+      >
         <Button
           variant="secondary"
           size="sm"

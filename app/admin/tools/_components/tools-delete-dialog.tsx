@@ -6,16 +6,20 @@ import { deleteTools } from "~/server/admin/tools/actions"
 
 type ToolsDeleteDialogProps = PropsWithChildren<{
   tools: Tool[]
+  onExecute?: () => void
 }>
 
-export const ToolsDeleteDialog = ({ tools, ...props }: ToolsDeleteDialogProps) => {
+export const ToolsDeleteDialog = ({ tools, onExecute, ...props }: ToolsDeleteDialogProps) => {
   return (
     <DeleteDialog
       ids={tools.map(({ id }) => id)}
       label="tool"
       action={deleteTools}
       callbacks={{
-        onNavigation: () => toast.success("Tool(s) deleted successfully"),
+        onExecute: () => {
+          toast.success("Tool(s) deleted successfully")
+          onExecute?.()
+        },
         onError: ({ error }) => toast.error(error.serverError),
       }}
       {...props}

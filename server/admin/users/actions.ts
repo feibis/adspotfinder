@@ -1,6 +1,5 @@
 "use server"
 
-import { redirect } from "next/navigation"
 import { after } from "next/server"
 import { removeS3Directories } from "~/lib/media"
 import { adminActionClient } from "~/lib/safe-actions"
@@ -38,7 +37,7 @@ export const deleteUsers = adminActionClient
       paths: ["/admin/users"],
     })
 
-    throw redirect("/admin/users")
+    return true
   })
 
 export const updateUserRole = adminActionClient

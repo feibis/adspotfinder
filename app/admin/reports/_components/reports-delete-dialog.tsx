@@ -6,16 +6,20 @@ import { deleteReports } from "~/server/admin/reports/actions"
 
 type ReportsDeleteDialogProps = PropsWithChildren<{
   reports: Report[]
+  onExecute?: () => void
 }>
 
-export const ReportsDeleteDialog = ({ reports, ...props }: ReportsDeleteDialogProps) => {
+export const ReportsDeleteDialog = ({ reports, onExecute, ...props }: ReportsDeleteDialogProps) => {
   return (
     <DeleteDialog
       ids={reports.map(({ id }) => id)}
       label="report"
       action={deleteReports}
       callbacks={{
-        onNavigation: () => toast.success("Report(s) deleted successfully"),
+        onExecute: () => {
+          toast.success("Report(s) deleted successfully")
+          onExecute?.()
+        },
         onError: ({ error }) => toast.error(error.serverError),
       }}
       {...props}

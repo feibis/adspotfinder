@@ -144,7 +144,7 @@ export const UserActions = ({ user, className, ...props }: UserActionsProps) => 
       </DropdownMenu>
 
       {user.role !== "admin" && (
-        <UsersDeleteDialog users={[user]}>
+        <UsersDeleteDialog users={[user]} onExecute={() => router.push("/admin/users")}>
           <Button
             variant="secondary"
             size="sm"

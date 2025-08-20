@@ -1,7 +1,6 @@
 "use server"
 
 import { slugify } from "@primoui/utils"
-import { redirect } from "next/navigation"
 import { adminActionClient } from "~/lib/safe-actions"
 import { idsSchema } from "~/server/admin/shared/schema"
 import { tagSchema } from "~/server/admin/tags/schema"
@@ -48,5 +47,5 @@ export const deleteTags = adminActionClient
       tags: ["tags"],
     })
 
-    throw redirect("/admin/tags")
+    return true
   })

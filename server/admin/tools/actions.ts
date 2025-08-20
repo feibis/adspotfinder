@@ -1,7 +1,6 @@
 "use server"
 
 import { slugify } from "@primoui/utils"
-import { redirect } from "next/navigation"
 import { after } from "next/server"
 import { removeS3Directories } from "~/lib/media"
 import { notifySubmitterOfToolPublished, notifySubmitterOfToolScheduled } from "~/lib/notifications"
@@ -79,5 +78,5 @@ export const deleteTools = adminActionClient
       tags: ["tools"],
     })
 
-    throw redirect("/admin/tools")
+    return true
   })
