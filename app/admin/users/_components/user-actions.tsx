@@ -41,7 +41,7 @@ export const UserActions = ({ user, className, ...props }: UserActionsProps) => 
   }
 
   return (
-    <Stack size="sm">
+    <Stack size="sm" wrap={false}>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button

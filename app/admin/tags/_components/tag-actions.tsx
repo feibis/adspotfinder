@@ -24,7 +24,7 @@ export const TagActions = ({ tag, className, ...props }: TagActionsProps) => {
   const pathname = usePathname()
 
   return (
-    <Stack size="sm">
+    <Stack size="sm" wrap={false}>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button
