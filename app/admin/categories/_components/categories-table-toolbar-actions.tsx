@@ -2,26 +2,26 @@
 
 import type { Category } from "@prisma/client"
 import type { Table } from "@tanstack/react-table"
+import { TrashIcon } from "lucide-react"
 import { CategoriesDeleteDialog } from "~/app/admin/categories/_components/categories-delete-dialog"
+import { Button } from "~/components/common/button"
 
 interface CategoriesTableToolbarActionsProps {
   table: Table<Category>
 }
 
 export function CategoriesTableToolbarActions({ table }: CategoriesTableToolbarActionsProps) {
-  return (
-    <>
-      {table.getFilteredSelectedRowModel().rows.length > 0 ? (
-        <CategoriesDeleteDialog
-          categories={table.getFilteredSelectedRowModel().rows.map(row => row.original)}
-          onSuccess={() => table.toggleAllRowsSelected(false)}
-        />
-      ) : null}
+  const { rows } = table.getFilteredSelectedRowModel()
 
-      {/**
-       * Other actions can be added here.
-       * For example, import, view, etc.
-       */}
-    </>
+  if (!rows.length) {
+    return null
+  }
+
+  return (
+    <CategoriesDeleteDialog categories={rows.map(row => row.original)}>
+      <Button variant="secondary" size="md" prefix={<TrashIcon />}>
+        Delete ({rows.length})
+      </Button>
+    </CategoriesDeleteDialog>
   )
 }

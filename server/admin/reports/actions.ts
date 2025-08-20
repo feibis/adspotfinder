@@ -1,8 +1,9 @@
 "use server"
 
-import { z } from "zod"
+import { redirect } from "next/navigation"
 import { adminActionClient } from "~/lib/safe-actions"
 import { reportSchema } from "~/server/admin/reports/schema"
+import { idsSchema } from "~/server/admin/shared/schema"
 
 export const updateReport = adminActionClient
   .inputSchema(reportSchema)
@@ -20,7 +21,7 @@ export const updateReport = adminActionClient
   })
 
 export const deleteReports = adminActionClient
-  .inputSchema(z.object({ ids: z.array(z.string()) }))
+  .inputSchema(idsSchema)
   .action(async ({ parsedInput: { ids }, ctx: { db, revalidate } }) => {
     await db.report.deleteMany({
       where: { id: { in: ids } },
@@ -30,5 +31,5 @@ export const deleteReports = adminActionClient
       paths: ["/admin/reports"],
     })
 
-    return true
+    throw redirect("/admin/reports")
   })

@@ -2,6 +2,8 @@
 
 import type { User } from "@prisma/client"
 import type { Table } from "@tanstack/react-table"
+import { TrashIcon } from "lucide-react"
+import { Button } from "~/components/common/button"
 import { UsersDeleteDialog } from "./users-delete-dialog"
 
 interface UsersTableToolbarActionsProps {
@@ -9,19 +11,17 @@ interface UsersTableToolbarActionsProps {
 }
 
 export function UsersTableToolbarActions({ table }: UsersTableToolbarActionsProps) {
-  return (
-    <>
-      {table.getFilteredSelectedRowModel().rows.length > 0 ? (
-        <UsersDeleteDialog
-          users={table.getFilteredSelectedRowModel().rows.map(row => row.original)}
-          onSuccess={() => table.toggleAllRowsSelected(false)}
-        />
-      ) : null}
+  const { rows } = table.getFilteredSelectedRowModel()
 
-      {/**
-       * Other actions can be added here.
-       * For example, import, view, etc.
-       */}
-    </>
+  if (!rows.length) {
+    return null
+  }
+
+  return (
+    <UsersDeleteDialog users={rows.map(row => row.original)}>
+      <Button variant="secondary" size="md" prefix={<TrashIcon />}>
+        Delete ({rows.length})
+      </Button>
+    </UsersDeleteDialog>
   )
 }

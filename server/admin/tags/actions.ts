@@ -1,8 +1,9 @@
 "use server"
 
 import { slugify } from "@primoui/utils"
-import { z } from "zod"
+import { redirect } from "next/navigation"
 import { adminActionClient } from "~/lib/safe-actions"
+import { idsSchema } from "~/server/admin/shared/schema"
 import { tagSchema } from "~/server/admin/tags/schema"
 
 export const upsertTag = adminActionClient
@@ -36,7 +37,7 @@ export const upsertTag = adminActionClient
   })
 
 export const deleteTags = adminActionClient
-  .inputSchema(z.object({ ids: z.array(z.string()) }))
+  .inputSchema(idsSchema)
   .action(async ({ parsedInput: { ids }, ctx: { db, revalidate } }) => {
     await db.tag.deleteMany({
       where: { id: { in: ids } },
@@ -47,5 +48,5 @@ export const deleteTags = adminActionClient
       tags: ["tags"],
     })
 
-    return true
+    throw redirect("/admin/tags")
   })

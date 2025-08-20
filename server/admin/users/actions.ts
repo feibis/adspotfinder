@@ -1,9 +1,10 @@
 "use server"
 
+import { redirect } from "next/navigation"
 import { after } from "next/server"
-import { z } from "zod"
 import { removeS3Directories } from "~/lib/media"
 import { adminActionClient } from "~/lib/safe-actions"
+import { idsSchema } from "~/server/admin/shared/schema"
 import { userSchema } from "~/server/admin/users/schema"
 
 export const updateUser = adminActionClient
@@ -22,7 +23,7 @@ export const updateUser = adminActionClient
   })
 
 export const deleteUsers = adminActionClient
-  .inputSchema(z.object({ ids: z.array(z.string()) }))
+  .inputSchema(idsSchema)
   .action(async ({ parsedInput: { ids }, ctx: { db, revalidate } }) => {
     await db.user.deleteMany({
       where: { id: { in: ids }, role: { not: "admin" } },
@@ -37,7 +38,7 @@ export const deleteUsers = adminActionClient
       paths: ["/admin/users"],
     })
 
-    return true
+    throw redirect("/admin/users")
   })
 
 export const updateUserRole = adminActionClient

@@ -2,26 +2,26 @@
 
 import type { Tool } from "@prisma/client"
 import type { Table } from "@tanstack/react-table"
+import { TrashIcon } from "lucide-react"
 import { ToolsDeleteDialog } from "~/app/admin/tools/_components/tools-delete-dialog"
+import { Button } from "~/components/common/button"
 
 interface ToolsTableToolbarActionsProps {
   table: Table<Tool>
 }
 
 export function ToolsTableToolbarActions({ table }: ToolsTableToolbarActionsProps) {
-  return (
-    <>
-      {table.getFilteredSelectedRowModel().rows.length > 0 ? (
-        <ToolsDeleteDialog
-          tools={table.getFilteredSelectedRowModel().rows.map(row => row.original)}
-          onSuccess={() => table.toggleAllRowsSelected(false)}
-        />
-      ) : null}
+  const { rows } = table.getFilteredSelectedRowModel()
 
-      {/**
-       * Other actions can be added here.
-       * For example, import, view, etc.
-       */}
-    </>
+  if (!rows.length) {
+    return null
+  }
+
+  return (
+    <ToolsDeleteDialog tools={rows.map(row => row.original)}>
+      <Button variant="secondary" size="md" prefix={<TrashIcon />}>
+        Delete ({rows.length})
+      </Button>
+    </ToolsDeleteDialog>
   )
 }

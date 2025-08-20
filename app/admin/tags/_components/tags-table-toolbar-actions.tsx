@@ -2,26 +2,26 @@
 
 import type { Tag } from "@prisma/client"
 import type { Table } from "@tanstack/react-table"
+import { TrashIcon } from "lucide-react"
 import { TagsDeleteDialog } from "~/app/admin/tags/_components/tags-delete-dialog"
+import { Button } from "~/components/common/button"
 
 interface TagsTableToolbarActionsProps {
   table: Table<Tag>
 }
 
-export function TagsTableToolbarActions({ table }: TagsTableToolbarActionsProps) {
-  return (
-    <>
-      {table.getFilteredSelectedRowModel().rows.length > 0 ? (
-        <TagsDeleteDialog
-          tags={table.getFilteredSelectedRowModel().rows.map(row => row.original)}
-          onSuccess={() => table.toggleAllRowsSelected(false)}
-        />
-      ) : null}
+export const TagsTableToolbarActions = ({ table }: TagsTableToolbarActionsProps) => {
+  const { rows } = table.getFilteredSelectedRowModel()
 
-      {/**
-       * Other actions can be added here.
-       * For example, import, view, etc.
-       */}
-    </>
+  if (!rows.length) {
+    return null
+  }
+
+  return (
+    <TagsDeleteDialog tags={rows.map(row => row.original)}>
+      <Button variant="secondary" size="md" prefix={<TrashIcon />}>
+        Delete ({rows.length})
+      </Button>
+    </TagsDeleteDialog>
   )
 }

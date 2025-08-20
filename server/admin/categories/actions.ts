@@ -1,9 +1,10 @@
 "use server"
 
 import { slugify } from "@primoui/utils"
-import { z } from "zod"
+import { redirect } from "next/navigation"
 import { adminActionClient } from "~/lib/safe-actions"
 import { categorySchema } from "~/server/admin/categories/schema"
+import { idsSchema } from "~/server/admin/shared/schema"
 
 export const upsertCategory = adminActionClient
   .inputSchema(categorySchema)
@@ -36,7 +37,7 @@ export const upsertCategory = adminActionClient
   })
 
 export const deleteCategories = adminActionClient
-  .inputSchema(z.object({ ids: z.array(z.string()) }))
+  .inputSchema(idsSchema)
   .action(async ({ parsedInput: { ids }, ctx: { db, revalidate } }) => {
     await db.category.deleteMany({
       where: { id: { in: ids } },
@@ -47,5 +48,5 @@ export const deleteCategories = adminActionClient
       tags: ["categories"],
     })
 
-    return true
+    throw redirect("/admin/categories")
   })

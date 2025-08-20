@@ -1,11 +1,12 @@
 "use server"
 
 import { slugify } from "@primoui/utils"
+import { redirect } from "next/navigation"
 import { after } from "next/server"
-import { z } from "zod"
 import { removeS3Directories } from "~/lib/media"
 import { notifySubmitterOfToolPublished, notifySubmitterOfToolScheduled } from "~/lib/notifications"
 import { adminActionClient } from "~/lib/safe-actions"
+import { idsSchema } from "~/server/admin/shared/schema"
 import { toolSchema } from "~/server/admin/tools/schema"
 
 export const upsertTool = adminActionClient
@@ -57,7 +58,7 @@ export const upsertTool = adminActionClient
   })
 
 export const deleteTools = adminActionClient
-  .inputSchema(z.object({ ids: z.array(z.string()) }))
+  .inputSchema(idsSchema)
   .action(async ({ parsedInput: { ids }, ctx: { db, revalidate } }) => {
     const tools = await db.tool.findMany({
       where: { id: { in: ids } },
@@ -78,5 +79,5 @@ export const deleteTools = adminActionClient
       tags: ["tools"],
     })
 
-    return true
+    throw redirect("/admin/tools")
   })

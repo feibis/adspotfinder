@@ -1,17 +1,28 @@
 import { Prisma } from "@prisma/client"
 import { noCase } from "change-case"
+import { revalidatePath, revalidateTag } from "next/cache"
 import { headers } from "next/headers"
 import { createSafeActionClient } from "next-safe-action"
 import { auth } from "~/lib/auth"
-import { queueRevalidation, type RevalidateOptions } from "~/lib/revalidation"
 import { db } from "~/services/db"
+
+type RevalidateOptions = {
+  paths?: string[]
+  tags?: string[]
+}
 
 /**
  * Queue revalidation for the given options
  * @param options - The options to queue revalidation for
  */
-const revalidate = (options: RevalidateOptions) => {
-  queueRevalidation(options)
+const revalidate = ({ paths = [], tags = [] }: RevalidateOptions) => {
+  for (const path of paths) {
+    revalidatePath(path)
+  }
+
+  for (const tag of tags) {
+    revalidateTag(tag)
+  }
 }
 
 // -----------------------------------------------------------------------------

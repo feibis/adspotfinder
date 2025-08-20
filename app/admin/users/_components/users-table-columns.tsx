@@ -77,7 +77,7 @@ export const getColumns = (): ColumnDef<User>[] => {
 
         if (isBanned) {
           return (
-            <Badge size="sm" variant="outline" className="text-red-500">
+            <Badge variant="outline" className="text-red-500">
               Banned
             </Badge>
           )

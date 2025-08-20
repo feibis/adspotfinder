@@ -1,19 +1,19 @@
 "use client"
 
 import type { Category } from "@prisma/client"
-import { EllipsisIcon } from "lucide-react"
-import { usePathname, useRouter } from "next/navigation"
-import { type ComponentProps, useState } from "react"
+import { EllipsisIcon, TrashIcon } from "lucide-react"
+import { usePathname } from "next/navigation"
+import type { ComponentProps } from "react"
 import { CategoriesDeleteDialog } from "~/app/admin/categories/_components/categories-delete-dialog"
 import { Button } from "~/components/common/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/common/dropdown-menu"
 import { Link } from "~/components/common/link"
+import { Stack } from "~/components/common/stack"
 import { cx } from "~/lib/utils"
 
 type CategoryActionsProps = ComponentProps<typeof Button> & {
@@ -22,49 +22,45 @@ type CategoryActionsProps = ComponentProps<typeof Button> & {
 
 export const CategoryActions = ({ category, className, ...props }: CategoryActionsProps) => {
   const pathname = usePathname()
-  const router = useRouter()
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
 
   return (
-    <DropdownMenu modal={false}>
-      <DropdownMenuTrigger asChild>
+    <Stack size="sm">
+      <DropdownMenu modal={false}>
+        <DropdownMenuTrigger asChild>
+          <Button
+            aria-label="Open menu"
+            variant="secondary"
+            size="sm"
+            prefix={<EllipsisIcon />}
+            className={cx("data-[state=open]:bg-accent", className)}
+            {...props}
+          />
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent align="end" sideOffset={8}>
+          {pathname !== `/admin/categories/${category.slug}` && (
+            <DropdownMenuItem asChild>
+              <Link href={`/admin/categories/${category.slug}`}>Edit</Link>
+            </DropdownMenuItem>
+          )}
+
+          <DropdownMenuItem asChild>
+            <Link href={`/categories/${category.slug}`} target="_blank">
+              View
+            </Link>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <CategoriesDeleteDialog categories={[category]}>
         <Button
-          aria-label="Open menu"
           variant="secondary"
           size="sm"
-          prefix={<EllipsisIcon />}
-          className={cx("data-[state=open]:bg-accent", className)}
+          prefix={<TrashIcon />}
+          className="text-red-500"
           {...props}
         />
-      </DropdownMenuTrigger>
-
-      <DropdownMenuContent align="end" sideOffset={8}>
-        {pathname !== `/admin/categories/${category.slug}` && (
-          <DropdownMenuItem asChild>
-            <Link href={`/admin/categories/${category.slug}`}>Edit</Link>
-          </DropdownMenuItem>
-        )}
-
-        <DropdownMenuItem asChild>
-          <Link href={`/categories/${category.slug}`} target="_blank">
-            View
-          </Link>
-        </DropdownMenuItem>
-
-        <DropdownMenuSeparator />
-
-        <DropdownMenuItem onSelect={() => setIsDeleteOpen(true)} className="text-red-500">
-          Delete
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-
-      <CategoriesDeleteDialog
-        open={isDeleteOpen}
-        onOpenChange={() => setIsDeleteOpen(false)}
-        categories={[category]}
-        showTrigger={false}
-        onSuccess={() => router.push("/admin/categories")}
-      />
-    </DropdownMenu>
+      </CategoriesDeleteDialog>
+    </Stack>
   )
 }

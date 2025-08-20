@@ -27,3 +27,10 @@ export const contentSchema = z.object({
  * The schema for the description generator.
  */
 export const descriptionSchema = contentSchema.pick({ description: true })
+
+/**
+ * The schema for the IDs validation.
+ */
+export const idsSchema = z.object({
+  ids: z.array(z.string()),
+})
