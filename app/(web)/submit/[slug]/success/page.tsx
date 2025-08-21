@@ -9,11 +9,9 @@ import { getOpenGraphImageUrl } from "~/lib/opengraph"
 import { type ToolOne, toolOnePayload } from "~/server/web/tools/payloads"
 import { db } from "~/services/db"
 
-type PageProps = {
-  params: Promise<{ slug: string }>
-}
+type Props = PageProps<"/submit/[slug]/success">
 
-const getTool = cache(async ({ params }: PageProps) => {
+const getTool = cache(async ({ params }: Props) => {
   const { slug } = await params
 
   const tool = await db.tool.findFirst({
@@ -42,7 +40,7 @@ const getMetadata = (tool: ToolOne) => {
   }
 }
 
-export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
+export const generateMetadata = async (props: Props): Promise<Metadata> => {
   const tool = await getTool(props)
   const url = `/submit/${tool.slug}/success`
   const metadata = getMetadata(tool)
@@ -59,7 +57,7 @@ export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
   }
 }
 
-export default async function SuccessPage(props: PageProps) {
+export default async function (props: Props) {
   const tool = await getTool(props)
   const { title, description } = getMetadata(tool)
 

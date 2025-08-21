@@ -1,7 +1,6 @@
 import { capitalCase } from "change-case"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import type { SearchParams } from "nuqs"
 import { cache, Suspense } from "react"
 import { ToolListingSkeleton } from "~/components/web/tools/tool-listing"
 import { ToolQuery } from "~/components/web/tools/tool-query"
@@ -12,12 +11,9 @@ import { getOpenGraphImageUrl } from "~/lib/opengraph"
 import type { TagOne } from "~/server/web/tags/payloads"
 import { findTag, findTagSlugs } from "~/server/web/tags/queries"
 
-type PageProps = {
-  params: Promise<{ slug: string }>
-  searchParams: Promise<SearchParams>
-}
+type Props = PageProps<"/tags/[slug]">
 
-const getTag = cache(async ({ params }: PageProps) => {
+const getTag = cache(async ({ params }: Props) => {
   const { slug } = await params
   const tag = await findTag({ where: { slug } })
 
@@ -39,7 +35,7 @@ export const generateStaticParams = async () => {
   return tags.map(({ slug }) => ({ slug }))
 }
 
-export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
+export const generateMetadata = async (props: Props): Promise<Metadata> => {
   const tag = await getTag(props)
   const url = `/tags/${tag.slug}`
   const metadata = getMetadata(tag)
@@ -55,7 +51,7 @@ export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
   }
 }
 
-export default async function TagPage(props: PageProps) {
+export default async function (props: Props) {
   const tag = await getTag(props)
   const { title } = getMetadata(tag)
 

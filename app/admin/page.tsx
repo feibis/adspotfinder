@@ -6,7 +6,7 @@ import { UsersCard } from "~/app/admin/_components/users-card"
 import { withAdminPage } from "~/components/admin/auth-hoc"
 import { H3 } from "~/components/common/heading"
 
-const DashboardPage = () => {
+export default withAdminPage(() => {
   return (
     <>
       <H3>Dashboard</H3>
@@ -28,6 +28,4 @@ const DashboardPage = () => {
       </div>
     </>
   )
-}
-
-export default withAdminPage(DashboardPage)
+})

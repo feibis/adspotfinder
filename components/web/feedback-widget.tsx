@@ -148,7 +148,7 @@ export const FeedbackWidget = () => {
       return 1
     }
 
-    const storedViews = Number.parseInt(sessionStorage.getItem(pageViewsKey) || "1")
+    const storedViews = Number.parseInt(sessionStorage.getItem(pageViewsKey) || "1", 10)
     sessionStorage.setItem(pageViewsKey, (storedViews + 1).toString())
     return storedViews + 1
   }, [])

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
 }
 
-export default async function SubmitPage() {
+export default async function () {
   return (
     <>
       <Intro>

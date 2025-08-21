@@ -1,8 +1,8 @@
 import { getSessionCookie } from "better-auth/cookies"
 import { headers } from "next/headers"
 import Script from "next/script"
-import { type PropsWithChildren, Suspense } from "react"
-import Providers from "~/app/(web)/providers"
+import { Suspense } from "react"
+import { Providers } from "~/app/(web)/providers"
 import { Wrapper } from "~/components/common/wrapper"
 import { AdBanner } from "~/components/web/ads/ad-banner"
 import { Bottom } from "~/components/web/bottom"
@@ -14,7 +14,7 @@ import { Container } from "~/components/web/ui/container"
 import { env } from "~/env"
 import { getServerSession } from "~/lib/auth"
 
-export default async function RootLayout({ children }: PropsWithChildren) {
+export default async function ({ children }: LayoutProps<"/">) {
   const hasSessionCookie = getSessionCookie(new Headers(await headers()))
   const session = hasSessionCookie ? await getServerSession() : null
 

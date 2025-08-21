@@ -1,7 +1,7 @@
 import { tryCatch } from "@primoui/utils"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { createLoader, parseAsString, type SearchParams } from "nuqs/server"
+import { createLoader, parseAsString } from "nuqs/server"
 import { AdDetailsForm } from "~/app/(web)/advertise/success/form"
 import { AdCard } from "~/components/web/ads/ad-card"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
@@ -12,10 +12,6 @@ import { cx } from "~/lib/utils"
 import { adOnePayload } from "~/server/web/ads/payloads"
 import { db } from "~/services/db"
 import { stripe } from "~/services/stripe"
-
-type PageProps = {
-  searchParams: Promise<SearchParams>
-}
 
 const url = "/advertise/success"
 const title = "Thank you for your payment!"
@@ -29,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
 }
 
-export default async function AdvertiseSuccessPage({ searchParams }: PageProps) {
+export default async function ({ searchParams }: PageProps<"/advertise/success">) {
   const searchParamsLoader = createLoader({ sessionId: parseAsString.withDefault("") })
   const { sessionId } = await searchParamsLoader(searchParams)
   const { data, error } = await tryCatch(stripe.checkout.sessions.retrieve(sessionId))

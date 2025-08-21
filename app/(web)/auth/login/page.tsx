@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
 }
 
-export default function LoginPage() {
+export default function () {
   return (
     <>
       <Intro>

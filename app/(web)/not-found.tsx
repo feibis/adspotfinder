@@ -8,7 +8,7 @@ import { Stack } from "~/components/common/stack"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { useSearch } from "~/contexts/search-context"
 
-export default function NotFound() {
+export default function () {
   const pathname = usePathname()
   const search = useSearch()
 

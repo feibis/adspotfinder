@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import type { SearchParams } from "nuqs/server"
 import { cache, Suspense } from "react"
 import { SubmitProducts } from "~/app/(web)/submit/[slug]/products"
 import { PlanSkeleton } from "~/components/web/plan"
@@ -13,12 +12,9 @@ import { isToolPublished } from "~/lib/tools"
 import { type ToolOne, toolOnePayload } from "~/server/web/tools/payloads"
 import { db } from "~/services/db"
 
-type PageProps = {
-  params: Promise<{ slug: string }>
-  searchParams: Promise<SearchParams>
-}
+type Props = PageProps<"/submit/[slug]">
 
-const getTool = cache(async ({ params }: PageProps) => {
+const getTool = cache(async ({ params }: Props) => {
   const { slug } = await params
 
   const tool = await db.tool.findFirst({
@@ -47,7 +43,7 @@ const getMetadata = (tool: ToolOne) => {
   }
 }
 
-export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
+export const generateMetadata = async (props: Props): Promise<Metadata> => {
   const tool = await getTool(props)
   const url = `/submit/${tool.slug}`
   const metadata = getMetadata(tool)
@@ -64,7 +60,7 @@ export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
   }
 }
 
-export default async function SubmitPackages(props: PageProps) {
+export default async function (props: Props) {
   const tool = await getTool(props)
   const { title, description } = getMetadata(tool)
 

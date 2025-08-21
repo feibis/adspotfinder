@@ -2,7 +2,6 @@ import "./styles.css"
 import type { Metadata } from "next"
 import { ThemeProvider } from "next-themes"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
-import type { PropsWithChildren } from "react"
 import { Search } from "~/components/common/search"
 import { Toaster } from "~/components/common/toaster"
 import { TooltipProvider } from "~/components/common/tooltip"
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   ...config.metadata,
 }
 
-export default function RootLayout({ children }: PropsWithChildren) {
+export default function ({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"

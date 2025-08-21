@@ -110,17 +110,13 @@ const SvgBadge = ({ theme, tool }: SvgBadgeProps) => {
   )
 }
 
-type PageProps = {
-  params: Promise<{ slug: string }>
-}
-
 const searchParamsLoader = createLoader({
   theme: parseAsStringEnum(["light", "dark"]).withDefault("light"),
   width: parseAsInteger.withDefault(200),
   height: parseAsInteger.withDefault(50),
 })
 
-export const GET = async ({ url }: NextRequest, { params }: PageProps) => {
+export const GET = async ({ url }: NextRequest, { params }: RouteContext<"/[slug]/badge.svg">) => {
   const { slug } = await params
   const { theme, width, height } = searchParamsLoader(url)
 

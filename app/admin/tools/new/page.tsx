@@ -4,7 +4,7 @@ import { Wrapper } from "~/components/common/wrapper"
 import { findCategoryList } from "~/server/admin/categories/queries"
 import { findTagList } from "~/server/admin/tags/queries"
 
-const CreateToolPage = () => {
+export default withAdminPage(() => {
   return (
     <Wrapper size="md" gap="sm">
       <ToolForm
@@ -14,6 +14,4 @@ const CreateToolPage = () => {
       />
     </Wrapper>
   )
-}
-
-export default withAdminPage(CreateToolPage)
+})

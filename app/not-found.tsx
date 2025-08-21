@@ -1,9 +1,9 @@
 import WebLayout from "~/app/(web)/layout"
 import WebNotFound from "~/app/(web)/not-found"
 
-export default function NotFound() {
+export default function () {
   return (
-    <WebLayout>
+    <WebLayout params={Promise.resolve({})}>
       <WebNotFound />
     </WebLayout>
   )

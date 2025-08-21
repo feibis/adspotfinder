@@ -4,11 +4,7 @@ import { withAdminPage } from "~/components/admin/auth-hoc"
 import { Wrapper } from "~/components/common/wrapper"
 import { findReportById } from "~/server/admin/reports/queries"
 
-type PageProps = {
-  params: Promise<{ id: string }>
-}
-
-const UpdateReportPage = async ({ params }: PageProps) => {
+export default withAdminPage(async ({ params }: PageProps<"/admin/reports/[id]">) => {
   const { id } = await params
   const report = await findReportById(id)
 
@@ -21,6 +17,4 @@ const UpdateReportPage = async ({ params }: PageProps) => {
       <ReportForm title="Update report" report={report} />
     </Wrapper>
   )
-}
-
-export default withAdminPage(UpdateReportPage)
+})

@@ -6,11 +6,7 @@ import { findCategoryList } from "~/server/admin/categories/queries"
 import { findTagList } from "~/server/admin/tags/queries"
 import { findToolBySlug } from "~/server/admin/tools/queries"
 
-type PageProps = {
-  params: Promise<{ slug: string }>
-}
-
-const UpdateToolPage = async ({ params }: PageProps) => {
+export default withAdminPage(async ({ params }: PageProps<"/admin/tools/[slug]">) => {
   const { slug } = await params
   const tool = await findToolBySlug(slug)
 
@@ -28,6 +24,4 @@ const UpdateToolPage = async ({ params }: PageProps) => {
       />
     </Wrapper>
   )
-}
-
-export default withAdminPage(UpdateToolPage)
+})

@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
 }
 
-export default function Categories() {
+export default function () {
   return (
     <>
       <Breadcrumbs

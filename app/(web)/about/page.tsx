@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
 }
 
-export default function AboutPage() {
+export default function () {
   return (
     <>
       <Intro>

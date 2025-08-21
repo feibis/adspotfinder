@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import type { PropsWithChildren } from "react"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { config } from "~/config"
 import { metadataConfig } from "~/config/metadata"
@@ -17,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
 }
 
-export default function DashboardLayout({ children }: PropsWithChildren) {
+export default function ({ children }: LayoutProps<"/dashboard">) {
   return (
     <>
       <Intro>

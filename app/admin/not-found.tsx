@@ -1,6 +1,6 @@
 import { H2 } from "~/components/common/heading"
 
-export default function NotFound() {
+export default function () {
   return (
     <div className="flex flex-col gap-2 max-w-sm">
       <H2>404 Not Found</H2>

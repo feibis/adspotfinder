@@ -2,7 +2,6 @@ import { lcFirst } from "@primoui/utils"
 import { noCase } from "change-case"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import type { SearchParams } from "nuqs/server"
 import { cache, Suspense } from "react"
 import { ToolListingSkeleton } from "~/components/web/tools/tool-listing"
 import { ToolQuery } from "~/components/web/tools/tool-query"
@@ -13,12 +12,9 @@ import { getOpenGraphImageUrl } from "~/lib/opengraph"
 import type { CategoryOne } from "~/server/web/categories/payloads"
 import { findCategory, findCategorySlugs } from "~/server/web/categories/queries"
 
-type PageProps = {
-  params: Promise<{ slug: string }>
-  searchParams: Promise<SearchParams>
-}
+type Props = PageProps<"/categories/[slug]">
 
-const getCategory = cache(async ({ params }: PageProps) => {
+const getCategory = cache(async ({ params }: Props) => {
   const { slug } = await params
   const category = await findCategory({ where: { slug } })
 
@@ -43,7 +39,7 @@ export const generateStaticParams = async () => {
   return categories.map(({ slug }) => ({ slug }))
 }
 
-export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
+export const generateMetadata = async (props: Props): Promise<Metadata> => {
   const category = await getCategory(props)
   const url = `/categories/${category.slug}`
   const metadata = getMetadata(category)
@@ -60,7 +56,7 @@ export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
   }
 }
 
-export default async function CategoryPage(props: PageProps) {
+export default async function (props: Props) {
   const category = await getCategory(props)
   const { title, description } = getMetadata(category)
 

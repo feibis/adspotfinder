@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
 }
 
-export default async function AdvertisePage() {
+export default async function () {
   const ads = await findAds({})
 
   return (

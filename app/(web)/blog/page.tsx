@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
 }
 
-export default function BlogPage() {
+export default function () {
   const posts = allPosts.toSorted((a, b) => b.publishedAt.localeCompare(a.publishedAt))
 
   return (

@@ -5,11 +5,7 @@ import { Wrapper } from "~/components/common/wrapper"
 import { findCategoryBySlug } from "~/server/admin/categories/queries"
 import { findToolList } from "~/server/admin/tools/queries"
 
-type PageProps = {
-  params: Promise<{ slug: string }>
-}
-
-const UpdateCategoryPage = async ({ params }: PageProps) => {
+export default withAdminPage(async ({ params }: PageProps<"/admin/categories/[slug]">) => {
   const { slug } = await params
   const category = await findCategoryBySlug(slug)
 
@@ -22,6 +18,4 @@ const UpdateCategoryPage = async ({ params }: PageProps) => {
       <CategoryForm title="Update category" category={category} toolsPromise={findToolList()} />
     </Wrapper>
   )
-}
-
-export default withAdminPage(UpdateCategoryPage)
+})

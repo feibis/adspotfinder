@@ -18,11 +18,7 @@ import { Section } from "~/components/web/ui/section"
 import { metadataConfig } from "~/config/metadata"
 import { getOpenGraphImageUrl } from "~/lib/opengraph"
 
-type PageProps = {
-  params: Promise<{ slug: string }>
-}
-
-const findPostBySlug = cache(async ({ params }: PageProps) => {
+const findPostBySlug = cache(async ({ params }: PageProps<"/blog/[slug]">) => {
   const { slug } = await params
   const post = allPosts.find(({ _meta }) => _meta.path === slug)
 
@@ -44,7 +40,7 @@ const getMetadata = (post: Post) => {
   }
 }
 
-export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
+export const generateMetadata = async (props: PageProps<"/blog/[slug]">): Promise<Metadata> => {
   const post = await findPostBySlug(props)
   const url = `/blog/${post._meta.path}`
   const metadata = getMetadata(post)
@@ -61,7 +57,7 @@ export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
   }
 }
 
-export default async function BlogPostPage(props: PageProps) {
+export default async function (props: PageProps<"/blog/[slug]">) {
   const post = await findPostBySlug(props)
 
   return (

@@ -4,11 +4,7 @@ import { withAdminPage } from "~/components/admin/auth-hoc"
 import { Wrapper } from "~/components/common/wrapper"
 import { findUserById } from "~/server/admin/users/queries"
 
-type PageProps = {
-  params: Promise<{ id: string }>
-}
-
-const UpdateUserPage = async ({ params }: PageProps) => {
+export default withAdminPage(async ({ params }: PageProps<"/admin/users/[id]">) => {
   const { id } = await params
   const user = await findUserById(id)
 
@@ -21,6 +17,4 @@ const UpdateUserPage = async ({ params }: PageProps) => {
       <UserForm title="Update user" user={user} />
     </Wrapper>
   )
-}
-
-export default withAdminPage(UpdateUserPage)
+})

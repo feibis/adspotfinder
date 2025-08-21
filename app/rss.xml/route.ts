@@ -33,7 +33,7 @@ export const GET = async () => {
     pubDate: new Date(),
   })
 
-  tools.map(tool => {
+  for (const tool of tools) {
     feed.item({
       guid: tool.websiteUrl,
       title: tool.name,
@@ -42,7 +42,7 @@ export const GET = async () => {
       description: tool.description ?? "",
       categories: tool.categories?.map(({ name }) => name) || [],
     })
-  })
+  }
 
   return new Response(feed.xml({ indent: true }), {
     headers: {

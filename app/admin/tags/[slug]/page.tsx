@@ -5,11 +5,7 @@ import { Wrapper } from "~/components/common/wrapper"
 import { findTagBySlug } from "~/server/admin/tags/queries"
 import { findToolList } from "~/server/admin/tools/queries"
 
-type PageProps = {
-  params: Promise<{ slug: string }>
-}
-
-const UpdateTagPage = async ({ params }: PageProps) => {
+export default withAdminPage(async ({ params }: PageProps<"/admin/tags/[slug]">) => {
   const { slug } = await params
   const tag = await findTagBySlug(slug)
 
@@ -22,6 +18,4 @@ const UpdateTagPage = async ({ params }: PageProps) => {
       <TagForm title="Update tag" tag={tag} toolsPromise={findToolList()} />
     </Wrapper>
   )
-}
-
-export default withAdminPage(UpdateTagPage)
+})

@@ -16,7 +16,7 @@ if (typeof window !== "undefined") {
   })
 }
 
-export default function Providers({ children }: PropsWithChildren) {
+export const Providers = ({ children }: PropsWithChildren) => {
   return (
     <PostHogProvider client={posthog}>
       <PosthogPageview />

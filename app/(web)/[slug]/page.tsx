@@ -30,11 +30,9 @@ import { isToolPublished } from "~/lib/tools"
 import type { ToolOne } from "~/server/web/tools/payloads"
 import { findTool, findToolSlugs } from "~/server/web/tools/queries"
 
-type PageProps = {
-  params: Promise<{ slug: string }>
-}
+type Props = PageProps<"/[slug]">
 
-const getTool = cache(async ({ params }: PageProps) => {
+const getTool = cache(async ({ params }: Props) => {
   const { slug } = await params
   const tool = await findTool({ where: { slug } })
 
@@ -57,7 +55,7 @@ export const generateStaticParams = async () => {
   return tools.map(({ slug }) => ({ slug }))
 }
 
-export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
+export const generateMetadata = async (props: Props): Promise<Metadata> => {
   const tool = await getTool(props)
   const url = `/${tool.slug}`
   const { name, description, faviconUrl } = tool
@@ -70,7 +68,7 @@ export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
   }
 }
 
-export default async function ToolPage(props: PageProps) {
+export default async function (props: Props) {
   const tool = await getTool(props)
   const { title } = getMetadata(tool)
 
