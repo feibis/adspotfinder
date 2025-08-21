@@ -1,7 +1,7 @@
 import type { Tool } from "@prisma/client"
 import { Text } from "@react-email/components"
 import { addHours, differenceInDays, format, formatDistanceToNowStrict } from "date-fns"
-import { config } from "~/config"
+import { siteConfig } from "~/config/site"
 import { EmailActionNudge } from "~/emails/components/action-nudge"
 import { EmailExpediteNudge } from "~/emails/components/expedite-nudge"
 import { EmailWrapper, type EmailWrapperProps } from "~/emails/components/wrapper"
@@ -22,7 +22,7 @@ const EmailSubmissionScheduled = ({ tool, ...props }: EmailProps) => {
 
       <Text>
         Great news! Your submitted tool, <strong>{tool.name}</strong>, was{" "}
-        <strong>accepted and scheduled</strong> for publication on {config.site.name}.
+        <strong>accepted and scheduled</strong> for publication on {siteConfig.name}.
       </Text>
 
       {isLongQueue ? (

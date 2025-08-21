@@ -3,7 +3,7 @@
 import type { AdType } from "@prisma/client"
 import { useCallback, useMemo, useState } from "react"
 import type { DateRange } from "react-day-picker"
-import { config } from "~/config"
+import { adsConfig } from "~/config/ads"
 import { calculateAdsPrice } from "~/lib/ads"
 
 export type AdsPicker = {
@@ -21,7 +21,7 @@ export type AdsSelection = {
 
 export const useAds = () => {
   const [selections, setSelections] = useState<AdsSelection[]>([])
-  const spots = config.ads.adSpots
+  const spots = adsConfig.adSpots
 
   const findAdSpot = useCallback((type: AdType) => {
     return spots.find(s => s.type === type) ?? spots[0]

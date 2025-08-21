@@ -2,7 +2,7 @@ import { render } from "@react-email/components"
 import type { ReactElement } from "react"
 import type { CreateEmailOptions } from "resend"
 import wretch from "wretch"
-import { config } from "~/config"
+import { siteConfig } from "~/config/site"
 import { env, isProd } from "~/env"
 import { resend } from "~/services/resend"
 
@@ -20,8 +20,8 @@ export type EmailParams = {
  */
 const prepareEmail = async (email: EmailParams): Promise<CreateEmailOptions> => {
   return {
-    from: `${config.site.name} <${env.RESEND_SENDER_EMAIL}>`,
-    replyTo: email.replyTo ?? (email.to !== config.site.email ? email.to : undefined),
+    from: `${siteConfig.name} <${env.RESEND_SENDER_EMAIL}>`,
+    replyTo: email.replyTo ?? (email.to !== siteConfig.email ? email.to : undefined),
     to: email.to,
     subject: email.subject,
     react: email.react,

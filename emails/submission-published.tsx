@@ -1,6 +1,6 @@
 import type { Tool } from "@prisma/client"
 import { Text } from "@react-email/components"
-import { config } from "~/config"
+import { siteConfig } from "~/config/site"
 import { EmailActionNudge } from "~/emails/components/action-nudge"
 import { EmailButton } from "~/emails/components/button"
 import { EmailFeatureNudge } from "~/emails/components/feature-nudge"
@@ -11,7 +11,7 @@ export type EmailProps = EmailWrapperProps & {
 }
 
 const EmailSubmissionPublished = ({ tool, ...props }: EmailProps) => {
-  const toolUrl = `${config.site.url}/${tool.slug}`
+  const toolUrl = `${siteConfig.url}/${tool.slug}`
 
   return (
     <EmailWrapper {...props}>
@@ -19,8 +19,8 @@ const EmailSubmissionPublished = ({ tool, ...props }: EmailProps) => {
 
       <Text>
         Great news! Your submitted tool, <strong>{tool.name}</strong>, is now{" "}
-        <strong>live on {config.site.name}</strong>. Thank you for sharing this awesome resource
-        with our community!
+        <strong>live on {siteConfig.name}</strong>. Thank you for sharing this awesome resource with
+        our community!
       </Text>
 
       <Text>
@@ -30,7 +30,7 @@ const EmailSubmissionPublished = ({ tool, ...props }: EmailProps) => {
       </Text>
 
       <EmailButton href={toolUrl}>
-        Check out {tool.name} on {config.site.name}
+        Check out {tool.name} on {siteConfig.name}
       </EmailButton>
 
       <EmailActionNudge tool={tool} />

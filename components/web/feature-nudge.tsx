@@ -3,7 +3,7 @@ import { toast } from "sonner"
 import { Button } from "~/components/common/button"
 import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
-import { config } from "~/config"
+import { siteConfig } from "~/config/site"
 
 type FeatureNudgeProps = {
   tool: Tool
@@ -14,7 +14,7 @@ export const FeatureNudge = ({ tool, t }: FeatureNudgeProps) => {
   return (
     <>
       <p className="text-sm text-secondary-foreground">
-        <strong>{tool.name}</strong> has already been published on {config.site.name}. If you want,
+        <strong>{tool.name}</strong> has already been published on {siteConfig.name}. If you want,
         you can feature it for extra exposure.
       </p>
 

@@ -17,7 +17,7 @@ import { Skeleton } from "~/components/common/skeleton"
 import { ExternalLink } from "~/components/web/external-link"
 import { Favicon } from "~/components/web/ui/favicon"
 import { LogoSymbol } from "~/components/web/ui/logo-symbol"
-import { config } from "~/config"
+import { adsConfig } from "~/config/ads"
 import { cx } from "~/lib/utils"
 import type { AdOne } from "~/server/web/ads/payloads"
 import { findAd } from "~/server/web/ads/queries"
@@ -41,12 +41,12 @@ type AdCardProps = CardProps & {
   )
 
 const AdCard = async ({ className, type, overrideAd, defaultOverride, ...props }: AdCardProps) => {
-  if (!config.ads.enabled) {
+  if (!adsConfig.enabled) {
     return null
   }
 
   // Default ad values to display if no ad is found
-  const defaultAd = { ...config.ads.defaultAd, ...defaultOverride }
+  const defaultAd = { ...adsConfig.defaultAd, ...defaultOverride }
 
   // Resolve the ad data from the override or database (don't query if override is defined)
   const resolvedAd =

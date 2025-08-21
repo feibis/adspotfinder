@@ -5,12 +5,12 @@ import { Button } from "~/components/common/button"
 import { Card } from "~/components/common/card"
 import { ExternalLink } from "~/components/web/external-link"
 import { Container } from "~/components/web/ui/container"
-import { config } from "~/config"
+import { adsConfig } from "~/config/ads"
 import { cx } from "~/lib/utils"
 import { findAd } from "~/server/web/ads/queries"
 
 export const AdBanner = async ({ className, ...props }: ComponentProps<typeof Card>) => {
-  if (!config.ads.enabled) {
+  if (!adsConfig.enabled) {
     return null
   }
 
@@ -19,7 +19,7 @@ export const AdBanner = async ({ className, ...props }: ComponentProps<typeof Ca
     (await findAd({ where: { type: "Banner" } })) ?? (await findAd({ where: { type: "All" } }))
 
   // Final ad data to display
-  const ad = resolvedAd ?? config.ads.defaultAd
+  const ad = resolvedAd ?? adsConfig.defaultAd
 
   // Determine if the ad is internal or external
   const isInternalAd = !isExternalUrl(ad.websiteUrl)

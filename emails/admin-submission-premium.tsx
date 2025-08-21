@@ -1,6 +1,6 @@
 import type { Tool } from "@prisma/client"
 import { Text } from "@react-email/components"
-import { config } from "~/config"
+import { siteConfig } from "~/config/site"
 import { EmailButton } from "~/emails/components/button"
 import { EmailWrapper, type EmailWrapperProps } from "~/emails/components/wrapper"
 
@@ -18,7 +18,7 @@ const EmailAdminSubmissionPremium = ({ tool, ...props }: EmailProps) => {
         of {tool.name}. You should review and approve it as soon as possible.
       </Text>
 
-      <EmailButton href={`${config.site.url}/admin/tools/${tool.slug}`}>
+      <EmailButton href={`${siteConfig.url}/admin/tools/${tool.slug}`}>
         Review {tool.name}
       </EmailButton>
     </EmailWrapper>

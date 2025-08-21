@@ -1,5 +1,5 @@
 import { type Tool, ToolStatus } from "@prisma/client"
-import { config } from "~/config"
+import { siteConfig } from "~/config/site"
 import EmailAdminSubmissionPremium from "~/emails/admin-submission-premium"
 import EmailSubmission from "~/emails/submission"
 import EmailSubmissionPremium from "~/emails/submission-premium"
@@ -42,7 +42,7 @@ export const notifySubmitterOfToolScheduled = async (tool: Tool) => {
   }
 
   const to = tool.submitterEmail
-  const subject = `Great news! ${tool.name} is scheduled for publication on ${config.site.name} 🎉`
+  const subject = `Great news! ${tool.name} is scheduled for publication on ${siteConfig.name} 🎉`
 
   return await sendEmail({
     to,
@@ -63,7 +63,7 @@ export const notifySubmitterOfToolPublished = async (tool: Tool) => {
   }
 
   const to = tool.submitterEmail
-  const subject = `${tool.name} has been published on ${config.site.name} 🎉`
+  const subject = `${tool.name} has been published on ${siteConfig.name} 🎉`
 
   return await sendEmail({
     to,
@@ -100,7 +100,7 @@ export const notifySubmitterOfPremiumTool = async (tool: Tool) => {
  * @returns The email that was sent
  */
 export const notifyAdminOfPremiumTool = async (tool: Tool) => {
-  const to = config.site.email
+  const to = siteConfig.email
   const subject = `New tool ${tool.isFeatured ? "featured" : "expedited"}: ${tool.name}`
 
   return await sendEmail({

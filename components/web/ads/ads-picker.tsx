@@ -18,7 +18,7 @@ import { Stack } from "~/components/common/stack"
 import { Tooltip } from "~/components/common/tooltip"
 import { AdsCalendar } from "~/components/web/ads/ads-calendar"
 import { Price } from "~/components/web/price"
-import { config } from "~/config"
+import { adsConfig } from "~/config/ads"
 import { useAds } from "~/hooks/use-ads"
 import { createStripeAdsCheckout } from "~/server/web/actions/stripe"
 import type { AdMany } from "~/server/web/ads/payloads"
@@ -68,7 +68,7 @@ export const AdsPicker = ({ className, ads, ...props }: AdsCalendarProps) => {
   return (
     <div className={cx("flex flex-col min-w-md border divide-y rounded-md", className)} {...props}>
       <div className="flex flex-wrap overflow-clip">
-        {config.ads.adSpots.map(adSpot => (
+        {adsConfig.adSpots.map(adSpot => (
           <AdsCalendar
             key={adSpot.type}
             adSpot={adSpot}

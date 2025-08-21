@@ -13,7 +13,8 @@ import { CTAForm } from "~/components/web/cta-form"
 import { ExternalLink } from "~/components/web/external-link"
 import { ThemeSwitcher } from "~/components/web/theme-switcher"
 import { NavLink, navLinkVariants } from "~/components/web/ui/nav-link"
-import { config } from "~/config"
+import { linksConfig } from "~/config/links"
+import { siteConfig } from "~/config/site"
 import { cx } from "~/lib/utils"
 
 type FooterProps = ComponentProps<"div"> & {
@@ -50,19 +51,19 @@ export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) 
             </Tooltip>
 
             <Tooltip tooltip="RSS Feed">
-              <ExternalLink href={config.links.feed} className={navLinkVariants()}>
+              <ExternalLink href={linksConfig.feed} className={navLinkVariants()}>
                 <RssIcon />
               </ExternalLink>
             </Tooltip>
 
             <Tooltip tooltip="Contact us">
-              <ExternalLink href={`mailto:${config.site.email}`} className={navLinkVariants()}>
+              <ExternalLink href={`mailto:${siteConfig.email}`} className={navLinkVariants()}>
                 <AtSignIcon />
               </ExternalLink>
             </Tooltip>
 
             <Tooltip tooltip="View source code">
-              <ExternalLink href={config.links.github} className={navLinkVariants()}>
+              <ExternalLink href={linksConfig.github} className={navLinkVariants()}>
                 <BrandGitHubIcon />
               </ExternalLink>
             </Tooltip>

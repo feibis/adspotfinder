@@ -19,7 +19,7 @@ import { Tooltip, TooltipProvider } from "~/components/common/tooltip"
 import { ExternalLink } from "~/components/web/external-link"
 import { NavItem, type NavItemProps } from "~/components/web/nav-item"
 import { Dock, DockItem, DockSeparator } from "~/components/web/ui/dock"
-import { config } from "~/config"
+import { siteConfig } from "~/config/site"
 
 type Platform =
   | "X"
@@ -91,8 +91,8 @@ export const Nav = ({ title, previous, next, ...props }: NavProps) => {
   const pathname = usePathname()
   const clipboard = useClipboard({ timeout: 2000 })
 
-  const currentUrl = encodeURIComponent(`${config.site.url}${pathname}`)
-  const shareTitle = encodeURIComponent(`${title} — ${config.site.name}`)
+  const currentUrl = encodeURIComponent(`${siteConfig.url}${pathname}`)
+  const shareTitle = encodeURIComponent(`${title} — ${siteConfig.name}`)
 
   const actions: (null | NavItemProps)[] = [
     {

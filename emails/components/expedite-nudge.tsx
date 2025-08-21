@@ -1,7 +1,7 @@
 import type { Tool } from "@prisma/client"
 import { Text } from "@react-email/components"
 import type { PropsWithChildren } from "react"
-import { config } from "~/config"
+import { siteConfig } from "~/config/site"
 import { EmailButton } from "~/emails/components/button"
 import { isToolWithinExpediteThreshold } from "~/lib/tools"
 
@@ -10,7 +10,7 @@ type EmailExpediteNudgeProps = PropsWithChildren<{
 }>
 
 export const EmailExpediteNudge = ({ children, tool }: EmailExpediteNudgeProps) => {
-  const link = `${config.site.url}/submit/${tool.slug}`
+  const link = `${siteConfig.url}/submit/${tool.slug}`
 
   if (isToolWithinExpediteThreshold(tool)) {
     return null

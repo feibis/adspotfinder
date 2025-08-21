@@ -1,6 +1,6 @@
 import type { Tool } from "@prisma/client"
 import { Hr, Link, Text } from "@react-email/components"
-import { config } from "~/config"
+import { siteConfig } from "~/config/site"
 import { EmailButton } from "~/emails/components/button"
 
 type EmailFeatureNudgeProps = {
@@ -9,7 +9,7 @@ type EmailFeatureNudgeProps = {
 }
 
 export const EmailFeatureNudge = ({ tool, showButton }: EmailFeatureNudgeProps) => {
-  const link = `${config.site.url}/submit/${tool.slug}`
+  const link = `${siteConfig.url}/submit/${tool.slug}`
 
   const benefits = [
     "⏱️ Get published within 12 hours",

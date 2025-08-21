@@ -5,8 +5,8 @@ import { admin, createAuthMiddleware, magicLink, oneTimeToken } from "better-aut
 import { revalidatePath } from "next/cache"
 import { headers } from "next/headers"
 import { cache } from "react"
-import { config } from "~/config"
 import { claimsConfig } from "~/config/claims"
+import { siteConfig } from "~/config/site"
 import EmailMagicLink from "~/emails/magic-link"
 import { env } from "~/env"
 import { sendEmail } from "~/lib/email"
@@ -59,7 +59,7 @@ export const auth = betterAuth({
     magicLink({
       sendMagicLink: async ({ email, url }) => {
         const to = email
-        const subject = `Your ${config.site.name} Login Link`
+        const subject = `Your ${siteConfig.name} Login Link`
         await sendEmail({ to, subject, react: EmailMagicLink({ to, url }) })
       },
     }),

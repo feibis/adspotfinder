@@ -1,13 +1,12 @@
 import type { Metadata } from "next"
 import { Link } from "~/components/common/link"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
-import { config } from "~/config"
 import { metadataConfig } from "~/config/metadata"
 import { getOpenGraphImageUrl } from "~/lib/opengraph"
 
 const url = "/check-inbox"
 const title = "Check your inbox"
-const description = `Check your inbox to sign in to ${config.site.name}.`
+const description = `Check your inbox to sign in to ${siteConfig.name}.`
 const ogImageUrl = getOpenGraphImageUrl({ title, description })
 
 export const metadata: Metadata = {

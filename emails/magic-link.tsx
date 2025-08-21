@@ -1,5 +1,5 @@
 import { Text } from "@react-email/components"
-import { config } from "~/config"
+import { siteConfig } from "~/config/site"
 import { EmailButton } from "~/emails/components/button"
 import { EmailWrapper, type EmailWrapperProps } from "~/emails/components/wrapper"
 
@@ -10,11 +10,11 @@ export type EmailProps = EmailWrapperProps & {
 const EmailMagicLink = ({ url, ...props }: EmailProps) => {
   return (
     <EmailWrapper {...props}>
-      <Text>Welcome to {config.site.name}!</Text>
+      <Text>Welcome to {siteConfig.name}!</Text>
 
       <Text>Please click the magic link below to sign in to your account.</Text>
 
-      <EmailButton href={url}>Sign in to {config.site.name}</EmailButton>
+      <EmailButton href={url}>Sign in to {siteConfig.name}</EmailButton>
 
       <Text>or copy and paste this URL into your browser:</Text>
 

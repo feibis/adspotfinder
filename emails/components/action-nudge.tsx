@@ -1,6 +1,6 @@
 import type { Tool } from "@prisma/client"
 import { Link, Text } from "@react-email/components"
-import { config } from "~/config"
+import { siteConfig } from "~/config/site"
 import { isToolPublished } from "~/lib/tools"
 
 type EmailActionNudgeProps = {
@@ -8,14 +8,14 @@ type EmailActionNudgeProps = {
 }
 
 export const EmailActionNudge = ({ tool }: EmailActionNudgeProps) => {
-  const link = `${config.site.url}/${tool.slug}`
+  const link = `${siteConfig.url}/${tool.slug}`
   const badgeLabel = isToolPublished(tool) ? "Featured on" : "Coming soon on"
 
   return (
     <Text>
       Want to build credibility with your users? You can now{" "}
       <Link href={`${link}?dialog=embed`}>
-        add a "{badgeLabel} {config.site.name}" badge
+        add a "{badgeLabel} {siteConfig.name}" badge
       </Link>{" "}
       to your website, showing visitors that {tool.name} is recognized by our community.
       {!tool.ownerId && (

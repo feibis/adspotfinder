@@ -1,11 +1,11 @@
 import { addSearchParams } from "@primoui/utils"
 import { ToolStatus } from "@prisma/client"
 import RSS from "rss"
-import { config } from "~/config"
+import { siteConfig } from "~/config/site"
 import { db } from "~/services/db"
 
 export const GET = async () => {
-  const { url, domain, name, tagline } = config.site
+  const { url, domain, name, tagline } = siteConfig
   const rssSearchParams = { utm_source: domain, utm_medium: "rss" }
 
   const tools = await db.tool.findMany({

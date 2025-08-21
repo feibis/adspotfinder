@@ -1,6 +1,6 @@
 import { Preview, Section, Text } from "@react-email/components"
-import { config } from "~/config"
 import { claimsConfig } from "~/config/claims"
+import { siteConfig } from "~/config/site"
 import { EmailWrapper, type EmailWrapperProps } from "~/emails/components/wrapper"
 
 type EmailProps = EmailWrapperProps & {
@@ -8,7 +8,7 @@ type EmailProps = EmailWrapperProps & {
 }
 
 const EmailVerifyDomain = ({ otp, ...props }: EmailProps) => {
-  const previewText = `Your code to verify domain ownership on ${config.site.name}`
+  const previewText = `Your code to verify domain ownership on ${siteConfig.name}`
 
   return (
     <EmailWrapper {...props}>
@@ -18,7 +18,7 @@ const EmailVerifyDomain = ({ otp, ...props }: EmailProps) => {
 
       <Text>
         You're receiving this email to verify ownership of the domain to claim a tool on{" "}
-        <strong>{config.site.name}</strong>. Please use the following one-time password (OTP) to
+        <strong>{siteConfig.name}</strong>. Please use the following one-time password (OTP) to
         complete the verification process:
       </Text>
 

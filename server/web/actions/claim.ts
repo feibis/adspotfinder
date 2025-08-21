@@ -4,7 +4,7 @@ import { getUrlHostname } from "@primoui/utils"
 import { revalidateTag } from "next/cache"
 import { headers } from "next/headers"
 import { after } from "next/server"
-import { config } from "~/config"
+import { siteConfig } from "~/config/site"
 import EmailVerifyDomain from "~/emails/verify-domain"
 import { auth } from "~/lib/auth"
 import { sendEmail } from "~/lib/email"
@@ -73,7 +73,7 @@ const generateAndSendOtp = async (email: string) => {
   // Send OTP email
   after(async () => {
     const to = email
-    const subject = `Your ${config.site.name} Verification Code`
+    const subject = `Your ${siteConfig.name} Verification Code`
     await sendEmail({ to, subject, react: EmailVerifyDomain({ to, otp }) })
   })
 

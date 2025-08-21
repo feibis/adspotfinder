@@ -5,7 +5,8 @@ import { type ComponentProps, Fragment, type ReactNode } from "react"
 import type { Graph } from "schema-dts"
 import { Stack } from "~/components/common/stack"
 import { NavLink } from "~/components/web/ui/nav-link"
-import { config } from "~/config"
+import { breadcrumbsConfig } from "~/config/breadcrumbs"
+import { siteConfig } from "~/config/site"
 import { cx } from "~/lib/utils"
 
 const BreadcrumbsSeparator = ({ ...props }: ComponentProps<"span">) => {
@@ -44,8 +45,8 @@ export const Breadcrumbs = ({ className, items, ...props }: BreadcrumbsProps) =>
           position: index + 1,
           item: {
             "@type": "WebPage",
-            "@id": `${config.site.url}${href}`,
-            name: typeof name === "string" ? name : config.site.name,
+            "@id": `${siteConfig.url}${href}`,
+            name: typeof name === "string" ? name : siteConfig.name,
           },
         })),
       },
@@ -54,7 +55,7 @@ export const Breadcrumbs = ({ className, items, ...props }: BreadcrumbsProps) =>
 
   return (
     <>
-      {config.breadcrumbs.enabled && (
+      {breadcrumbsConfig.enabled && (
         <Stack size="sm" className={cx("-mb-fluid-md pb-3 text-sm", className)} asChild {...props}>
           <nav>
             {breadcrumbItems.map(({ href, name }, index) => (

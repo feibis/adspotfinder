@@ -2,7 +2,7 @@
 
 import type { ComponentProps } from "react"
 import { Button } from "~/components/common/button"
-import { config } from "~/config"
+import { siteConfig } from "~/config/site"
 import { useFilters } from "~/contexts/filter-context"
 import { cx } from "~/lib/utils"
 import type { TagsFilterSchema } from "~/server/web/tags/schema"
@@ -15,7 +15,7 @@ export const TagFilters = ({ className, ...props }: ComponentProps<"div">) => {
       className={cx("grid grid-cols-[repeat(auto-fit,minmax(2rem,1fr))] gap-1 w-full", className)}
       {...props}
     >
-      {config.site.alphabet.split("").map(letter => (
+      {siteConfig.alphabet.split("").map(letter => (
         <Button
           key={letter}
           variant={filters.letter === letter ? "primary" : "secondary"}

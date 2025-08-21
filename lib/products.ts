@@ -1,7 +1,7 @@
 import { addDays, differenceInMonths } from "date-fns"
 import plur from "plur"
 import type Stripe from "stripe"
-import { config } from "~/config"
+import { submissionsConfig } from "~/config/submissions"
 
 const SYMBOLS = {
   positive: "✓ ",
@@ -12,7 +12,7 @@ const SYMBOLS = {
 type SymbolType = keyof typeof SYMBOLS
 
 export const getQueueLength = (queueLength: number) => {
-  const queueDays = Math.ceil((queueLength / config.submissions.postingRate) * 7)
+  const queueDays = Math.ceil((queueLength / submissionsConfig.postingRate) * 7)
   const queueMonths = Math.max(differenceInMonths(addDays(new Date(), queueDays), new Date()), 1)
 
   return `${queueMonths} ${plur("month", queueMonths)}`

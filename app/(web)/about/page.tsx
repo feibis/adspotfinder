@@ -3,13 +3,13 @@ import { Link } from "~/components/common/link"
 import { Prose } from "~/components/common/prose"
 import { ExternalLink } from "~/components/web/external-link"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
-import { config } from "~/config"
+import { linksConfig } from "~/config/links"
 import { metadataConfig } from "~/config/metadata"
 import { getOpenGraphImageUrl } from "~/lib/opengraph"
 
 const url = "/about"
 const title = "About Us"
-const description = `${config.site.name} is a community driven list of tools and resources for developers.`
+const description = `${siteConfig.name} is a community driven list of tools and resources for developers.`
 const ogImageUrl = getOpenGraphImageUrl({ title, description })
 
 export const metadata: Metadata = {
@@ -28,11 +28,11 @@ export default function () {
       </Intro>
 
       <Prose>
-        <h2>What is {config.site.name}?</h2>
+        <h2>What is {siteConfig.name}?</h2>
 
         <p>
-          <Link href="/" title={config.site.tagline}>
-            {config.site.name}
+          <Link href="/" title={siteConfig.tagline}>
+            {siteConfig.name}
           </Link>{" "}
           is a community driven list of <strong>tools and resources for developers</strong>. The
           goal of the site is to be your first stop when researching for a new tool or resource to
@@ -55,7 +55,7 @@ export default function () {
 
         <p>
           –{" "}
-          <ExternalLink href={config.links.author} doFollow>
+          <ExternalLink href={linksConfig.author} doFollow>
             Piotr Kulpinski
           </ExternalLink>
         </p>

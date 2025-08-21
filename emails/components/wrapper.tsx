@@ -11,7 +11,7 @@ import {
   Tailwind,
   Text,
 } from "@react-email/components"
-import { config } from "~/config"
+import { siteConfig } from "~/config/site"
 
 export type EmailWrapperProps = ContainerProps & {
   to: string
@@ -27,10 +27,10 @@ export const EmailWrapper = ({ to, preview, children, ...props }: EmailWrapperPr
       <Tailwind>
         <Body className="mx-auto my-auto bg-background font-sans">
           <Container className="w-full max-w-[580px] mx-auto px-10" {...props}>
-            <Link href={config.site.url} className="inline-block mt-6 mb-2">
+            <Link href={siteConfig.url} className="inline-block mt-6 mb-2">
               <Img
-                src={`${config.site.url}/logo.png`}
-                alt={`${config.site.name} Logo`}
+                src={`${siteConfig.url}/logo.png`}
+                alt={`${siteConfig.name} Logo`}
                 width="572"
                 height="91"
                 className="h-6 w-auto"
@@ -48,7 +48,7 @@ export const EmailWrapper = ({ to, preview, children, ...props }: EmailWrapperPr
             </Text>
 
             <Text className="text-xs/normal text-gray-500">
-              Any questions? Please feel free to reach us at {config.site.email}.
+              Any questions? Please feel free to reach us at {siteConfig.email}.
             </Text>
           </Container>
         </Body>

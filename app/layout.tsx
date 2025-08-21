@@ -1,25 +1,26 @@
-import "./styles.css"
 import type { Metadata } from "next"
 import { ThemeProvider } from "next-themes"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
 import { Search } from "~/components/common/search"
 import { Toaster } from "~/components/common/toaster"
 import { TooltipProvider } from "~/components/common/tooltip"
-import { config } from "~/config"
+import { metadataConfig } from "~/config/metadata"
+import { siteConfig } from "~/config/site"
 import { SearchProvider } from "~/contexts/search-context"
 import { fontSans } from "~/lib/fonts"
+import "./styles.css"
 
 export const metadata: Metadata = {
-  metadataBase: new URL(config.site.url),
+  metadataBase: new URL(siteConfig.url),
   title: {
-    template: `%s – ${config.site.name}`,
-    default: `${config.site.tagline} – ${config.site.name}`,
+    template: `%s – ${siteConfig.name}`,
+    default: `${siteConfig.tagline} – ${siteConfig.name}`,
   },
-  description: config.site.description,
+  description: siteConfig.description,
   icons: {
     icon: [{ type: "image/png", url: "/favicon.png" }],
   },
-  ...config.metadata,
+  ...metadataConfig,
 }
 
 export default function ({ children }: LayoutProps<"/">) {

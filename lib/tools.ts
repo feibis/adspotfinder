@@ -1,7 +1,7 @@
 import type { Tool } from "@prisma/client"
 import { differenceInDays } from "date-fns"
-import { config } from "~/config"
 
+import { submissionsConfig } from "~/config/submissions"
 /**
  * Check if a tool is published.
  *
@@ -39,7 +39,7 @@ export const isToolApproved = (tool: Pick<Tool, "status">) => {
  * @returns Whether the tool is within the expedite threshold.
  */
 export const isToolWithinExpediteThreshold = (tool: Pick<Tool, "publishedAt">) => {
-  const threshold = config.submissions.expediteThreshold
+  const threshold = submissionsConfig.expediteThreshold
 
   return tool.publishedAt && differenceInDays(tool.publishedAt, new Date()) < threshold
 }

@@ -2,7 +2,8 @@ import { addSearchParams, getUrlHostname } from "@primoui/utils"
 import type { ComponentProps } from "react"
 import { Stack } from "~/components/common/stack"
 import { ExternalLink } from "~/components/web/external-link"
-import { config } from "~/config"
+import { linksConfig } from "~/config/links"
+import { siteConfig } from "~/config/site"
 import { cx } from "~/lib/utils"
 
 type BuiltWithProps = ComponentProps<typeof Stack> & {
@@ -10,8 +11,8 @@ type BuiltWithProps = ComponentProps<typeof Stack> & {
 }
 
 export const BuiltWith = ({ className, medium, ...props }: BuiltWithProps) => {
-  const rssSearchParams = { utm_source: getUrlHostname(config.site.url), utm_medium: medium ?? "" }
-  const href = addSearchParams(config.links.builtWith, rssSearchParams)
+  const rssSearchParams = { utm_source: getUrlHostname(siteConfig.url), utm_medium: medium ?? "" }
+  const href = addSearchParams(linksConfig.builtWith, rssSearchParams)
 
   return (
     <Stack size="sm" className={cx("text-sm text-muted-foreground", className)} {...props}>

@@ -5,7 +5,6 @@ import { SubmitProducts } from "~/app/(web)/submit/[slug]/products"
 import { PlanSkeleton } from "~/components/web/plan"
 import { Stats } from "~/components/web/stats"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
-import { config } from "~/config"
 import { metadataConfig } from "~/config/metadata"
 import { getOpenGraphImageUrl } from "~/lib/opengraph"
 import { isToolPublished } from "~/lib/tools"
@@ -33,7 +32,7 @@ const getMetadata = (tool: ToolOne) => {
   if (isToolPublished(tool)) {
     return {
       title: `Boost ${tool.name}'s Visibility`,
-      description: `You can upgrade ${tool.name}'s listing on ${config.site.name} to benefit from a featured badge, a prominent placement, and a do-follow link.`,
+      description: `You can upgrade ${tool.name}'s listing on ${siteConfig.name} to benefit from a featured badge, a prominent placement, and a do-follow link.`,
     }
   }
 
