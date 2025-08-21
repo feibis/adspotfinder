@@ -78,6 +78,16 @@
         "useAnchorContent": "off",
         "useValidAnchor": "off",
         "useAltText": "off"
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "level": "off",
+          "fix": "safe",
+          "options": {
+            "attributes": ["className", "classNames"],
+            "functions": ["clsx", "cva", "cn", "cx"]
+          }
+        }
       }
     }
   }
