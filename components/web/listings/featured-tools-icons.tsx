@@ -12,7 +12,7 @@ import { Favicon } from "~/components/web/ui/favicon"
 import { siteConfig } from "~/config/site"
 import { findTools } from "~/server/web/tools/queries"
 
-export const FeaturedTools = async ({ ...props }: ComponentProps<typeof Card>) => {
+export const FeaturedToolsIcons = async ({ ...props }: ComponentProps<typeof Card>) => {
   const tools = await findTools({ where: { isFeatured: true } })
   const showAddButton = tools.length < 12
 

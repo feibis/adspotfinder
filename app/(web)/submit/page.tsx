@@ -3,6 +3,7 @@ import { SubmitForm } from "~/app/(web)/submit/form"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { Section } from "~/components/web/ui/section"
 import { metadataConfig } from "~/config/metadata"
+import { siteConfig } from "~/config/site"
 import { getOpenGraphImageUrl } from "~/lib/opengraph"
 
 const url = "/submit"

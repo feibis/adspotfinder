@@ -5,6 +5,7 @@ import { ExternalLink } from "~/components/web/external-link"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { linksConfig } from "~/config/links"
 import { metadataConfig } from "~/config/metadata"
+import { siteConfig } from "~/config/site"
 import { getOpenGraphImageUrl } from "~/lib/opengraph"
 
 const url = "/about"

@@ -1,14 +1,13 @@
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
-import type { DashboardPageProps } from "~/app/(web)/dashboard/page"
 import { DashboardTable } from "~/app/(web)/dashboard/table"
 import { DataTableSkeleton } from "~/components/data-table/data-table-skeleton"
 import { auth } from "~/lib/auth"
 import { findTools } from "~/server/admin/tools/queries"
 import { toolsTableParamsCache } from "~/server/admin/tools/schema"
 
-export const DashboardToolListing = async ({ searchParams }: DashboardPageProps) => {
+export const DashboardToolListing = async ({ searchParams }: PageProps<"/dashboard">) => {
   const parsedParams = toolsTableParamsCache.parse(await searchParams)
   const session = await auth.api.getSession({ headers: await headers() })
 

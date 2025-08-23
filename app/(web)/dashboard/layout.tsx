@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { metadataConfig } from "~/config/metadata"
+import { siteConfig } from "~/config/site"
 import { getOpenGraphImageUrl } from "~/lib/opengraph"
 
 const url = "/dashboard"

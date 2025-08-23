@@ -7,6 +7,7 @@ import { Stats } from "~/components/web/stats"
 import { Testimonial } from "~/components/web/testimonial"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { metadataConfig } from "~/config/metadata"
+import { siteConfig } from "~/config/site"
 import { getOpenGraphImageUrl } from "~/lib/opengraph"
 import { findAds } from "~/server/web/ads/queries"
 
