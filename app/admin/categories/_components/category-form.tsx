@@ -100,7 +100,7 @@ export function CategoryForm({
           <AIGenerateDescription
             prompt={`Create a compelling description for the category named "${name}". Begin with a plural noun phrase (e.g., "Tools for..." or "Resources that..."). Craft a single, concise sentence that clearly conveys the purpose and value of this category. Ensure the description is specific enough to differentiate this category from others while remaining broad enough to encompass all relevant items within it.`}
             schema={descriptionSchema}
-            onFinish={object => form.setValue("description", object.description)}
+            onStream={object => form.setValue("description", object.description)}
           />
 
           {category && <CategoryActions category={category} size="md" />}
