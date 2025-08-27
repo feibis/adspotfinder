@@ -14,6 +14,7 @@ enum AdType {
   Tools
   ToolPage
   BlogPost
+  Bottom
   All
 }
 
@@ -101,6 +102,7 @@ model Ad {
   description String?
   websiteUrl  String
   faviconUrl  String?
+  bannerUrl   String?
   buttonLabel String?
   type        AdType   @default(All)
   startsAt    DateTime

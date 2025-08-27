@@ -5,6 +5,7 @@ import { Suspense } from "react"
 import { Providers } from "~/app/(web)/providers"
 import { Wrapper } from "~/components/common/wrapper"
 import { AdBanner } from "~/components/web/ads/ad-banner"
+import { AdBottom } from "~/components/web/ads/ad-bottom"
 import { Bottom } from "~/components/web/bottom"
 import { FeedbackWidget } from "~/components/web/feedback-widget"
 import { Footer } from "~/components/web/footer"
@@ -31,6 +32,10 @@ export default async function ({ children }: LayoutProps<"/">) {
         <Container asChild>
           <Wrapper className="grow py-fluid-md">
             {children}
+
+            <Suspense>
+              <AdBottom />
+            </Suspense>
 
             <Footer />
           </Wrapper>

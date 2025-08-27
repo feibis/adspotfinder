@@ -1,28 +1,19 @@
-import { isExternalUrl } from "@primoui/utils"
 import type { ComponentProps } from "react"
-import { Badge } from "~/components/common/badge"
 import { Button } from "~/components/common/button"
 import { Card } from "~/components/common/card"
-import { ExternalLink } from "~/components/web/external-link"
+import { AdBadge, AdLink } from "~/components/web/ads/ad-base"
 import { Container } from "~/components/web/ui/container"
-import { adsConfig } from "~/config/ads"
+import { Favicon } from "~/components/web/ui/favicon"
 import { cx } from "~/lib/utils"
-import { findAd } from "~/server/web/ads/queries"
+import { findAdWithFallback } from "~/server/web/actions/ads"
 
 export const AdBanner = async ({ className, ...props }: ComponentProps<typeof Card>) => {
-  if (!adsConfig.enabled) {
+  const type = "Banner"
+  const { data: ad } = await findAdWithFallback({ type, fallback: ["all", "default"] })
+
+  if (!ad) {
     return null
   }
-
-  // Resolve the ad data from database
-  const resolvedAd =
-    (await findAd({ where: { type: "Banner" } })) ?? (await findAd({ where: { type: "All" } }))
-
-  // Final ad data to display
-  const ad = resolvedAd ?? adsConfig.defaultAd
-
-  // Determine if the ad is internal or external
-  const isInternalAd = !isExternalUrl(ad.websiteUrl)
 
   return (
     <Container className="z-49 mt-1">
@@ -31,27 +22,16 @@ export const AdBanner = async ({ className, ...props }: ComponentProps<typeof Ca
         asChild
         {...props}
       >
-        <ExternalLink
-          href={`${ad.websiteUrl}${isInternalAd ? `?type=${ad.type}` : ""}`}
-          target={isInternalAd ? "_self" : undefined}
-          doTrack
-          eventName="click_ad"
-          eventProps={{ url: ad.websiteUrl, type: ad.type, source: "banner" }}
-        >
-          <Badge variant="outline" className="leading-none max-sm:order-last">
-            Ad
-          </Badge>
+        <AdLink ad={ad} type={type} source="banner">
+          <AdBadge className="leading-none max-sm:order-last" />
 
           <div className="text-xs leading-tight text-secondary-foreground mr-auto sm:text-sm">
-            {ad.faviconUrl && (
-              <img
-                src={ad.faviconUrl}
-                alt={ad.name}
-                width={32}
-                height={32}
-                className="flex float-left align-middle mr-1.5 size-3.5 rounded-sm sm:size-4"
-              />
-            )}
+            <Favicon
+              src={ad.faviconUrl}
+              title={ad.name}
+              size={32}
+              className="float-left align-middle p-0 mr-1.5 size-3.5 rounded-sm sm:size-4"
+            />
             <strong className="font-medium text-foreground">{ad.name}</strong> — {ad.description}
           </div>
 
@@ -63,7 +43,7 @@ export const AdBanner = async ({ className, ...props }: ComponentProps<typeof Ca
           >
             <span>{ad.buttonLabel ?? "Learn More"}</span>
           </Button>
-        </ExternalLink>
+        </AdLink>
       </Card>
     </Container>
   )

@@ -53,7 +53,7 @@ export default async function ({ searchParams }: PageProps<"/advertise/success">
 
         {existingAd && (
           <Section.Sidebar>
-            <AdCard overrideAd={existingAd} />
+            <AdCard type="All" explicitAd={existingAd} />
           </Section.Sidebar>
         )}
       </Section>

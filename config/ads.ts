@@ -50,5 +50,6 @@ export const adsConfig = {
     description: "Reach our audience of professional directory owners and boost your sales.",
     buttonLabel: `Advertise on ${siteConfig.name}`,
     faviconUrl: "/favicon.png",
+    bannerUrl: null,
   } satisfies AdOne,
 }

@@ -22,10 +22,20 @@ export const findAd = async ({ where, orderBy, ...args }: Prisma.AdFindFirstArgs
   cacheTag("ad")
   cacheLife("minutes")
 
-  return db.ad.findFirst({
+  // Find all matching ads
+  const matchingAds = await db.ad.findMany({
     ...args,
     orderBy: orderBy ?? { startsAt: "desc" },
     where: { startsAt: { lte: new Date() }, endsAt: { gt: new Date() }, ...where },
     select: adOnePayload,
   })
+
+  // Return null if no ads found
+  if (matchingAds.length === 0) {
+    return null
+  }
+
+  // Return a random ad from the matching ones
+  const randomIndex = Math.floor(Math.random() * matchingAds.length)
+  return matchingAds[randomIndex]
 }

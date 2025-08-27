@@ -1,8 +1,7 @@
-import { isExternalUrl } from "@primoui/utils"
-import type { AdType } from "@prisma/client"
 import { ArrowUpRightIcon } from "lucide-react"
+import Image from "next/image"
+import type { InferSafeActionFnInput } from "next-safe-action"
 import type { ComponentProps } from "react"
-import { Badge } from "~/components/common/badge"
 import { Button } from "~/components/common/button"
 import {
   Card,
@@ -14,83 +13,60 @@ import {
 } from "~/components/common/card"
 import { H4 } from "~/components/common/heading"
 import { Skeleton } from "~/components/common/skeleton"
-import { ExternalLink } from "~/components/web/external-link"
+import { AdBadge, AdLink } from "~/components/web/ads/ad-base"
 import { Favicon } from "~/components/web/ui/favicon"
-import { LogoSymbol } from "~/components/web/ui/logo-symbol"
-import { adsConfig } from "~/config/ads"
 import { cx } from "~/lib/utils"
-import type { AdOne } from "~/server/web/ads/payloads"
-import { findAd } from "~/server/web/ads/queries"
+import { findAdWithFallback } from "~/server/web/actions/ads"
 
-type AdCardProps = CardProps & {
-  // Default values to merge with the fallback ad
-  defaultOverride?: Partial<AdOne>
-} & (
-    | {
-        // Database query conditions to find a specific ad
-        type: AdType
-        // Override ad data without database query
-        overrideAd?: AdOne | null
-      }
-    | {
-        // Database query conditions to find a specific ad
-        type?: AdType
-        // Override ad data without database query
-        overrideAd: AdOne | null
-      }
-  )
+type AdCardProps = CardProps & InferSafeActionFnInput<typeof findAdWithFallback>["clientInput"]
 
-const AdCard = async ({ className, type, overrideAd, defaultOverride, ...props }: AdCardProps) => {
-  if (!adsConfig.enabled) {
+const AdCard = async ({ className, type, explicitAd, fallback, ...props }: AdCardProps) => {
+  const { data: ad } = await findAdWithFallback({ type, explicitAd, fallback })
+
+  if (!ad) {
     return null
   }
 
-  // Default ad values to display if no ad is found
-  const defaultAd = { ...adsConfig.defaultAd, ...defaultOverride }
-
-  // Resolve the ad data from the override or database (don't query if override is defined)
-  const resolvedAd =
-    overrideAd !== undefined
-      ? overrideAd
-      : ((await findAd({ where: { type } })) ?? (await findAd({ where: { type: "All" } })))
-
-  // Final ad data to display
-  const ad = resolvedAd ?? defaultAd
-
-  // Determine if the ad is internal or external
-  const isInternalAd = !isExternalUrl(ad.websiteUrl)
-
   return (
     <Card className={cx("group/button", className)} asChild {...props}>
-      <ExternalLink
-        href={`${ad.websiteUrl}${isInternalAd ? `?type=${ad.type}` : ""}`}
-        target={isInternalAd ? "_self" : undefined}
-        doTrack
-        eventName="click_ad"
-        eventProps={{ url: ad.websiteUrl, type: ad.type, source: "card" }}
-      >
+      <AdLink ad={ad} type={type} source="card">
         <CardBadges>
-          <Badge variant="outline">Ad</Badge>
+          <AdBadge />
         </CardBadges>
 
-        <CardHeader wrap={false}>
-          <Favicon src={ad.faviconUrl ?? "/favicon.png"} title={ad.name} contained />
+        {ad.bannerUrl ? (
+          <Image
+            src={ad.bannerUrl}
+            alt={ad.name}
+            width={400}
+            height={225}
+            className="w-full -m-5 rounded-md"
+          />
+        ) : (
+          // Fallback to a custom banner
+          <>
+            <CardHeader wrap={false}>
+              <Favicon src={ad.faviconUrl ?? "/favicon.png"} title={ad.name} contained />
 
-          <H4 as="strong" className="truncate">
-            {ad.name}
-          </H4>
-        </CardHeader>
+              <H4 as="strong" className="truncate">
+                {ad.name}
+              </H4>
+            </CardHeader>
 
-        <CardDescription className="mb-auto pr-2 line-clamp-4">{ad.description}</CardDescription>
+            <CardDescription className="mb-auto pr-2 line-clamp-4">
+              {ad.description}
+            </CardDescription>
 
-        <Button className="pointer-events-none md:w-full" suffix={<ArrowUpRightIcon />} asChild>
-          <span>{ad.buttonLabel ?? `Visit ${ad.name}`}</span>
-        </Button>
+            <Button className="pointer-events-none md:w-full" suffix={<ArrowUpRightIcon />} asChild>
+              <span>{ad.buttonLabel ?? `Visit ${ad.name}`}</span>
+            </Button>
 
-        <CardIcon>
-          {isInternalAd ? <LogoSymbol /> : <Favicon src={ad.faviconUrl} title={ad.name} />}
-        </CardIcon>
-      </ExternalLink>
+            <CardIcon>
+              <Favicon src={ad.faviconUrl} title={ad.name} />
+            </CardIcon>
+          </>
+        )}
+      </AdLink>
     </Card>
   )
 }
@@ -99,7 +75,7 @@ const AdCardSkeleton = ({ className, ...props }: ComponentProps<typeof Card>) =>
   return (
     <Card hover={false} className={cx("items-stretch select-none", className)} {...props}>
       <CardBadges>
-        <Badge variant="outline">Ad</Badge>
+        <AdBadge />
       </CardBadges>
 
       <CardHeader>
