@@ -1,6 +1,6 @@
 import { ArrowUpRightIcon } from "lucide-react"
-import Image from "next/image"
 import type { InferSafeActionFnInput } from "next-safe-action"
+import Image from "next/image"
 import type { ComponentProps } from "react"
 import { Button } from "~/components/common/button"
 import {
@@ -40,7 +40,7 @@ const AdCard = async ({ className, type, explicitAd, fallback, ...props }: AdCar
             alt={ad.name}
             width={400}
             height={225}
-            className="w-full -m-5 rounded-md"
+            className="max-w-none w-[calc(100%+2.5rem)] -m-5 rounded-md"
           />
         ) : (
           // Fallback to a custom banner

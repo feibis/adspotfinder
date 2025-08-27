@@ -28,7 +28,7 @@ export const AdBottom = async ({ ...props }: ComponentProps<typeof Card>) => {
             alt={ad.name}
             width={1024}
             height={574}
-            className="w-full -m-5 rounded-md"
+            className="max-w-none w-[calc(100%+2.5rem)] -m-5 rounded-md"
           />
         ) : (
           // Fallback to a custom banner
