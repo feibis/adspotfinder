@@ -3,6 +3,7 @@
 import { useMediaQuery } from "@mantine/hooks"
 import { cx } from "cva"
 import {
+  CalendarIcon,
   DockIcon,
   ExternalLinkIcon,
   GalleryHorizontalEndIcon,
@@ -50,7 +51,7 @@ export const Sidebar = () => {
       className={cx("sticky top-0 h-dvh z-40 border-r", isMobile ? "w-12" : "w-48")}
       links={[
         {
-          title: siteConfig.name,
+          title: "Dashboard",
           href: "/admin",
           prefix: <LogoSymbol />,
           suffix: (
@@ -92,6 +93,14 @@ export const Sidebar = () => {
           title: "Reports",
           href: "/admin/reports",
           prefix: <TriangleAlertIcon />,
+        },
+
+        undefined, // Separator
+
+        {
+          title: "Schedule",
+          href: "/admin/schedule",
+          prefix: <CalendarIcon />,
         },
 
         undefined, // Separator

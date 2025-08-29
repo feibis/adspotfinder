@@ -1,6 +1,6 @@
 import { ArrowUpRightIcon } from "lucide-react"
-import type { InferSafeActionFnInput } from "next-safe-action"
 import Image from "next/image"
+import type { InferSafeActionFnInput } from "next-safe-action"
 import type { ComponentProps } from "react"
 import { Button } from "~/components/common/button"
 import {

@@ -1,9 +1,9 @@
 import { eachDayOfInterval, format, startOfDay, subDays } from "date-fns"
 import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
 import type { ComponentProps } from "react"
-import { Chart, type ChartData } from "~/app/admin/_components/chart"
-import { StatCardHeader } from "~/app/admin/_components/stat-card-header"
-import { Card } from "~/components/common/card"
+import type { ChartData } from "~/components/admin/chart"
+import { MetricChart } from "~/components/admin/metrics/metric-chart"
+import type { Card } from "~/components/common/card"
 import { env } from "~/env"
 import { resend } from "~/services/resend"
 
@@ -57,26 +57,25 @@ const getSubscribers = async () => {
   return { results, totalSubscribers, averageSubscribers }
 }
 
-const SubscribersCard = async ({ ...props }: ComponentProps<typeof Card>) => {
+const SubscriberMetric = async ({ ...props }: ComponentProps<typeof Card>) => {
   const { results, totalSubscribers, averageSubscribers } = await getSubscribers()
 
   return (
-    <Card hover={false} focus={false} {...props}>
-      <StatCardHeader
-        title="Subscribers"
-        value={totalSubscribers.toLocaleString()}
-        note="last 30 days"
-      />
-
-      <Chart
-        data={results}
-        dataLabel="Subscriber"
-        average={averageSubscribers}
-        className="w-full"
-        cellClassName="bg-chart-2"
-      />
-    </Card>
+    <MetricChart
+      header={{
+        title: "Subscribers",
+        value: totalSubscribers.toLocaleString(),
+        note: "last 30 days",
+      }}
+      chart={{
+        data: results,
+        dataLabel: "Subscriber",
+        average: averageSubscribers,
+        cellClassName: "bg-chart-2",
+      }}
+      {...props}
+    />
   )
 }
 
-export { SubscribersCard }
+export { SubscriberMetric }

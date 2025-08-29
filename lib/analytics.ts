@@ -36,16 +36,16 @@ export const getPageAnalytics = async (page: string, period = "30d") => {
   }
 }
 
-type AnalyticsTotalResponse = {
+type VisitorsTotalResponse = {
   results: { metrics: [number]; dimensions: [string] }[]
 }
 
 /**
- * Get the total analytics for a given period
- * @param period - The period to get the analytics for
- * @returns The total analytics
+ * Get the total visitors for a given period
+ * @param period - The period to get the visitors for
+ * @returns The total visitors
  */
-export const getTotalAnalytics = async (period = "30d") => {
+export const getTotalVisitors = async (period = "30d") => {
   const query = {
     site_id: env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN,
     metrics: ["visitors"],
@@ -54,7 +54,7 @@ export const getTotalAnalytics = async (period = "30d") => {
   }
 
   const { data, error } = await tryCatch(
-    getPlausibleApi().post(query).json<AnalyticsTotalResponse>(),
+    getPlausibleApi().post(query).json<VisitorsTotalResponse>(),
   )
 
   if (error) {

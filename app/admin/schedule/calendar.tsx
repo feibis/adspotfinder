@@ -39,7 +39,7 @@ const CalendarDay = ({ className, day, tools, currentDate, ...props }: CalendarD
   return (
     <td
       className={cx(
-        "h-16 p-2 border align-top",
+        "h-24 p-2 border align-top",
         !isCurrentMonth && "bg-muted text-muted-foreground/50",
         className,
       )}
@@ -90,20 +90,20 @@ export const Calendar = ({ className, tools, ...props }: CalendarProps) => {
 
   return (
     <div className={cx("space-y-2", className)} {...props}>
-      <Stack className="justify-between">
+      <Stack>
+        <H5 className="mr-auto">{format(currentDate, "MMMM yyyy")}</H5>
+
         <Button
           variant="secondary"
-          size="sm"
+          size="md"
           prefix={<ChevronLeftIcon />}
           onClick={() => setCurrentDate(date => subMonths(date, 1))}
           disabled={isSameMonth(currentDate, today)}
         />
 
-        <H5>{format(currentDate, "MMMM yyyy")}</H5>
-
         <Button
           variant="secondary"
-          size="sm"
+          size="md"
           prefix={<ChevronRightIcon />}
           onClick={() => setCurrentDate(date => addMonths(date, 1))}
         />

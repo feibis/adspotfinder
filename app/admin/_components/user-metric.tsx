@@ -1,9 +1,9 @@
 import { eachDayOfInterval, format, isSameDay, startOfDay, subDays } from "date-fns"
 import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
 import type { ComponentProps } from "react"
-import { Chart, type ChartData } from "~/app/admin/_components/chart"
-import { StatCardHeader } from "~/app/admin/_components/stat-card-header"
-import { Card } from "~/components/common/card"
+import type { ChartData } from "~/components/admin/chart"
+import { MetricChart } from "~/components/admin/metrics/metric-chart"
+import type { Card } from "~/components/common/card"
 import { db } from "~/services/db"
 
 const getUsers = async () => {
@@ -34,22 +34,25 @@ const getUsers = async () => {
   }
 }
 
-const UsersCard = async ({ ...props }: ComponentProps<typeof Card>) => {
+const UserMetric = async ({ ...props }: ComponentProps<typeof Card>) => {
   const { results, totalUsers, averageUsers } = await getUsers()
 
   return (
-    <Card hover={false} focus={false} {...props}>
-      <StatCardHeader title="Users" value={totalUsers.toLocaleString()} note="last 30 days" />
-
-      <Chart
-        data={results}
-        dataLabel="User"
-        average={averageUsers}
-        className="w-full"
-        cellClassName="bg-chart-1"
-      />
-    </Card>
+    <MetricChart
+      header={{
+        title: "Users",
+        value: totalUsers.toLocaleString(),
+        note: "last 30 days",
+      }}
+      chart={{
+        data: results,
+        dataLabel: "User",
+        average: averageUsers,
+        cellClassName: "bg-chart-1",
+      }}
+      {...props}
+    />
   )
 }
 
-export { UsersCard }
+export { UserMetric }

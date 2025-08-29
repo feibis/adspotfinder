@@ -1,9 +1,9 @@
 import { eachDayOfInterval, format, startOfDay, subDays } from "date-fns"
 import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
 import type { ComponentProps } from "react"
-import { Chart, type ChartData } from "~/app/admin/_components/chart"
-import { StatCardHeader } from "~/app/admin/_components/stat-card-header"
-import { Card } from "~/components/common/card"
+import type { ChartData } from "~/components/admin/chart"
+import { MetricChart } from "~/components/admin/metrics/metric-chart"
+import type { Card } from "~/components/common/card"
 import { stripe } from "~/services/stripe"
 
 const getRevenue = async () => {
@@ -53,26 +53,25 @@ const getRevenue = async () => {
   }
 }
 
-const RevenueCard = async ({ ...props }: ComponentProps<typeof Card>) => {
+const RevenueMetric = async ({ ...props }: ComponentProps<typeof Card>) => {
   const { results, totalRevenue, averageRevenue } = await getRevenue()
 
   return (
-    <Card hover={false} focus={false} {...props}>
-      <StatCardHeader
-        title="Revenue"
-        value={`$${totalRevenue.toLocaleString()}`}
-        note="last 30 days"
-      />
-
-      <Chart
-        data={results}
-        dataPrefix="$"
-        average={averageRevenue}
-        className="w-full"
-        cellClassName="bg-chart-5"
-      />
-    </Card>
+    <MetricChart
+      header={{
+        title: "Revenue",
+        value: totalRevenue.toLocaleString(),
+        note: "last 30 days",
+      }}
+      chart={{
+        data: results,
+        dataLabel: "Revenue",
+        average: averageRevenue,
+        cellClassName: "bg-chart-5",
+      }}
+      {...props}
+    />
   )
 }
 
-export { RevenueCard }
+export { RevenueMetric }

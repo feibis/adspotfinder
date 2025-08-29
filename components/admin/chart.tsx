@@ -70,14 +70,16 @@ export const Chart = ({
               </Stack>
             }
           >
-            <div
-              className={cx(
-                "flex-1 bg-primary rounded-full transition-[height] duration-300 opacity-75 hover:opacity-100",
-                index === data.length - 1 && "opacity-50",
-                cellClassName,
-              )}
-              style={{ height: `${(item.value / maxValue) * 100}%` }}
-            />
+            <div className="flex-1 flex items-end h-full">
+              <div
+                className={cx(
+                  "flex-1 bg-primary rounded-full duration-300 opacity-75 hover:opacity-100",
+                  index === data.length - 1 && "opacity-50",
+                  cellClassName,
+                )}
+                style={{ height: `${(item.value / maxValue) * 100}%` }}
+              />
+            </div>
           </Tooltip>
         ))}
       </div>
