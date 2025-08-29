@@ -18,10 +18,12 @@ import { createResendContact } from "~/services/resend"
  */
 const generateUniqueSlug = async (baseName: string): Promise<string> => {
   const baseSlug = slugify(baseName)
+  const maxAttempts = 10
   let slug = baseSlug
   let suffix = 2
+  let attempts = 0
 
-  while (true) {
+  while (attempts < maxAttempts) {
     // Check if slug exists
     if (!(await db.tool.findUnique({ where: { slug } }))) {
       return slug
@@ -30,7 +32,11 @@ const generateUniqueSlug = async (baseName: string): Promise<string> => {
     // Add/increment suffix and try again
     slug = `${baseSlug}-${suffix}`
     suffix++
+    attempts++
   }
+
+  // If we've exhausted all attempts, throw an error
+  throw new Error("Unable to generate unique slug after maximum attempts")
 }
 
 /**

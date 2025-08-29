@@ -41,4 +41,3 @@ export const AdBadge = ({ className, ...props }: ComponentProps<typeof Badge>) =
     </Badge>
   )
 }
-
