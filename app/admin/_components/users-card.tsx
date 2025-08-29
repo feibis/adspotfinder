@@ -2,8 +2,8 @@ import { eachDayOfInterval, format, isSameDay, startOfDay, subDays } from "date-
 import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
 import type { ComponentProps } from "react"
 import { Chart, type ChartData } from "~/app/admin/_components/chart"
-import { Card, CardDescription, CardHeader } from "~/components/common/card"
-import { H2 } from "~/components/common/heading"
+import { StatCardHeader } from "~/app/admin/_components/stat-card-header"
+import { Card } from "~/components/common/card"
 import { db } from "~/services/db"
 
 const getUsers = async () => {
@@ -39,18 +39,14 @@ const UsersCard = async ({ ...props }: ComponentProps<typeof Card>) => {
 
   return (
     <Card hover={false} focus={false} {...props}>
-      <CardHeader>
-        <CardDescription>Users</CardDescription>
-        <span className="ml-auto text-xs text-muted-foreground">last 30 days</span>
-        <H2 className="w-full">{totalUsers.toLocaleString()}</H2>
-      </CardHeader>
+      <StatCardHeader title="Users" value={totalUsers.toLocaleString()} note="last 30 days" />
 
       <Chart
         data={results}
+        dataLabel="User"
         average={averageUsers}
         className="w-full"
         cellClassName="bg-chart-1"
-        label="User"
       />
     </Card>
   )

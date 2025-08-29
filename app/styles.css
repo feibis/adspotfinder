@@ -9,7 +9,9 @@
   --header-top: 0rem;
   --header-bottom: 0.75rem;
   --header-inner-offset: calc(var(--header-top) + var(--header-height));
-  --header-outer-offset: calc(var(--header-top) + var(--header-height) + var(--header-bottom));
+  --header-outer-offset: calc(
+    var(--header-top) + var(--header-height) + var(--header-bottom)
+  );
 
   --color-background: hsl(0 0% 100%);
   --color-foreground: hsl(0 0% 12%);
@@ -65,6 +67,7 @@
   --grid-template-columns-md: repeat(auto-fill, minmax(16rem, 1fr));
   --grid-template-columns-lg: repeat(auto-fill, minmax(18rem, 1fr));
   --grid-template-columns-xl: repeat(auto-fill, minmax(20rem, 1fr));
+  --grid-template-columns-2xl: repeat(auto-fill, minmax(22rem, 1fr));
 
   --animate-fade-in: fade-in 0.3s ease-in-out;
   --animate-ping: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;

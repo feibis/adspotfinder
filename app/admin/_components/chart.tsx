@@ -17,10 +17,19 @@ type ChartProps = Partial<ComponentProps<"div">> & {
   data: ChartData[]
   average?: number
   cellClassName?: string
-  label?: string
+  dataPrefix?: string
+  dataLabel?: string
 }
 
-export const Chart = ({ className, cellClassName, data, average, label, ...props }: ChartProps) => {
+export const Chart = ({
+  className,
+  cellClassName,
+  data,
+  average,
+  dataPrefix,
+  dataLabel,
+  ...props
+}: ChartProps) => {
   if (data.length === 0) {
     return <Note>No data available.</Note>
   }
@@ -36,7 +45,8 @@ export const Chart = ({ className, cellClassName, data, average, label, ...props
         >
           <div className="h-px w-full flex-1 border border-dashed border-foreground/15" />
 
-          <Note className="absolute right-0 bottom-1 tabular-nums">
+          <Note className="absolute right-0 bottom-1 text-xs text-shadow-2xs text-shadow-background">
+            {dataPrefix}
             {Math.round(average).toLocaleString()}
           </Note>
         </div>
@@ -54,7 +64,8 @@ export const Chart = ({ className, cellClassName, data, average, label, ...props
                 </span>
 
                 <span className="font-medium">
-                  {item.value.toLocaleString()} {label && plur(label, item.value)}
+                  {dataPrefix}
+                  {item.value.toLocaleString()} {dataLabel && plur(dataLabel, item.value)}
                 </span>
               </Stack>
             }

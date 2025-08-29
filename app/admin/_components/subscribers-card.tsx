@@ -2,8 +2,8 @@ import { eachDayOfInterval, format, startOfDay, subDays } from "date-fns"
 import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
 import type { ComponentProps } from "react"
 import { Chart, type ChartData } from "~/app/admin/_components/chart"
-import { Card, CardDescription, CardHeader } from "~/components/common/card"
-import { H2 } from "~/components/common/heading"
+import { StatCardHeader } from "~/app/admin/_components/stat-card-header"
+import { Card } from "~/components/common/card"
 import { env } from "~/env"
 import { resend } from "~/services/resend"
 
@@ -62,18 +62,18 @@ const SubscribersCard = async ({ ...props }: ComponentProps<typeof Card>) => {
 
   return (
     <Card hover={false} focus={false} {...props}>
-      <CardHeader>
-        <CardDescription>Subscribers</CardDescription>
-        <span className="ml-auto text-xs text-muted-foreground">last 30 days</span>
-        <H2 className="w-full">{totalSubscribers.toLocaleString()}</H2>
-      </CardHeader>
+      <StatCardHeader
+        title="Subscribers"
+        value={totalSubscribers.toLocaleString()}
+        note="last 30 days"
+      />
 
       <Chart
         data={results}
+        dataLabel="Subscriber"
         average={averageSubscribers}
         className="w-full"
         cellClassName="bg-chart-2"
-        label="Subscriber"
       />
     </Card>
   )

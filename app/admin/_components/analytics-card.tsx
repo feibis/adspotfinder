@@ -1,8 +1,8 @@
 import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
 import type { ComponentProps } from "react"
 import { Chart } from "~/app/admin/_components/chart"
-import { Card, CardDescription, CardHeader } from "~/components/common/card"
-import { H2 } from "~/components/common/heading"
+import { StatCardHeader } from "~/app/admin/_components/stat-card-header"
+import { Card } from "~/components/common/card"
 import { getTotalAnalytics } from "~/lib/analytics"
 
 const getAnalytics = async () => {
@@ -19,18 +19,14 @@ const AnalyticsCard = async ({ ...props }: ComponentProps<typeof Card>) => {
 
   return (
     <Card hover={false} focus={false} {...props}>
-      <CardHeader>
-        <CardDescription>Visitors</CardDescription>
-        <span className="ml-auto text-xs text-muted-foreground">last 30 days</span>
-        <H2 className="w-full">{totalVisitors.toLocaleString()}</H2>
-      </CardHeader>
+      <StatCardHeader title="Visitors" value={totalVisitors.toLocaleString()} note="last 30 days" />
 
       <Chart
         data={results}
+        dataLabel="Visitor"
         average={averageVisitors}
         className="w-full"
         cellClassName="bg-chart-4"
-        label="Visitor"
       />
     </Card>
   )

@@ -1,5 +1,5 @@
-import { Card, CardDescription, CardHeader } from "~/components/common/card"
-import { H2 } from "~/components/common/heading"
+import { StatCardHeader } from "~/app/admin/_components/stat-card-header"
+import { Card } from "~/components/common/card"
 import { Link } from "~/components/common/link"
 import { db } from "~/services/db"
 
@@ -17,10 +17,7 @@ export const StatsCard = async () => {
       {stats.map((stat, index) => (
         <Card key={stat.label} className="w-fit grow" asChild>
           <Link href={stat.href}>
-            <CardHeader direction="column">
-              <CardDescription>{stat.label}</CardDescription>
-              <H2>{counts[index].toLocaleString()}</H2>
-            </CardHeader>
+            <StatCardHeader title={stat.label} value={counts[index].toLocaleString()} />
           </Link>
         </Card>
       ))}
