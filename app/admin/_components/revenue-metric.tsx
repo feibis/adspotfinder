@@ -26,7 +26,7 @@ const getRevenue = async () => {
       .filter(({ status }) => status === "succeeded")
       .reduce<Record<string, number>>((acc, charge) => {
         const date = format(new Date(charge.created * 1000), "yyyy-MM-dd")
-        const amount = charge.amount / 100 // Convert from cents
+        const amount = Math.round(charge.amount / 100) // Convert from cents and round to 2 decimal places
         acc[date] = (acc[date] || 0) + amount
         return acc
       }, {})
@@ -41,7 +41,7 @@ const getRevenue = async () => {
     }))
 
     // Calculate total revenue
-    const totalRevenue = charges.reduce((sum, charge) => sum + charge.amount / 100, 0)
+    const totalRevenue = charges.reduce((sum, charge) => sum + Math.round(charge.amount / 100), 0)
 
     // Calculate average daily revenue
     const averageRevenue = results.reduce((sum, day) => sum + day.value, 0) / results.length
@@ -60,12 +60,12 @@ const RevenueMetric = async ({ ...props }: ComponentProps<typeof Card>) => {
     <MetricChart
       header={{
         title: "Revenue",
-        value: totalRevenue.toLocaleString(),
+        value: `$${totalRevenue.toLocaleString()}`,
         note: "last 30 days",
       }}
       chart={{
         data: results,
-        dataLabel: "Revenue",
+        dataPrefix: "$",
         average: averageRevenue,
         cellClassName: "bg-chart-5",
       }}
