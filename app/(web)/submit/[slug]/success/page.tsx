@@ -27,31 +27,25 @@ const getTool = cache(async ({ params }: Props) => {
 })
 
 const getMetadata = (tool: ToolOne) => {
+  let title = `Thank you for submitting ${tool.name}!`
+  let description = `We'll review ${tool.name}'s submission and publish it on ${siteConfig.name} soon.`
+
   if (tool.isFeatured) {
-    return {
-      title: "Thank you for your payment!",
-      description: `We've received your payment. ${tool.name} should be featured on ${siteConfig.name} shortly.`,
-    }
+    title = "Thank you for your payment!"
+    description = `We've received your payment. ${tool.name} should be featured on ${siteConfig.name} shortly.`
   }
 
-  return {
-    title: `Thank you for submitting ${tool.name}!`,
-    description: `We'll review ${tool.name}'s submission and publish it on ${siteConfig.name} soon.`,
-  }
+  return { url: `/submit/${tool.slug}/success`, title, description }
 }
 
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
   const tool = await getTool(props)
-  const url = `/submit/${tool.slug}/success`
-  const metadata = getMetadata(tool)
-
-  const ogImageUrl = getOpenGraphImageUrl({
-    title: String(metadata.title),
-    description: metadata.description,
-  })
+  const { url, title, description } = getMetadata(tool)
+  const ogImageUrl = getOpenGraphImageUrl({ title, description })
 
   return {
-    ...metadata,
+    title,
+    description,
     alternates: { ...metadataConfig.alternates, canonical: url },
     openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
   }
@@ -64,7 +58,7 @@ export default async function (props: Props) {
   return (
     <>
       <Intro alignment="center">
-        <IntroTitle>{`${title}`}</IntroTitle>
+        <IntroTitle>{title}</IntroTitle>
         <IntroDescription>{description}</IntroDescription>
       </Intro>
 

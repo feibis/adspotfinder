@@ -26,6 +26,14 @@ import { Tag } from "~/components/web/ui/tag"
 import { VerifiedBadge } from "~/components/web/verified-badge"
 import { metadataConfig } from "~/config/metadata"
 import { getOpenGraphImageUrl } from "~/lib/opengraph"
+import {
+  createGraph,
+  generateBreadcrumbs,
+  generateSoftwareApplication,
+  generateWebPage,
+  getOrganization,
+  getWebSite,
+} from "~/lib/structured-data"
 import { isToolPublished } from "~/lib/tools"
 import type { ToolOne } from "~/server/web/tools/payloads"
 import { findTool, findToolSlugs } from "~/server/web/tools/queries"
@@ -43,11 +51,32 @@ const getTool = cache(async ({ params }: Props) => {
   return tool
 })
 
-const getMetadata = (tool: ToolOne): Metadata => {
+const getMetadata = (tool: ToolOne) => {
   return {
+    url: `/${tool.slug}`,
     title: `${tool.name}: ${tool.tagline}`,
     description: tool.description,
   }
+}
+
+const getBreadcrumbs = (tool: ToolOne) => {
+  return [
+    { name: "Tools", url: "/" },
+    { name: tool.name, url: `/${tool.slug}` },
+  ]
+}
+
+const getStructuredData = (tool: ToolOne) => {
+  const breadcrumbs = getBreadcrumbs(tool)
+  const { url, title, description } = getMetadata(tool)
+
+  return createGraph([
+    getOrganization(),
+    getWebSite(),
+    generateBreadcrumbs(breadcrumbs),
+    generateSoftwareApplication(tool),
+    generateWebPage(url, title, description, `${url}#software`),
+  ])
 }
 
 export const generateStaticParams = async () => {
@@ -57,12 +86,13 @@ export const generateStaticParams = async () => {
 
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
   const tool = await getTool(props)
-  const url = `/${tool.slug}`
-  const { name, description, faviconUrl } = tool
+  const { url, title, description } = getMetadata(tool)
+  const { name, faviconUrl } = tool
   const ogImageUrl = getOpenGraphImageUrl({ title: name, description, faviconUrl })
 
   return {
-    ...getMetadata(tool),
+    title,
+    description,
     alternates: { ...metadataConfig.alternates, canonical: url },
     openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
   }
@@ -70,6 +100,7 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
 
 export default async function (props: Props) {
   const tool = await getTool(props)
+  const structuredData = getStructuredData(tool)
   const { title } = getMetadata(tool)
 
   const [previous, next] = await Promise.all([
@@ -179,12 +210,7 @@ export default async function (props: Props) {
           <Stack className="w-full md:sticky md:bottom-2 md:z-10 max-md:order-7">
             <div className="absolute -inset-x-1 -bottom-3 -top-8 -z-1 pointer-events-none bg-background mask-t-from-66% max-md:hidden" />
 
-            <Nav
-              className="mr-auto"
-              title={`${title}`}
-              previous={previous?.slug}
-              next={next?.slug}
-            />
+            <Nav className="mr-auto" title={title} previous={previous?.slug} next={next?.slug} />
 
             <ToolActions tool={tool} />
           </Stack>
@@ -207,6 +233,12 @@ export default async function (props: Props) {
       <Suspense fallback={<RelatedToolsSkeleton tool={tool} />}>
         <RelatedTools tool={tool} />
       </Suspense>
+
+      {/* JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
     </>
   )
 }

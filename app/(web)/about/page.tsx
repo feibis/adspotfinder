@@ -7,11 +7,30 @@ import { linksConfig } from "~/config/links"
 import { metadataConfig } from "~/config/metadata"
 import { siteConfig } from "~/config/site"
 import { getOpenGraphImageUrl } from "~/lib/opengraph"
+import {
+  createGraph,
+  generateAboutPage,
+  generateBreadcrumbs,
+  generateWebPage,
+  getOrganization,
+  getWebSite,
+} from "~/lib/structured-data"
 
 const url = "/about"
 const title = "About Us"
 const description = `${siteConfig.name} is a community driven list of tools and resources for developers.`
 const ogImageUrl = getOpenGraphImageUrl({ title, description })
+const breadcrumbs = [{ name: "About", url }]
+
+const getStructuredData = () => {
+  return createGraph([
+    getOrganization(),
+    getWebSite(),
+    generateBreadcrumbs(breadcrumbs),
+    generateWebPage(url, title, description),
+    generateAboutPage(url, title, description),
+  ])
+}
 
 export const metadata: Metadata = {
   title,
@@ -21,6 +40,8 @@ export const metadata: Metadata = {
 }
 
 export default function () {
+  const structuredData = getStructuredData()
+
   return (
     <>
       <Intro>
@@ -61,6 +82,12 @@ export default function () {
           </ExternalLink>
         </p>
       </Prose>
+
+      {/* JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
     </>
   )
 }

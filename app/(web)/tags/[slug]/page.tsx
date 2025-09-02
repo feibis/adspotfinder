@@ -8,6 +8,12 @@ import { Breadcrumbs } from "~/components/web/ui/breadcrumbs"
 import { Intro, IntroTitle } from "~/components/web/ui/intro"
 import { metadataConfig } from "~/config/metadata"
 import { getOpenGraphImageUrl } from "~/lib/opengraph"
+import {
+  createGraph,
+  generateBreadcrumbs,
+  generateCollectionPage,
+  generateWebPage,
+} from "~/lib/structured-data"
 import type { TagOne } from "~/server/web/tags/payloads"
 import { findTag, findTagSlugs } from "~/server/web/tags/queries"
 
@@ -26,8 +32,26 @@ const getTag = cache(async ({ params }: Props) => {
 
 const getMetadata = (tag: TagOne) => {
   return {
+    url: `/tags/${tag.slug}`,
     title: `Tools tagged "${tag.name}"`,
+    description: `Explore tools and software tagged with ${tag.name} to find solutions that match your specific needs.`,
   }
+}
+
+const getBreadcrumbs = (tag: TagOne) => [
+  { name: "Tags", url: "/tags" },
+  { name: capitalCase(tag.slug), url: `/tags/${tag.slug}` },
+]
+
+const getStructuredData = (tag: TagOne) => {
+  const breadcrumbs = getBreadcrumbs(tag)
+  const { url, title, description } = getMetadata(tag)
+
+  return createGraph([
+    generateBreadcrumbs(breadcrumbs),
+    generateCollectionPage(url, title, description),
+    generateWebPage(url, title, description),
+  ])
 }
 
 export const generateStaticParams = async () => {
@@ -53,25 +77,16 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
 
 export default async function (props: Props) {
   const tag = await getTag(props)
+  const breadcrumbs = getBreadcrumbs(tag)
+  const structuredData = getStructuredData(tag)
   const { title } = getMetadata(tag)
 
   return (
     <>
-      <Breadcrumbs
-        items={[
-          {
-            href: "/tags",
-            name: "Tags",
-          },
-          {
-            href: `/tags/${tag.slug}`,
-            name: capitalCase(tag.slug),
-          },
-        ]}
-      />
+      <Breadcrumbs items={breadcrumbs} />
 
       <Intro>
-        <IntroTitle>{`${title}`}</IntroTitle>
+        <IntroTitle>{title}</IntroTitle>
       </Intro>
 
       <Suspense fallback={<ToolListingSkeleton />}>
@@ -82,6 +97,11 @@ export default async function (props: Props) {
           ad="Tools"
         />
       </Suspense>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
     </>
   )
 }

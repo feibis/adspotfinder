@@ -46,6 +46,10 @@ export const AIGenerateDescription = <T extends z.ZodSchema>({
 
       toast.success(successMessage)
     },
+
+    onError: error => {
+      toast.error(error.message)
+    },
   })
 
   // Handle streaming updates from AI SDK

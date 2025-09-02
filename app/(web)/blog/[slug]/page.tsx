@@ -17,6 +17,14 @@ import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { Section } from "~/components/web/ui/section"
 import { metadataConfig } from "~/config/metadata"
 import { getOpenGraphImageUrl } from "~/lib/opengraph"
+import {
+  createGraph,
+  generateArticle,
+  generateBreadcrumbs,
+  generateWebPage,
+  getOrganization,
+  getWebSite,
+} from "~/lib/structured-data"
 
 const findPostBySlug = cache(async ({ params }: PageProps<"/blog/[slug]">) => {
   const { slug } = await params
@@ -35,23 +43,56 @@ export const generateStaticParams = () => {
 
 const getMetadata = (post: Post) => {
   return {
+    url: `/blog/${post._meta.path}`,
     title: post.title,
     description: post.description,
   }
 }
 
+const getBreadcrumbs = (post: Post) => {
+  return [
+    { name: "Blog", url: "/blog" },
+    { name: post.title, url: `/blog/${post._meta.path}` },
+  ]
+}
+
+const getStructuredData = (post: Post) => {
+  const breadcrumbs = getBreadcrumbs(post)
+  const { url, title, description } = getMetadata(post)
+
+  // Calculate word count from MDX content
+  const wordCount = post.content.split(/\s+/).length
+
+  return createGraph([
+    getOrganization(),
+    getWebSite(),
+    generateBreadcrumbs(breadcrumbs),
+    generateArticle(
+      url,
+      title,
+      description,
+      post.publishedAt,
+      post.author
+        ? {
+            name: post.author.name,
+            url: `https://twitter.com/${post.author.twitterHandle}`,
+          }
+        : undefined,
+      post.image,
+      wordCount,
+    ),
+    generateWebPage(url, title, description),
+  ])
+}
+
 export const generateMetadata = async (props: PageProps<"/blog/[slug]">): Promise<Metadata> => {
   const post = await findPostBySlug(props)
-  const url = `/blog/${post._meta.path}`
-  const metadata = getMetadata(post)
-
-  const ogImageUrl = getOpenGraphImageUrl({
-    title: String(metadata.title),
-    description: metadata.description,
-  })
+  const { url, title, description } = getMetadata(post)
+  const ogImageUrl = getOpenGraphImageUrl({ title, description })
 
   return {
-    ...metadata,
+    title,
+    description,
     alternates: { ...metadataConfig.alternates, canonical: url },
     openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
   }
@@ -59,21 +100,12 @@ export const generateMetadata = async (props: PageProps<"/blog/[slug]">): Promis
 
 export default async function (props: PageProps<"/blog/[slug]">) {
   const post = await findPostBySlug(props)
+  const breadcrumbs = getBreadcrumbs(post)
+  const structuredData = getStructuredData(post)
 
   return (
     <>
-      <Breadcrumbs
-        items={[
-          {
-            href: "/blog",
-            name: "Blog",
-          },
-          {
-            href: `/blog/${post._meta.path}`,
-            name: post.title,
-          },
-        ]}
-      />
+      <Breadcrumbs items={breadcrumbs} />
 
       <Intro>
         <IntroTitle>{post.title}</IntroTitle>
@@ -135,6 +167,12 @@ export default async function (props: PageProps<"/blog/[slug]">) {
       </Section>
 
       <Nav title={post.title} className="self-start" />
+
+      {/* JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
     </>
   )
 }

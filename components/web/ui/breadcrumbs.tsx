@@ -2,11 +2,9 @@
 
 import { Home } from "lucide-react"
 import { type ComponentProps, Fragment, type ReactNode } from "react"
-import type { Graph } from "schema-dts"
 import { Stack } from "~/components/common/stack"
 import { NavLink } from "~/components/web/ui/nav-link"
 import { breadcrumbsConfig } from "~/config/breadcrumbs"
-import { siteConfig } from "~/config/site"
 import { cx } from "~/lib/utils"
 
 const BreadcrumbsSeparator = ({ ...props }: ComponentProps<"span">) => {
@@ -18,7 +16,7 @@ const BreadcrumbsSeparator = ({ ...props }: ComponentProps<"span">) => {
 }
 
 type Breadcrumb = {
-  href: string
+  url: string
   name: string | ReactNode
 }
 
@@ -27,41 +25,17 @@ type BreadcrumbsProps = ComponentProps<typeof Stack> & {
 }
 
 export const Breadcrumbs = ({ className, items, ...props }: BreadcrumbsProps) => {
-  const breadcrumbItems = [
-    {
-      href: "/",
-      name: <Home aria-label="Home" />,
-    },
-    ...items,
-  ]
-
-  const jsonLd: Graph = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "BreadcrumbList",
-        itemListElement: breadcrumbItems.map(({ href, name }, index) => ({
-          "@type": "ListItem",
-          position: index + 1,
-          item: {
-            "@type": "WebPage",
-            "@id": `${siteConfig.url}${href}`,
-            name: typeof name === "string" ? name : siteConfig.name,
-          },
-        })),
-      },
-    ],
-  }
+  const breadcrumbItems = [{ url: "/", name: <Home aria-label="Home" /> }, ...items]
 
   return (
     <>
       {breadcrumbsConfig.enabled && (
         <Stack size="sm" className={cx("-mb-fluid-md pb-3 text-sm", className)} asChild {...props}>
           <nav>
-            {breadcrumbItems.map(({ href, name }, index) => (
+            {breadcrumbItems.map(({ url, name }, index) => (
               <Fragment key={index}>
                 {index > 0 && <BreadcrumbsSeparator />}
-                <NavLink exact href={href} className="not-last:shrink-0 last:line-clamp-1">
+                <NavLink exact href={url} className="not-last:shrink-0 last:line-clamp-1">
                   {name}
                 </NavLink>
               </Fragment>
@@ -69,11 +43,6 @@ export const Breadcrumbs = ({ className, items, ...props }: BreadcrumbsProps) =>
           </nav>
         </Stack>
       )}
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
     </>
   )
 }

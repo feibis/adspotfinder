@@ -9,6 +9,14 @@ import { Breadcrumbs } from "~/components/web/ui/breadcrumbs"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { metadataConfig } from "~/config/metadata"
 import { getOpenGraphImageUrl } from "~/lib/opengraph"
+import {
+  createGraph,
+  generateBreadcrumbs,
+  generateCollectionPage,
+  generateWebPage,
+  getOrganization,
+  getWebSite,
+} from "~/lib/structured-data"
 import type { CategoryOne } from "~/server/web/categories/payloads"
 import { findCategory, findCategorySlugs } from "~/server/web/categories/queries"
 
@@ -29,9 +37,30 @@ const getMetadata = (category: CategoryOne) => {
   const title = category.label || `${category.name} Tools`
 
   return {
+    url: `/categories/${category.slug}`,
     title,
     description: `A curated collection of the best ${lcFirst(category.description ?? noCase(title))}`,
   }
+}
+
+const getBreadcrumbs = (category: CategoryOne) => {
+  return [
+    { name: "Categories", url: "/categories" },
+    { name: category.name, url: `/categories/${category.slug}` },
+  ]
+}
+
+const getStructuredData = (category: CategoryOne) => {
+  const breadcrumbs = getBreadcrumbs(category)
+  const { url, title, description } = getMetadata(category)
+
+  return createGraph([
+    getOrganization(),
+    getWebSite(),
+    generateBreadcrumbs(breadcrumbs),
+    generateWebPage(url, title, description),
+    generateCollectionPage(url, title, description),
+  ])
 }
 
 export const generateStaticParams = async () => {
@@ -41,16 +70,12 @@ export const generateStaticParams = async () => {
 
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
   const category = await getCategory(props)
-  const url = `/categories/${category.slug}`
-  const metadata = getMetadata(category)
-
-  const ogImageUrl = getOpenGraphImageUrl({
-    title: String(metadata.title),
-    description: metadata.description,
-  })
+  const { url, title, description } = getMetadata(category)
+  const ogImageUrl = getOpenGraphImageUrl({ title, description })
 
   return {
-    ...metadata,
+    title,
+    description,
     alternates: { ...metadataConfig.alternates, canonical: url },
     openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
   }
@@ -58,25 +83,16 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
 
 export default async function (props: Props) {
   const category = await getCategory(props)
+  const breadcrumbs = getBreadcrumbs(category)
+  const structuredData = getStructuredData(category)
   const { title, description } = getMetadata(category)
 
   return (
     <>
-      <Breadcrumbs
-        items={[
-          {
-            href: "/categories",
-            name: "Categories",
-          },
-          {
-            href: `/categories/${category.slug}`,
-            name: category.label || category.name,
-          },
-        ]}
-      />
+      <Breadcrumbs items={breadcrumbs} />
 
       <Intro>
-        <IntroTitle>{`${title}`}</IntroTitle>
+        <IntroTitle>{title}</IntroTitle>
         <IntroDescription className="max-w-3xl">{description}</IntroDescription>
       </Intro>
 
@@ -88,6 +104,11 @@ export default async function (props: Props) {
           ad="Tools"
         />
       </Suspense>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
     </>
   )
 }

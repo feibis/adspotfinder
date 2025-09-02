@@ -30,31 +30,25 @@ const getTool = cache(async ({ params }: Props) => {
 })
 
 const getMetadata = (tool: ToolOne) => {
+  let title = `Choose a plan for ${tool.name}`
+  let description = `Maximize ${tool.name}'s impact from day one. Select a package that suits your goals - from free listing to premium features.`
+
   if (isToolPublished(tool)) {
-    return {
-      title: `Boost ${tool.name}'s Visibility`,
-      description: `You can upgrade ${tool.name}'s listing on ${siteConfig.name} to benefit from a featured badge, a prominent placement, and a do-follow link.`,
-    }
+    title = `Boost ${tool.name}'s Visibility`
+    description = `You can upgrade ${tool.name}'s listing on ${siteConfig.name} to benefit from a featured badge, a prominent placement, and a do-follow link.`
   }
 
-  return {
-    title: `Choose a plan for ${tool.name}`,
-    description: `Maximize ${tool.name}'s impact from day one. Select a package that suits your goals - from free listing to premium features.`,
-  }
+  return { url: `/submit/${tool.slug}`, title, description }
 }
 
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
   const tool = await getTool(props)
-  const url = `/submit/${tool.slug}`
-  const metadata = getMetadata(tool)
-
-  const ogImageUrl = getOpenGraphImageUrl({
-    title: String(metadata.title),
-    description: metadata.description,
-  })
+  const { url, title, description } = getMetadata(tool)
+  const ogImageUrl = getOpenGraphImageUrl({ title, description })
 
   return {
-    ...metadata,
+    title,
+    description,
     alternates: { ...metadataConfig.alternates, canonical: url },
     openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
   }
@@ -67,7 +61,7 @@ export default async function (props: Props) {
   return (
     <>
       <Intro alignment="center">
-        <IntroTitle>{`${title}`}</IntroTitle>
+        <IntroTitle>{title}</IntroTitle>
         <IntroDescription>{description}</IntroDescription>
       </Intro>
 
