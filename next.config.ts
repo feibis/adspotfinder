@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
   experimental: {
     ppr: true,
     useCache: true,
+    workerThreads: false,
 
     optimizePackageImports: [
       "@content-collections/core",
