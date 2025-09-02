@@ -37,10 +37,6 @@ const findPostBySlug = cache(async ({ params }: PageProps<"/blog/[slug]">) => {
   return post
 })
 
-export const generateStaticParams = () => {
-  return allPosts.map(({ _meta }) => ({ slug: _meta.path }))
-}
-
 const getMetadata = (post: Post) => {
   return {
     url: `/blog/${post._meta.path}`,
@@ -83,6 +79,10 @@ const getStructuredData = (post: Post) => {
     ),
     generateWebPage(url, title, description),
   ])
+}
+
+export const generateStaticParams = () => {
+  return allPosts.map(({ _meta }) => ({ slug: _meta.path }))
 }
 
 export const generateMetadata = async (props: PageProps<"/blog/[slug]">): Promise<Metadata> => {

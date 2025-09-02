@@ -11,6 +11,8 @@ import {
   generateBreadcrumbs,
   generateCollectionPage,
   generateWebPage,
+  getOrganization,
+  getWebSite,
 } from "~/lib/structured-data"
 
 const url = "/categories"
@@ -19,19 +21,21 @@ const description = "Browse all tool categories to find the perfect software for
 const ogImageUrl = getOpenGraphImageUrl({ title, description })
 const breadcrumbs = [{ name: "Categories", url }]
 
-const getStructuredData = () => {
-  return createGraph([
-    generateWebPage(url, title),
-    generateBreadcrumbs(breadcrumbs),
-    generateCollectionPage(url, title, description),
-  ])
-}
-
 export const metadata: Metadata = {
   title,
   description,
   alternates: { ...metadataConfig.alternates, canonical: url },
   openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
+}
+
+const getStructuredData = () => {
+  return createGraph([
+    getOrganization(),
+    getWebSite(),
+    generateWebPage(url, title),
+    generateBreadcrumbs(breadcrumbs),
+    generateCollectionPage(url, title, description),
+  ])
 }
 
 export default function () {

@@ -22,6 +22,13 @@ const description = `${siteConfig.name} is a community driven list of tools and 
 const ogImageUrl = getOpenGraphImageUrl({ title, description })
 const breadcrumbs = [{ name: "About", url }]
 
+export const metadata: Metadata = {
+  title,
+  description,
+  alternates: { ...metadataConfig.alternates, canonical: url },
+  openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
+}
+
 const getStructuredData = () => {
   return createGraph([
     getOrganization(),
@@ -30,13 +37,6 @@ const getStructuredData = () => {
     generateWebPage(url, title, description),
     generateAboutPage(url, title, description),
   ])
-}
-
-export const metadata: Metadata = {
-  title,
-  description,
-  alternates: { ...metadataConfig.alternates, canonical: url },
-  openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
 }
 
 export default function () {

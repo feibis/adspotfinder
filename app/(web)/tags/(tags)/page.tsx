@@ -11,6 +11,8 @@ import {
   generateBreadcrumbs,
   generateCollectionPage,
   generateWebPage,
+  getOrganization,
+  getWebSite,
 } from "~/lib/structured-data"
 
 const url = "/tags"
@@ -22,6 +24,8 @@ const breadcrumbs = [{ name: "Tags", url }]
 
 const getStructuredData = () => {
   return createGraph([
+    getOrganization(),
+    getWebSite(),
     generateWebPage(url, title),
     generateBreadcrumbs(breadcrumbs),
     generateCollectionPage(url, title, description),
