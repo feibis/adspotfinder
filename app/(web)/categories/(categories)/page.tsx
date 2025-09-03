@@ -32,8 +32,8 @@ const getStructuredData = () => {
   return createGraph([
     getOrganization(),
     getWebSite(),
-    generateWebPage(url, title),
     generateBreadcrumbs(breadcrumbs),
+    generateWebPage(url, title, description),
     generateCollectionPage(url, title, description),
   ])
 }

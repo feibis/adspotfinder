@@ -22,21 +22,21 @@ const description =
 const ogImageUrl = getOpenGraphImageUrl({ title, description })
 const breadcrumbs = [{ name: "Tags", url }]
 
-const getStructuredData = () => {
-  return createGraph([
-    getOrganization(),
-    getWebSite(),
-    generateWebPage(url, title),
-    generateBreadcrumbs(breadcrumbs),
-    generateCollectionPage(url, title, description),
-  ])
-}
-
 export const metadata: Metadata = {
   title,
   description,
   alternates: { ...metadataConfig.alternates, canonical: url },
   openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
+}
+
+const getStructuredData = () => {
+  return createGraph([
+    getOrganization(),
+    getWebSite(),
+    generateBreadcrumbs(breadcrumbs),
+    generateWebPage(url, title, description),
+    generateCollectionPage(url, title, description),
+  ])
 }
 
 export default function (props: PageProps<"/tags">) {
