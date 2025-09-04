@@ -84,7 +84,7 @@ export const submitTool = actionClient
     const slug = await generateUniqueSlug(data.name)
 
     // Check if the email domain matches the tool's website domain
-    const ownerId = session?.user.email.includes(hostname) ? session?.user.id : undefined
+    const ownerId = session?.user.email.includes(domain) ? session?.user.id : undefined
 
     // Save the tool to the database
     const { data: tool, error } = await tryCatch(
