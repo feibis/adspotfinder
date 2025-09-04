@@ -9,7 +9,7 @@ import { findAdWithFallback } from "~/server/web/actions/ads"
 
 export const AdBanner = async ({ className, ...props }: ComponentProps<typeof Card>) => {
   const type = "Banner"
-  const { data: ad } = await findAdWithFallback({ type, fallback: ["all", "default"] })
+  const { data: ad } = await findAdWithFallback({ type })
 
   if (!ad) {
     return null

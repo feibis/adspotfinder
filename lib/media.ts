@@ -1,6 +1,6 @@
 import { DeleteObjectCommand, ListObjectsV2Command } from "@aws-sdk/client-s3"
 import { Upload } from "@aws-sdk/lib-storage"
-import { stripURLSubpath, tryCatch } from "@primoui/utils"
+import { getDomain, tryCatch } from "@primoui/utils"
 import { fileTypeFromBuffer } from "file-type"
 import { env, isProd } from "~/env"
 import { s3Client } from "~/services/s3"
@@ -100,7 +100,7 @@ export const removeS3File = async (key: string) => {
  */
 export const getFaviconFetchUrl = (url: string) => {
   const options = new URLSearchParams({
-    domain_url: stripURLSubpath(url),
+    domain_url: getDomain(url),
     sz: "128",
   })
 

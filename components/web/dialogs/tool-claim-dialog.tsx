@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
-import { getUrlHostname } from "@primoui/utils"
+import { getDomain } from "@primoui/utils"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
@@ -47,6 +47,8 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
 
   const emailResolver = zodResolver(claimToolEmailSchema)
   const otpResolver = zodResolver(claimToolOtpSchema)
+
+  const toolDomain = getDomain(tool.websiteUrl)
 
   const sendOtpAction = useHookFormAction(sendToolClaimOtp, emailResolver, {
     formProps: {
@@ -112,11 +114,8 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
     return () => clearInterval(interval)
   }, [cooldownRemaining])
 
-  const handleEmailSubmit = (data: z.infer<typeof claimToolEmailSchema>) => {
-    const toolDomain = getUrlHostname(tool.websiteUrl)
-    const emailDomain = data.email.split("@")[1]
-
-    if (toolDomain !== emailDomain) {
+  const handleEmailSubmit = ({ email }: z.infer<typeof claimToolEmailSchema>) => {
+    if (toolDomain !== email.split("@")[1]) {
       sendOtpAction.form.setError("email", {
         type: "manual",
         message: `Email must match the website domain (${toolDomain})`,
@@ -164,8 +163,8 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
               <DialogDescription>
                 <p>
                   To claim this listing, you need to verify the ownership of the{" "}
-                  <strong>{getUrlHostname(tool.websiteUrl)}</strong> domain. This helps us to ensure
-                  that you represent the organization.
+                  <strong>{toolDomain}</strong> domain. This helps us to ensure that you represent
+                  the organization.
                 </p>
 
                 <p>
@@ -190,7 +189,7 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
                       <Input
                         type="email"
                         data-1p-ignore
-                        placeholder={`e.g. hello@${getUrlHostname(tool.websiteUrl)}`}
+                        placeholder={`e.g. hello@${toolDomain}`}
                         {...field}
                       />
                     </FormControl>

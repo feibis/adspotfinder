@@ -1,4 +1,4 @@
-import { getUrlHostname } from "@primoui/utils"
+import { getDomain } from "@primoui/utils"
 import { env } from "~/env"
 
 export const siteConfig = {
@@ -9,7 +9,7 @@ export const siteConfig = {
     "The complete boilerplate for building profitable directory websites. Start generating revenue from day one with our battle-tested stack and built-in monetization features.",
   email: env.NEXT_PUBLIC_SITE_EMAIL,
   url: env.NEXT_PUBLIC_SITE_URL,
-  domain: getUrlHostname(env.NEXT_PUBLIC_SITE_URL),
+  domain: getDomain(env.NEXT_PUBLIC_SITE_URL),
 
   alphabet: "abcdefghijklmnopqrstuvwxyz&",
 }

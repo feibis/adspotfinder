@@ -1,4 +1,4 @@
-import { addSearchParams } from "@primoui/utils"
+import { setQueryParams } from "@primoui/utils"
 import { ToolStatus } from "@prisma/client"
 import RSS from "rss"
 import { siteConfig } from "~/config/site"
@@ -25,7 +25,7 @@ export const GET = async () => {
   const feed = new RSS({
     title: name,
     description: tagline,
-    site_url: addSearchParams(url, rssSearchParams),
+    site_url: setQueryParams(url, rssSearchParams),
     feed_url: `${url}/rss.xml`,
     copyright: `${new Date().getFullYear()} ${name}`,
     language: "en",
@@ -37,7 +37,7 @@ export const GET = async () => {
     feed.item({
       guid: tool.websiteUrl,
       title: tool.name,
-      url: addSearchParams(`${url}/${tool.slug}`, rssSearchParams),
+      url: setQueryParams(`${url}/${tool.slug}`, rssSearchParams),
       date: tool.publishedAt?.toUTCString() ?? new Date().toUTCString(),
       description: tool.description ?? "",
       categories: tool.categories?.map(({ name }) => name) || [],

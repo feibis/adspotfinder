@@ -1,6 +1,6 @@
 "use server"
 
-import { getUrlHostname, slugify, tryCatch } from "@primoui/utils"
+import { getDomain, slugify, tryCatch } from "@primoui/utils"
 import { headers } from "next/headers"
 import { after } from "next/server"
 import { isDev } from "~/env"
@@ -51,7 +51,7 @@ export const submitTool = actionClient
 
     const ip = await getIP()
     const rateLimitKey = `submission:${ip}`
-    const hostname = getUrlHostname(data.websiteUrl)
+    const domain = getDomain(data.websiteUrl)
 
     // Rate limiting check
     if (await isRateLimited(rateLimitKey, "submission")) {
@@ -72,7 +72,7 @@ export const submitTool = actionClient
 
     // Check if the tool already exists
     const existingTool = await db.tool.findFirst({
-      where: { websiteUrl: { contains: hostname } },
+      where: { websiteUrl: { contains: domain } },
     })
 
     // If the tool exists, redirect to the tool or submit page

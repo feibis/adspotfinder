@@ -1,6 +1,6 @@
 "use server"
 
-import { getUrlHostname } from "@primoui/utils"
+import { getDomain } from "@primoui/utils"
 import { revalidateTag } from "next/cache"
 import { headers } from "next/headers"
 import { after } from "next/server"
@@ -50,7 +50,7 @@ const getClaimableTool = async (id: string) => {
  * Verify that email domain matches tool website domain
  */
 const verifyEmailDomain = (email: string, toolWebsiteUrl: string) => {
-  const toolDomain = getUrlHostname(toolWebsiteUrl)
+  const toolDomain = getDomain(toolWebsiteUrl)
   const emailDomain = email.split("@")[1]
 
   if (toolDomain !== emailDomain) {

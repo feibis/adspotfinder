@@ -1,6 +1,6 @@
 "use server"
 
-import { getUrlHostname } from "@primoui/utils"
+import { getDomain } from "@primoui/utils"
 import { AdType, type Prisma } from "@prisma/client"
 import { revalidateTag } from "next/cache"
 import { redirect } from "next/navigation"
@@ -105,9 +105,9 @@ export const createAdFromCheckout = actionClient
       throw new Error("Checkout session is not complete")
     }
 
-    const websiteUrl = getUrlHostname(adDetails.websiteUrl)
-    const faviconFetchUrl = getFaviconFetchUrl(websiteUrl)
-    const faviconPath = `ads/${websiteUrl}/favicon`
+    const adDomain = getDomain(adDetails.websiteUrl)
+    const faviconFetchUrl = getFaviconFetchUrl(adDetails.websiteUrl)
+    const faviconPath = `ads/${adDomain}/favicon`
 
     // Upload favicon
     const { data: faviconUrl } = await fetchMedia({ url: faviconFetchUrl, path: faviconPath })

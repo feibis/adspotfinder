@@ -1,4 +1,4 @@
-import { isExternalUrl } from "@primoui/utils"
+import { isExternalUrl, removeQueryParams } from "@primoui/utils"
 import type { AdType } from "@prisma/client"
 import type { ComponentProps } from "react"
 import { Badge } from "~/components/common/badge"
@@ -23,7 +23,7 @@ export const AdLink = ({ ad, type, source, ...props }: AdLinkProps) => {
       href={`${ad.websiteUrl}${isInternal ? `?type=${type}` : ""}`}
       target={isInternal ? "_self" : "_blank"}
       eventName="click_ad"
-      eventProps={{ url: ad.websiteUrl, type, source }}
+      eventProps={{ url: removeQueryParams(ad.websiteUrl), type, source }}
       doFollow
       doTrack
       {...props}

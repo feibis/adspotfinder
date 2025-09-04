@@ -1,3 +1,4 @@
+import { removeQueryParams } from "@primoui/utils"
 import { PlusIcon } from "lucide-react"
 import type { ComponentProps } from "react"
 import { Card } from "~/components/common/card"
@@ -36,7 +37,7 @@ export const FeaturedToolsIcons = async ({ ...props }: ComponentProps<typeof Car
               doTrack
               eventName="click_website"
               eventProps={{
-                url: tool.websiteUrl,
+                url: removeQueryParams(tool.websiteUrl),
                 isFeatured: tool.isFeatured,
                 source: "supporter",
               }}

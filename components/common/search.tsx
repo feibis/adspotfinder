@@ -1,7 +1,7 @@
 "use client"
 
 import { type HotkeyItem, useDebouncedState, useHotkeys } from "@mantine/hooks"
-import { getUrlHostname } from "@primoui/utils"
+import { getDomain } from "@primoui/utils"
 import { LoaderIcon, MoonIcon, SunIcon } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import type { InferSafeActionFnResult } from "next-safe-action"
@@ -235,7 +235,7 @@ export const Search = () => {
             <>
               {faviconUrl && <img src={faviconUrl} alt="" width={16} height={16} />}
               <span className="flex-1 truncate">{name}</span>
-              <span className="opacity-50">{getUrlHostname(websiteUrl)}</span>
+              <span className="opacity-50">{getDomain(websiteUrl)}</span>
             </>
           )}
         />

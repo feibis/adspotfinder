@@ -13,6 +13,8 @@ import {
   generateBreadcrumbs,
   generateCollectionPage,
   generateWebPage,
+  getOrganization,
+  getWebSite,
 } from "~/lib/structured-data"
 import type { TagOne } from "~/server/web/tags/payloads"
 import { findTag, findTagSlugs } from "~/server/web/tags/queries"
@@ -48,6 +50,8 @@ const getStructuredData = (tag: TagOne) => {
   const { url, title, description } = getMetadata(tag)
 
   return createGraph([
+    getOrganization(),
+    getWebSite(),
     generateBreadcrumbs(breadcrumbs),
     generateCollectionPage(url, title, description),
     generateWebPage(url, title, description),
@@ -62,14 +66,12 @@ export const generateStaticParams = async () => {
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
   const tag = await getTag(props)
   const url = `/tags/${tag.slug}`
-  const metadata = getMetadata(tag)
-
-  const ogImageUrl = getOpenGraphImageUrl({
-    title: String(metadata.title),
-  })
+  const { title, description } = getMetadata(tag)
+  const ogImageUrl = getOpenGraphImageUrl({ title, description })
 
   return {
-    ...metadata,
+    title,
+    description,
     alternates: { ...metadataConfig.alternates, canonical: url },
     openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
   }

@@ -1,3 +1,4 @@
+import { removeQueryParams } from "@primoui/utils"
 import { ToolStatus } from "@prisma/client"
 import { ArrowUpRightIcon, HashIcon } from "lucide-react"
 import type { Metadata } from "next"
@@ -148,7 +149,7 @@ export default async function (props: Props) {
                   doTrack
                   eventName="click_website"
                   eventProps={{
-                    url: tool.websiteUrl,
+                    url: removeQueryParams(tool.websiteUrl),
                     isFeatured: tool.isFeatured,
                     source: "button",
                   }}
@@ -166,7 +167,11 @@ export default async function (props: Props) {
               href={tool.affiliateUrl || tool.websiteUrl}
               doFollow={tool.isFeatured}
               eventName="click_website"
-              eventProps={{ url: tool.websiteUrl, isFeatured: tool.isFeatured, source: "image" }}
+              eventProps={{
+                url: removeQueryParams(tool.websiteUrl),
+                isFeatured: tool.isFeatured,
+                source: "image",
+              }}
               src={tool.screenshotUrl}
               alt={`Screenshot of ${tool.name} website`}
               className="self-stretch max-md:order-2"
