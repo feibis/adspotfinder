@@ -7,7 +7,7 @@ import {
   useState,
 } from "react"
 import { Ping } from "~/components/common/ping"
-import type { ProductInterval } from "~/hooks/use-plan-prices"
+import type { ProductInterval } from "~/hooks/use-product-prices"
 import { cx } from "~/lib/utils"
 
 type Interval = {
@@ -16,19 +16,19 @@ type Interval = {
   note?: ReactNode
 }
 
-type PlanIntervalSwitchProps = Omit<ComponentProps<"div">, "onChange"> & {
+type IntervalSwitchProps = Omit<ComponentProps<"div">, "onChange"> & {
   intervals: Interval[]
   value: ProductInterval
   onChange: (value: ProductInterval) => void
 }
 
-export const PlanIntervalSwitch = ({
+export const IntervalSwitch = ({
   className,
   intervals,
   value,
   onChange,
   ...props
-}: PlanIntervalSwitchProps) => {
+}: IntervalSwitchProps) => {
   const [indicatorStyle, setIndicatorStyle] = useState<CSSProperties>({ opacity: 0 })
 
   const updateIndicator = useCallback(() => {

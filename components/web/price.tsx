@@ -38,12 +38,15 @@ export const Price = ({
     <div className={cx("relative flex items-center", className)} {...props}>
       {format?.notation === "compact" && <span className="self-start mr-1 text-[0.9em]">$</span>}
 
-      <div className="relative -tracking-wide tabular-nums font-display">
+      <div className="relative tabular-nums font-display">
         <NumberFlow
           value={price}
           format={{ ...defaultFormat, ...format }}
           locales="en-US"
-          className={cx("flex! items-center font-semibold h-[0.9em]", priceClassName)}
+          className={cx(
+            "flex items-center -tracking-wide font-semibold [--number-flow-char-height:0.75em] h-[0.75em]",
+            priceClassName,
+          )}
           plugins={[continuous]}
         />
 

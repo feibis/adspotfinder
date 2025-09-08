@@ -49,7 +49,7 @@ const calculateDiscount = (basePrice: number, price: number) => {
   return basePrice > 0 ? Math.round(((basePrice - price) / basePrice) * 100) : 0
 }
 
-export function usePlanPrices(prices: Stripe.Price[], coupon?: Stripe.Coupon | null) {
+export function useProductPrices(prices: Stripe.Price[], coupon?: Stripe.Coupon | null) {
   const [interval, setInterval] = useState<ProductInterval>("month")
   const calculatedPrices = calculatePrices(prices, interval, coupon)
 

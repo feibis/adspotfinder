@@ -4,33 +4,32 @@ import { ArrowUpRightIcon, CheckIcon, XIcon } from "lucide-react"
 import { useAction } from "next-safe-action/hooks"
 import { posthog } from "posthog-js"
 import { Slot } from "radix-ui"
-import type { ComponentProps } from "react"
+import type { ComponentProps, ReactNode } from "react"
 import { toast } from "sonner"
 import type Stripe from "stripe"
 import { Button } from "~/components/common/button"
 import { Card, CardBg, type cardVariants } from "~/components/common/card"
-import { H5 } from "~/components/common/heading"
+import { H4, H5 } from "~/components/common/heading"
 import { Ping } from "~/components/common/ping"
 import { Skeleton } from "~/components/common/skeleton"
 import { Stack } from "~/components/common/stack"
 import { Tooltip } from "~/components/common/tooltip"
-import { PlanIntervalSwitch } from "~/components/web/plan-interval-switch"
+import { IntervalSwitch } from "~/components/web/interval-switch"
 import { Price } from "~/components/web/price"
-import { usePlanPrices } from "~/hooks/use-plan-prices"
-import { isToolPublished } from "~/lib/tools"
+import { useProductPrices } from "~/hooks/use-product-prices"
+import type { ProductFeature } from "~/lib/products"
 import { cva, cx, type VariantProps } from "~/lib/utils"
-import { createStripeToolCheckout } from "~/server/web/actions/stripe"
-import type { ToolOne } from "~/server/web/tools/payloads"
+import { createStripeCheckout } from "~/server/web/actions/stripe"
 
-const planVariants = cva({
+const productVariants = cva({
   base: "items-stretch gap-8 basis-72 grow max-w-80 bg-transparent overflow-clip",
 })
 
-const planFeatureVariants = cva({
+const productFeatureVariants = cva({
   base: "flex gap-3 text-sm",
 })
 
-const planFeatureCheckVariants = cva({
+const productFeatureCheckVariants = cva({
   base: "shrink-0 size-5 stroke-[3px] p-1 rounded-md",
 
   variants: {
@@ -42,38 +41,21 @@ const planFeatureCheckVariants = cva({
   },
 })
 
-export type PlanFeature = {
-  /**
-   * The text of the feature.
-   */
-  name?: string
-
-  /**
-   * The footnote of the feature.
-   */
-  footnote?: string
-
-  /**
-   * The type of the feature.
-   */
-  type?: "positive" | "neutral" | "negative"
-}
-
-type PlanProps = ComponentProps<"div"> &
+type ProductProps = ComponentProps<"div"> &
   VariantProps<typeof cardVariants> &
-  VariantProps<typeof planVariants> & {
+  VariantProps<typeof productVariants> & {
     /**
-     * The plan.
+     * The product.
      */
-    plan: Stripe.Product
+    product: Stripe.Product
 
     /**
-     * The features of the plan.
+     * The features of the product.
      */
-    features: PlanFeature[]
+    features: ProductFeature[]
 
     /**
-     * The prices of the plan.
+     * The prices of the product.
      */
     prices: Stripe.Price[]
 
@@ -83,35 +65,50 @@ type PlanProps = ComponentProps<"div"> &
     coupon?: Stripe.Coupon
 
     /**
-     * The slug of the tool.
+     * The metadata of the plan.
      */
-    tool: ToolOne
+    metadata?: Record<string, string>
 
     /**
-     * Whether the plan is featured.
+     * Whether the product is featured.
      */
     isFeatured?: boolean
+
+    /**
+     * The URL to redirect to after a successful payment.
+     */
+    successUrl: string
+
+    /**
+     * The URL to redirect to after a canceled payment.
+     */
+    cancelUrl?: string
+
+    /**
+     * The label of the button.
+     */
+    buttonLabel?: ReactNode
   }
 
-const Plan = ({
+const Product = ({
   className,
-  plan,
+  product,
   features,
   prices,
   coupon,
-  tool,
+  metadata,
   isFeatured,
+  successUrl,
+  cancelUrl,
+  buttonLabel,
   ...props
-}: PlanProps) => {
+}: ProductProps) => {
   const { isSubscription, currentPrice, price, fullPrice, discount, interval, setInterval } =
-    usePlanPrices(prices, coupon)
+    useProductPrices(prices, coupon)
 
-  const { execute, isPending } = useAction(createStripeToolCheckout, {
+  const { execute, isPending } = useAction(createStripeCheckout, {
     onSuccess: () => {
-      posthog.capture("stripe_checkout_tool", {
-        tool: tool.slug,
-        mode: isSubscription ? "featured" : "expedited",
-      })
+      posthog.capture("stripe_checkout", { product: product.name, ...metadata })
     },
 
     onError: ({ error }) => {
@@ -122,27 +119,28 @@ const Plan = ({
   const onSubmit = () => {
     // Execute the action
     execute({
-      priceId: currentPrice.id,
-      tool: tool.slug,
+      line_items: [{ price: currentPrice.id, quantity: 1 }],
       mode: isSubscription ? "subscription" : "payment",
       coupon: coupon?.id,
+      successUrl,
+      cancelUrl,
     })
   }
 
   return (
     <Card
       hover={false}
-      className={cx(planVariants({ className }), isFeatured && "lg:-my-3 lg:py-8")}
+      className={cx(productVariants({ className }), isFeatured && "lg:-my-3 lg:py-8")}
       {...props}
     >
       {isFeatured && <CardBg />}
 
       <div className="space-y-3">
         <div className="flex items-center justify-between gap-2">
-          <H5>{plan.name}</H5>
+          <H4>{product.name}</H4>
 
           {isSubscription && prices.length > 1 && (
-            <PlanIntervalSwitch
+            <IntervalSwitch
               intervals={[
                 { label: "Monthly", value: "month" },
                 { label: "Yearly", value: "year" },
@@ -154,8 +152,8 @@ const Plan = ({
           )}
         </div>
 
-        {plan.description && (
-          <p className="text-foreground/50 text-sm text-pretty">{plan.description}</p>
+        {product.description && (
+          <p className="text-foreground/50 text-sm text-pretty">{product.description}</p>
         )}
       </div>
 
@@ -171,14 +169,14 @@ const Plan = ({
       />
 
       {!!features && (
-        <Stack direction="column" className="my-auto items-stretch">
+        <Stack direction="column" className="my-auto flex-1 items-stretch">
           {features.map(({ type, name, footnote }) => (
-            <div key={name} className={cx(planFeatureVariants())}>
-              <Slot.Root className={cx(planFeatureCheckVariants({ type }))}>
+            <div key={name} className={cx(productFeatureVariants())}>
+              <Slot.Root className={cx(productFeatureCheckVariants({ type }))}>
                 {type === "negative" ? <XIcon /> : <CheckIcon />}
               </Slot.Root>
 
-              <span className={cx("truncate", type === "negative" && "opacity-50")}>{name}</span>
+              <span className={cx(type === "negative" && "opacity-50")}>{name}</span>
 
               {footnote && (
                 <Tooltip tooltip={footnote} delayDuration={0}>
@@ -198,19 +196,15 @@ const Plan = ({
         suffix={!price ? <span /> : <ArrowUpRightIcon />}
         onClick={onSubmit}
       >
-        {!price
-          ? "Current Package"
-          : isToolPublished(tool)
-            ? "Upgrade Listing"
-            : (plan.metadata.label ?? `Choose ${plan.name}`)}
+        {buttonLabel || "Buy Now"}
       </Button>
     </Card>
   )
 }
 
-const PlanSkeleton = () => {
+const ProductSkeleton = () => {
   return (
-    <Card hover={false} className={cx(planVariants())}>
+    <Card hover={false} className={cx(productVariants())}>
       <div className="space-y-3">
         <H5>
           <Skeleton className="w-24">&nbsp;</Skeleton>
@@ -226,8 +220,8 @@ const PlanSkeleton = () => {
 
       <Stack direction="column" className="my-auto items-stretch">
         {[...Array(5)].map((_, index) => (
-          <div key={index} className={cx(planFeatureVariants())}>
-            <div className={cx(planFeatureCheckVariants({ type: "neutral" }))}>&nbsp;</div>
+          <div key={index} className={cx(productFeatureVariants())}>
+            <div className={cx(productFeatureCheckVariants({ type: "neutral" }))}>&nbsp;</div>
 
             <Skeleton className="w-3/4">&nbsp;</Skeleton>
           </div>
@@ -241,4 +235,4 @@ const PlanSkeleton = () => {
   )
 }
 
-export { Plan, PlanSkeleton, type PlanProps }
+export { Product, ProductSkeleton, type ProductProps }

@@ -2,6 +2,7 @@ import { addDays, differenceInMonths } from "date-fns"
 import plur from "plur"
 import type Stripe from "stripe"
 import { submissionsConfig } from "~/config/submissions"
+import { stripe } from "~/services/stripe"
 
 const SYMBOLS = {
   positive: "✓ ",
@@ -10,6 +11,21 @@ const SYMBOLS = {
 } as const
 
 type SymbolType = keyof typeof SYMBOLS
+
+export type ProductInterval = "month" | "year"
+
+export type ProductFeature = {
+  name: string
+  footnote?: string
+  type?: keyof typeof SYMBOLS
+}
+
+export type ProductWithPrices = {
+  product: Stripe.Product
+  prices: Stripe.Price[]
+  coupon: Stripe.Coupon | undefined
+  isFeatured: boolean
+}
 
 export const getQueueLength = (queueLength: number) => {
   const queueDays = Math.ceil((queueLength / submissionsConfig.postingRate) * 7)
@@ -24,26 +40,39 @@ const getFeatureType = (featureName?: string) => {
     | undefined
 }
 
-const removeSymbol = (featureName?: string, type?: SymbolType) => {
-  return type ? featureName?.replace(SYMBOLS[type], "") : featureName
+const removeSymbol = (name: string, type?: SymbolType) => {
+  return type ? name.replace(SYMBOLS[type], "") : name
 }
 
 /**
- * Get the products for pricing.
+ * Get the price amount from a Stripe price object or string.
+ *
+ * @param price - The price to get the amount from.
+ * @returns The price amount.
+ */
+const getPriceAmount = (price?: Stripe.Price | string | null) => {
+  return typeof price === "object" && price !== null ? (price.unit_amount ?? 0) : 0
+}
+
+/*
+ * Sort products by price
+ */
+export const sortProductsByPrice = (products: Stripe.Product[]) => {
+  return products.sort((a, b) => getPriceAmount(a.default_price) - getPriceAmount(b.default_price))
+}
+
+/**
+ * Get the tool listing products for pricing.
  *
  * @param products - The products to get for pricing.
  * @param isPublished - Whether the tool is published.
  * @returns The products for pricing.
  */
-export const getProducts = (
+export const getListingProducts = (
   products: Stripe.Product[],
   coupon: Stripe.Coupon | undefined,
   isPublished: boolean,
 ) => {
-  const getPriceAmount = (price?: Stripe.Price | string | null) => {
-    return typeof price === "object" && price !== null ? (price.unit_amount ?? 0) : 0
-  }
-
   return (
     products
       // Filter out products that are not listings
@@ -107,36 +136,47 @@ const getLastDiscountedProductIndex = (products: Stripe.Product[], coupon?: Stri
 }
 
 /**
+ * Get the normalized features of a product.
+ *
+ * @param product - The product to get the features of.
+ * @returns The normalized features of the product.
+ */
+export const getProductFeatures = (product: Stripe.Product) => {
+  return product.marketing_features.map(feature => {
+    const type = getFeatureType(feature.name)
+    const name = removeSymbol(feature.name || "", type)
+
+    return { name, type } satisfies ProductFeature
+  })
+}
+
+/**
  * Get the features of a product.
  *
  * @param product - The product to get the features of.
  * @param isPublished - Whether the tool is published.
- * @param queueLength - The length of the queue.
+ * @param queue - The length of the queue.
  * @returns The features of the product.
  */
-export const getProductFeatures = (
+export const getProductListingFeatures = (
   product: Stripe.Product,
   isPublished: boolean,
-  queueLength: number,
+  queue: number,
 ) => {
-  const features = product.marketing_features.filter(
-    feature => !isPublished || !feature.name?.includes("processing time"),
-  )
+  const queueTemplate = "{queue}"
+  const queueFootnote = "Calculated based on the number of tools in the queue."
 
-  return features.map(feature => {
-    const type = getFeatureType(feature.name)
-    const name = removeSymbol(feature.name, type)
+  return getProductFeatures(product)
+    .filter(({ name }) => !isPublished || !name.includes("processing time"))
+    .map(({ name, type }) => {
+      const isQueueFeature = name.includes(queueTemplate)
 
-    if (name?.includes("{queue}")) {
       return {
         type,
-        name: name.replace("{queue}", getQueueLength(queueLength)),
-        footnote: "Calculated based on the number of tools in the queue.",
-      }
-    }
-
-    return { ...feature, name, type }
-  })
+        name: isQueueFeature ? name.replace(queueTemplate, getQueueLength(queue)) : name,
+        footnote: isQueueFeature ? queueFootnote : undefined,
+      } satisfies ProductFeature
+    })
 }
 
 /**
@@ -147,13 +187,7 @@ export const getProductFeatures = (
  * @param stripe - The Stripe instance to use for fetching prices.
  * @returns A promise that resolves to an array of products with their prices and discount status.
  */
-export const prepareProductsWithPrices = async (
-  products: Stripe.Product[],
-  coupon?: Stripe.Coupon,
-  stripe?: Stripe,
-) => {
-  if (!stripe) throw new Error("Stripe instance is required")
-
+export const getProductsWithPrices = async (products: Stripe.Product[], coupon?: Stripe.Coupon) => {
   return Promise.all(
     products.map(async (product, index) => {
       const prices = await stripe.prices.list({ product: product.id, active: true })
@@ -162,9 +196,9 @@ export const prepareProductsWithPrices = async (
       return {
         product,
         prices: prices.data,
-        isDiscounted,
+        coupon: isDiscounted ? coupon : undefined,
         isFeatured: isProductFeatured(index, products, coupon, isDiscounted),
-      }
+      } satisfies ProductWithPrices
     }),
   )
 }
