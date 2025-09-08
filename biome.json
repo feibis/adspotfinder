@@ -1,7 +1,8 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.2.2/schema.json",
   "files": {
-    "includes": ["**", "!**/.next"]
+    "includes": ["**", "!node_modules", "!.next", "!.content-collections"],
+    "ignoreUnknown": true
   },
   "assist": {
     "actions": {

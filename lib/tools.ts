@@ -1,7 +1,7 @@
 import type { Tool } from "@prisma/client"
 import { differenceInDays } from "date-fns"
-
 import { submissionsConfig } from "~/config/submissions"
+
 /**
  * Check if a tool is published.
  *

@@ -1,4 +1,4 @@
-import { getDomain, setQueryParams } from "@primoui/utils"
+import { setQueryParams } from "@primoui/utils"
 import type { ComponentProps } from "react"
 import { Stack } from "~/components/common/stack"
 import { ExternalLink } from "~/components/web/external-link"
@@ -11,7 +11,7 @@ type BuiltWithProps = ComponentProps<typeof Stack> & {
 }
 
 export const BuiltWith = ({ className, medium, ...props }: BuiltWithProps) => {
-  const rssSearchParams = { utm_source: getDomain(siteConfig.url), utm_medium: medium ?? "" }
+  const rssSearchParams = { utm_source: siteConfig.domain, utm_medium: medium ?? "" }
   const href = setQueryParams(linksConfig.builtWith, rssSearchParams)
 
   return (

@@ -1,6 +1,6 @@
 "use client"
 
-import { getDomain, isExternalUrl, setQueryParams } from "@primoui/utils"
+import { isExternalUrl, setQueryParams } from "@primoui/utils"
 import { type Properties, posthog } from "posthog-js"
 import type { ComponentProps } from "react"
 import { siteConfig } from "~/config/site"
@@ -21,9 +21,8 @@ export const ExternalLink = ({
   eventProps,
   ...props
 }: ExternalLinkProps) => {
-  const domain = getDomain(siteConfig.url)
   const addTracking = doTrack && !href?.includes("utm_")
-  const finalHref = addTracking ? setQueryParams(href!, { utm_source: domain }) : href
+  const finalHref = addTracking ? setQueryParams(href!, { utm_source: siteConfig.domain }) : href
   const isExternal = isExternalUrl(finalHref)
 
   return (
