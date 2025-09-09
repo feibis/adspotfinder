@@ -20,7 +20,7 @@ import { AdsCalendar } from "~/components/web/ads/ads-calendar"
 import { Price } from "~/components/web/price"
 import { adsConfig } from "~/config/ads"
 import { useAds } from "~/hooks/use-ads"
-import { createStripeAdsCheckout } from "~/server/web/actions/stripe"
+import { createStripeCheckout } from "~/server/web/actions/stripe"
 import type { AdMany } from "~/server/web/ads/payloads"
 
 type AdsCalendarProps = ComponentProps<"div"> & {
@@ -31,9 +31,9 @@ export const AdsPicker = ({ className, ads, ...props }: AdsCalendarProps) => {
   const { price, selections, hasSelections, findAdSpot, clearSelection, updateSelection } = useAds()
   const [type] = useQueryState("type", parseAsString)
 
-  const { execute, isPending } = useAction(createStripeAdsCheckout, {
-    onSuccess: () => {
-      posthog.capture("stripe_checkout_ad", { ...price })
+  const { execute, isPending } = useAction(createStripeCheckout, {
+    onSuccess: ({ input }) => {
+      posthog.capture("stripe_checkout", input)
     },
 
     onError: ({ error }) => {
@@ -42,27 +42,40 @@ export const AdsPicker = ({ className, ads, ...props }: AdsCalendarProps) => {
   })
 
   const handleCheckout = () => {
-    const checkoutData = selections
-      .filter(({ dateRange, duration }) => dateRange?.from && dateRange?.to && duration)
-      .map(selection => {
-        const adSpot = findAdSpot(selection.type)
+    const validSelections = selections.filter(
+      ({ dateRange, duration }) => dateRange?.from && dateRange?.to && duration,
+    )
 
-        const discountedPrice = price?.discountPercentage
-          ? adSpot.price * (1 - price.discountPercentage / 100)
-          : adSpot.price
+    const lineItems = validSelections.map(selection => {
+      const adSpot = findAdSpot(selection.type)
 
-        return {
-          type: selection.type,
-          price: discountedPrice,
-          duration: selection.duration ?? 0,
-          metadata: {
-            startDate: selection.dateRange?.from?.getTime() ?? 0,
-            endDate: selection.dateRange?.to?.getTime() ?? 0,
-          },
-        }
-      })
+      const discountedPrice = price?.discountPercentage
+        ? adSpot.price * (1 - price.discountPercentage / 100)
+        : adSpot.price
 
-    execute(checkoutData)
+      return {
+        price_data: {
+          product_data: { name: `${selection.type} Ad` },
+          unit_amount: Math.round(discountedPrice * 100),
+          currency: "usd",
+        },
+        quantity: selection.duration ?? 1,
+      }
+    })
+
+    const adData = validSelections.map(selection => ({
+      type: selection.type,
+      startsAt: selection.dateRange?.from?.getTime() ?? 0,
+      endsAt: selection.dateRange?.to?.getTime() ?? 0,
+    }))
+
+    execute({
+      lineItems,
+      mode: "payment",
+      metadata: { ads: JSON.stringify(adData) },
+      successUrl: "/advertise/success",
+      cancelUrl: "/advertise",
+    })
   }
 
   return (

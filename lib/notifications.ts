@@ -21,12 +21,12 @@ export const notifySubmitterOfToolSubmitted = async (tool: Tool) => {
 
   const to = tool.submitterEmail
   const subject = `🙌 Thanks for submitting ${tool.name}!`
-  const queueLength = await countSubmittedTools({})
+  const queue = await countSubmittedTools({})
 
   return await sendEmail({
     to,
     subject,
-    react: EmailSubmission({ to, tool, queueLength }),
+    react: EmailSubmission({ to, tool, queue }),
   })
 }
 

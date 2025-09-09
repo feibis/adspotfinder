@@ -2,23 +2,23 @@ import type { Tool } from "@prisma/client"
 import { Text } from "@react-email/components"
 import { EmailExpediteNudge } from "~/emails/components/expedite-nudge"
 import { EmailWrapper, type EmailWrapperProps } from "~/emails/components/wrapper"
-import { getQueueLength } from "~/lib/products"
+import { calculateQueueDuration } from "~/lib/products"
 
 export type EmailProps = EmailWrapperProps & {
   tool: Tool
-  queueLength?: number
+  queue?: number
 }
 
-const EmailSubmission = ({ tool, queueLength = 100, ...props }: EmailProps) => {
+const EmailSubmission = ({ tool, queue = 100, ...props }: EmailProps) => {
   return (
     <EmailWrapper {...props}>
       <Text>Hey {tool.submitterName?.trim()}!</Text>
 
       <Text>Thanks for submitting {tool.name}, it'll be reviewed shortly!</Text>
 
-      {queueLength > 10 && (
+      {queue > 10 && (
         <EmailExpediteNudge tool={tool}>
-          in approximately <strong>{getQueueLength(queueLength)}</strong>
+          in approximately <strong>{calculateQueueDuration(queue)}</strong>
         </EmailExpediteNudge>
       )}
     </EmailWrapper>

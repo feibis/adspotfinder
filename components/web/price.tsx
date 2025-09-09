@@ -1,5 +1,6 @@
 import NumberFlow, { continuous, type Format } from "@number-flow/react"
 import { formatNumber } from "@primoui/utils"
+import { AnimatePresence, motion, type Variants } from "motion/react"
 import type { ComponentProps } from "react"
 import type Stripe from "stripe"
 import { Badge } from "~/components/common/badge"
@@ -34,6 +35,15 @@ export const Price = ({
   priceClassName,
   ...props
 }: PriceProps) => {
+  const MotionBadge = motion.create(Badge)
+  const maxRedemptions = coupon?.max_redemptions || 0
+  const timesRedeemed = coupon?.times_redeemed || 0
+
+  const animationVariants: Variants = {
+    hidden: { opacity: 0, x: 10 },
+    visible: { opacity: 1, x: 0 },
+  }
+
   return (
     <div className={cx("relative flex items-center", className)} {...props}>
       {format?.notation === "compact" && <span className="self-start mr-1 text-[0.9em]">$</span>}
@@ -44,42 +54,52 @@ export const Price = ({
           format={{ ...defaultFormat, ...format }}
           locales="en-US"
           className={cx(
-            "flex items-center -tracking-wide font-semibold [--number-flow-char-height:0.75em] h-[0.75em]",
+            "flex items-center pr-1.5 -tracking-wide font-semibold [--number-flow-char-height:0.75em] h-[0.75em]",
             priceClassName,
           )}
           plugins={[continuous]}
         />
 
-        {!!fullPrice && fullPrice > price && (
-          <div className="absolute -top-[1em] left-full ml-1">
-            <span className="text-[0.9em] text-muted-foreground">
-              {formatNumber(fullPrice, "standard")}
-            </span>
-
-            <span className="absolute -inset-x-0.5 top-1/2 h-[0.1em] -rotate-10 bg-red-500/50" />
-          </div>
-        )}
+        <AnimatePresence>
+          {!!fullPrice && fullPrice > price && (
+            <motion.div
+              className="absolute -top-[1.25em] left-full"
+              variants={animationVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+            >
+              <span className="text-muted-foreground">{formatNumber(fullPrice, "standard")}</span>
+              <span className="absolute -inset-x-0.5 top-1/2 h-[0.1em] -rotate-10 bg-red-500/50" />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {price > 0 && interval && (
-        <div className="m-[0.25em] self-end text-muted-foreground text-[0.9em] leading-none">
-          /{interval}
-        </div>
+        <div className="self-end text-muted-foreground text-[0.9em] leading-none">/{interval}</div>
       )}
 
-      {!!discount && (
-        <Badge variant="success" className="absolute -top-3.5 right-0">
-          {discount}% off
-          {coupon?.max_redemptions && (
-            <span className="text-foreground/65">
-              ({coupon.max_redemptions - coupon.times_redeemed}
-              {coupon.max_redemptions > coupon.max_redemptions - coupon.times_redeemed &&
-                `/${coupon.max_redemptions}`}{" "}
-              left)
-            </span>
-          )}
-        </Badge>
-      )}
+      <AnimatePresence>
+        {!!discount && (
+          <MotionBadge
+            variant="success"
+            className="absolute -top-3.5 right-0"
+            variants={animationVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+          >
+            {discount}% off
+            {!!maxRedemptions && (
+              <span className="text-foreground/65">
+                ({maxRedemptions - timesRedeemed}
+                {maxRedemptions > maxRedemptions - timesRedeemed && `/${maxRedemptions}`} left)
+              </span>
+            )}
+          </MotionBadge>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

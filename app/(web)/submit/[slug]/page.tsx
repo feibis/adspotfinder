@@ -73,27 +73,31 @@ export default async function (props: Props) {
       <Suspense fallback={<ProductListSkeleton />}>
         <ProductQuery
           searchParams={props.searchParams}
-          metadata={{ tool: tool.slug }}
-          successUrl={`/submit/${tool.slug}/success`}
-          cancelUrl={`/submit/${tool.slug}`}
+          checkoutData={{
+            successUrl: `/submit/${tool.slug}/success`,
+            cancelUrl: `/submit/${tool.slug}`,
+            metadata: { tool: tool.slug },
+          }}
+          productFilter={({ name }) => {
+            return name.includes("Listing") && (!isPublished || !name.includes("Expedited"))
+          }}
+          productMapper={({ name, ...product }) => {
+            return { ...product, name: name.replace("Listing", "").trim() }
+          }}
+          featuresMapper={({ ...product }) => {
+            return getProductListingFeatures(product, isPublished, queueLength)
+          }}
           buttonLabel={({ name, metadata }) => {
             if (name.includes("Free")) {
               return "Current Package"
-            } else if (isPublished) {
-              return "Upgrade Listing"
-            } else {
-              return metadata.label ?? `Choose ${name}`
             }
+
+            if (isPublished) {
+              return "Upgrade Listing"
+            }
+
+            return metadata.label ?? `Choose ${name}`
           }}
-          filter={({ name }) => {
-            // Filter out products that are not listings and are not eligible for expedited listings
-            return name.includes("Listing") && (!isPublished || !name.includes("Expedited"))
-          }}
-          mapper={({ name, ...product }) => ({
-            ...product,
-            name: name.replace("Listing", "").trim(),
-          })}
-          featuresMapper={product => getProductListingFeatures(product, isPublished, queueLength)}
         />
       </Suspense>
 

@@ -1,8 +1,13 @@
 import { addDays, differenceInMonths } from "date-fns"
 import plur from "plur"
+import type { ReactNode } from "react"
 import type Stripe from "stripe"
 import { submissionsConfig } from "~/config/submissions"
-import { stripe } from "~/services/stripe"
+import {
+  findStripeCoupon,
+  findStripePricesByProduct,
+  findStripeProducts,
+} from "~/server/web/products/queries"
 
 const SYMBOLS = {
   positive: "✓ ",
@@ -15,8 +20,8 @@ type SymbolType = keyof typeof SYMBOLS
 export type ProductInterval = "month" | "year"
 
 export type ProductFeature = {
-  name: string
-  footnote?: string
+  name: ReactNode
+  footnote?: ReactNode
   type?: keyof typeof SYMBOLS
 }
 
@@ -27,20 +32,20 @@ export type ProductWithPrices = {
   isFeatured: boolean
 }
 
-export const getQueueLength = (queueLength: number) => {
-  const queueDays = Math.ceil((queueLength / submissionsConfig.postingRate) * 7)
+export const calculateQueueDuration = (queueSize: number) => {
+  const queueDays = Math.ceil((queueSize / submissionsConfig.postingRate) * 7)
   const queueMonths = Math.max(differenceInMonths(addDays(new Date(), queueDays), new Date()), 1)
 
   return `${queueMonths} ${plur("month", queueMonths)}`
 }
 
-const getFeatureType = (featureName?: string) => {
+const extractFeatureTypeFromName = (featureName?: string) => {
   return Object.keys(SYMBOLS).find(key => featureName?.startsWith(SYMBOLS[key as SymbolType])) as
     | SymbolType
     | undefined
 }
 
-const removeSymbol = (name: string, type?: SymbolType) => {
+const removeTypeSymbolFromName = (name: string, type?: SymbolType) => {
   return type ? name.replace(SYMBOLS[type], "") : name
 }
 
@@ -50,7 +55,7 @@ const removeSymbol = (name: string, type?: SymbolType) => {
  * @param price - The price to get the amount from.
  * @returns The price amount.
  */
-const getPriceAmount = (price?: Stripe.Price | string | null) => {
+const extractPriceAmount = (price?: Stripe.Price | string | null) => {
   return typeof price === "object" && price !== null ? (price.unit_amount ?? 0) : 0
 }
 
@@ -58,37 +63,8 @@ const getPriceAmount = (price?: Stripe.Price | string | null) => {
  * Sort products by price
  */
 export const sortProductsByPrice = (products: Stripe.Product[]) => {
-  return products.sort((a, b) => getPriceAmount(a.default_price) - getPriceAmount(b.default_price))
-}
-
-/**
- * Get the tool listing products for pricing.
- *
- * @param products - The products to get for pricing.
- * @param isPublished - Whether the tool is published.
- * @returns The products for pricing.
- */
-export const getListingProducts = (
-  products: Stripe.Product[],
-  coupon: Stripe.Coupon | undefined,
-  isPublished: boolean,
-) => {
-  return (
-    products
-      // Filter out products that are not listings
-      .filter(({ name }) => name.includes("Listing"))
-
-      // Sort by price
-      .sort((a, b) => getPriceAmount(a.default_price) - getPriceAmount(b.default_price))
-
-      // Filter out expedited products if the tool is published
-      .filter(({ name }) => !isPublished || !name.includes("Expedited"))
-
-      // Filter out products that are not eligible for the coupon
-      .filter(product => isProductDiscounted(product.id, coupon) || product.name.includes("Free"))
-
-      // Clean up the name
-      .map(({ name, ...product }) => ({ ...product, name: name.replace("Listing", "").trim() }))
+  return products.sort(
+    (a, b) => extractPriceAmount(a.default_price) - extractPriceAmount(b.default_price),
   )
 }
 
@@ -98,19 +74,19 @@ export const getListingProducts = (
  * @param index - The index of the product in the list.
  * @param products - The list of all products.
  * @param coupon - The coupon being applied, if any.
- * @param isDiscounted - Whether the product is eligible for a discount.
+ * @param isEligibleForDiscount - Whether the product is eligible for a discount.
  * @returns Whether the product should be featured.
  */
 const isProductFeatured = (
   index: number,
   products: Stripe.Product[],
   coupon?: Stripe.Coupon,
-  isDiscounted = true,
+  isEligibleForDiscount = true,
 ) => {
   if (!coupon) return index === products.length - 1
 
-  const lastDiscountedIndex = getLastDiscountedProductIndex(products, coupon)
-  return isDiscounted && index === lastDiscountedIndex
+  const lastDiscountedIndex = findLastDiscountedProductIndex(products, coupon)
+  return isEligibleForDiscount && index === lastDiscountedIndex
 }
 
 /**
@@ -120,7 +96,7 @@ const isProductFeatured = (
  * @param coupon - The coupon to check against.
  * @returns Whether the product is eligible for the discount.
  */
-const isProductDiscounted = (productId: string, coupon?: Stripe.Coupon) => {
+const isProductEligibleForDiscount = (productId: string, coupon?: Stripe.Coupon) => {
   return !coupon?.applies_to || coupon.applies_to.products.includes(productId)
 }
 
@@ -131,8 +107,14 @@ const isProductDiscounted = (productId: string, coupon?: Stripe.Coupon) => {
  * @param coupon - The coupon to check against.
  * @returns The index of the last discounted product, or -1 if none are discounted.
  */
-const getLastDiscountedProductIndex = (products: Stripe.Product[], coupon?: Stripe.Coupon) => {
-  return products.reduce((lastId, p, id) => (isProductDiscounted(p.id, coupon) ? id : lastId), -1)
+const findLastDiscountedProductIndex = (products: Stripe.Product[], coupon?: Stripe.Coupon) => {
+  return products.reduce((lastIndex, product, currentIndex) => {
+    if (isProductEligibleForDiscount(product.id, coupon)) {
+      return currentIndex
+    }
+
+    return lastIndex
+  }, -1)
 }
 
 /**
@@ -143,8 +125,8 @@ const getLastDiscountedProductIndex = (products: Stripe.Product[], coupon?: Stri
  */
 export const getProductFeatures = (product: Stripe.Product) => {
   return product.marketing_features.map(feature => {
-    const type = getFeatureType(feature.name)
-    const name = removeSymbol(feature.name || "", type)
+    const type = extractFeatureTypeFromName(feature.name)
+    const name = removeTypeSymbolFromName(feature.name || "", type)
 
     return { name, type } satisfies ProductFeature
   })
@@ -173,7 +155,7 @@ export const getProductListingFeatures = (
 
       return {
         type,
-        name: isQueueFeature ? name.replace(queueTemplate, getQueueLength(queue)) : name,
+        name: isQueueFeature ? name.replace(queueTemplate, calculateQueueDuration(queue)) : name,
         footnote: isQueueFeature ? queueFootnote : undefined,
       } satisfies ProductFeature
     })
@@ -190,15 +172,38 @@ export const getProductListingFeatures = (
 export const getProductsWithPrices = async (products: Stripe.Product[], coupon?: Stripe.Coupon) => {
   return Promise.all(
     products.map(async (product, index) => {
-      const prices = await stripe.prices.list({ product: product.id, active: true })
-      const isDiscounted = isProductDiscounted(product.id, coupon)
+      const prices = await findStripePricesByProduct(product.id)
+      const isEligibleForDiscount = isProductEligibleForDiscount(product.id, coupon)
 
       return {
         product,
-        prices: prices.data,
-        coupon: isDiscounted ? coupon : undefined,
-        isFeatured: isProductFeatured(index, products, coupon, isDiscounted),
+        prices,
+        coupon: isEligibleForDiscount ? coupon : undefined,
+        isFeatured: isProductFeatured(index, products, coupon, isEligibleForDiscount),
       } satisfies ProductWithPrices
     }),
   )
+}
+
+export const getProductsForListing = async (
+  discountCode?: string,
+  productFilter?: (product: Stripe.Product) => boolean,
+  productMapper?: (product: Stripe.Product) => Stripe.Product,
+) => {
+  const [allProducts, coupon] = await Promise.all([
+    findStripeProducts(),
+    findStripeCoupon(discountCode),
+  ])
+
+  // Apply filters if provided
+  const filteredProducts = productFilter ? allProducts.filter(productFilter) : allProducts
+
+  // Apply mapper if provided
+  const mappedProducts = productMapper ? filteredProducts.map(productMapper) : filteredProducts
+
+  // Sort products by price
+  const sortedProducts = sortProductsByPrice(mappedProducts)
+
+  // Get products with their prices
+  return await getProductsWithPrices(sortedProducts, coupon)
 }

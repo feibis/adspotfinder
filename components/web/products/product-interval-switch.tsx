@@ -7,7 +7,7 @@ import {
   useState,
 } from "react"
 import { Ping } from "~/components/common/ping"
-import type { ProductInterval } from "~/hooks/use-product-prices"
+import type { ProductInterval } from "~/lib/products"
 import { cx } from "~/lib/utils"
 
 type Interval = {
@@ -16,25 +16,23 @@ type Interval = {
   note?: ReactNode
 }
 
-type IntervalSwitchProps = Omit<ComponentProps<"div">, "onChange"> & {
+type ProductIntervalSwitchProps = Omit<ComponentProps<"div">, "onChange"> & {
   intervals: Interval[]
   value: ProductInterval
   onChange: (value: ProductInterval) => void
 }
 
-export const IntervalSwitch = ({
+export const ProductIntervalSwitch = ({
   className,
   intervals,
   value,
   onChange,
   ...props
-}: IntervalSwitchProps) => {
+}: ProductIntervalSwitchProps) => {
   const [indicatorStyle, setIndicatorStyle] = useState<CSSProperties>({ opacity: 0 })
 
   const updateIndicator = useCallback(() => {
-    const activeLabel = document.querySelector(
-      `label:has(input[value="${value}"])`,
-    ) as HTMLLabelElement | null
+    const activeLabel = document.querySelector<HTMLElement>(`label:has(input[value="${value}"])`)
 
     if (activeLabel) {
       setIndicatorStyle({
