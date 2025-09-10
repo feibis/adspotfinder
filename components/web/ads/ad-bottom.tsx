@@ -5,7 +5,7 @@ import { Card, CardBadges } from "~/components/common/card"
 import { AdBadge, AdLink } from "~/components/web/ads/ad-base"
 import { Favicon } from "~/components/web/ui/favicon"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
-import { findAdWithFallback } from "~/server/web/actions/ads"
+import { findAdWithFallback } from "~/server/web/ads/actions"
 
 export const AdBottom = async ({ ...props }: ComponentProps<typeof Card>) => {
   const type = "Bottom"

@@ -5,7 +5,7 @@ import { AdBadge, AdLink } from "~/components/web/ads/ad-base"
 import { Container } from "~/components/web/ui/container"
 import { Favicon } from "~/components/web/ui/favicon"
 import { cx } from "~/lib/utils"
-import { findAdWithFallback } from "~/server/web/actions/ads"
+import { findAdWithFallback } from "~/server/web/ads/actions"
 
 export const AdBanner = async ({ className, ...props }: ComponentProps<typeof Card>) => {
   const type = "Banner"

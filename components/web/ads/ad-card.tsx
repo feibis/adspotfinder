@@ -1,6 +1,6 @@
 import { ArrowUpRightIcon } from "lucide-react"
-import Image from "next/image"
 import type { InferSafeActionFnInput } from "next-safe-action"
+import Image from "next/image"
 import type { ComponentProps } from "react"
 import { Button } from "~/components/common/button"
 import {
@@ -16,7 +16,7 @@ import { Skeleton } from "~/components/common/skeleton"
 import { AdBadge, AdLink } from "~/components/web/ads/ad-base"
 import { Favicon } from "~/components/web/ui/favicon"
 import { cx } from "~/lib/utils"
-import { findAdWithFallback } from "~/server/web/actions/ads"
+import { findAdWithFallback } from "~/server/web/ads/actions"
 
 type AdCardProps = CardProps & InferSafeActionFnInput<typeof findAdWithFallback>["clientInput"]
 
