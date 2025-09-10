@@ -20,7 +20,7 @@ import { siteConfig } from "~/config/site"
 import { useProductPrices } from "~/hooks/use-product-prices"
 import type { ProductFeature, ProductInterval } from "~/lib/products"
 import { cx } from "~/lib/utils"
-import { createStripeCheckout } from "~/server/web/actions/stripe"
+import { createStripeCheckout } from "~/server/web/products/actions"
 
 const productClassName = "items-stretch gap-8 basis-72 grow max-w-80 bg-transparent overflow-clip"
 

@@ -4,6 +4,7 @@ import {
   type ReactNode,
   useCallback,
   useEffect,
+  useRef,
   useState,
 } from "react"
 import { Ping } from "~/components/common/ping"
@@ -30,18 +31,25 @@ export const ProductIntervalSwitch = ({
   ...props
 }: ProductIntervalSwitchProps) => {
   const [indicatorStyle, setIndicatorStyle] = useState<CSSProperties>({ opacity: 0 })
+  const containerRef = useRef<HTMLDivElement>(null)
+  const labelRefs = useRef<(HTMLLabelElement | null)[]>([])
 
   const updateIndicator = useCallback(() => {
-    const activeLabel = document.querySelector<HTMLElement>(`label:has(input[value="${value}"])`)
+    const activeIndex = intervals.findIndex(interval => interval.value === value)
+    const activeLabel = labelRefs.current[activeIndex]
+    const container = containerRef.current
 
-    if (activeLabel) {
+    if (activeLabel && container) {
+      const containerRect = container.getBoundingClientRect()
+      const labelRect = activeLabel.getBoundingClientRect()
+
       setIndicatorStyle({
         opacity: 1,
-        width: `${activeLabel.offsetWidth}px`,
-        transform: `translateX(${activeLabel.offsetLeft - 2}px)`,
+        width: `${labelRect.width}px`,
+        transform: `translateX(${labelRect.left - containerRect.left - 2}px)`,
       })
     }
-  }, [value])
+  }, [value, intervals])
 
   useEffect(() => {
     updateIndicator()
@@ -50,15 +58,22 @@ export const ProductIntervalSwitch = ({
   }, [updateIndicator])
 
   return (
-    <div className={cx("relative flex rounded-md bg-foreground/10 p-0.5", className)} {...props}>
+    <div
+      ref={containerRef}
+      className={cx("relative flex rounded-md bg-foreground/10 p-0.5", className)}
+      {...props}
+    >
       <div
         className="absolute inset-0.5 bg-background rounded-sm will-change-transform transition-all duration-300 ease-in-out"
         style={indicatorStyle}
       />
 
-      {intervals.map(interval => (
+      {intervals.map((interval, index) => (
         <label
           key={interval.value}
+          ref={el => {
+            labelRefs.current[index] = el
+          }}
           className={cx(
             "relative z-10 flex items-center whitespace-nowrap px-2.5 py-1 text-xs font-medium cursor-pointer transition",
             interval.value !== value && "opacity-60",

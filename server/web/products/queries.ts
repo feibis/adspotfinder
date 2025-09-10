@@ -17,8 +17,9 @@ export const findStripeProducts = async () => {
     })
 
     return products
-  } catch {
-    return []
+  } catch (error) {
+    console.error("Failed to fetch Stripe products:", error)
+    throw new Error("Unable to load products. Please try again later.")
   }
 }
 
@@ -36,8 +37,9 @@ export const findStripePricesByProduct = async (productId: string) => {
     })
 
     return prices
-  } catch {
-    return []
+  } catch (error) {
+    console.error(`Failed to fetch prices for product ${productId}:`, error)
+    throw new Error("Unable to load pricing information. Please try again later.")
   }
 }
 
@@ -58,7 +60,9 @@ export const findStripeCoupon = async (code?: string) => {
     })
 
     return promoCodes.data[0]?.coupon
-  } catch {
+  } catch (error) {
+    console.error(`Failed to fetch coupon ${code}:`, error)
+    // For coupons, we return undefined instead of throwing to allow graceful degradation
     return undefined
   }
 }

@@ -20,8 +20,8 @@ import { AdsCalendar } from "~/components/web/ads/ads-calendar"
 import { Price } from "~/components/web/price"
 import { adsConfig } from "~/config/ads"
 import { useAds } from "~/hooks/use-ads"
-import { createStripeCheckout } from "~/server/web/actions/stripe"
 import type { AdMany } from "~/server/web/ads/payloads"
+import { createStripeCheckout } from "~/server/web/products/actions"
 
 type AdsCalendarProps = ComponentProps<"div"> & {
   ads: AdMany[]
@@ -57,7 +57,6 @@ export const AdsPicker = ({ className, ads, ...props }: AdsCalendarProps) => {
         price_data: {
           product_data: { name: `${selection.type} Ad` },
           unit_amount: Math.round(discountedPrice * 100),
-          currency: "usd",
         },
         quantity: selection.duration ?? 1,
       }
