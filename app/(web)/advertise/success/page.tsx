@@ -2,7 +2,7 @@ import { tryCatch } from "@primoui/utils"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { createLoader, parseAsString } from "nuqs/server"
-import { AdDetailsForm } from "~/app/(web)/advertise/success/form"
+import { AdForm } from "~/app/(web)/advertise/success/ad-form"
 import { AdCard } from "~/components/web/ads/ad-card"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { Section } from "~/components/web/ui/section"
@@ -48,7 +48,7 @@ export default async function ({ searchParams }: PageProps<"/advertise/success">
 
       <Section>
         <Section.Content className={cx(!existingAd && "md:col-span-full")}>
-          <AdDetailsForm sessionId={data.id} ad={existingAd} className="w-full max-w-xl mx-auto" />
+          <AdForm sessionId={data.id} ad={existingAd} className="w-full max-w-xl mx-auto" />
         </Section.Content>
 
         {existingAd && (

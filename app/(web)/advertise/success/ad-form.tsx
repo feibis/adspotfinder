@@ -22,12 +22,12 @@ import { createAdFromCheckout } from "~/server/web/ads/actions"
 import type { AdOne } from "~/server/web/ads/payloads"
 import { adDetailsSchema } from "~/server/web/shared/schema"
 
-type AdDetailsFormProps = ComponentProps<"form"> & {
+type AdFormProps = ComponentProps<"form"> & {
   sessionId: string
   ad?: AdOne | null
 }
 
-export const AdDetailsForm = ({ className, sessionId, ad, ...props }: AdDetailsFormProps) => {
+export const AdForm = ({ className, sessionId, ad, ...props }: AdFormProps) => {
   const formAaction = createAdFromCheckout
   const resolver = zodResolver(adDetailsSchema)
 
