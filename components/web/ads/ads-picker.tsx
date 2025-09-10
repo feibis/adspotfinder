@@ -1,11 +1,11 @@
 "use client"
 
 import { formatDateRange } from "@primoui/utils"
+import type { AdType } from "@prisma/client"
 import { cx } from "cva"
 import { endOfDay, startOfDay } from "date-fns"
 import { XIcon } from "lucide-react"
 import { useAction } from "next-safe-action/hooks"
-import { parseAsString, useQueryState } from "nuqs"
 import plur from "plur"
 import posthog from "posthog-js"
 import type { ComponentProps } from "react"
@@ -25,11 +25,11 @@ import { createStripeCheckout } from "~/server/web/products/actions"
 
 type AdsCalendarProps = ComponentProps<"div"> & {
   ads: AdMany[]
+  type: AdType | null
 }
 
-export const AdsPicker = ({ className, ads, ...props }: AdsCalendarProps) => {
+export const AdsPicker = ({ className, ads, type, ...props }: AdsCalendarProps) => {
   const { price, selections, hasSelections, findAdSpot, clearSelection, updateSelection } = useAds()
-  const [type] = useQueryState("type", parseAsString)
 
   const { execute, isPending } = useAction(createStripeCheckout, {
     onSuccess: ({ input }) => {
@@ -88,11 +88,12 @@ export const AdsPicker = ({ className, ads, ...props }: AdsCalendarProps) => {
             price={price}
             selections={selections}
             updateSelection={updateSelection}
-            className={cx(
-              "border-l border-t -ml-px -mt-px",
-              type && type !== adSpot.type && "bg-card",
+            className="group border-l border-t -ml-px -mt-px"
+          >
+            {type === adSpot.type && (
+              <div className="absolute inset-px border-2 border-primary/50 rounded-sm not-group-last:right-0.5" />
             )}
-          />
+          </AdsCalendar>
         ))}
       </div>
 

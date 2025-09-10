@@ -1,7 +1,9 @@
+import { LoaderIcon } from "lucide-react"
 import type { Metadata } from "next"
+import { Suspense } from "react"
+import { AdvertisePickers } from "~/app/(web)/advertise/pickers"
 import { Button } from "~/components/common/button"
 import { Wrapper } from "~/components/common/wrapper"
-import { AdsPicker } from "~/components/web/ads/ads-picker"
 import { ExternalLink } from "~/components/web/external-link"
 import { Stats } from "~/components/web/stats"
 import { Testimonial } from "~/components/web/testimonial"
@@ -9,7 +11,6 @@ import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { metadataConfig } from "~/config/metadata"
 import { siteConfig } from "~/config/site"
 import { getOpenGraphImageUrl } from "~/lib/opengraph"
-import { findAds } from "~/server/web/ads/queries"
 
 const url = "/advertise"
 const title = "Advertise"
@@ -23,9 +24,7 @@ export const metadata: Metadata = {
   openGraph: { ...metadataConfig.openGraph, url, images: [{ url: ogImageUrl }] },
 }
 
-export default async function () {
-  const ads = await findAds({})
-
+export default function ({ searchParams }: PageProps<"/advertise">) {
   return (
     <Wrapper gap="xl">
       <Intro alignment="center">
@@ -33,7 +32,9 @@ export default async function () {
         <IntroDescription>{description}</IntroDescription>
       </Intro>
 
-      <AdsPicker ads={ads} className="mx-auto" />
+      <Suspense fallback={<LoaderIcon className="mx-auto size-[1.25em] animate-spin" />}>
+        <AdvertisePickers searchParams={searchParams} />
+      </Suspense>
 
       <Stats />
 
