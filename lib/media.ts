@@ -1,8 +1,7 @@
 import { DeleteObjectCommand, ListObjectsV2Command } from "@aws-sdk/client-s3"
 import { Upload } from "@aws-sdk/lib-storage"
-import { detectXml } from "@file-type/xml"
 import { getDomain, tryCatch } from "@primoui/utils"
-import { FileTypeParser } from "file-type"
+import { fileTypeFromBuffer } from "file-type"
 import { env, isProd } from "~/env"
 import { s3Client } from "~/services/s3"
 
@@ -14,8 +13,7 @@ import { s3Client } from "~/services/s3"
  */
 export const uploadToS3Storage = async (file: Buffer, key: string) => {
   const endpoint = env.S3_PUBLIC_URL ?? `https://${env.S3_BUCKET}.s3.${env.S3_REGION}.amazonaws.com`
-  const parser = new FileTypeParser({ customDetectors: [detectXml] })
-  const fileType = await parser.fromBuffer(file)
+  const fileType = await fileTypeFromBuffer(file)
   const s3Key = `${key}.${fileType?.ext ?? "png"}`
 
   const upload = new Upload({

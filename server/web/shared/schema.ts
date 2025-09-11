@@ -1,7 +1,13 @@
 import { isMimeTypeMatch } from "@primoui/utils"
 import { z } from "zod"
 
-export const ALLOWED_MIMETYPES = ["image/*"]
+export const ALLOWED_MIMETYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+  "image/avif",
+]
 
 export const fileSchema = z
   .instanceof(File)
