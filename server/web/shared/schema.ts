@@ -1,12 +1,13 @@
+import { isMimeTypeMatch } from "@primoui/utils"
 import { z } from "zod"
 
-export const VALID_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"]
+export const ALLOWED_MIMETYPES = ["image/*"]
 
 export const fileSchema = z
   .instanceof(File)
   .refine(async ({ size }) => size > 0, "File cannot be empty")
   .refine(async ({ size }) => size < 1024 * 512, "File size must be less than 512KB")
-  .refine(async ({ type }) => VALID_IMAGE_TYPES.includes(type), "File must be a valid image")
+  .refine(async ({ type }) => isMimeTypeMatch(type, ALLOWED_MIMETYPES), "File type is not valid")
 
 export const submitToolSchema = z.object({
   name: z.string().min(1, "Name is required"),

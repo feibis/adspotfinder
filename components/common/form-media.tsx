@@ -9,7 +9,7 @@ import { Input } from "~/components/common/input"
 import { Stack } from "~/components/common/stack"
 import { useMediaAction } from "~/hooks/use-media-action"
 import { cx } from "~/lib/utils"
-import { VALID_IMAGE_TYPES } from "~/server/web/shared/schema"
+import { ALLOWED_MIMETYPES } from "~/server/web/shared/schema"
 
 type FormMediaProps<T extends FieldValues> = ComponentProps<typeof FormItem> & {
   form: UseFormReturn<T>
@@ -79,7 +79,7 @@ export const FormMedia = <T extends FieldValues>({
       <input
         ref={inputRef}
         type="file"
-        accept={VALID_IMAGE_TYPES.join(",")}
+        accept={ALLOWED_MIMETYPES.join(",")}
         onChange={action.handleUpload}
         className="hidden"
       />
