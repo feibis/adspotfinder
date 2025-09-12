@@ -67,6 +67,7 @@ export default async function (props: Props) {
         alt=""
         width={256}
         height={228}
+        loading="eager"
         className="max-w-64 w-2/3 h-auto mx-auto"
       />
     </>

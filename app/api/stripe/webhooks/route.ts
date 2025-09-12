@@ -98,7 +98,7 @@ export const POST = async (req: Request) => {
   } catch (error) {
     console.log(error)
 
-    return new Response("Webhook handler failed", { status: 400 })
+    return new Response(`Webhook handler failed: ${error}`, { status: 400 })
   }
 
   return new Response(JSON.stringify({ received: true }))
