@@ -5,7 +5,6 @@ import { OgBase } from "~/components/web/og/og-base"
 import { loadGoogleFont } from "~/lib/fonts"
 import { openGraphSearchParams } from "~/lib/opengraph"
 
-export const runtime = "edge"
 export const contentType = "image/png"
 export const alt = "OpenGraph Image"
 export const size = { width: 1200, height: 630 }
