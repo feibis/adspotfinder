@@ -174,10 +174,9 @@ export default async function (props: Props) {
               }}
               src={tool.screenshotUrl}
               alt={`Screenshot of ${tool.name} website`}
+              loading="eager"
               className="self-stretch max-md:order-2"
-            >
-              Visit {tool.name}
-            </OverlayImage>
+            />
           )}
 
           {tool.content && <Markdown code={tool.content} className="max-md:order-4" />}

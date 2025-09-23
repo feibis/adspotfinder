@@ -70,6 +70,9 @@ export const submitTool = actionClient
       })
     }
 
+    // Check if the email domain matches the tool's website domain
+    const ownerId = session?.user.email.includes(domain) ? session?.user.id : undefined
+
     // Check if the tool already exists
     const existingTool = await db.tool.findFirst({
       where: { websiteUrl: { contains: domain } },
@@ -77,14 +80,21 @@ export const submitTool = actionClient
 
     // If the tool exists, redirect to the tool or submit page
     if (existingTool) {
+      if (!existingTool.submitterEmail) {
+        const { submitterEmail, submitterName, submitterNote } = data
+
+        // Update the tool with the new submitter information
+        await db.tool.update({
+          where: { id: existingTool.id },
+          data: { submitterEmail, submitterName, submitterNote, ownerId },
+        })
+      }
+
       return existingTool
     }
 
     // Generate a unique slug
     const slug = await generateUniqueSlug(data.name)
-
-    // Check if the email domain matches the tool's website domain
-    const ownerId = session?.user.email.includes(domain) ? session?.user.id : undefined
 
     // Save the tool to the database
     const { data: tool, error } = await tryCatch(

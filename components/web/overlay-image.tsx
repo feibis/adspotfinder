@@ -6,13 +6,14 @@ import { cx } from "~/lib/utils"
 type OverlayImageProps = ComponentProps<typeof ExternalLink> & {
   src: string
   alt?: string
+  loading?: ComponentProps<"img">["loading"]
 }
 
-export const OverlayImage = ({ children, className, src, alt, ...props }: OverlayImageProps) => {
+export const OverlayImage = ({ className, src, alt, loading, ...props }: OverlayImageProps) => {
   return (
     <Box hover>
       <ExternalLink
-        className={cx("not-prose group relative rounded-md overflow-clip", className)}
+        className={cx("not-prose group relative rounded-lg overflow-clip", className)}
         doTrack
         {...props}
       >
@@ -21,7 +22,7 @@ export const OverlayImage = ({ children, className, src, alt, ...props }: Overla
           alt={alt ?? ""}
           width={1280}
           height={1024}
-          loading="lazy"
+          loading={loading}
           className="aspect-video h-auto w-full object-cover object-top will-change-transform group-hover:scale-[101%]"
         />
       </ExternalLink>
