@@ -15,7 +15,7 @@ const DialogClose = DialogPrimitive.Close
 const DialogOverlay = ({ className, ...props }: ComponentProps<typeof DialogPrimitive.Overlay>) => (
   <DialogPrimitive.Overlay
     className={cx(
-      "fixed inset-0 z-50 bg-background/80 backdrop-blur-sm",
+      "fixed inset-0 z-50 background-dashed bg-foreground/10 backdrop-blur-sm",
       "data-[state=open]:animate-in data-[state=closed]:animate-out",
       "data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0",
       className,
@@ -36,7 +36,7 @@ const DialogContent = ({
       <div className="fixed inset-0 z-50 flex h-screen items-start justify-center px-4 py-6 sm:pt-[12.5vh] sm:[@media(min-height:1000px)]:pt-[25vh]">
         <DialogPrimitive.Content
           className={cx(
-            "relative max-h-full w-full max-w-lg grid gap-4 border bg-background p-4 rounded-md shadow-lg overflow-y-auto overscroll-contain sm:p-6 sm:rounded-lg",
+            "relative max-h-full w-full max-w-lg grid gap-4 border bg-background p-4 rounded-md shadow-md overflow-y-auto overscroll-contain sm:p-6 sm:rounded-lg",
             "data-[state=open]:animate-in data-[state=closed]:animate-out",
             "data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0",
             "data-[state=open]:slide-in-from-bottom-4 data-[state=closed]:slide-out-to-bottom-4",

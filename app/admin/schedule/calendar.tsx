@@ -28,7 +28,7 @@ const CalendarDay = ({ className, day, tools, month, ...props }: CalendarDayProp
     <td
       className={cx(
         "h-24 p-2 border align-top lg:px-3",
-        !isCurrentMonth && "bg-dashed text-muted-foreground/50",
+        !isCurrentMonth && "background-dashed text-muted-foreground/50",
         className,
       )}
       {...props}

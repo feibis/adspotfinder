@@ -1,8 +1,9 @@
-import { isExternalUrl, removeQueryParams, setQueryParams } from "@primoui/utils"
+import { removeQueryParams, setQueryParams } from "@primoui/utils"
 import type { AdType } from "@prisma/client"
 import type { ComponentProps } from "react"
 import { Badge } from "~/components/common/badge"
 import { ExternalLink } from "~/components/web/external-link"
+import { siteConfig } from "~/config/site"
 import { cx } from "~/lib/utils"
 import type { AdOne } from "~/server/web/ads/payloads"
 
@@ -18,7 +19,7 @@ type AdLinkProps = ComponentProps<typeof ExternalLink> & {
  */
 const AdLink = ({ ad, type, source, params, ...props }: AdLinkProps) => {
   const url = removeQueryParams(ad.websiteUrl)
-  const isInternal = !isExternalUrl(url)
+  const isInternal = url.startsWith(siteConfig.url)
 
   return (
     <ExternalLink

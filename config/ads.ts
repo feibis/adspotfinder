@@ -34,7 +34,7 @@ export const adsConfig = {
       preview: "https://share.cleanshot.com/SvqTztKT",
     },
     {
-      label: "Tool Sidebar Ad",
+      label: "Tool Page Ad",
       type: "ToolPage",
       description: "Visible on the sidebar of every tool page",
       price: 15,
@@ -45,7 +45,7 @@ export const adsConfig = {
   // Default ad configuration
   defaultAd: {
     type: "All",
-    websiteUrl: "/advertise",
+    websiteUrl: `${siteConfig.url}/advertise`,
     name: "Your brand here",
     description: "Reach our audience of professional directory owners and boost your sales.",
     buttonLabel: `Advertise on ${siteConfig.name}`,
