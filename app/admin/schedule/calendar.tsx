@@ -1,22 +1,13 @@
 "use client"
 
-import {
-  addMonths,
-  eachDayOfInterval,
-  endOfMonth,
-  endOfWeek,
-  format,
-  isSameDay,
-  isSameMonth,
-  startOfMonth,
-  startOfWeek,
-  subMonths,
-} from "date-fns"
+import { ToolStatus } from "@prisma/client"
+import { addMonths, eachDayOfInterval, format, isSameDay, isSameMonth, subMonths } from "date-fns"
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
-import { type ComponentProps, useState } from "react"
+import type { ComponentProps } from "react"
 import { Button } from "~/components/common/button"
 import { H5 } from "~/components/common/heading"
 import { Link } from "~/components/common/link"
+import { ShowMore } from "~/components/common/show-more"
 import { Stack } from "~/components/common/stack"
 import { cx } from "~/lib/utils"
 import type { findScheduledTools } from "~/server/admin/tools/queries"
@@ -25,45 +16,49 @@ type Tools = Awaited<ReturnType<typeof findScheduledTools>>
 
 type CalendarDayProps = ComponentProps<"td"> & {
   day: Date
-  currentDate: Date
+  month: Date
   tools: Tools
 }
 
-const CalendarDay = ({ className, day, tools, currentDate, ...props }: CalendarDayProps) => {
+const CalendarDay = ({ className, day, tools, month, ...props }: CalendarDayProps) => {
   const isToday = isSameDay(day, new Date())
-  const isCurrentMonth = isSameMonth(day, currentDate)
-  const publishedTools = tools.filter(
-    ({ publishedAt }) => publishedAt && isSameDay(publishedAt, day),
-  )
+  const isCurrentMonth = isSameMonth(day, month)
 
   return (
     <td
       className={cx(
-        "h-24 p-2 border align-top",
-        !isCurrentMonth && "bg-muted text-muted-foreground/50",
+        "h-24 p-2 border align-top lg:px-3",
+        !isCurrentMonth && "bg-dashed text-muted-foreground/50",
         className,
       )}
       {...props}
     >
       <Stack size="xs" direction="column">
-        <div
-          className={cx(
-            "text-xs",
-            isToday ? "font-semibold text-primary opacity-100" : "opacity-50",
-          )}
+        <h6
+          className={cx("text-xs text-muted-foreground", isToday && "font-semibold text-primary")}
         >
           {format(day, "d")}
-        </div>
+        </h6>
 
-        {publishedTools.map(tool => (
-          <Link
-            key={tool.slug}
-            href={`/admin/tools/${tool.slug}`}
-            className="font-medium truncate hover:text-primary w-full"
-          >
-            {tool.name}
-          </Link>
-        ))}
+        <ShowMore
+          size="xs"
+          direction="column"
+          className="w-full"
+          items={tools}
+          limit={5}
+          renderItem={({ slug, name, status }) => (
+            <Link
+              key={slug}
+              href={`/admin/tools/${slug}`}
+              className={cx(
+                "max-w-full font-medium truncate hover:text-primary",
+                status === ToolStatus.Published && "text-muted-foreground/50 line-through",
+              )}
+            >
+              {name}
+            </Link>
+          )}
+        />
       </Stack>
     </td>
   )
@@ -71,42 +66,39 @@ const CalendarDay = ({ className, day, tools, currentDate, ...props }: CalendarD
 
 type CalendarProps = ComponentProps<"div"> & {
   tools: Tools
+  month: Date
+  calendarStart: Date
+  calendarEnd: Date
 }
 
-export const Calendar = ({ className, tools, ...props }: CalendarProps) => {
-  const today = new Date()
-  const [currentDate, setCurrentDate] = useState(today)
-
-  const monthStart = startOfMonth(currentDate)
-  const monthEnd = endOfMonth(monthStart)
-  const calendarStart = startOfWeek(monthStart, { weekStartsOn: 1 })
-  const calendarEnd = endOfWeek(monthEnd, { weekStartsOn: 1 })
-
+export const Calendar = ({
+  className,
+  tools,
+  month,
+  calendarStart,
+  calendarEnd,
+  ...props
+}: CalendarProps) => {
   const days = eachDayOfInterval({ start: calendarStart, end: calendarEnd })
-
-  const weeks = Array.from({ length: Math.ceil(days.length / 7) }, (_, i) =>
-    days.slice(i * 7, (i + 1) * 7),
-  )
+  const length = Math.ceil(days.length / 7)
+  const weeks = Array.from({ length }, (_, i) => days.slice(i * 7, (i + 1) * 7))
 
   return (
     <div className={cx("space-y-2", className)} {...props}>
-      <Stack>
-        <H5 className="mr-auto">{format(currentDate, "MMMM yyyy")}</H5>
+      <Stack size="sm">
+        <H5 className="mr-auto">{format(month, "MMM yyyy")}</H5>
 
-        <Button
-          variant="secondary"
-          size="md"
-          prefix={<ChevronLeftIcon />}
-          onClick={() => setCurrentDate(date => subMonths(date, 1))}
-          disabled={isSameMonth(currentDate, today)}
-        />
+        <Button variant="secondary" size="md" prefix={<ChevronLeftIcon />} asChild>
+          <Link href={`/admin/schedule?month=${format(subMonths(month, 1), "yyyy-MM")}`}>
+            <span className="max-sm:sr-only">Previous</span>
+          </Link>
+        </Button>
 
-        <Button
-          variant="secondary"
-          size="md"
-          prefix={<ChevronRightIcon />}
-          onClick={() => setCurrentDate(date => addMonths(date, 1))}
-        />
+        <Button variant="secondary" size="md" suffix={<ChevronRightIcon />} asChild>
+          <Link href={`/admin/schedule?month=${format(addMonths(month, 1), "yyyy-MM")}`}>
+            <span className="max-sm:sr-only">Next</span>
+          </Link>
+        </Button>
       </Stack>
 
       <table className="w-full table-fixed border-collapse text-sm">
@@ -131,8 +123,8 @@ export const Calendar = ({ className, tools, ...props }: CalendarProps) => {
                 <CalendarDay
                   key={day.toISOString()}
                   day={day}
-                  tools={tools}
-                  currentDate={currentDate}
+                  month={month}
+                  tools={tools.filter(tool => isSameDay(tool.publishedAt!, day))}
                 />
               ))}
             </tr>

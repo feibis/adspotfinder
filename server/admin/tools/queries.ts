@@ -50,10 +50,11 @@ export const findTools = async (search: ToolsTableSchema, where?: Prisma.ToolWhe
   return { tools, total, pageCount }
 }
 
-export const findScheduledTools = async () => {
+export const findScheduledTools = async ({ where, ...args }: Prisma.ToolFindManyArgs = {}) => {
   return db.tool.findMany({
-    where: { status: ToolStatus.Scheduled },
-    select: { slug: true, name: true, publishedAt: true },
+    ...args,
+    where: { status: { in: [ToolStatus.Published, ToolStatus.Scheduled] }, ...where },
+    select: { slug: true, name: true, status: true, publishedAt: true },
     orderBy: { publishedAt: "asc" },
   })
 }

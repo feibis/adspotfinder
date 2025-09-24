@@ -9,7 +9,9 @@
   --header-top: 0rem;
   --header-bottom: 0.75rem;
   --header-inner-offset: calc(var(--header-top) + var(--header-height));
-  --header-outer-offset: calc(var(--header-top) + var(--header-height) + var(--header-bottom));
+  --header-outer-offset: calc(
+    var(--header-top) + var(--header-height) + var(--header-bottom)
+  );
 
   --color-background: hsl(0 0% 100%);
   --color-foreground: hsl(0 0% 12%);
@@ -244,4 +246,18 @@
 @utility animate-reveal {
   animation-timeline: view();
   animation-range: 0% 20%;
+}
+
+@utility bg-dashed {
+  background-image: linear-gradient(
+    45deg,
+    var(--color-border) 12.5%,
+    transparent 12.5%,
+    transparent 50%,
+    var(--color-border) 50%,
+    var(--color-border) 62.5%,
+    transparent 62.5%,
+    transparent 100%
+  );
+  background-size: 0.25rem 0.25rem;
 }
