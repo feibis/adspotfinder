@@ -111,16 +111,16 @@ export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogPr
                     <RadioGroup
                       value={value}
                       onValueChange={onChange}
-                      className="grid gap-2.5"
+                      className="flex flex-col items-start gap-2.5"
                       {...field}
                     >
                       {reportsConfig.reportTypes.map(type => (
-                        <Stack key={type} size="sm" asChild>
+                        <Stack key={type} size="sm" wrap={false} asChild>
                           <FormLabel
-                            htmlFor={`r${type}`}
-                            className="font-normal text-secondary-foreground overflow-visible"
+                            htmlFor={undefined}
+                            className="font-normal text-secondary-foreground overflow-visible cursor-pointer"
                           >
-                            <RadioGroupItem value={type} id={`r${type}`} />
+                            <RadioGroupItem value={type} />
                             {type}
                           </FormLabel>
                         </Stack>
