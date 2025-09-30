@@ -17,7 +17,7 @@ export const reportsTableParamsSchema = {
   from: parseAsString.withDefault(""),
   to: parseAsString.withDefault(""),
   operator: parseAsStringEnum(["and", "or"]).withDefault("and"),
-  type: parseAsArrayOf(z.string()).withDefault([]),
+  type: parseAsArrayOf(parseAsString).withDefault([]),
 }
 
 export const reportsTableParamsCache = createSearchParamsCache(reportsTableParamsSchema)
