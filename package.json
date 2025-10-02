@@ -91,5 +91,6 @@
   },
   "engines": {
     "node": "22.x"
-  }
+  },
+  "packageManager": "bun@1.2.2"
 }
