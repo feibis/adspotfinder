@@ -63,7 +63,7 @@ export const Price = ({
         <AnimatePresence>
           {!!fullPrice && fullPrice > price && (
             <motion.div
-              className="absolute -top-[1.25em] left-full"
+              className="absolute -top-[1.25em] left-full text-sm"
               variants={animationVariants}
               initial="hidden"
               animate="visible"

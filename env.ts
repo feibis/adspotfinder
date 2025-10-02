@@ -17,6 +17,7 @@ export const env = createEnv({
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
     VERCEL_ENV: z.enum(["development", "preview", "production"]).default("development"),
+    DATABASE_URL: z.string().min(1),
     CRON_SECRET: z.string().optional(),
     BETTER_AUTH_SECRET: z.string().min(1),
     BETTER_AUTH_URL: z.url().min(1),

@@ -1,6 +1,6 @@
 import { setQueryParams } from "@primoui/utils"
-import { ToolStatus } from "@prisma/client"
 import RSS from "rss"
+import { ToolStatus } from "~/.generated/prisma/client"
 import { siteConfig } from "~/config/site"
 import { db } from "~/services/db"
 

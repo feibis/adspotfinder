@@ -1,8 +1,8 @@
 "use server"
 
-import { ToolStatus } from "@prisma/client"
 import { headers } from "next/headers"
 import { z } from "zod"
+import { ToolStatus } from "~/.generated/prisma/client"
 import { auth } from "~/lib/auth"
 import { actionClient } from "~/lib/safe-actions"
 import { db } from "~/services/db"

@@ -1,5 +1,5 @@
-import type { Tool } from "@prisma/client"
 import { toast } from "sonner"
+import type { Tool } from "~/.generated/prisma/client"
 import { Button } from "~/components/common/button"
 import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"

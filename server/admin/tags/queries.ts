@@ -1,6 +1,6 @@
 import { isTruthy } from "@primoui/utils"
-import type { Prisma } from "@prisma/client"
 import { endOfDay, startOfDay } from "date-fns"
+import type { Prisma } from "~/.generated/prisma/client"
 import type { TagsTableSchema } from "~/server/admin/tags/schema"
 import { db } from "~/services/db"
 

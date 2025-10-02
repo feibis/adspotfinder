@@ -1,8 +1,8 @@
 "use client"
 
 import { formatDate } from "@primoui/utils"
-import type { Report, Tool } from "@prisma/client"
 import type { ColumnDef } from "@tanstack/react-table"
+import type { Report, Tool } from "~/.generated/prisma/browser"
 import { ReportActions } from "~/app/admin/reports/_components/report-actions"
 import { RowCheckbox } from "~/components/admin/row-checkbox"
 import { Badge } from "~/components/common/badge"

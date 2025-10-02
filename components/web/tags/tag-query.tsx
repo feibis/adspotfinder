@@ -1,5 +1,5 @@
-import type { Prisma } from "@prisma/client"
 import type { SearchParams } from "nuqs"
+import type { Prisma } from "~/.generated/prisma/client"
 import type { PaginationProps } from "~/components/web/pagination"
 import type { TagListProps } from "~/components/web/tags/tag-list"
 import { TagListing, type TagListingProps } from "~/components/web/tags/tag-listing"

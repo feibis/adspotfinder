@@ -1,5 +1,5 @@
-import type { Tool } from "@prisma/client"
 import { Text } from "@react-email/components"
+import type { Tool } from "~/.generated/prisma/client"
 import { siteConfig } from "~/config/site"
 import { EmailActionNudge } from "~/emails/components/action-nudge"
 import { EmailButton } from "~/emails/components/button"

@@ -1,9 +1,9 @@
 "use client"
 
 import { formatDate } from "@primoui/utils"
-import type { Tag } from "@prisma/client"
 import type { ColumnDef } from "@tanstack/react-table"
 import { HashIcon } from "lucide-react"
+import type { Tag } from "~/.generated/prisma/browser"
 import { TagActions } from "~/app/admin/tags/_components/tag-actions"
 import { RowCheckbox } from "~/components/admin/row-checkbox"
 import { Badge } from "~/components/common/badge"

@@ -1,4 +1,4 @@
-import { type Tool, ToolStatus } from "@prisma/client"
+import { type Tool, ToolStatus } from "~/.generated/prisma/client"
 import { siteConfig } from "~/config/site"
 import EmailAdminSubmissionPremium from "~/emails/admin-submission-premium"
 import EmailSubmission from "~/emails/submission"

@@ -1,6 +1,6 @@
-import type { User } from "@prisma/client"
 import type { PropsWithChildren } from "react"
 import { toast } from "sonner"
+import type { User } from "~/.generated/prisma/client"
 import { DeleteDialog } from "~/components/admin/dialogs/delete-dialog"
 import { deleteUsers } from "~/server/admin/users/actions"
 

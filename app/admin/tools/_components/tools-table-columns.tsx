@@ -1,9 +1,9 @@
 "use client"
 
 import { formatDate } from "@primoui/utils"
-import { type Tool, ToolStatus } from "@prisma/client"
 import type { ColumnDef } from "@tanstack/react-table"
 import type { ComponentProps } from "react"
+import { type Tool, ToolStatus } from "~/.generated/prisma/browser"
 import { ToolActions } from "~/app/admin/tools/_components/tool-actions"
 import { RowCheckbox } from "~/components/admin/row-checkbox"
 import { Badge } from "~/components/common/badge"

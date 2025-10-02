@@ -1,5 +1,5 @@
-import { type Prisma, ToolStatus } from "@prisma/client"
 import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
+import { type Prisma, ToolStatus } from "~/.generated/prisma/client"
 import { tagManyPayload, tagOnePayload } from "~/server/web/tags/payloads"
 import type { TagsFilterParams } from "~/server/web/tags/schema"
 import { db } from "~/services/db"

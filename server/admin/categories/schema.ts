@@ -1,4 +1,3 @@
-import type { Category } from "@prisma/client"
 import {
   createSearchParamsCache,
   parseAsInteger,
@@ -6,6 +5,7 @@ import {
   parseAsStringEnum,
 } from "nuqs/server"
 import * as z from "zod"
+import type { Category } from "~/.generated/prisma/browser"
 import { getSortingStateParser } from "~/lib/parsers"
 
 export const categoriesTableParamsSchema = {

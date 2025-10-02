@@ -1,9 +1,9 @@
 "use client"
 
-import type { Tag } from "@prisma/client"
 import { EllipsisIcon, TrashIcon } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import type { ComponentProps } from "react"
+import type { Tag } from "~/.generated/prisma/browser"
 import { TagsDeleteDialog } from "~/app/admin/tags/_components/tags-delete-dialog"
 import { Button } from "~/components/common/button"
 import {

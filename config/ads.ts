@@ -1,4 +1,4 @@
-import type { AdType } from "@prisma/client"
+import type { AdType } from "~/.generated/prisma/client"
 import { siteConfig } from "~/config/site"
 import type { AdOne } from "~/server/web/ads/payloads"
 

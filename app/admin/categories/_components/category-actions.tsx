@@ -1,9 +1,9 @@
 "use client"
 
-import type { Category } from "@prisma/client"
 import { EllipsisIcon, TrashIcon } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import type { ComponentProps } from "react"
+import type { Category } from "~/.generated/prisma/browser"
 import { CategoriesDeleteDialog } from "~/app/admin/categories/_components/categories-delete-dialog"
 import { Button } from "~/components/common/button"
 import {

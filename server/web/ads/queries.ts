@@ -1,5 +1,5 @@
-import type { Prisma } from "@prisma/client"
 import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
+import type { Prisma } from "~/.generated/prisma/client"
 import { adManyPayload, adOnePayload } from "~/server/web/ads/payloads"
 import { db } from "~/services/db"
 

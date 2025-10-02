@@ -1,8 +1,8 @@
 "use client"
 
-import type { Tag } from "@prisma/client"
 import type { Table } from "@tanstack/react-table"
 import { TrashIcon } from "lucide-react"
+import type { Tag } from "~/.generated/prisma/browser"
 import { TagsDeleteDialog } from "~/app/admin/tags/_components/tags-delete-dialog"
 import { Button } from "~/components/common/button"
 

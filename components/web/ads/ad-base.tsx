@@ -1,6 +1,6 @@
 import { removeQueryParams, setQueryParams } from "@primoui/utils"
-import type { AdType } from "@prisma/client"
 import type { ComponentProps } from "react"
+import type { AdType } from "~/.generated/prisma/client"
 import { Badge } from "~/components/common/badge"
 import { ExternalLink } from "~/components/web/external-link"
 import { siteConfig } from "~/config/site"

@@ -1,9 +1,9 @@
 "use client"
 
-import type { Tag } from "@prisma/client"
 import { PlusIcon } from "lucide-react"
 import { useQueryStates } from "nuqs"
 import { use, useMemo } from "react"
+import type { Tag } from "~/.generated/prisma/browser"
 import { getColumns } from "~/app/admin/tags/_components/tags-table-columns"
 import { TagsTableToolbarActions } from "~/app/admin/tags/_components/tags-table-toolbar-actions"
 import { DateRangePicker } from "~/components/admin/date-range-picker"

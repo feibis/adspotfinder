@@ -1,6 +1,6 @@
-import { Prisma } from "@prisma/client"
+import type { Prisma } from "~/.generated/prisma/client"
 
-export const adOnePayload = Prisma.validator<Prisma.AdSelect>()({
+export const adOnePayload = {
   name: true,
   description: true,
   websiteUrl: true,
@@ -8,13 +8,13 @@ export const adOnePayload = Prisma.validator<Prisma.AdSelect>()({
   bannerUrl: true,
   buttonLabel: true,
   type: true,
-})
+} satisfies Prisma.AdSelect
 
-export const adManyPayload = Prisma.validator<Prisma.AdSelect>()({
+export const adManyPayload = {
   type: true,
   startsAt: true,
   endsAt: true,
-})
+} satisfies Prisma.AdSelect
 
 export type AdOne = Prisma.AdGetPayload<{ select: typeof adOnePayload }>
 export type AdMany = Prisma.AdGetPayload<{ select: typeof adManyPayload }>

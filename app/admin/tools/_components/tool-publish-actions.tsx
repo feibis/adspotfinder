@@ -1,8 +1,10 @@
-import { ToolStatus } from "@prisma/client"
+"use client"
+
 import { formatDate } from "date-fns"
 import { BadgeCheckIcon, CalendarIcon } from "lucide-react"
 import { type ComponentProps, type ReactNode, useState } from "react"
 import { useFormContext } from "react-hook-form"
+import { ToolStatus } from "~/.generated/prisma/browser"
 import { Button, type ButtonProps } from "~/components/common/button"
 import { Calendar } from "~/components/common/calendar"
 import { Checkbox } from "~/components/common/checkbox"

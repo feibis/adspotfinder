@@ -1,6 +1,6 @@
-import type { Tool } from "@prisma/client"
 import { Text } from "@react-email/components"
 import { addHours, differenceInDays, format, formatDistanceToNowStrict } from "date-fns"
+import type { Tool } from "~/.generated/prisma/client"
 import { siteConfig } from "~/config/site"
 import { EmailActionNudge } from "~/emails/components/action-nudge"
 import { EmailExpediteNudge } from "~/emails/components/expedite-nudge"

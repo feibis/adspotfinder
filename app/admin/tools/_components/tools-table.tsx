@@ -1,9 +1,9 @@
 "use client"
 
-import { type Tool, ToolStatus } from "@prisma/client"
 import { CircleDashedIcon, CircleDotDashedIcon, CircleDotIcon, PlusIcon } from "lucide-react"
 import { useQueryStates } from "nuqs"
 import { use, useMemo } from "react"
+import { type Tool, ToolStatus } from "~/.generated/prisma/browser"
 import { getColumns } from "~/app/admin/tools/_components/tools-table-columns"
 import { ToolsTableToolbarActions } from "~/app/admin/tools/_components/tools-table-toolbar-actions"
 import { DateRangePicker } from "~/components/admin/date-range-picker"

@@ -1,8 +1,8 @@
 "use client"
 
-import type { Report } from "@prisma/client"
 import type { Table } from "@tanstack/react-table"
 import { TrashIcon } from "lucide-react"
+import type { Report } from "~/.generated/prisma/browser"
 import { Button } from "~/components/common/button"
 import { ReportsDeleteDialog } from "./reports-delete-dialog"
 

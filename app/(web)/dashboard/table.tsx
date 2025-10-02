@@ -1,7 +1,6 @@
 "use client"
 
 import { formatDate } from "@primoui/utils"
-import { type Tool, ToolStatus } from "@prisma/client"
 import type { ColumnDef } from "@tanstack/react-table"
 import { differenceInDays, formatDistanceToNowStrict } from "date-fns"
 import {
@@ -13,6 +12,7 @@ import {
 } from "lucide-react"
 import { useQueryStates } from "nuqs"
 import { use, useMemo } from "react"
+import { type Tool, ToolStatus } from "~/.generated/prisma/browser"
 import { Button } from "~/components/common/button"
 import { Link } from "~/components/common/link"
 import { Note } from "~/components/common/note"

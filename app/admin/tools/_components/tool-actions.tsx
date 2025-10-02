@@ -1,10 +1,10 @@
 "use client"
 
 import { isValidUrl } from "@primoui/utils"
-import type { Tool } from "@prisma/client"
 import { EllipsisIcon, TrashIcon } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import type { ComponentProps } from "react"
+import type { Tool } from "~/.generated/prisma/browser"
 import { ToolsDeleteDialog } from "~/app/admin/tools/_components/tools-delete-dialog"
 import { Button } from "~/components/common/button"
 import {

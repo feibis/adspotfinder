@@ -1,7 +1,6 @@
-import { PrismaClient, ToolStatus } from "@prisma/client"
 import { addDays } from "date-fns"
-
-const prisma = new PrismaClient()
+import { ToolStatus } from "~/.generated/prisma/client"
+import { db } from "~/services/db"
 
 const ADMIN_EMAIL = "admin@dirstarter.com"
 const USER_EMAIL = "user@dirstarter.com"
@@ -17,7 +16,7 @@ async function main() {
 
   console.log("Starting seeding...")
 
-  await prisma.user.createMany({
+  await db.user.createMany({
     data: [
       {
         name: "Admin User",
@@ -37,7 +36,7 @@ async function main() {
   console.log("Created users")
 
   // Create categories
-  await prisma.category.createMany({
+  await db.category.createMany({
     data: [
       {
         name: "Frontend",
@@ -93,7 +92,7 @@ async function main() {
   console.log("Created categories")
 
   // Create tags
-  await prisma.tag.createMany({
+  await db.tag.createMany({
     data: [
       { name: "React", slug: "react" },
       { name: "Vue", slug: "vue" },
@@ -359,7 +358,7 @@ async function main() {
 
   // Create tools with their relationships
   for (const { categories, tags, ...toolData } of toolsData) {
-    await prisma.tool.create({
+    await db.tool.create({
       data: {
         ...toolData,
         content: DUMMY_CONTENT,
@@ -380,5 +379,5 @@ main()
     process.exit(1)
   })
   .finally(async () => {
-    await prisma.$disconnect()
+    await db.$disconnect()
   })

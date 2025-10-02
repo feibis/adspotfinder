@@ -1,8 +1,8 @@
 "use client"
 
-import type { User } from "@prisma/client"
 import { useQueryStates } from "nuqs"
 import { use, useMemo } from "react"
+import type { User } from "~/.generated/prisma/browser"
 import { DateRangePicker } from "~/components/admin/date-range-picker"
 import { DataTable } from "~/components/data-table/data-table"
 import { DataTableHeader } from "~/components/data-table/data-table-header"

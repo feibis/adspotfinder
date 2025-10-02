@@ -1,5 +1,5 @@
-import type { Tool } from "@prisma/client"
 import { Text } from "@react-email/components"
+import type { Tool } from "~/.generated/prisma/client"
 import { EmailFeatureNudge } from "~/emails/components/feature-nudge"
 import { EmailWrapper, type EmailWrapperProps } from "~/emails/components/wrapper"
 import { isToolPublished } from "~/lib/tools"

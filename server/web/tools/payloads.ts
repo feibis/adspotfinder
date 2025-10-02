@@ -1,22 +1,22 @@
-import { Prisma } from "@prisma/client"
+import type { Prisma } from "~/.generated/prisma/client"
 import { categoryManyPayload } from "~/server/web/categories/payloads"
 import { tagManyPayload } from "~/server/web/tags/payloads"
 
-export const toolCategoriesPayload = Prisma.validator<Prisma.Tool$categoriesArgs>()({
+export const toolCategoriesPayload = {
   select: categoryManyPayload,
   orderBy: { name: "asc" },
-})
+} satisfies Prisma.Tool$categoriesArgs
 
-export const toolTagsPayload = Prisma.validator<Prisma.Tool$tagsArgs>()({
+export const toolTagsPayload = {
   select: tagManyPayload,
   orderBy: { name: "asc" },
-})
+} satisfies Prisma.Tool$tagsArgs
 
-export const toolOwnerPayload = Prisma.validator<Prisma.Tool$ownerArgs>()({
+export const toolOwnerPayload = {
   select: { id: true },
-})
+} satisfies Prisma.Tool$ownerArgs
 
-export const toolOnePayload = Prisma.validator<Prisma.ToolSelect>()({
+export const toolOnePayload = {
   id: true,
   name: true,
   slug: true,
@@ -35,9 +35,9 @@ export const toolOnePayload = Prisma.validator<Prisma.ToolSelect>()({
   ownerId: true,
   categories: toolCategoriesPayload,
   tags: toolTagsPayload,
-})
+} satisfies Prisma.ToolSelect
 
-export const toolManyPayload = Prisma.validator<Prisma.ToolSelect>()({
+export const toolManyPayload = {
   id: true,
   name: true,
   slug: true,
@@ -51,7 +51,7 @@ export const toolManyPayload = Prisma.validator<Prisma.ToolSelect>()({
   updatedAt: true,
   ownerId: true,
   categories: toolCategoriesPayload,
-})
+} satisfies Prisma.ToolSelect
 
 export type ToolOne = Prisma.ToolGetPayload<{ select: typeof toolOnePayload }>
 export type ToolMany = Prisma.ToolGetPayload<{ select: typeof toolManyPayload }>

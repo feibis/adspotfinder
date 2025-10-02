@@ -3,12 +3,12 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { formatDateTime, getRandomString, slugify } from "@primoui/utils"
-import { type Tool, ToolStatus } from "@prisma/client"
 import { EyeIcon, InfoIcon, PencilIcon } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { type ComponentProps, use, useMemo, useRef, useState } from "react"
 import { toast } from "sonner"
+import { type Tool, ToolStatus } from "~/.generated/prisma/browser"
 import { ToolActions } from "~/app/admin/tools/_components/tool-actions"
 import { ToolPublishActions } from "~/app/admin/tools/_components/tool-publish-actions"
 import { AIGenerateContent } from "~/components/admin/ai/generate-content"
@@ -466,8 +466,8 @@ export function ToolForm({
                 setSelectedIds={field.onChange}
                 prompt={
                   isGenerationComplete && name && description
-                    ? `From the list of available categories below, suggest relevant categories for this link: 
-                    
+                    ? `From the list of available categories below, suggest relevant categories for this link:
+
                     - URL: ${websiteUrl}
                     - Meta title: ${name}
                     - Meta description: ${description}.`
@@ -491,8 +491,8 @@ export function ToolForm({
                 maxSuggestions={10}
                 prompt={
                   isGenerationComplete && name && description
-                    ? `From the list of available tags below, suggest relevant tags for this link: 
-                    
+                    ? `From the list of available tags below, suggest relevant tags for this link:
+
                     - URL: ${websiteUrl}
                     - Meta title: ${name}
                     - Meta description: ${description}.`

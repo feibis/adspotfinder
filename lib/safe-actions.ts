@@ -1,8 +1,8 @@
-import { Prisma } from "@prisma/client"
 import { noCase } from "change-case"
 import { revalidatePath, revalidateTag } from "next/cache"
 import { headers } from "next/headers"
 import { createSafeActionClient } from "next-safe-action"
+import { Prisma } from "~/.generated/prisma/client"
 import { auth } from "~/lib/auth"
 import { db } from "~/services/db"
 

@@ -1,4 +1,3 @@
-import type { User } from "@prisma/client"
 import {
   createSearchParamsCache,
   parseAsInteger,
@@ -6,6 +5,7 @@ import {
   parseAsStringEnum,
 } from "nuqs/server"
 import { z } from "zod"
+import type { User } from "~/.generated/prisma/browser"
 import { getSortingStateParser } from "~/lib/parsers"
 
 export const usersTableParamsSchema = {

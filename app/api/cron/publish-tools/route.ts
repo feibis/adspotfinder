@@ -1,6 +1,6 @@
-import { ToolStatus } from "@prisma/client"
 import { revalidateTag } from "next/cache"
 import { after } from "next/server"
+import { ToolStatus } from "~/.generated/prisma/client"
 import { env } from "~/env"
 import { notifySubmitterOfToolPublished } from "~/lib/notifications"
 import { db } from "~/services/db"

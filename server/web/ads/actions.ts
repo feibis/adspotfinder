@@ -1,8 +1,8 @@
 "use server"
 
 import { getDomain } from "@primoui/utils"
-import { AdType, type Prisma } from "@prisma/client"
 import z from "zod"
+import { AdType, type Prisma } from "~/.generated/prisma/client"
 import { adsConfig } from "~/config/ads"
 import { getFaviconFetchUrl } from "~/lib/media"
 import { actionClient } from "~/lib/safe-actions"

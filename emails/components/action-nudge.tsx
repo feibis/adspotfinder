@@ -1,5 +1,5 @@
-import type { Tool } from "@prisma/client"
 import { Link, Text } from "@react-email/components"
+import type { Tool } from "~/.generated/prisma/client"
 import { siteConfig } from "~/config/site"
 import { isToolPublished } from "~/lib/tools"
 

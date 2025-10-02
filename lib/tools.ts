@@ -1,5 +1,5 @@
-import type { Tool } from "@prisma/client"
 import { differenceInDays } from "date-fns"
+import type { Tool } from "~/.generated/prisma/client"
 import { submissionsConfig } from "~/config/submissions"
 
 /**

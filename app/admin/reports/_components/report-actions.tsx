@@ -1,9 +1,9 @@
 "use client"
 
-import type { Report } from "@prisma/client"
 import { EllipsisIcon, TrashIcon } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import type { ComponentProps } from "react"
+import type { Report } from "~/.generated/prisma/browser"
 import { ReportsDeleteDialog } from "~/app/admin/reports/_components/reports-delete-dialog"
 import { Button } from "~/components/common/button"
 import {

@@ -1,8 +1,8 @@
 "use client"
 
-import type { Category } from "@prisma/client"
 import type { Table } from "@tanstack/react-table"
 import { TrashIcon } from "lucide-react"
+import type { Category } from "~/.generated/prisma/browser"
 import { CategoriesDeleteDialog } from "~/app/admin/categories/_components/categories-delete-dialog"
 import { Button } from "~/components/common/button"
 

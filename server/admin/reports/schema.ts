@@ -1,4 +1,3 @@
-import type { Report } from "@prisma/client"
 import {
   createSearchParamsCache,
   parseAsArrayOf,
@@ -7,6 +6,7 @@ import {
   parseAsStringEnum,
 } from "nuqs/server"
 import { z } from "zod"
+import type { Report } from "~/.generated/prisma/browser"
 import { getSortingStateParser } from "~/lib/parsers"
 
 export const reportsTableParamsSchema = {

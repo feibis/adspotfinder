@@ -1,7 +1,7 @@
 import { performance } from "node:perf_hooks"
 import { getRandomElement } from "@primoui/utils"
-import { type Prisma, ToolStatus } from "@prisma/client"
 import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
+import { type Prisma, ToolStatus } from "~/.generated/prisma/client"
 import { toolManyPayload, toolOnePayload } from "~/server/web/tools/payloads"
 import type { ToolFilterParams } from "~/server/web/tools/schema"
 import { db } from "~/services/db"

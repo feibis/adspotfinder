@@ -1,9 +1,9 @@
 "use client"
 
-import { ToolStatus } from "@prisma/client"
 import { addMonths, eachDayOfInterval, format, isSameDay, isSameMonth, subMonths } from "date-fns"
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 import type { ComponentProps } from "react"
+import { ToolStatus } from "~/.generated/prisma/browser"
 import { Button } from "~/components/common/button"
 import { H5 } from "~/components/common/heading"
 import { Link } from "~/components/common/link"

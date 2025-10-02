@@ -1,4 +1,3 @@
-import { type Tool, ToolStatus } from "@prisma/client"
 import {
   createSearchParamsCache,
   parseAsArrayOf,
@@ -7,6 +6,7 @@ import {
   parseAsStringEnum,
 } from "nuqs/server"
 import * as z from "zod"
+import { type Tool, ToolStatus } from "~/.generated/prisma/browser"
 import { getSortingStateParser } from "~/lib/parsers"
 
 export const toolsTableParamsSchema = {

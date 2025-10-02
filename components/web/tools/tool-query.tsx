@@ -1,6 +1,6 @@
-import type { AdType, Prisma } from "@prisma/client"
 import type { SearchParams } from "nuqs"
 import { Suspense } from "react"
+import type { AdType, Prisma } from "~/.generated/prisma/client"
 import { AdCard, AdCardSkeleton } from "~/components/web/ads/ad-card"
 import type { PaginationProps } from "~/components/web/pagination"
 import { ToolList, type ToolListProps } from "~/components/web/tools/tool-list"

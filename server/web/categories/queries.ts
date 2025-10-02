@@ -1,5 +1,5 @@
-import { type Prisma, ToolStatus } from "@prisma/client"
 import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
+import { type Prisma, ToolStatus } from "~/.generated/prisma/client"
 import { categoryManyPayload, categoryOnePayload } from "~/server/web/categories/payloads"
 import { db } from "~/services/db"
 
