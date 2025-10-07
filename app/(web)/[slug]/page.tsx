@@ -3,7 +3,6 @@ import { ArrowUpRightIcon, HashIcon } from "lucide-react"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { cache, Suspense } from "react"
-import { ToolStatus } from "~/.generated/prisma/client"
 import { Badge } from "~/components/common/badge"
 import { Button } from "~/components/common/button"
 import { H2, H5 } from "~/components/common/heading"
@@ -104,18 +103,6 @@ export default async function (props: Props) {
   const structuredData = getStructuredData(tool)
   const { title } = getMetadata(tool)
 
-  const [previous, next] = await Promise.all([
-    findTool({
-      where: { createdAt: { lt: tool.createdAt }, status: ToolStatus.Published },
-      orderBy: { createdAt: "desc" },
-    }),
-
-    findTool({
-      where: { createdAt: { gt: tool.createdAt }, status: ToolStatus.Published },
-      orderBy: { createdAt: "asc" },
-    }),
-  ])
-
   return (
     <>
       <Section>
@@ -214,7 +201,7 @@ export default async function (props: Props) {
           <Stack className="w-full md:sticky md:bottom-2 md:z-10 max-md:order-7">
             <div className="absolute -inset-x-1 -bottom-3 -top-8 -z-1 pointer-events-none bg-background mask-t-from-66% max-md:hidden" />
 
-            <Nav className="mr-auto" title={title} previous={previous?.slug} next={next?.slug} />
+            <Nav className="mr-auto" title={title} />
 
             <ToolActions tool={tool} />
           </Stack>

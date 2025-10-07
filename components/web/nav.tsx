@@ -1,10 +1,9 @@
 "use client"
 
-import { useClipboard } from "@mantine/hooks"
-import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, LinkIcon } from "lucide-react"
-import { usePathname, useRouter } from "next/navigation"
+import { useClipboard, useHotkeys } from "@mantine/hooks"
+import { usePathname } from "next/navigation"
 import { Slot } from "radix-ui"
-import { type ComponentProps, Fragment, type ReactNode } from "react"
+import type { ComponentProps, ReactNode } from "react"
 import { toast } from "sonner"
 import { BrandBlueskyIcon } from "~/components/common/icons/brand-bluesky"
 import { BrandFacebookIcon } from "~/components/common/icons/brand-facebook"
@@ -14,12 +13,13 @@ import { BrandMastodonIcon } from "~/components/common/icons/brand-mastodon"
 import { BrandRedditIcon } from "~/components/common/icons/brand-reddit"
 import { BrandWhatsAppIcon } from "~/components/common/icons/brand-whatsapp"
 import { BrandXIcon } from "~/components/common/icons/brand-x"
+import { Kbd } from "~/components/common/kbd"
 import { Note } from "~/components/common/note"
 import { Tooltip, TooltipProvider } from "~/components/common/tooltip"
 import { ExternalLink } from "~/components/web/external-link"
-import { NavItem, type NavItemProps } from "~/components/web/nav-item"
-import { Dock, DockItem, DockSeparator } from "~/components/web/ui/dock"
+import type { Dock } from "~/components/web/ui/dock"
 import { siteConfig } from "~/config/site"
+import { cva, cx } from "~/lib/utils"
 
 type Platform =
   | "X"
@@ -80,82 +80,57 @@ const shareOptions: ShareOption[] = [
   },
 ]
 
+const navItemVariants = cva({
+  base: "py-1 px-[5px] text-xs font-medium text-secondary-foreground rounded-sm hover:text-foreground",
+})
+
 type NavProps = ComponentProps<typeof Dock> & {
   title: string
   previous?: string
   next?: string
 }
 
-export const Nav = ({ title, previous, next, ...props }: NavProps) => {
-  const router = useRouter()
+export const Nav = ({ className, title, previous, next, ...props }: NavProps) => {
   const pathname = usePathname()
   const clipboard = useClipboard({ timeout: 2000 })
 
   const currentUrl = encodeURIComponent(`${siteConfig.url}${pathname}`)
   const shareTitle = encodeURIComponent(`${title} — ${siteConfig.name}`)
 
-  const actions: (null | NavItemProps)[] = [
-    {
-      icon: clipboard.copied ? <CheckIcon /> : <LinkIcon />,
-      tooltip: clipboard.copied ? "Copied!" : "Copy Link",
-      shortcut: "C",
-      onClick: () => {
-        clipboard.copy(window.location.href)
-        toast.success("Link copied to clipboard")
-      },
-    },
-  ]
-
-  if (previous || next) {
-    actions.push(
-      null,
-      {
-        icon: <ArrowLeftIcon />,
-        tooltip: "Previous Tool",
-        shortcut: "←",
-        hotkey: "ArrowLeft",
-        isDisabled: !previous,
-        onClick: () => router.push(`/${previous}`),
-      },
-      {
-        icon: <ArrowRightIcon />,
-        tooltip: "Next Tool",
-        shortcut: "→",
-        hotkey: "ArrowRight",
-        isDisabled: !next,
-        onClick: () => router.push(`/${next}`),
-      },
-    )
+  const handleCopyLink = () => {
+    clipboard.copy(window.location.href)
+    toast.success("Link copied to clipboard")
   }
+
+  useHotkeys([["C", handleCopyLink, { preventDefault: true }]])
 
   return (
     <TooltipProvider delayDuration={0} disableHoverableContent>
-      <Dock {...props}>
-        {actions.map((action, i) => (
-          <Fragment key={i}>
-            {!action && <DockSeparator />}
-            {action && <NavItem {...action} />}
-          </Fragment>
-        ))}
+      <div
+        className={cx("flex flex-wrap items-center p-1 bg-background border rounded-lg", className)}
+        {...props}
+      >
+        <button type="button" className={navItemVariants()} onClick={handleCopyLink}>
+          Copy link <Kbd className="ml-0.5">{clipboard.copied ? "✔︎" : "C"}</Kbd>
+        </button>
 
-        <DockSeparator />
+        <div className="w-px h-4 mx-1.5 bg-ring" />
 
         <Note className="mx-1 text-xs font-medium max-lg:hidden">Share:</Note>
 
         {shareOptions.map(({ platform, url, icon }) => (
           <Tooltip key={platform} tooltip={`Share on ${platform}`} sideOffset={0}>
-            <DockItem asChild>
-              <ExternalLink
-                href={url(currentUrl, shareTitle)}
-                eventName="click_share"
-                eventProps={{ url: currentUrl, platform }}
-              >
-                <Slot.Root className="size-4">{icon}</Slot.Root>
-              </ExternalLink>
-            </DockItem>
+            <ExternalLink
+              href={url(currentUrl, shareTitle)}
+              eventName="click_share"
+              eventProps={{ url: currentUrl, platform }}
+              className={navItemVariants()}
+            >
+              <Slot.Root className="size-4">{icon}</Slot.Root>
+            </ExternalLink>
           </Tooltip>
         ))}
-      </Dock>
+      </div>
     </TooltipProvider>
   )
 }
