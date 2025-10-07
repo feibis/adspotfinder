@@ -1,4 +1,4 @@
-import { endOfMonth, endOfWeek, format, startOfWeek } from "date-fns"
+import { endOfMonth, endOfWeek, format, parse, startOfWeek } from "date-fns"
 import { createLoader, parseAsString } from "nuqs/server"
 import { Calendar } from "~/app/admin/schedule/calendar"
 import { withAdminPage } from "~/components/admin/auth-hoc"
@@ -11,7 +11,7 @@ export default withAdminPage(async ({ searchParams }: PageProps<"/admin/schedule
   const searchParamsLoader = createLoader({ month: parseAsString.withDefault(defaultMonth) })
   const { month } = searchParamsLoader(await searchParams)
 
-  const currentMonth = new Date(month)
+  const currentMonth = parse(month, "yyyy-MM", new Date())
   const calendarStart = startOfWeek(currentMonth, { weekStartsOn: 1 })
   const calendarEnd = endOfWeek(endOfMonth(currentMonth), { weekStartsOn: 1 })
 

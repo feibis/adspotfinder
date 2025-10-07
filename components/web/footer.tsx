@@ -88,7 +88,7 @@ export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) 
         </Stack>
       </div>
 
-      <BuiltWith medium="footer" />
+      <BuiltWith medium="footer" className="self-start" />
 
       {children}
     </footer>

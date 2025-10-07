@@ -4,12 +4,10 @@ import type { NextConfig } from "next"
 const nextConfig: NextConfig = {
   typedRoutes: true,
   reactStrictMode: false,
-  devIndicators: false,
 
   experimental: {
     ppr: true,
     useCache: true,
-    workerThreads: false,
 
     optimizePackageImports: [
       "@content-collections/core",
