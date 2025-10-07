@@ -17,7 +17,6 @@ import { Kbd } from "~/components/common/kbd"
 import { Note } from "~/components/common/note"
 import { Tooltip, TooltipProvider } from "~/components/common/tooltip"
 import { ExternalLink } from "~/components/web/external-link"
-import type { Dock } from "~/components/web/ui/dock"
 import { siteConfig } from "~/config/site"
 import { cva, cx } from "~/lib/utils"
 
@@ -84,7 +83,7 @@ const navItemVariants = cva({
   base: "py-1 px-[5px] text-xs font-medium text-secondary-foreground rounded-sm hover:text-foreground",
 })
 
-type NavProps = ComponentProps<typeof Dock> & {
+type NavProps = ComponentProps<"div"> & {
   title: string
   previous?: string
   next?: string
@@ -122,9 +121,9 @@ export const Nav = ({ className, title, previous, next, ...props }: NavProps) =>
           <Tooltip key={platform} tooltip={`Share on ${platform}`} sideOffset={0}>
             <ExternalLink
               href={url(currentUrl, shareTitle)}
+              className={navItemVariants()}
               eventName="click_share"
               eventProps={{ url: currentUrl, platform }}
-              className={navItemVariants()}
             >
               <Slot.Root className="size-4">{icon}</Slot.Root>
             </ExternalLink>
