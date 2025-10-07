@@ -1,10 +1,9 @@
 "use server"
 
 import { getDomain, slugify, tryCatch } from "@primoui/utils"
-import { headers } from "next/headers"
 import { after } from "next/server"
 import { isDev } from "~/env"
-import { auth } from "~/lib/auth"
+import { getServerSession } from "~/lib/auth"
 import { isDisposableEmail } from "~/lib/email"
 import { notifySubmitterOfToolSubmitted } from "~/lib/notifications"
 import { getIP, isRateLimited } from "~/lib/rate-limiter"
@@ -47,8 +46,7 @@ const generateUniqueSlug = async (baseName: string): Promise<string> => {
 export const submitTool = actionClient
   .inputSchema(submitToolSchema)
   .action(async ({ parsedInput: { newsletterOptIn, ...data } }) => {
-    const session = await auth.api.getSession({ headers: await headers() })
-
+    const session = await getServerSession()
     const ip = await getIP()
     const rateLimitKey = `submission:${ip}`
     const domain = getDomain(data.websiteUrl)

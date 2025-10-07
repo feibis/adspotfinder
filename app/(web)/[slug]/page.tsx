@@ -203,7 +203,9 @@ export default async function (props: Props) {
 
             <Nav className="mr-auto" title={title} />
 
-            <ToolActions tool={tool} />
+            <Suspense>
+              <ToolActions tool={tool} />
+            </Suspense>
           </Stack>
         </Section.Content>
 

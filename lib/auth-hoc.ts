@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
-import { auth, type Session } from "~/lib/auth"
+import { getServerSession, type Session } from "~/lib/auth"
 
 type WithAuthHandler = (req: NextRequest, session: Session) => Promise<Response>
 
@@ -11,9 +11,7 @@ type WithAuthHandler = (req: NextRequest, session: Session) => Promise<Response>
  */
 export const withAuth = (handler: WithAuthHandler) => {
   return async (req: NextRequest) => {
-    const session = await auth.api.getSession({
-      headers: req.headers,
-    })
+    const session = await getServerSession(req)
 
     if (!session?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

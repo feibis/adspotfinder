@@ -1,5 +1,3 @@
-"use client"
-
 import { getInitials } from "@primoui/utils"
 import { LogOutIcon, ShieldHalfIcon, UserIcon } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/common/avatar"
@@ -16,16 +14,10 @@ import {
 import { Link } from "~/components/common/link"
 import { NavLink } from "~/components/web/ui/nav-link"
 import { UserLogout } from "~/components/web/user-logout"
-import type { Session } from "~/lib/auth"
-import { useSession } from "~/lib/auth-client"
+import { getServerSession } from "~/lib/auth"
 
-type UserMenuProps = {
-  session: Session | null
-}
-
-const UserMenu = (props: UserMenuProps) => {
-  const { data } = useSession()
-  const session = data ?? props.session
+const UserMenu = async () => {
+  const session = await getServerSession()
 
   if (!session?.user) {
     return (

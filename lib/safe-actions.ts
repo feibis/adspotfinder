@@ -1,9 +1,8 @@
 import { noCase } from "change-case"
 import { revalidatePath, revalidateTag } from "next/cache"
-import { headers } from "next/headers"
 import { createSafeActionClient } from "next-safe-action"
 import { Prisma } from "~/.generated/prisma/client"
-import { auth } from "~/lib/auth"
+import { getServerSession } from "~/lib/auth"
 import { db } from "~/services/db"
 
 type RevalidateOptions = {
@@ -59,7 +58,7 @@ export const actionClient = createSafeActionClient({
 // 2. Auth-guarded client
 // -----------------------------------------------------------------------------
 export const userActionClient = actionClient.use(async ({ next }) => {
-  const session = await auth.api.getSession({ headers: await headers() })
+  const session = await getServerSession()
 
   if (!session?.user) {
     throw new Error("User not authenticated")

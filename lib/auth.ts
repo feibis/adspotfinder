@@ -4,6 +4,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma"
 import { admin, createAuthMiddleware, magicLink, oneTimeToken } from "better-auth/plugins"
 import { revalidatePath } from "next/cache"
 import { headers } from "next/headers"
+import type { NextRequest } from "next/server"
 import { cache } from "react"
 import { claimsConfig } from "~/config/claims"
 import { siteConfig } from "~/config/site"
@@ -25,6 +26,8 @@ export const auth = betterAuth({
   },
 
   session: {
+    freshAge: 0,
+
     cookieCache: {
       enabled: true,
     },
@@ -73,9 +76,9 @@ export const auth = betterAuth({
   ],
 })
 
-export const getServerSession = cache(async () => {
+export const getServerSession = cache(async (request?: NextRequest) => {
   return auth.api.getSession({
-    headers: await headers(),
+    headers: request?.headers ?? (await headers()),
   })
 })
 

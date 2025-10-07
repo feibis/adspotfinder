@@ -24,16 +24,10 @@ import { Container } from "~/components/web/ui/container"
 import { Hamburger } from "~/components/web/ui/hamburger"
 import { Logo } from "~/components/web/ui/logo"
 import { NavLink } from "~/components/web/ui/nav-link"
-import { UserMenu } from "~/components/web/user-menu"
 import { useSearch } from "~/contexts/search-context"
-import type { Session } from "~/lib/auth"
 import { cx } from "~/lib/utils"
 
-type HeaderProps = ComponentProps<"div"> & {
-  session: Session | null
-}
-
-const Header = ({ className, session, ...props }: HeaderProps) => {
+const Header = ({ children, className, ...props }: ComponentProps<"div">) => {
   const pathname = usePathname()
   const search = useSearch()
   const [isNavOpen, setNavOpen] = useState(false)
@@ -109,7 +103,7 @@ const Header = ({ className, session, ...props }: HeaderProps) => {
               <Link href="/submit">Submit</Link>
             </Button>
 
-            <UserMenu session={session} />
+            {children}
           </Stack>
         </div>
 
@@ -143,4 +137,4 @@ const Header = ({ className, session, ...props }: HeaderProps) => {
   )
 }
 
-export { Header, type HeaderProps }
+export { Header }

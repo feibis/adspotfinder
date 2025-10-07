@@ -1,7 +1,6 @@
-import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import type { FunctionComponent } from "react"
-import { auth } from "~/lib/auth"
+import { getServerSession } from "~/lib/auth"
 
 /**
  * A higher order function that wraps a page component with admin authentication.
@@ -11,7 +10,7 @@ import { auth } from "~/lib/auth"
  */
 export const withAdminPage = (Component: FunctionComponent<any>, redirectPath = "/") => {
   return async function AdminProtectedPage(props: any) {
-    const session = await auth.api.getSession({ headers: await headers() })
+    const session = await getServerSession()
 
     if (session?.user.role !== "admin") {
       redirect(redirectPath)

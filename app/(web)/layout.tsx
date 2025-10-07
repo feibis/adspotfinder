@@ -1,7 +1,5 @@
-import { getSessionCookie } from "better-auth/cookies"
-import { headers } from "next/headers"
 import Script from "next/script"
-import { Suspense } from "react"
+import { type PropsWithChildren, Suspense } from "react"
 import { Providers } from "~/app/(web)/providers"
 import { Wrapper } from "~/components/common/wrapper"
 import { AdBanner } from "~/components/web/ads/ad-banner"
@@ -12,17 +10,19 @@ import { Footer } from "~/components/web/footer"
 import { Header } from "~/components/web/header"
 import { Backdrop } from "~/components/web/ui/backdrop"
 import { Container } from "~/components/web/ui/container"
+import { UserMenu, UserMenuSkeleton } from "~/components/web/user-menu"
 import { env } from "~/env"
-import { getServerSession } from "~/lib/auth"
 
-export default async function ({ children }: LayoutProps<"/">) {
-  const hasSessionCookie = getSessionCookie(new Headers(await headers()))
-  const session = hasSessionCookie ? await getServerSession() : null
-
+export default function ({ children }: PropsWithChildren) {
   return (
     <Providers>
       <div className="flex flex-col min-h-dvh overflow-clip pt-(--header-inner-offset)">
-        <Header session={session} />
+        <Header>
+          <Suspense fallback={<UserMenuSkeleton />}>
+            <UserMenu />
+          </Suspense>
+        </Header>
+
         <Backdrop isFixed />
 
         <Suspense>

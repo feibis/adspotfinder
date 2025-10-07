@@ -3,7 +3,7 @@ import WebNotFound from "~/app/(web)/not-found"
 
 export default function () {
   return (
-    <WebLayout params={Promise.resolve({})}>
+    <WebLayout>
       <WebNotFound />
     </WebLayout>
   )
