@@ -16,20 +16,21 @@ const getRevenue = async () => {
     const thirtyDaysAgo = startOfDay(subDays(new Date(), 30))
 
     // Get balance charges for revenue data
-    const { data: charges } = await stripe.charges.list({
+    const { data } = await stripe.charges.list({
       created: { gte: Math.floor(thirtyDaysAgo.getTime() / 1000) },
       limit: 100,
     })
 
+    // Filter out non-successful and refunded charges
+    const charges = data.filter(({ status, refunded }) => status === "succeeded" && !refunded)
+
     // Process daily revenue data
-    const revenueByDate = charges
-      .filter(({ status }) => status === "succeeded")
-      .reduce<Record<string, number>>((acc, charge) => {
-        const date = format(new Date(charge.created * 1000), "yyyy-MM-dd")
-        const amount = Math.round(charge.amount / 100) // Convert from cents and round to 2 decimal places
-        acc[date] = (acc[date] || 0) + amount
-        return acc
-      }, {})
+    const revenueByDate = charges.reduce<Record<string, number>>((acc, charge) => {
+      const date = format(new Date(charge.created * 1000), "yyyy-MM-dd")
+      const amount = Math.round(charge.amount / 100) // Convert from cents and round to 2 decimal places
+      acc[date] = (acc[date] || 0) + amount
+      return acc
+    }, {})
 
     // Fill in missing dates with 0
     const results: ChartData[] = eachDayOfInterval({
