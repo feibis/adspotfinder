@@ -1,35 +1,36 @@
 import { LoaderIcon } from "lucide-react"
 import type { Metadata } from "next"
-import { Suspense } from "react"
+import { getTranslations } from "next-intl/server"
+import { cache, Suspense } from "react"
 import { Login } from "~/components/web/auth/login"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { siteConfig } from "~/config/site"
-import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
+import { getPageData, getPageMetadata } from "~/lib/pages"
 
-const getPageData = async () => {
+const getData = cache(async () => {
+  const t = await getTranslations("pages.auth")
   const url = "/auth/login"
+  const title = t("meta.title")
+  const description = t("meta.description", { siteName: siteConfig.name })
 
-  const metadata = await getI18nMetadata("pages.auth", t => ({
-    title: t("meta.title"),
-    description: t("meta.description", { siteName: siteConfig.name }),
-  }))
-
-  return { url, metadata }
-}
+  return getPageData(url, title, description, {
+    breadcrumbs: [{ url, title }],
+  })
+})
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  return getPageMetadata(await getPageData())
+  const { url, metadata } = await getData()
+  return getPageMetadata({ url, metadata })
 }
 
 export default async function () {
-  const { metadata } = await getPageData()
-  const { title, description } = metadata
+  const { metadata } = await getData()
 
   return (
     <>
       <Intro>
-        <IntroTitle size="h3">{title}</IntroTitle>
-        <IntroDescription className="md:text-sm">{description}</IntroDescription>
+        <IntroTitle size="h3">{metadata.title}</IntroTitle>
+        <IntroDescription className="md:text-sm">{metadata.description}</IntroDescription>
       </Intro>
 
       <Suspense fallback={<LoaderIcon className="animate-spin mx-auto" />}>

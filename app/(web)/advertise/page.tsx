@@ -1,71 +1,64 @@
 import { LoaderIcon } from "lucide-react"
 import type { Metadata } from "next"
+import { getTranslations } from "next-intl/server"
 import { cache, Suspense } from "react"
 import { AdvertisePickers } from "~/app/(web)/advertise/pickers"
 import { Button } from "~/components/common/button"
 import { Wrapper } from "~/components/common/wrapper"
 import { ExternalLink } from "~/components/web/external-link"
 import { Stats } from "~/components/web/stats"
+import { StructuredData } from "~/components/web/structured-data"
 import { Testimonial } from "~/components/web/testimonial"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { siteConfig } from "~/config/site"
-import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
-import {
-  createGraph,
-  generateBreadcrumbs,
-  generateWebPage,
-  getOrganization,
-  getWebSite,
-} from "~/lib/structured-data"
+import { getPageData, getPageMetadata } from "~/lib/pages"
 
-const getPageData = cache(async () => {
+const getData = cache(async () => {
+  const t = await getTranslations("pages.advertise")
   const url = "/advertise"
+  const title = t("meta.title")
+  const description = t("meta.description", { siteName: siteConfig.name })
 
-  const metadata = await getI18nMetadata("pages.advertise", t => ({
-    title: t("meta.title"),
-    description: t("meta.description", { siteName: siteConfig.name }),
-  }))
-
-  const breadcrumbs = [{ name: "Advertise", url }]
-
-  const structuredData = createGraph([
-    getOrganization(),
-    getWebSite(),
-    generateBreadcrumbs(breadcrumbs),
-    generateWebPage(url, metadata.title, metadata.description),
-  ])
-
-  return { url, metadata, breadcrumbs, structuredData }
+  return getPageData(url, title, description, {
+    breadcrumbs: [{ url, title }],
+  })
 })
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  return getPageMetadata(await getPageData())
+  const { url, metadata } = await getData()
+  return getPageMetadata({ url, metadata })
 }
 
 export default async function ({ searchParams }: PageProps<"/advertise">) {
-  const { metadata, structuredData } = await getPageData()
-  const { t, title, description } = metadata
+  const { metadata, structuredData } = await getData()
+  const t = await getTranslations("pages.advertise")
+
+  const testimonial = {
+    quote: t("testimonial.quote"),
+    author: {
+      name: t("testimonial.author.name"),
+      title: t("testimonial.author.title"),
+    },
+  }
 
   return (
     <Wrapper gap="xl">
-      <Intro alignment="center">
-        <IntroTitle>{title}</IntroTitle>
-        <IntroDescription>{description}</IntroDescription>
-      </Intro>
+      <div className="flex flex-col items-center gap-10">
+        <Intro alignment="center">
+          <IntroTitle>{metadata.title}</IntroTitle>
+          <IntroDescription>{metadata.description}</IntroDescription>
+        </Intro>
 
-      <Suspense fallback={<LoaderIcon className="mx-auto size-[1.25em] animate-spin" />}>
-        <AdvertisePickers searchParams={searchParams} />
-      </Suspense>
+        <Suspense fallback={<LoaderIcon className="mx-auto size-[1.25em] animate-spin" />}>
+          <AdvertisePickers searchParams={searchParams} />
+        </Suspense>
+      </div>
 
       <Stats />
 
       <Testimonial
-        quote="After advertising on this platform, we saw a 38% increase in qualified leads and 2.4x ROI within the first month. The targeted audience was exactly what our business needed. Highly recommended!"
-        author={{
-          name: "Piotr Kulpinski",
-          image: "/authors/piotrkulpinski.webp",
-          title: "Founder of Dirstarter",
-        }}
+        quote={testimonial.quote}
+        author={{ ...testimonial.author, image: "/authors/piotrkulpinski.webp" }}
       />
 
       <hr />
@@ -82,10 +75,7 @@ export default async function ({ searchParams }: PageProps<"/advertise">) {
         </Button>
       </Intro>
 
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <StructuredData data={structuredData} />
     </Wrapper>
   )
 }

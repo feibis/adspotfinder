@@ -11,25 +11,19 @@ import { AdCard, AdCardSkeleton } from "~/components/web/ads/ad-card"
 import { ExternalLink } from "~/components/web/external-link"
 import { MDX } from "~/components/web/mdx"
 import { Nav } from "~/components/web/nav"
+import { StructuredData } from "~/components/web/structured-data"
 import { Author } from "~/components/web/ui/author"
 import { Breadcrumbs } from "~/components/web/ui/breadcrumbs"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { Section } from "~/components/web/ui/section"
-import { getPageMetadata } from "~/lib/metadata"
-import {
-  createGraph,
-  generateArticle,
-  generateBreadcrumbs,
-  generateWebPage,
-  getOrganization,
-  getWebSite,
-} from "~/lib/structured-data"
+import { getPageData, getPageMetadata } from "~/lib/pages"
+import { generateArticle } from "~/lib/structured-data"
 
 export const dynamicParams = false
 
 type Props = PageProps<"/blog/[slug]">
 
-const getPageData = cache(async ({ params }: Props) => {
+const getData = cache(async ({ params }: Props) => {
   const { slug } = await params
   const post = allPosts.find(({ _meta }) => _meta.path === slug)
 
@@ -38,40 +32,26 @@ const getPageData = cache(async ({ params }: Props) => {
   }
 
   const url = `/blog/${post._meta.path}`
-  const wordCount = post.content.split(/\s+/).length
 
-  const metadata = {
-    title: post.title,
-    description: post.description,
-  }
+  const data = getPageData(url, post.title, post.description, {
+    breadcrumbs: [
+      { url: "/blog", title: "Blog" },
+      { url, title: post.title },
+    ],
+    structuredData: [
+      generateArticle(
+        url,
+        post.title,
+        post.description,
+        post.publishedAt,
+        post.author,
+        post.image,
+        post.content.split(/\s+/).length,
+      ),
+    ],
+  })
 
-  const breadcrumbs = [
-    { name: "Blog", url: "/blog" },
-    { name: post.title, url },
-  ]
-
-  const structuredData = createGraph([
-    getOrganization(),
-    getWebSite(),
-    generateBreadcrumbs(breadcrumbs),
-    generateWebPage(url, metadata.title, metadata.description),
-    generateArticle(
-      url,
-      metadata.title,
-      metadata.description,
-      post.publishedAt,
-      post.author
-        ? {
-            name: post.author.name,
-            url: `https://twitter.com/${post.author.twitterHandle}`,
-          }
-        : undefined,
-      post.image,
-      wordCount,
-    ),
-  ])
-
-  return { post, url, metadata, breadcrumbs, structuredData }
+  return { post, ...data }
 })
 
 export const generateStaticParams = () => {
@@ -79,11 +59,12 @@ export const generateStaticParams = () => {
 }
 
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
-  return getPageMetadata(await getPageData(props))
+  const { url, metadata } = await getData(props)
+  return getPageMetadata({ url, metadata })
 }
 
 export default async function (props: Props) {
-  const { post, breadcrumbs, structuredData } = await getPageData(props)
+  const { post, breadcrumbs, structuredData } = await getData(props)
 
   return (
     <>
@@ -133,15 +114,8 @@ export default async function (props: Props) {
                 Written by
               </H6>
 
-              <ExternalLink
-                href={`https://twitter.com/${post.author.twitterHandle}`}
-                className="group"
-              >
-                <Author
-                  name={post.author.name}
-                  image={post.author.image}
-                  title={`@${post.author.twitterHandle}`}
-                />
+              <ExternalLink href={post.author.url} className="group">
+                <Author {...post.author} />
               </ExternalLink>
             </Stack>
           )}
@@ -150,11 +124,7 @@ export default async function (props: Props) {
 
       <Nav title={post.title} className="self-start" />
 
-      {/* JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <StructuredData data={structuredData} />
     </>
   )
 }

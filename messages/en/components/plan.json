@@ -1,0 +1,7 @@
+{
+  "monthly": "Monthly",
+  "yearly": "Yearly",
+  "current_package": "Current Package",
+  "upgrade_listing": "Upgrade Listing",
+  "choose_plan": "Choose {planName}"
+}

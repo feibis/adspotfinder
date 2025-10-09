@@ -1,0 +1,8 @@
+{
+  "greeting": "Hey {name}!",
+  "accepted": "Great news! Your submitted tool, <strong>{toolName}</strong>, was <strong>accepted and scheduled</strong> for publication on {siteName}.",
+  "queue": {
+    "short": "{toolName} is scheduled to be added <strong>{relativeDate}</strong>.",
+    "long": "on <strong>{dateFormatted}</strong>"
+  }
+}

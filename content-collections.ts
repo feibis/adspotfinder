@@ -2,6 +2,7 @@ import { defineCollection, defineConfig } from "@content-collections/core"
 import { compileMDX, type Options } from "@content-collections/mdx"
 import rehypeAutolinkHeadings from "rehype-autolink-headings"
 import rehypeSlug from "rehype-slug"
+import { defaultLocale, locales } from "~/lib/i18n"
 
 const mdxOptions: Options = {
   rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
@@ -22,9 +23,11 @@ const posts = defineCollection({
       .object({
         name: z.string(),
         image: z.string(),
-        twitterHandle: z.string(),
+        title: z.string().optional(),
+        url: z.string().optional(),
       })
       .optional(),
+    locale: z.enum(locales).default(defaultLocale),
   }),
 
   transform: async (data, context) => {

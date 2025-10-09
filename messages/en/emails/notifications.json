@@ -1,0 +1,30 @@
+{
+  "submission": {
+    "subject": "🙌 Thanks for submitting {toolName}!",
+    "preview": "We received {toolName} and will review it shortly."
+  },
+  "scheduled": {
+    "subject": "Great news! {toolName} is scheduled for publication on {siteName} 🎉",
+    "preview": "{toolName} is in the queue and will go live soon."
+  },
+  "published": {
+    "subject": "{toolName} has been published on {siteName} 🎉",
+    "preview": "{toolName} is now live on {siteName}."
+  },
+  "premium": {
+    "subject": "🙌 Thank you for {action, select, feature {featuring} expedite {expediting} other {supporting}} {toolName}!",
+    "preview": "Your upgrade for {toolName} is being processed."
+  },
+  "admin_premium": {
+    "subject": "New tool {action, select, feature {featured} expedite {expedited} other {updated}}: {toolName}",
+    "preview": "{toolName} was {action, select, feature {featured} expedite {expedited} other {updated}} by {submitterName}."
+  },
+  "magic_link": {
+    "subject": "Your {siteName} login link",
+    "preview": "Use this magic link to access your {siteName} account."
+  },
+  "verify_domain": {
+    "subject": "Your {siteName} verification code",
+    "preview": "Use this code to verify your domain on {siteName}."
+  }
+}

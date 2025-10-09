@@ -15,13 +15,11 @@ import { findFilterOptions } from "~/server/web/actions/filters"
 import type { ToolFilterSchema } from "~/server/web/tools/schema"
 
 export const ToolFilters = ({ ...props }: ComponentProps<typeof Select>) => {
-  const t = useTranslations("filters")
+  const t = useTranslations("tools.filters")
   const { filters, updateFilters } = useFilters<ToolFilterSchema>()
   const { result, execute } = useAction(findFilterOptions)
 
-  useEffect(() => {
-    execute()
-  }, [execute])
+  useEffect(execute, [execute])
 
   return (
     <>
@@ -33,7 +31,7 @@ export const ToolFilters = ({ ...props }: ComponentProps<typeof Select>) => {
           {...props}
         >
           <SelectTrigger size="lg" className="w-auto min-w-40 max-sm:flex-1">
-            <SelectValue placeholder={t(`all_${type}` as keyof typeof t)} />
+            <SelectValue placeholder={t(`all.${type}` as keyof typeof t)} />
           </SelectTrigger>
 
           <SelectContent align="end">

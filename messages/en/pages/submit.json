@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "title": "Add a free listing",
+    "description": "Listing on {siteName} is a great way to get more exposure for your tool. We only list high-quality tools that are useful for directory owners."
+  },
+  "form": {
+    "your_name_label": "Your Name:",
+    "your_name_placeholder": "John Doe",
+    "your_email_label": "Your Email:",
+    "your_email_placeholder": "john@doe.com",
+    "name_label": "Name:",
+    "name_placeholder": "PostHog",
+    "website_label": "Website URL:",
+    "website_placeholder": "https://posthog.com",
+    "note_label": "Note:",
+    "note_placeholder": "Any additional information...",
+    "newsletter_label": "I'd like to receive free email updates",
+    "submit_button": "Submit",
+    "already_published": "{name} has already been published.",
+    "submitted_success": "{name} has been submitted.",
+    "errors": {
+      "rate_limited": "Too many submissions. Please try again later.",
+      "disposable_email": "Please use a valid, non-disposable email address.",
+      "failed_submission": "We couldn't submit your tool. Please try again.",
+      "slug_generation_failed": "We couldn't generate a unique URL for your tool. Try renaming it and submit again."
+    }
+  },
+  "feature": {
+    "meta": {
+      "title": "Boost {name}'s Visibility",
+      "description": "You can upgrade {name}'s listing on {siteName} to benefit from a featured badge, a prominent placement, and a do-follow link."
+    }
+  },
+  "expedite": {
+    "meta": {
+      "title": "Choose a plan for {name}",
+      "description": "Maximize {name}'s impact from day one. Select a package that suits your goals - from free listing to premium features."
+    }
+  },
+  "featured": {
+    "meta": {
+      "title": "Thank you for your payment!",
+      "description": "We've received your payment. {name} should be featured on {siteName} shortly."
+    }
+  },
+  "success": {
+    "meta": {
+      "title": "Thank you for submitting {name}!",
+      "description": "We'll review {name}'s submission and publish it on {siteName} soon."
+    }
+  }
+}

@@ -1,68 +1,51 @@
 import type { Metadata } from "next"
+import { getTranslations } from "next-intl/server"
 import { cache } from "react"
 import { Link } from "~/components/common/link"
 import { Prose } from "~/components/common/prose"
 import { ExternalLink } from "~/components/web/external-link"
+import { StructuredData } from "~/components/web/structured-data"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { linksConfig } from "~/config/links"
 import { siteConfig } from "~/config/site"
-import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
-import {
-  createGraph,
-  generateAboutPage,
-  generateBreadcrumbs,
-  generateWebPage,
-  getOrganization,
-  getWebSite,
-} from "~/lib/structured-data"
+import { getPageData, getPageMetadata } from "~/lib/pages"
+import { generateAboutPage } from "~/lib/structured-data"
 
-const getPageData = cache(async () => {
+const getData = cache(async () => {
+  const t = await getTranslations("pages.about")
   const url = "/about"
+  const title = t("meta.title")
+  const description = t("meta.description", { siteName: siteConfig.name })
 
-  const metadata = await getI18nMetadata("pages.about", t => ({
-    title: t("meta.title"),
-    description: t("meta.description", { siteName: siteConfig.name }),
-  }))
-
-  const breadcrumbs = [{ name: "About", url }]
-
-  const structuredData = createGraph([
-    getOrganization(),
-    getWebSite(),
-    generateBreadcrumbs(breadcrumbs),
-    generateWebPage(url, metadata.title, metadata.description),
-    generateAboutPage(url, metadata.title, metadata.description),
-  ])
-
-  return { url, metadata, breadcrumbs, structuredData }
+  return getPageData(url, title, description, {
+    breadcrumbs: [{ url, title }],
+    structuredData: [generateAboutPage(url, title, description)],
+  })
 })
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  return getPageMetadata(await getPageData())
+  const { url, metadata } = await getData()
+  return getPageMetadata({ url, metadata })
 }
 
 export default async function () {
-  const { metadata, structuredData } = await getPageData()
-  const { title, description } = metadata
+  const { metadata, structuredData } = await getData()
 
   return (
     <>
       <Intro>
-        <IntroTitle>{title}</IntroTitle>
-        <IntroDescription>{description}</IntroDescription>
+        <IntroTitle>{metadata.title}</IntroTitle>
+        <IntroDescription>{metadata.description}</IntroDescription>
       </Intro>
 
       <Prose>
         <h2>What is {siteConfig.name}?</h2>
 
         <p>
-          <Link href="/" title={siteConfig.tagline}>
-            {siteConfig.name}
-          </Link>{" "}
-          is a community driven list of <strong>tools and resources for developers</strong>. The
-          goal of the site is to be your first stop when researching for a new tool or resource to
-          help you grow your business. It will help you find alternatives and reviews of the
-          products you already use.
+          <Link href="/">{siteConfig.name}</Link> is a community driven list of{" "}
+          <strong>tools and resources for developers</strong>. The goal of the site is to be your
+          first stop when researching for a new tool or resource to help you grow your business. It
+          will help you find alternatives and reviews of the products you already use.
         </p>
 
         <h2>About the Author</h2>
@@ -86,11 +69,7 @@ export default async function () {
         </p>
       </Prose>
 
-      {/* JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <StructuredData data={structuredData} />
     </>
   )
 }

@@ -1,7 +1,6 @@
 import type { SearchParams } from "nuqs"
-import { Suspense } from "react"
 import type { AdType, Prisma } from "~/.generated/prisma/client"
-import { AdCard, AdCardSkeleton } from "~/components/web/ads/ad-card"
+import { AdCard } from "~/components/web/ads/ad-card"
 import type { PaginationProps } from "~/components/web/pagination"
 import { ToolList, type ToolListProps } from "~/components/web/tools/tool-list"
 import { ToolListing, type ToolListingProps } from "~/components/web/tools/tool-listing"
@@ -33,11 +32,7 @@ const ToolQuery = async ({
   return (
     <ToolListing pagination={{ total, perPage, page, ...pagination }} {...props}>
       <ToolList tools={tools} {...list}>
-        {ad && (
-          <Suspense fallback={<AdCardSkeleton isRevealed className="lg:order-1" />}>
-            <AdCard type={ad} isRevealed className="lg:order-1" />
-          </Suspense>
-        )}
+        {ad && <AdCard type={ad} isRevealed className="lg:order-1" />}
       </ToolList>
     </ToolListing>
   )

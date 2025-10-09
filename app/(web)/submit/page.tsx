@@ -1,34 +1,36 @@
 import type { Metadata } from "next"
+import { getTranslations } from "next-intl/server"
+import { cache } from "react"
 import { SubmitForm } from "~/app/(web)/submit/form"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { Section } from "~/components/web/ui/section"
 import { siteConfig } from "~/config/site"
-import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
+import { getPageData, getPageMetadata } from "~/lib/pages"
 
-const getPageData = async () => {
+const getData = cache(async () => {
+  const t = await getTranslations("pages.submit")
   const url = "/submit"
+  const title = t("meta.title")
+  const description = t("meta.description", { siteName: siteConfig.name })
 
-  const metadata = await getI18nMetadata("pages.submit", t => ({
-    title: t("meta.title"),
-    description: t("meta.description", { siteName: siteConfig.name }),
-  }))
-
-  return { url, metadata }
-}
+  return getPageData(url, title, description, {
+    breadcrumbs: [{ url, title }],
+  })
+})
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  return getPageMetadata(await getPageData())
+  const { url, metadata } = await getData()
+  return getPageMetadata({ url, metadata })
 }
 
 export default async function () {
-  const { metadata } = await getPageData()
-  const { title, description } = metadata
+  const { metadata } = await getData()
 
   return (
     <>
       <Intro>
-        <IntroTitle>{title}</IntroTitle>
-        <IntroDescription>{description}</IntroDescription>
+        <IntroTitle>{metadata.title}</IntroTitle>
+        <IntroDescription>{metadata.description}</IntroDescription>
       </Intro>
 
       <Section>

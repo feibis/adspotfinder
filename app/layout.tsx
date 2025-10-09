@@ -9,18 +9,21 @@ import { siteConfig } from "~/config/site"
 import { SearchProvider } from "~/contexts/search-context"
 import { fontSans } from "~/lib/fonts"
 import "./styles.css"
+import { getTranslations } from "next-intl/server"
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
-  title: {
-    template: `%s – ${siteConfig.name}`,
-    default: `${siteConfig.tagline} – ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  icons: {
-    icon: [{ type: "image/png", url: "/favicon.png" }],
-  },
-  ...metadataConfig,
+export const generateMetadata = async (): Promise<Metadata> => {
+  const t = await getTranslations()
+
+  return {
+    metadataBase: new URL(siteConfig.url),
+    title: {
+      template: `%s – ${siteConfig.name}`,
+      default: `${t("brand.tagline")} – ${siteConfig.name}`,
+    },
+    description: t("brand.description"),
+    icons: { icon: [{ type: "image/png", url: "/favicon.png" }] },
+    ...metadataConfig,
+  }
 }
 
 export default function ({ children }: LayoutProps<"/">) {

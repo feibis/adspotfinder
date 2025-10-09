@@ -1,0 +1,10 @@
+{
+  "favicon_alt": "Favicon of {title}",
+  "favicon_alt_default": "Favicon",
+  "hamburger_icon": "Hamburger icon",
+  "breadcrumbs": {
+    "nav_label": "Breadcrumb",
+    "home_label": "Home",
+    "separator_label": "Separator"
+  }
+}

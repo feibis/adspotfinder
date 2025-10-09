@@ -1,9 +1,13 @@
 import { getExcerpt } from "@primoui/utils"
 import { LogoSymbol } from "~/components/web/ui/logo-symbol"
-import { siteConfig } from "~/config/site"
 import type { OpenGraphParams } from "~/lib/opengraph"
 
-export const OgBase = ({ title, description, faviconUrl }: OpenGraphParams) => {
+type OgBaseProps = OpenGraphParams & {
+  siteName: string
+  siteTagline: string
+}
+
+export const OgBase = ({ title, description, faviconUrl, siteName, siteTagline }: OgBaseProps) => {
   return (
     <div
       style={{
@@ -95,10 +99,10 @@ export const OgBase = ({ title, description, faviconUrl }: OpenGraphParams) => {
             }}
           >
             <LogoSymbol style={{ height: "1.25em", width: "1.25em" }} />
-            <span>{siteConfig.name}</span>
+            <span>{siteName}</span>
           </div>
 
-          <span style={{ opacity: 0.5, fontSize: "1.6rem" }}>{siteConfig.tagline}</span>
+          <span style={{ opacity: 0.5, fontSize: "1.6rem" }}>{siteTagline}</span>
         </div>
       </div>
     </div>

@@ -127,7 +127,9 @@ export const GET = async ({ url }: NextRequest, { params }: RouteContext<"/[slug
     },
   })
 
-  if (!tool) notFound()
+  if (!tool) {
+    notFound()
+  }
 
   const svg = await satori(<SvgBadge theme={theme} tool={tool} />, {
     width,

@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
 import { Hero } from "~/app/(web)/(home)/hero"
 import { ToolListingSkeleton } from "~/components/web/tools/tool-listing"
@@ -12,18 +13,20 @@ import {
   getWebSite,
 } from "~/lib/structured-data"
 
-const getStructuredData = () => {
+const getStructuredData = async () => {
+  const t = await getTranslations("brand")
+
   return createGraph([
     getOrganization(),
     getWebSite(),
     generateBreadcrumbs([]),
     generateItemList([]),
-    generateWebPage(siteConfig.url, siteConfig.name, siteConfig.description),
+    generateWebPage(siteConfig.url, t("name"), t("description")),
   ])
 }
 
-export default function (props: PageProps<"/">) {
-  const structuredData = getStructuredData()
+export default async function (props: PageProps<"/">) {
+  const structuredData = await getStructuredData()
 
   return (
     <>

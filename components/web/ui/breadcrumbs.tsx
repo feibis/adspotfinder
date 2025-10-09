@@ -1,5 +1,3 @@
-"use client"
-
 import { Home } from "lucide-react"
 import { type ComponentProps, Fragment, type ReactNode } from "react"
 import { Stack } from "~/components/common/stack"
@@ -17,7 +15,7 @@ const BreadcrumbsSeparator = ({ ...props }: ComponentProps<"span">) => {
 
 type Breadcrumb = {
   url: string
-  name: string | ReactNode
+  title: string | ReactNode
 }
 
 type BreadcrumbsProps = ComponentProps<typeof Stack> & {
@@ -25,18 +23,18 @@ type BreadcrumbsProps = ComponentProps<typeof Stack> & {
 }
 
 export const Breadcrumbs = ({ className, items, ...props }: BreadcrumbsProps) => {
-  const breadcrumbItems = [{ url: "/", name: <Home aria-label="Home" /> }, ...items]
+  const breadcrumbItems = [{ url: "/", title: <Home aria-label="Home" /> }, ...items]
 
   return (
     <>
       {breadcrumbsConfig.enabled && (
         <Stack size="sm" className={cx("-mb-fluid-md pb-3 text-sm", className)} asChild {...props}>
           <nav>
-            {breadcrumbItems.map(({ url, name }, index) => (
+            {breadcrumbItems.map(({ url, title }, index) => (
               <Fragment key={index}>
                 {index > 0 && <BreadcrumbsSeparator />}
                 <NavLink exact href={url} className="not-last:shrink-0 last:line-clamp-1">
-                  {name}
+                  {title}
                 </NavLink>
               </Fragment>
             ))}

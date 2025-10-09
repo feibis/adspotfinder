@@ -15,6 +15,7 @@ import { RelatedTools, RelatedToolsSkeleton } from "~/components/web/listings/re
 import { Markdown } from "~/components/web/markdown"
 import { Nav } from "~/components/web/nav"
 import { OverlayImage } from "~/components/web/overlay-image"
+import { StructuredData } from "~/components/web/structured-data"
 import { ToolActions } from "~/components/web/tools/tool-actions"
 import { ToolPreviewAlert } from "~/components/web/tools/tool-preview-alert"
 import { Backdrop } from "~/components/web/ui/backdrop"
@@ -24,47 +25,34 @@ import { Section } from "~/components/web/ui/section"
 import { Sticky } from "~/components/web/ui/sticky"
 import { Tag } from "~/components/web/ui/tag"
 import { VerifiedBadge } from "~/components/web/verified-badge"
-import { getPageMetadata } from "~/lib/metadata"
-import {
-  createGraph,
-  generateBreadcrumbs,
-  generateCollectionPage,
-  generateWebPage,
-  getOrganization,
-  getWebSite,
-} from "~/lib/structured-data"
+import { getPageData, getPageMetadata } from "~/lib/pages"
+import { generateCollectionPage } from "~/lib/structured-data"
 import { isToolPublished } from "~/lib/tools"
 import { findTool, findToolSlugs } from "~/server/web/tools/queries"
 
 type Props = PageProps<"/[slug]">
 
-const getPageData = cache(async ({ params }: Props) => {
+const getData = cache(async ({ params }: Props) => {
   const { slug } = await params
   const tool = await findTool({ where: { slug } })
 
-  if (!tool) notFound()
-
-  const url = `/${tool.slug}`
-
-  const metadata = {
-    title: `${tool.name}: ${tool.tagline}`,
-    description: tool.description,
+  if (!tool) {
+    notFound()
   }
 
-  const breadcrumbs = [
-    { name: "Tools", url: "/" },
-    { name: tool.name, url },
-  ]
+  const url = `/${tool.slug}`
+  const title = `${tool.name}: ${tool.tagline}`
+  const description = tool.description ?? ""
 
-  const structuredData = createGraph([
-    getOrganization(),
-    getWebSite(),
-    generateBreadcrumbs(breadcrumbs),
-    generateCollectionPage(url, metadata.title, metadata.description),
-    generateWebPage(url, metadata.title, metadata.description),
-  ])
+  const data = getPageData(url, title, description, {
+    breadcrumbs: [
+      { title: "Tools", url: "/" },
+      { title: tool.name, url },
+    ],
+    structuredData: [generateCollectionPage(url, title, description)],
+  })
 
-  return { tool, url, metadata, breadcrumbs, structuredData }
+  return { tool, ...data }
 })
 
 export const generateStaticParams = async () => {
@@ -73,7 +61,7 @@ export const generateStaticParams = async () => {
 }
 
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
-  const { tool, url, metadata } = await getPageData(props)
+  const { tool, url, metadata } = await getData(props)
 
   const ogImage = {
     title: tool.name,
@@ -85,7 +73,7 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
 }
 
 export default async function (props: Props) {
-  const { tool, metadata, structuredData } = await getPageData(props)
+  const { tool, metadata, structuredData } = await getData(props)
 
   return (
     <>
@@ -211,11 +199,7 @@ export default async function (props: Props) {
         <RelatedTools tool={tool} />
       </Suspense>
 
-      {/* JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <StructuredData data={structuredData} />
     </>
   )
 }

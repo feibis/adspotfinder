@@ -6,7 +6,9 @@ publishedAt: 2025-03-19
 author:
   name: Piotr Kulpinski
   image: "/authors/piotrkulpinski.webp"
-  twitterHandle: "piotrkulpinski"
+  title: "@piotrkulpinski"
+  url: "https://twitter.com/piotrkulpinski"
+locale: "en"
 ---
 
 In recent years, the web development landscape has undergone a significant transformation with the emergence of edge computing. This paradigm shift is revolutionizing how we build and deploy web applications, offering unprecedented performance improvements and enabling new possibilities for developers worldwide.

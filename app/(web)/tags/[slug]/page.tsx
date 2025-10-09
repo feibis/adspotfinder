@@ -1,28 +1,22 @@
-import { capitalCase } from "change-case"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
+import { getTranslations } from "next-intl/server"
 import { cache, Suspense } from "react"
+import { StructuredData } from "~/components/web/structured-data"
 import { ToolListingSkeleton } from "~/components/web/tools/tool-listing"
 import { ToolQuery } from "~/components/web/tools/tool-query"
 import { Breadcrumbs } from "~/components/web/ui/breadcrumbs"
 import { Intro, IntroTitle } from "~/components/web/ui/intro"
 import { siteConfig } from "~/config/site"
-import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
-import {
-  createGraph,
-  generateBreadcrumbs,
-  generateCollectionPage,
-  generateWebPage,
-  getOrganization,
-  getWebSite,
-} from "~/lib/structured-data"
+import { getPageData, getPageMetadata } from "~/lib/pages"
+import { generateCollectionPage } from "~/lib/structured-data"
 import { findTag, findTagSlugs } from "~/server/web/tags/queries"
 
 export const dynamicParams = false
 
 type Props = PageProps<"/tags/[slug]">
 
-const getPageData = cache(async ({ params }: Props) => {
+const getData = cache(async ({ params }: Props) => {
   const { slug } = await params
   const tag = await findTag({ where: { slug } })
 
@@ -30,27 +24,20 @@ const getPageData = cache(async ({ params }: Props) => {
     notFound()
   }
 
+  const t = await getTranslations("pages.tags")
   const url = `/tags/${tag.slug}`
+  const title = t("meta.title", { name: tag.name })
+  const description = t("meta.description", { name: tag.name, siteName: siteConfig.name })
 
-  const metadata = await getI18nMetadata("pages.tags", t => ({
-    title: t("meta.title", { name: tag.name }),
-    description: t("meta.description", { name: tag.name, siteName: siteConfig.name }),
-  }))
+  const data = getPageData(url, title, description, {
+    breadcrumbs: [
+      { url: "/tags", title: t("breadcrumb") },
+      { url, title: tag.name },
+    ],
+    structuredData: [generateCollectionPage(url, title, description)],
+  })
 
-  const breadcrumbs = [
-    { name: "Tags", url: "/tags" },
-    { name: capitalCase(tag.slug), url },
-  ]
-
-  const structuredData = createGraph([
-    getOrganization(),
-    getWebSite(),
-    generateBreadcrumbs(breadcrumbs),
-    generateCollectionPage(url, metadata.title, metadata.description),
-    generateWebPage(url, metadata.title, metadata.description),
-  ])
-
-  return { tag, url, metadata, breadcrumbs, structuredData }
+  return { tag, ...data }
 })
 
 export const generateStaticParams = async () => {
@@ -59,34 +46,32 @@ export const generateStaticParams = async () => {
 }
 
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
-  return getPageMetadata(await getPageData(props))
+  const { url, metadata } = await getData(props)
+  return getPageMetadata({ url, metadata })
 }
 
 export default async function (props: Props) {
-  const { tag, metadata, breadcrumbs, structuredData } = await getPageData(props)
-  const { title } = metadata
+  const { tag, metadata, breadcrumbs, structuredData } = await getData(props)
+  const t = await getTranslations("pages.tags")
 
   return (
     <>
       <Breadcrumbs items={breadcrumbs} />
 
       <Intro>
-        <IntroTitle>{title}</IntroTitle>
+        <IntroTitle>{metadata.title}</IntroTitle>
       </Intro>
 
       <Suspense fallback={<ToolListingSkeleton />}>
         <ToolQuery
           searchParams={props.searchParams}
           where={{ tags: { some: { slug: tag.slug } } }}
-          search={{ placeholder: `Search in "${tag.name}"...` }}
+          search={{ placeholder: t("search.placeholder", { name: tag.name }) }}
           ad="Tools"
         />
       </Suspense>
 
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <StructuredData data={structuredData} />
     </>
   )
 }

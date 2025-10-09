@@ -1,5 +1,6 @@
 import { setQueryParams } from "@primoui/utils"
 import { cacheLife, cacheTag } from "next/cache"
+import { getTranslations } from "next-intl/server"
 import { cache } from "react"
 import RSS from "rss"
 import { ToolStatus } from "~/.generated/prisma/client"
@@ -28,13 +29,15 @@ const findTools = cache(async () => {
 })
 
 export const GET = async () => {
-  const { url, domain, name, tagline } = siteConfig
-  const rssSearchParams = { utm_source: domain, utm_medium: "rss" }
+  const t = await getTranslations()
   const tools = await findTools()
+
+  const { url, domain, name } = siteConfig
+  const rssSearchParams = { utm_source: domain, utm_medium: "rss" }
 
   const feed = new RSS({
     title: name,
-    description: tagline,
+    description: t("brand.description"),
     site_url: setQueryParams(url, rssSearchParams),
     feed_url: `${url}/rss.xml`,
     copyright: `${new Date().getFullYear()} ${name}`,

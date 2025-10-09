@@ -1,0 +1,6 @@
+{
+  "greeting": "Hey {name}!",
+  "greeting_fallback": "there",
+  "thanks": "Thanks for submitting {toolName}, it'll be reviewed shortly!",
+  "queue_detail": "in approximately <strong>{duration}</strong>"
+}

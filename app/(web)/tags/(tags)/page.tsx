@@ -1,65 +1,48 @@
 import type { Metadata } from "next"
-import { Suspense } from "react"
+import { getTranslations } from "next-intl/server"
+import { cache, Suspense } from "react"
+import { StructuredData } from "~/components/web/structured-data"
 import { TagListSkeleton } from "~/components/web/tags/tag-list"
 import { TagQuery } from "~/components/web/tags/tag-query"
 import { Breadcrumbs } from "~/components/web/ui/breadcrumbs"
 import { Intro, IntroTitle } from "~/components/web/ui/intro"
 import { siteConfig } from "~/config/site"
-import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
-import {
-  createGraph,
-  generateBreadcrumbs,
-  generateCollectionPage,
-  generateWebPage,
-  getOrganization,
-  getWebSite,
-} from "~/lib/structured-data"
+import { getPageData, getPageMetadata } from "~/lib/pages"
+import { generateCollectionPage } from "~/lib/structured-data"
 
-const getPageData = async () => {
+const getData = cache(async () => {
+  const t = await getTranslations("pages.tags")
   const url = "/tags"
+  const title = t("meta.title")
+  const description = t("meta.description", { siteName: siteConfig.name })
 
-  const metadata = await getI18nMetadata("pages.tags", t => ({
-    title: t("meta.title"),
-    description: t("meta.description", { siteName: siteConfig.name }),
-  }))
-
-  const breadcrumbs = [{ name: "Tags", url }]
-
-  const structuredData = createGraph([
-    getOrganization(),
-    getWebSite(),
-    generateBreadcrumbs(breadcrumbs),
-    generateCollectionPage(url, metadata.title, metadata.description),
-    generateWebPage(url, metadata.title, metadata.description),
-  ])
-
-  return { url, metadata, breadcrumbs, structuredData }
-}
+  return getPageData(url, title, description, {
+    breadcrumbs: [{ url, title }],
+    structuredData: [generateCollectionPage(url, title, description)],
+  })
+})
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  return getPageMetadata(await getPageData())
+  const { url, metadata } = await getData()
+  return getPageMetadata({ url, metadata })
 }
 
 export default async function (props: PageProps<"/tags">) {
-  const { metadata, breadcrumbs, structuredData } = await getPageData()
-  const { title } = metadata
+  const { metadata, breadcrumbs, structuredData } = await getData()
 
   return (
     <>
       <Breadcrumbs items={breadcrumbs} />
 
       <Intro>
-        <IntroTitle>{title}</IntroTitle>
+        <IntroTitle>{metadata.title}</IntroTitle>
       </Intro>
 
       <Suspense fallback={<TagListSkeleton />}>
         <TagQuery searchParams={props.searchParams} options={{ enableFilters: true }} />
       </Suspense>
 
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <StructuredData data={structuredData} />
     </>
   )
 }

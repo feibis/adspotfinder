@@ -1,31 +1,18 @@
 import { allPosts } from "content-collections"
 import type { Metadata } from "next"
+import { getTranslations } from "next-intl/server"
 import { cache } from "react"
 import { PostList } from "~/components/web/posts/post-list"
+import { StructuredData } from "~/components/web/structured-data"
 import { Breadcrumbs } from "~/components/web/ui/breadcrumbs"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { siteConfig } from "~/config/site"
-import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
-import {
-  createGraph,
-  generateBlog,
-  generateBreadcrumbs,
-  generateWebPage,
-  getOrganization,
-  getWebSite,
-} from "~/lib/structured-data"
+import { getPageData, getPageMetadata } from "~/lib/pages"
+import { generateBlog } from "~/lib/structured-data"
 
-const getPageData = cache(async () => {
-  const url = "/blog"
-
-  const metadata = await getI18nMetadata("pages.blog", t => ({
-    title: t("meta.title"),
-    description: t("meta.description", { siteName: siteConfig.name }),
-  }))
-
-  const breadcrumbs = [{ name: "Blog", url }]
-
+const getData = cache(async () => {
   const posts = allPosts.toSorted((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+
   const blogPosts = posts.map(post => ({
     title: post.title,
     description: post.description,
@@ -33,41 +20,39 @@ const getPageData = cache(async () => {
     publishedAt: post.publishedAt,
   }))
 
-  const structuredData = createGraph([
-    getOrganization(),
-    getWebSite(),
-    generateBreadcrumbs(breadcrumbs),
-    generateBlog(url, metadata.title, metadata.description, blogPosts),
-    generateWebPage(url, metadata.title, metadata.description),
-  ])
+  const t = await getTranslations("pages.blog")
+  const url = "/blog"
+  const title = t("meta.title")
+  const description = t("meta.description", { siteName: siteConfig.name })
 
-  return { posts, url, metadata, breadcrumbs, structuredData }
+  const data = getPageData(url, title, description, {
+    breadcrumbs: [{ url, title }],
+    structuredData: [generateBlog(url, title, description, blogPosts)],
+  })
+
+  return { posts, ...data }
 })
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  return getPageMetadata(await getPageData())
+  const { url, metadata } = await getData()
+  return getPageMetadata({ url, metadata })
 }
 
 export default async function () {
-  const { posts, metadata, breadcrumbs, structuredData } = await getPageData()
-  const { title, description } = metadata
+  const { posts, metadata, breadcrumbs, structuredData } = await getData()
 
   return (
     <>
       <Breadcrumbs items={breadcrumbs} />
 
       <Intro>
-        <IntroTitle>{title}</IntroTitle>
-        <IntroDescription>{description}</IntroDescription>
+        <IntroTitle>{metadata.title}</IntroTitle>
+        <IntroDescription>{metadata.description}</IntroDescription>
       </Intro>
 
       <PostList posts={posts} />
 
-      {/* JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <StructuredData data={structuredData} />
     </>
   )
 }

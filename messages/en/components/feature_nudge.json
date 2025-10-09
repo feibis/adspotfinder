@@ -1,0 +1,5 @@
+{
+  "message": "{name} has already been published on {siteName}. If you want, you can feature it for extra exposure.",
+  "feature_button": "Feature {toolName}",
+  "dismiss_button": "Dismiss"
+}

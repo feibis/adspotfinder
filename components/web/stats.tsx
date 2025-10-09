@@ -1,4 +1,6 @@
-import { useTranslations } from "next-intl"
+"use client"
+
+import { useLocale, useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import { MDXComponents } from "~/components/web/mdx-components"
 import { Stat } from "~/components/web/ui/stat"
@@ -24,6 +26,8 @@ type StatsProps = ComponentProps<"div"> & VariantProps<typeof statsVariants>
 
 export const Stats = ({ alignment, className, ...props }: StatsProps) => {
   const t = useTranslations("stats")
+  const locale = useLocale()
+
   const stats = [
     { value: 250000, label: t("monthly_pageviews") },
     { value: 2000, label: t("listed_tools") },
@@ -40,7 +44,7 @@ export const Stats = ({ alignment, className, ...props }: StatsProps) => {
           <Stat
             value={value}
             format={{ notation: "compact" }}
-            locales="en-US"
+            locales={locale}
             // @ts-expect-error
             style={{ "--number-flow-char-height": "0.75em" }}
             className="text-5xl font-display font-semibold"

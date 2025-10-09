@@ -12,17 +12,16 @@ type RelatedToolsProps = Omit<ComponentProps<typeof Listing>, "title"> & {
 }
 
 const RelatedTools = async ({ tool, ...props }: RelatedToolsProps) => {
+  const t = await getTranslations("components.listings")
   const tools = await findRelatedTools({ slug: tool.slug })
 
   if (!tools.length) {
     return <FeaturedTools />
   }
 
-  const t = await getTranslations("components.listings")
-
   return (
     <Listing
-      title={t("similar_to", { tool: tool.name })}
+      title={t("similar_to", { toolName: tool.name })}
       button={<Link href="/">{t("view_all_tools")}</Link>}
       {...props}
     >
@@ -31,9 +30,11 @@ const RelatedTools = async ({ tool, ...props }: RelatedToolsProps) => {
   )
 }
 
-const RelatedToolsSkeleton = ({ tool, ...props }: RelatedToolsProps) => {
+const RelatedToolsSkeleton = async ({ tool, ...props }: RelatedToolsProps) => {
+  const t = await getTranslations("components.listings")
+
   return (
-    <Listing title={`Similar to ${tool.name}`} {...props}>
+    <Listing title={t("similar_to", { toolName: tool.name })} {...props}>
       <ToolListSkeleton count={3} />
     </Listing>
   )

@@ -1,0 +1,6 @@
+{
+  "greeting": "Hey {name}!",
+  "published_notice": "Great news! Your submitted tool, <strong>{toolName}</strong>, is now <strong>live on {siteName}</strong>. Thank you for sharing this awesome resource with our community!",
+  "share_prompt": "We'd love it if you could spread the word. A quick post on your favorite social platform or community about {toolName} would mean a lot to us. It helps other people discover cool tools like yours!",
+  "button": "Check out {toolName} on {siteName}"
+}

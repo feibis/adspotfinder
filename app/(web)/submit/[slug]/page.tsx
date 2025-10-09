@@ -1,19 +1,20 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
+import { getTranslations } from "next-intl/server"
 import { cache, Suspense } from "react"
 import { ProductListSkeleton } from "~/components/web/products/product-list"
 import { ProductQuery } from "~/components/web/products/product-query"
 import { Stats } from "~/components/web/stats"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { siteConfig } from "~/config/site"
-import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
+import { getPageData, getPageMetadata } from "~/lib/pages"
 import { isToolPublished } from "~/lib/tools"
 import { toolOnePayload } from "~/server/web/tools/payloads"
 import { db } from "~/services/db"
 
 type Props = PageProps<"/submit/[slug]">
 
-const getPageData = cache(async ({ params }: Props) => {
+const getData = cache(async ({ params }: Props) => {
   const { slug } = await params
 
   const tool = await db.tool.findFirst({
@@ -21,41 +22,45 @@ const getPageData = cache(async ({ params }: Props) => {
     select: toolOnePayload,
   })
 
-  if (!tool) notFound()
+  if (!tool) {
+    notFound()
+  }
 
-  const url = `/submit/${tool.slug}`
   const namespace = isToolPublished(tool) ? "feature" : "expedite"
+  const t = await getTranslations(`pages.submit.${namespace}`)
+  const url = `/submit/${tool.slug}`
+  const title = t("meta.title")
+  const description = t("meta.description", { siteName: siteConfig.name })
 
-  const metadata = await getI18nMetadata(`pages.submit.${namespace}`, t => ({
-    title: t("meta.title", { name: tool.name }),
-    description: t("meta.description", { name: tool.name, siteName: siteConfig.name }),
-  }))
+  const data = getPageData(url, title, description, {
+    breadcrumbs: [{ url, title }],
+  })
 
-  return { tool, url, metadata }
+  return { tool, ...data }
 })
 
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
-  return getPageMetadata(await getPageData(props))
+  const { url, metadata } = await getData(props)
+  return getPageMetadata({ url, metadata })
 }
 
 export default async function (props: Props) {
-  const { tool, metadata } = await getPageData(props)
-  const { title, description } = metadata
+  const { tool, url, metadata } = await getData(props)
   const isPublished = isToolPublished(tool)
 
   return (
     <>
       <Intro alignment="center">
-        <IntroTitle>{title}</IntroTitle>
-        <IntroDescription>{description}</IntroDescription>
+        <IntroTitle>{metadata.title}</IntroTitle>
+        <IntroDescription>{metadata.description}</IntroDescription>
       </Intro>
 
       <Suspense fallback={<ProductListSkeleton />}>
         <ProductQuery
           searchParams={props.searchParams}
           checkoutData={{
-            successUrl: `/submit/${tool.slug}/success`,
-            cancelUrl: `/submit/${tool.slug}`,
+            successUrl: `${url}/success`,
+            cancelUrl: `${url}`,
             metadata: { tool: tool.slug },
           }}
           productFilter={({ name }) => {

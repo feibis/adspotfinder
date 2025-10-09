@@ -66,17 +66,17 @@ export const getWebSite = (): WebSite => ({
  * Generates breadcrumb list schema with automatic ID
  */
 export const generateBreadcrumbs = (
-  items: Array<{ name: string; url: string }>,
+  items: Array<{ title: string; url: string }>,
 ): BreadcrumbList => {
   const lastUrl = items[items.length - 1]?.url || ""
   const absoluteLastUrl = toAbsoluteUrl(lastUrl)
   return {
     "@type": "BreadcrumbList",
     "@id": `${absoluteLastUrl}#breadcrumb`,
-    itemListElement: [{ name: "Home", url: siteConfig.url }, ...items].map((item, index) => ({
+    itemListElement: [{ url: siteConfig.url, title: "Home" }, ...items].map((item, index) => ({
       "@type": "ListItem",
       position: index + 1,
-      name: item.name,
+      name: item.title,
       item: toAbsoluteUrl(item.url),
     })),
   }
@@ -140,7 +140,7 @@ export const generateSoftwareApplication = (tool: ToolOne | ToolMany): SoftwareA
 export const generateCollectionPage = (
   url: string,
   name: string,
-  description: string | null,
+  description?: string,
 ): CollectionPage => {
   const absoluteUrl = toAbsoluteUrl(url)
   return {
@@ -148,7 +148,7 @@ export const generateCollectionPage = (
     "@id": absoluteUrl,
     url: absoluteUrl,
     name,
-    description: description || undefined,
+    description,
   }
 }
 
@@ -219,7 +219,7 @@ export const generateFAQ = (questions: Array<{ question: string; answer: string 
 export const generateArticle = (
   url: string,
   title: string,
-  description: string,
+  description: string | undefined,
   publishedAt: string,
   author?: { name: string; url?: string },
   image?: string,
@@ -282,7 +282,7 @@ export const generateWebPage = (
 export const generateBlog = (
   url: string,
   name: string,
-  description: string,
+  description: string | undefined,
   posts: Array<{ title: string; description: string | null; path: string; publishedAt: string }>,
 ): Blog => {
   const absoluteUrl = toAbsoluteUrl(url)
@@ -305,7 +305,7 @@ export const generateBlog = (
 /**
  * Generates about page schema
  */
-export const generateAboutPage = (url: string, name: string, description: string): AboutPage => {
+export const generateAboutPage = (url: string, name: string, description?: string): AboutPage => {
   const absoluteUrl = toAbsoluteUrl(url)
   return {
     "@type": "AboutPage",

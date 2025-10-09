@@ -11,8 +11,8 @@ import { db } from "~/services/db"
 const getCounts = async () => {
   "use cache"
 
-  cacheTag("tools-count")
-  cacheLife("minutes")
+  cacheTag("tools")
+  cacheLife("max")
 
   return await db.$transaction([
     db.tool.count({

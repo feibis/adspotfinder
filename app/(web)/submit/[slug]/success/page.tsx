@@ -1,16 +1,17 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 import { notFound } from "next/navigation"
+import { getTranslations } from "next-intl/server"
 import { cache } from "react"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { siteConfig } from "~/config/site"
-import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
+import { getPageData, getPageMetadata } from "~/lib/pages"
 import { toolOnePayload } from "~/server/web/tools/payloads"
 import { db } from "~/services/db"
 
 type Props = PageProps<"/submit/[slug]/success">
 
-const getPageData = cache(async ({ params }: Props) => {
+const getData = cache(async ({ params }: Props) => {
   const { slug } = await params
 
   const tool = await db.tool.findFirst({
@@ -18,32 +19,36 @@ const getPageData = cache(async ({ params }: Props) => {
     select: toolOnePayload,
   })
 
-  if (!tool) notFound()
+  if (!tool) {
+    notFound()
+  }
 
-  const url = `/submit/${tool.slug}/success`
   const namespace = tool.isFeatured ? "featured" : "success"
+  const t = await getTranslations(`pages.submit.${namespace}`)
+  const url = `/submit/${tool.slug}/success`
+  const title = t("meta.title")
+  const description = t("meta.description", { siteName: siteConfig.name })
 
-  const metadata = await getI18nMetadata(`pages.submit.${namespace}`, t => ({
-    title: t("meta.title", { name: tool.name }),
-    description: t("meta.description", { name: tool.name, siteName: siteConfig.name }),
-  }))
+  const data = getPageData(url, title, description, {
+    breadcrumbs: [{ url, title }],
+  })
 
-  return { tool, url, metadata }
+  return { tool, ...data }
 })
 
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
-  return getPageMetadata(await getPageData(props))
+  const { url, metadata } = await getData(props)
+  return getPageMetadata({ url, metadata })
 }
 
 export default async function (props: Props) {
-  const { metadata } = await getPageData(props)
-  const { title, description } = metadata
+  const { metadata } = await getData(props)
 
   return (
     <>
       <Intro alignment="center">
-        <IntroTitle>{title}</IntroTitle>
-        <IntroDescription>{description}</IntroDescription>
+        <IntroTitle>{metadata.title}</IntroTitle>
+        <IntroDescription>{metadata.description}</IntroDescription>
       </Intro>
 
       <Image

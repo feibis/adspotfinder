@@ -3,7 +3,7 @@
 import NumberFlow, { continuous, type Format } from "@number-flow/react"
 import { formatNumber } from "@primoui/utils"
 import { AnimatePresence, motion, type Variants } from "motion/react"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import type Stripe from "stripe"
 import { Badge } from "~/components/common/badge"
@@ -38,6 +38,7 @@ export const Price = ({
   priceClassName,
   ...props
 }: PriceProps) => {
+  const locale = useLocale()
   const t = useTranslations("components.price")
   const MotionBadge = motion.create(Badge)
   const maxRedemptions = coupon?.max_redemptions || 0
@@ -56,7 +57,7 @@ export const Price = ({
         <NumberFlow
           value={price}
           format={{ ...defaultFormat, ...format }}
-          locales="en-US"
+          locales={locale}
           className={cx(
             "flex items-center pr-1.5 -tracking-wide font-semibold [--number-flow-char-height:0.75em] h-[0.75em]",
             priceClassName,
@@ -73,7 +74,10 @@ export const Price = ({
               animate="visible"
               exit="hidden"
             >
-              <span className="text-muted-foreground">{formatNumber(fullPrice, "standard")}</span>
+              <span className="text-muted-foreground">
+                {formatNumber(fullPrice, "standard", locale)}
+              </span>
+
               <span className="absolute -inset-x-0.5 top-1/2 h-[0.1em] -rotate-10 bg-red-500/50" />
             </motion.div>
           )}

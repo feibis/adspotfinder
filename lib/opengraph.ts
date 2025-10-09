@@ -2,9 +2,9 @@ import { createSerializer, type inferParserType, parseAsString } from "nuqs/serv
 import { siteConfig } from "~/config/site"
 
 export const openGraphSearchParams = {
-  title: parseAsString.withDefault(siteConfig.name),
-  description: parseAsString.withDefault(siteConfig.description),
-  faviconUrl: parseAsString.withDefault(`${siteConfig.url}/favicon.png`),
+  title: parseAsString,
+  description: parseAsString,
+  faviconUrl: parseAsString,
 }
 
 export type OpenGraphParams = Partial<inferParserType<typeof openGraphSearchParams>>

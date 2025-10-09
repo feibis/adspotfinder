@@ -1,38 +1,41 @@
 import type { Metadata } from "next"
+import { getTranslations } from "next-intl/server"
 import { createLoader, parseAsString } from "nuqs/server"
+import { cache } from "react"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { NavLink } from "~/components/web/ui/nav-link"
 import { siteConfig } from "~/config/site"
-import { getI18nMetadata, getPageMetadata } from "~/lib/metadata"
+import { getPageData, getPageMetadata } from "~/lib/pages"
 
 const searchParamsLoader = createLoader({
   email: parseAsString.withDefault(""),
 })
 
-const getPageData = async () => {
+const getData = cache(async () => {
+  const t = await getTranslations("pages.auth.verify")
   const url = "/auth/verify"
+  const title = t("meta.title")
+  const description = t("meta.description", { siteName: siteConfig.name })
 
-  const metadata = await getI18nMetadata("pages.auth.verify", t => ({
-    title: t("meta.title"),
-    description: t("meta.description", { siteName: siteConfig.name }),
-  }))
-
-  return { url, metadata }
-}
+  return getPageData(url, title, description, {
+    breadcrumbs: [{ url, title }],
+  })
+})
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  return getPageMetadata(await getPageData())
+  const { url, metadata } = await getData()
+  return getPageMetadata({ url, metadata })
 }
 
 export default async function ({ searchParams }: PageProps<"/auth/verify">) {
   const { email } = await searchParamsLoader(searchParams)
-  const { metadata } = await getPageData()
-  const { t, title } = metadata
+  const { metadata } = await getData()
+  const t = await getTranslations("pages.auth.verify")
 
   return (
     <>
       <Intro>
-        <IntroTitle size="h3">{title}</IntroTitle>
+        <IntroTitle size="h3">{metadata.title}</IntroTitle>
         <IntroDescription className="text-sm!">{t("description", { email })}</IntroDescription>
       </Intro>
 
