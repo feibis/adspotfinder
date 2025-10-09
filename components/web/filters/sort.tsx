@@ -16,7 +16,7 @@ export type SortProps = ComponentProps<typeof Select> & {
 }
 
 export const Sort = ({ options, ...props }: SortProps) => {
-  const t = useTranslations("tools.filters")
+  const t = useTranslations("common")
   const { filters, updateFilters } = useFilters()
 
   return (

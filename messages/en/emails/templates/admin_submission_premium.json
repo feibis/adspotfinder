@@ -1,6 +1,0 @@
-{
-  "greeting": "Hi!",
-  "body": "{submitterName} has opted to {action, select, feature {feature} expedite {expedite} other {update}} the submission of {toolName}. You should review and approve it as soon as possible.",
-  "submitter_fallback": "A customer",
-  "button": "Review {toolName}"
-}

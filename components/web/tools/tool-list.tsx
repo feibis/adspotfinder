@@ -1,3 +1,5 @@
+"use client"
+
 import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import { EmptyList } from "~/components/web/empty-list"
@@ -18,7 +20,7 @@ const ToolList = ({ children, tools, ...props }: ToolListProps) => {
         <ToolCard key={tool.slug} tool={tool} style={{ order }} />
       ))}
 
-      {tools.length ? children : <EmptyList>{t("empty_states.no_tools")}</EmptyList>}
+      {tools.length ? children : <EmptyList>{t("tools.no_tools")}</EmptyList>}
     </Grid>
   )
 }

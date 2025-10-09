@@ -14,7 +14,7 @@ export type ToolSearchProps = ComponentProps<typeof Stack> & {
 }
 
 export const ToolSearch = ({ placeholder, ...props }: ToolSearchProps) => {
-  const t = useTranslations("components.tool_search")
+  const t = useTranslations("tools.filters")
   const { enableSort, enableFilters } = useFilters<ToolFilterSchema>()
 
   const sortOptions = [

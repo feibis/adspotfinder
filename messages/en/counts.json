@@ -1,5 +1,0 @@
-{
-  "tools": "{count, plural, =0 {tools} =1 {tool} other {tools}}",
-  "categories": "{count, plural, =0 {categories} =1 {category} other {categories}}",
-  "tags": "{count, plural, =0 {tags} =1 {tag} other {tags}}"
-}

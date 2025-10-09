@@ -15,11 +15,11 @@ export type TagSearchProps = ComponentProps<typeof Stack> & {
 
 export const TagSearch = ({ placeholder, ...props }: TagSearchProps) => {
   const { enableSort, enableFilters } = useFilters<TagsFilterSchema>()
-  const t = useTranslations("components.tags")
+  const t = useTranslations("tags.filters")
 
   const sortOptions = [
-    { value: "name.asc", label: t("name_asc") },
-    { value: "name.desc", label: t("name_desc") },
+    { value: "name.asc", label: t("sort_name_asc") },
+    { value: "name.desc", label: t("sort_name_desc") },
   ]
 
   return (

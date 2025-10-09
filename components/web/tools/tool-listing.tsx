@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import type { PropsWithChildren } from "react"
 import { Input } from "~/components/common/input"
 import { Pagination, type PaginationProps } from "~/components/web/pagination"
@@ -28,9 +29,11 @@ const ToolListing = ({ children, pagination, options, search }: ToolListingProps
 }
 
 const ToolListingSkeleton = () => {
+  const t = useTranslations("common")
+
   return (
     <div className="space-y-5">
-      <Input size="lg" placeholder="Loading..." disabled />
+      <Input size="lg" placeholder={t("loading")} disabled />
       <ToolListSkeleton />
     </div>
   )

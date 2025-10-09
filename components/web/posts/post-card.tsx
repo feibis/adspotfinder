@@ -1,3 +1,5 @@
+"use client"
+
 import { formatDate, getReadTime } from "@primoui/utils"
 import type { Post } from "content-collections"
 import Image from "next/image"
@@ -12,7 +14,7 @@ type PostCardProps = ComponentProps<typeof Card> & {
 }
 
 export const PostCard = ({ className, post, ...props }: PostCardProps) => {
-  const t = useTranslations("components.posts")
+  const t = useTranslations()
 
   return (
     <Card className="overflow-clip" asChild {...props}>
@@ -39,7 +41,7 @@ export const PostCard = ({ className, post, ...props }: PostCardProps) => {
           <CardFooter>
             <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
             <span>&bull;</span>
-            <span>{t("min_read", { count: getReadTime(post.content) })}</span>
+            <span>{t("posts.read_time", { count: getReadTime(post.content) })}</span>
           </CardFooter>
         )}
       </Link>

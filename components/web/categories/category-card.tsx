@@ -1,3 +1,5 @@
+"use client"
+
 import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import { Link } from "~/components/common/link"
@@ -10,7 +12,8 @@ type CategoryCardProps = ComponentProps<typeof Tile> & {
 }
 
 const CategoryCard = ({ category, ...props }: CategoryCardProps) => {
-  const t = useTranslations("counts")
+  const t = useTranslations()
+  const count = category._count.tools
 
   return (
     <Tile asChild {...props}>
@@ -19,9 +22,7 @@ const CategoryCard = ({ category, ...props }: CategoryCardProps) => {
 
         <TileDivider />
 
-        <TileCaption>
-          {`${category._count.tools} ${t("tools", { count: category._count.tools })}`}
-        </TileCaption>
+        <TileCaption>{`${count} ${t("tools.count_tools", { count })}`}</TileCaption>
       </Link>
     </Tile>
   )

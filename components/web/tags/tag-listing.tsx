@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Input } from "~/components/common/input"
 import { Pagination, type PaginationProps } from "~/components/web/pagination"
 import { TagList, type TagListProps, TagListSkeleton } from "~/components/web/tags/tag-list"
@@ -28,9 +29,11 @@ const TagListing = ({ list, pagination, options, search }: TagListingProps) => {
 }
 
 const TagListingSkeleton = () => {
+  const t = useTranslations("common")
+
   return (
     <div className="space-y-10">
-      <Input size="lg" placeholder="Loading..." disabled />
+      <Input size="lg" placeholder={t("loading")} disabled />
       <TagListSkeleton />
     </div>
   )

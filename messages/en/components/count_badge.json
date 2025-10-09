@@ -1,4 +1,0 @@
-{
-  "new_tools": "{count} new {count, plural, =0 {tools} =1 {tool} other {tools}} added",
-  "total_tools": "{count} {count, plural, =0 {tools} =1 {tool} other {tools}} collected"
-}

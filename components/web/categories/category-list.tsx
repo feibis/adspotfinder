@@ -1,3 +1,5 @@
+"use client"
+
 import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import { CategoryCard, CategoryCardSkeleton } from "~/components/web/categories/category-card"
@@ -19,7 +21,7 @@ const CategoryList = ({ categories, className, ...props }: CategoryListProps) =>
         <CategoryCard key={category.slug} category={category} />
       ))}
 
-      {!categories.length && <EmptyList>{t("empty_states.no_categories")}</EmptyList>}
+      {!categories.length && <EmptyList>{t("categories.no_categories")}</EmptyList>}
     </Grid>
   )
 }

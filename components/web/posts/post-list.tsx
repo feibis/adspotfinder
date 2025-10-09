@@ -18,7 +18,7 @@ export const PostList = ({ posts, ...props }: PostListProps) => {
         <PostCard key={post._meta.path} post={post} />
       ))}
 
-      {!posts.length && <EmptyList>{t("empty_states.no_posts")}</EmptyList>}
+      {!posts.length && <EmptyList>{t("posts.no_posts")}</EmptyList>}
     </Grid>
   )
 }

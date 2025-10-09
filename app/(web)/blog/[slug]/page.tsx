@@ -3,6 +3,7 @@ import { allPosts } from "content-collections"
 import type { Metadata } from "next"
 import Image from "next/image"
 import { notFound } from "next/navigation"
+import { getTranslations } from "next-intl/server"
 import { cache, Suspense } from "react"
 import { H6 } from "~/components/common/heading"
 import { Note } from "~/components/common/note"
@@ -65,6 +66,7 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
 
 export default async function (props: Props) {
   const { post, breadcrumbs, structuredData } = await getData(props)
+  const t = await getTranslations()
 
   return (
     <>
@@ -83,7 +85,7 @@ export default async function (props: Props) {
             )}
 
             <span className="px-2">&bull;</span>
-            <span>{getReadTime(post.content)} min read</span>
+            <span>{t("posts.read_time", { count: getReadTime(post.content) })}</span>
           </Note>
         </Stack>
       </Intro>

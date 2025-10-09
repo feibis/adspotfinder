@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl"
 import { useAction } from "next-safe-action/hooks"
+import plur from "plur"
 import { type ComponentProps, useEffect } from "react"
 import {
   Select,
@@ -31,7 +32,7 @@ export const ToolFilters = ({ ...props }: ComponentProps<typeof Select>) => {
           {...props}
         >
           <SelectTrigger size="lg" className="w-auto min-w-40 max-sm:flex-1">
-            <SelectValue placeholder={t(`all.${type}` as keyof typeof t)} />
+            <SelectValue placeholder={t(`all_${plur(type)}`)} />
           </SelectTrigger>
 
           <SelectContent align="end">

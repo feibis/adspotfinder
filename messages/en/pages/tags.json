@@ -1,9 +1,0 @@
-{
-  "meta": {
-    "title": "Browse Tags"
-  },
-  "breadcrumb": "Tags",
-  "search": {
-    "tag_placeholder": "Search in \"{name}\"..."
-  }
-}

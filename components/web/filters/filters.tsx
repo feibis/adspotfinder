@@ -14,7 +14,7 @@ export type FiltersProps = ComponentProps<typeof Stack> & {
 }
 
 export const Filters = ({ children, className, placeholder, ...props }: FiltersProps) => {
-  const t = useTranslations("tools.filters")
+  const t = useTranslations("common")
   const { filters, isLoading, isDefault, updateFilters } = useFilters()
 
   return (
@@ -39,7 +39,6 @@ export const Filters = ({ children, className, placeholder, ...props }: FiltersP
             className="absolute right-2 inset-y-2"
             onClick={() => updateFilters(null)}
             prefix={<XIcon />}
-            aria-label={t("reset")}
           >
             <span className="max-md:sr-only">{t("reset")}</span>
           </Button>

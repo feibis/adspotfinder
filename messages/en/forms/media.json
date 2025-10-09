@@ -1,5 +1,0 @@
-{
-  "success": "Media updated successfully. Please save to apply your changes.",
-  "error": "We couldn't process this media file. Please try again.",
-  "fetch_error": "We couldn't fetch media from that URL. Double-check the address and try again."
-}
