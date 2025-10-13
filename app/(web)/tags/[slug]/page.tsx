@@ -16,6 +16,10 @@ export const dynamicParams = false
 
 type Props = PageProps<"/tags/[slug]">
 
+// I18n page namespace
+const namespace = "pages.tag"
+
+// Get page data
 const getData = cache(async ({ params }: Props) => {
   const { slug } = await params
   const tag = await findTag({ where: { slug } })
@@ -24,14 +28,14 @@ const getData = cache(async ({ params }: Props) => {
     notFound()
   }
 
-  const t = await getTranslations("pages.tags")
+  const t = await getTranslations()
   const url = `/tags/${tag.slug}`
-  const title = t("meta.title", { name: tag.name })
-  const description = t("meta.description", { name: tag.name, siteName: siteConfig.name })
+  const title = t(`${namespace}.title`, { name: tag.name })
+  const description = t(`${namespace}.description`, { name: tag.name, siteName: siteConfig.name })
 
   const data = getPageData(url, title, description, {
     breadcrumbs: [
-      { url: "/tags", title: t("breadcrumb") },
+      { url: "/tags", title: t("navigation.tags") },
       { url, title: tag.name },
     ],
     structuredData: [generateCollectionPage(url, title, description)],
@@ -52,7 +56,8 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
 
 export default async function (props: Props) {
   const { tag, metadata, breadcrumbs, structuredData } = await getData(props)
-  const t = await getTranslations("pages.tags")
+  const t = await getTranslations()
+  const placeholder = t(`${namespace}.search.placeholder`, { name: tag.name.toLowerCase() })
 
   return (
     <>
@@ -66,7 +71,7 @@ export default async function (props: Props) {
         <ToolQuery
           searchParams={props.searchParams}
           where={{ tags: { some: { slug: tag.slug } } }}
-          search={{ placeholder: t("search.placeholder", { name: tag.name }) }}
+          search={{ placeholder }}
           ad="Tools"
         />
       </Suspense>

@@ -68,13 +68,13 @@ const Header = ({ className, ...props }: ComponentProps<"div">) => {
                 suffix={<ChevronDownIcon className="group-data-[state=open]:-rotate-180" />}
                 asChild
               >
-                <DropdownMenuTrigger>{t("common.browse")}</DropdownMenuTrigger>
+                <DropdownMenuTrigger>{t("navigation.browse")}</DropdownMenuTrigger>
               </NavLink>
 
               <DropdownMenuContent align="start">
                 <DropdownMenuItem asChild>
                   <NavLink href="/?sort=publishedAt.desc" prefix={<CalendarDaysIcon />}>
-                    {t("navigation.browse_tools")}
+                    {t("navigation.latest_tools")}
                   </NavLink>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>

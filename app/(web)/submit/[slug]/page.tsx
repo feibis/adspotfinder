@@ -14,6 +14,10 @@ import { db } from "~/services/db"
 
 type Props = PageProps<"/submit/[slug]">
 
+// I18n page namespace
+const namespace = "pages.submit"
+
+// Get page data
 const getData = cache(async ({ params }: Props) => {
   const { slug } = await params
 
@@ -26,11 +30,11 @@ const getData = cache(async ({ params }: Props) => {
     notFound()
   }
 
-  const namespace = isToolPublished(tool) ? "feature" : "expedite"
-  const t = await getTranslations(`pages.submit.${namespace}`)
+  const prefix = isToolPublished(tool) ? "feature" : "expedite"
+  const t = await getTranslations()
   const url = `/submit/${tool.slug}`
-  const title = t("meta.title")
-  const description = t("meta.description", { siteName: siteConfig.name })
+  const title = t(`${namespace}.${prefix}.title`)
+  const description = t(`${namespace}.${prefix}.description`, { siteName: siteConfig.name })
 
   const data = getPageData(url, title, description, {
     breadcrumbs: [{ url, title }],

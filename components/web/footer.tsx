@@ -52,19 +52,19 @@ export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) 
               <ThemeSwitcher />
             </Tooltip>
 
-            <Tooltip tooltip={t("footer.rss_feed")}>
+            <Tooltip tooltip={t("navigation.rss_feed")}>
               <ExternalLink href={linksConfig.feed} className={navLinkVariants()}>
                 <RssIcon />
               </ExternalLink>
             </Tooltip>
 
-            <Tooltip tooltip={t("footer.contact_us")}>
+            <Tooltip tooltip={t("navigation.contact_us")}>
               <ExternalLink href={`mailto:${siteConfig.email}`} className={navLinkVariants()}>
                 <AtSignIcon />
               </ExternalLink>
             </Tooltip>
 
-            <Tooltip tooltip={t("footer.source_code")}>
+            <Tooltip tooltip={t("navigation.source_code")}>
               <ExternalLink href={linksConfig.github} className={navLinkVariants()}>
                 <BrandGitHubIcon />
               </ExternalLink>
@@ -73,16 +73,16 @@ export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) 
         </Stack>
 
         <Stack direction="column" className="text-sm md:col-span-3 md:col-start-8">
-          <H6 as="strong">{t("common.browse")}:</H6>
+          <H6 as="strong">{t("navigation.browse")}:</H6>
 
-          <NavLink href="/">{t("navigation.browse_tools")}</NavLink>
+          <NavLink href="/">{t("navigation.tools")}</NavLink>
           <NavLink href="/categories">{t("navigation.categories")}</NavLink>
           <NavLink href="/tags">{t("navigation.tags")}</NavLink>
           <NavLink href="/blog">{t("navigation.blog")}</NavLink>
         </Stack>
 
         <Stack direction="column" className="text-sm md:col-span-3">
-          <H6 as="strong">{t("common.quick_links")}:</H6>
+          <H6 as="strong">{t("navigation.quick_links")}:</H6>
 
           <NavLink href="/submit">{t("navigation.submit")}</NavLink>
           <NavLink href="/about">{t("navigation.about")}</NavLink>

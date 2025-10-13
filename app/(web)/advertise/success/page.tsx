@@ -17,6 +17,10 @@ import { stripe } from "~/services/stripe"
 
 type Props = PageProps<"/advertise/success">
 
+// I18n page namespace
+const namespace = "pages.advertise.success"
+
+// Get page data
 const getData = cache(async ({ searchParams }: Props) => {
   const searchParamsLoader = createLoader({ sessionId: parseAsString.withDefault("") })
   const { sessionId } = await searchParamsLoader(searchParams)
@@ -26,10 +30,10 @@ const getData = cache(async ({ searchParams }: Props) => {
     notFound()
   }
 
-  const t = await getTranslations("pages.advertise.success")
+  const t = await getTranslations()
   const url = "/advertise/success"
-  const title = t("meta.title")
-  const description = t("meta.description", { siteName: siteConfig.name })
+  const title = t(`${namespace}.title`)
+  const description = t(`${namespace}.description`, { siteName: siteConfig.name })
 
   const data = getPageData(url, title, description, {
     breadcrumbs: [{ url, title }],

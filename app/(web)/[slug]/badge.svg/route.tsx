@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import type { NextRequest } from "next/server"
+import { getTranslations } from "next-intl/server"
 import { createLoader, parseAsInteger, parseAsStringEnum } from "nuqs/server"
 import satori from "satori"
 import { ToolStatus } from "~/.generated/prisma/client"
@@ -30,7 +31,9 @@ type SvgBadgeProps = {
   tool: ToolOne
 }
 
-const SvgBadge = ({ theme, tool }: SvgBadgeProps) => {
+const SvgBadge = async ({ theme, tool }: SvgBadgeProps) => {
+  const t = await getTranslations()
+  const prefix = isToolPublished(tool) ? "featured" : "coming_soon"
   const colors = THEMES[theme]
 
   return (
@@ -77,7 +80,7 @@ const SvgBadge = ({ theme, tool }: SvgBadgeProps) => {
             opacity: 0.75,
           }}
         >
-          {isToolPublished(tool) ? "Featured on" : "Coming soon on"}
+          {t(`common.${prefix}`)}
         </span>
 
         <span

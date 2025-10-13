@@ -10,14 +10,18 @@ import { siteConfig } from "~/config/site"
 import { getPageData, getPageMetadata } from "~/lib/pages"
 import { generateCollectionPage } from "~/lib/structured-data"
 
+// I18n page namespace
+const namespace = "pages.tags"
+
+// Get page data
 const getData = cache(async () => {
-  const t = await getTranslations("pages.tags")
+  const t = await getTranslations()
   const url = "/tags"
-  const title = t("meta.title")
-  const description = t("meta.description", { siteName: siteConfig.name })
+  const title = t(`${namespace}.title`)
+  const description = t(`${namespace}.description`, { siteName: siteConfig.name })
 
   return getPageData(url, title, description, {
-    breadcrumbs: [{ url, title }],
+    breadcrumbs: [{ url, title: t("navigation.tags") }],
     structuredData: [generateCollectionPage(url, title, description)],
   })
 })

@@ -5,11 +5,15 @@ import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { siteConfig } from "~/config/site"
 import { getPageData, getPageMetadata } from "~/lib/pages"
 
+// I18n page namespace
+const namespace = "pages.dashboard"
+
+// Get page data
 const getData = cache(async () => {
-  const t = await getTranslations("pages.dashboard")
+  const t = await getTranslations()
   const url = "/dashboard"
-  const title = t("meta.title")
-  const description = t("meta.description", { siteName: siteConfig.name })
+  const title = t(`${namespace}.meta.title`)
+  const description = t(`${namespace}.meta.description`, { siteName: siteConfig.name })
 
   return getPageData(url, title, description, {
     breadcrumbs: [{ url, title }],

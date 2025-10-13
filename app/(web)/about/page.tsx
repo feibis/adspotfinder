@@ -11,11 +11,15 @@ import { siteConfig } from "~/config/site"
 import { getPageData, getPageMetadata } from "~/lib/pages"
 import { generateAboutPage } from "~/lib/structured-data"
 
+// I18n page namespace
+const namespace = "pages.about"
+
+// Get page data
 const getData = cache(async () => {
-  const t = await getTranslations("pages.about")
+  const t = await getTranslations()
   const url = "/about"
-  const title = t("meta.title")
-  const description = t("meta.description", { siteName: siteConfig.name })
+  const title = t(`${namespace}.title`)
+  const description = t(`${namespace}.description`, { siteName: siteConfig.name })
 
   return getPageData(url, title, description, {
     breadcrumbs: [{ url, title }],

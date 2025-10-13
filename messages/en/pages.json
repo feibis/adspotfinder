@@ -1,16 +1,12 @@
 {
   "about": {
-    "meta": {
-      "title": "About Us",
-      "description": "{siteName} is a community driven list of tools and resources for developers."
-    }
+    "title": "About Us",
+    "description": "{siteName} is a community driven list of tools and resources for developers."
   },
 
   "advertise": {
-    "meta": {
-      "title": "Advertise",
-      "description": "Promote your business or software on {siteName} and reach a wide audience of software enthusiasts."
-    },
+    "title": "Advertise",
+    "description": "Promote your business or software on {siteName} and reach a wide audience of software enthusiasts.",
     "cta": {
       "title": "Need a custom partnership?",
       "description": "Tell us more about your company and we will get back to you as soon as possible.",
@@ -24,79 +20,73 @@
       }
     },
     "success": {
-      "meta": {
-        "title": "Thank you for your payment!",
-        "description": "Please complete your advertisement setup by providing your company details."
-      }
+      "title": "Thank you for your payment!",
+      "description": "Please complete your advertisement setup by providing your company details."
     }
   },
 
   "auth": {
-    "meta": {
+    "login": {
       "title": "Sign In",
       "description": "Get access to the dashboard and manage your submitted tools."
     },
+
     "verify": {
-      "meta": {
-        "title": "Check your inbox",
-        "description": "Check your inbox to sign in to {siteName}."
-      },
-      "description": "We've sent you a magic link to {email}. Please click the link to confirm your address.",
+      "title": "Check your inbox",
+      "description": "Check your inbox to sign in to {siteName}.",
+      "instructions": "We've sent you a magic link to {email}. Please click the link to confirm your address and sign in.",
       "no_email": "No email in your inbox? Check your spam folder or <link>try a different email address</link>."
     }
   },
 
   "blog": {
-    "meta": {
-      "title": "Blog",
-      "description": "A collection of useful articles for developers and software enthusiasts. Learn about the latest trends and technologies in the community."
-    }
+    "title": "Blog",
+    "description": "A collection of useful articles for developers and software enthusiasts. Learn about the latest trends and technologies in the community."
   },
 
   "categories": {
-    "meta": {
-      "title": "Browse Categories",
-      "description": "Browse all tool categories to find the perfect software for your needs."
-    },
-    "breadcrumb": "Categories",
+    "title": "Browse Categories",
+    "description": "Browse all tool categories to find the perfect software for your needs."
+  },
+
+  "category": {
+    "title": "{name} Tools",
+    "description": "A curated collection of the best {name}",
     "search": {
-      "category_placeholder": "Search {name}..."
+      "placeholder": "Search {name}..."
     }
   },
 
   "tags": {
-    "meta": {
-      "title": "Browse Tags"
-    },
-    "breadcrumb": "Tags",
+    "title": "Browse Tags",
+    "description": "Browse all available tags to discover tools by specific features and capabilities."
+  },
+
+  "tag": {
+    "title": "Tools tagged with \"{name}\"",
+    "description": "Explore tools and software tagged with {name} to find solutions that match your specific needs.",
     "search": {
-      "tag_placeholder": "Search in \"{name}\"..."
+      "placeholder": "Search in \"{name}\"..."
     }
   },
 
   "error": {
-    "meta": {
-      "title": "Something went wrong!",
-      "description": "Please try again. If the problem persists, <link>contact support</link>."
-    },
+    "title": "Something went wrong!",
+    "description": "Please try again. If the problem persists, <link>contact support</link>.",
     "reload_button": "Reload the page",
     "home_button": "Go back home"
   },
 
   "not_found": {
-    "meta": {
-      "title": "404 Not Found",
-      "description": "We're sorry, but the page {pathname} could not be found. You may have mistyped the address or the page may have moved."
-    },
+    "title": "404 Not Found",
+    "description": "We're sorry, but the page {pathname} could not be found. You may have mistyped the address or the page may have moved.",
     "search_button": "Search for tools",
     "home_button": "Go back home"
   },
 
   "submit": {
-    "meta": {
-      "title": "Add a free listing",
-      "description": "Listing on {siteName} is a great way to get more exposure for your tool. We only list high-quality tools that are useful for directory owners."
-    },
+    "title": "Add a free listing",
+    "description": "Listing on {siteName} is a great way to get more exposure for your tool. We only list high-quality tools that are useful for directory owners.",
     "form": {
       "your_name_label": "Your Name:",
       "your_name_placeholder": "John Doe",
@@ -120,28 +110,20 @@
       }
     },
     "feature": {
-      "meta": {
-        "title": "Boost {name}'s Visibility",
-        "description": "You can upgrade {name}'s listing on {siteName} to benefit from a featured badge, a prominent placement, and a do-follow link."
-      }
+      "title": "Boost {name}'s Visibility",
+      "description": "You can upgrade {name}'s listing on {siteName} to benefit from a featured badge, a prominent placement, and a do-follow link."
     },
     "expedite": {
-      "meta": {
-        "title": "Choose a plan for {name}",
-        "description": "Maximize {name}'s impact from day one. Select a package that suits your goals - from free listing to premium features."
-      }
+      "title": "Choose a plan for {name}",
+      "description": "Maximize {name}'s impact from day one. Select a package that suits your goals - from free listing to premium features."
     },
     "featured": {
-      "meta": {
-        "title": "Thank you for your payment!",
-        "description": "We've received your payment. {name} should be featured on {siteName} shortly."
-      }
+      "title": "Thank you for your payment!",
+      "description": "We've received your payment. {name} should be featured on {siteName} shortly."
     },
     "success": {
-      "meta": {
-        "title": "Thank you for submitting {name}!",
-        "description": "We'll review {name}'s submission and publish it on {siteName} soon."
-      }
+      "title": "Thank you for submitting {name}!",
+      "description": "We'll review {name}'s submission and publish it on {siteName} soon."
     }
   }
 }

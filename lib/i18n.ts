@@ -1,5 +1,4 @@
-import { readFile } from "node:fs/promises"
-import { glob } from "node:fs/promises"
+import { glob, readFile } from "node:fs/promises"
 import { basename, join } from "node:path"
 import { getRequestConfig } from "next-intl/server"
 

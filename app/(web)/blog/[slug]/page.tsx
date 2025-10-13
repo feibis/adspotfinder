@@ -24,6 +24,7 @@ export const dynamicParams = false
 
 type Props = PageProps<"/blog/[slug]">
 
+// Get page data
 const getData = cache(async ({ params }: Props) => {
   const { slug } = await params
   const post = allPosts.find(({ _meta }) => _meta.path === slug)
@@ -32,11 +33,12 @@ const getData = cache(async ({ params }: Props) => {
     notFound()
   }
 
+  const t = await getTranslations()
   const url = `/blog/${post._meta.path}`
 
   const data = getPageData(url, post.title, post.description, {
     breadcrumbs: [
-      { url: "/blog", title: "Blog" },
+      { url: "/blog", title: t("navigation.blog") },
       { url, title: post.title },
     ],
     structuredData: [

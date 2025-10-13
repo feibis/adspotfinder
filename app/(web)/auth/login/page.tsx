@@ -7,11 +7,15 @@ import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { siteConfig } from "~/config/site"
 import { getPageData, getPageMetadata } from "~/lib/pages"
 
+// I18n page namespace
+const namespace = "pages.auth.login"
+
+// Get page data
 const getData = cache(async () => {
-  const t = await getTranslations("pages.auth")
+  const t = await getTranslations()
   const url = "/auth/login"
-  const title = t("meta.title")
-  const description = t("meta.description", { siteName: siteConfig.name })
+  const title = t(`${namespace}.title`)
+  const description = t(`${namespace}.description`, { siteName: siteConfig.name })
 
   return getPageData(url, title, description, {
     breadcrumbs: [{ url, title }],

@@ -13,11 +13,15 @@ import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { siteConfig } from "~/config/site"
 import { getPageData, getPageMetadata } from "~/lib/pages"
 
+// I18n page namespace
+const namespace = "pages.advertise"
+
+// Get page data
 const getData = cache(async () => {
-  const t = await getTranslations("pages.advertise")
+  const t = await getTranslations()
   const url = "/advertise"
-  const title = t("meta.title")
-  const description = t("meta.description", { siteName: siteConfig.name })
+  const title = t(`${namespace}.title`)
+  const description = t(`${namespace}.description`, { siteName: siteConfig.name })
 
   return getPageData(url, title, description, {
     breadcrumbs: [{ url, title }],
@@ -31,13 +35,13 @@ export const generateMetadata = async (): Promise<Metadata> => {
 
 export default async function ({ searchParams }: PageProps<"/advertise">) {
   const { metadata, structuredData } = await getData()
-  const t = await getTranslations("pages.advertise")
+  const t = await getTranslations()
 
   const testimonial = {
-    quote: t("testimonial.quote"),
+    quote: t(`${namespace}.testimonial.quote`),
     author: {
-      name: t("testimonial.author.name"),
-      title: t("testimonial.author.title"),
+      name: t(`${namespace}.testimonial.author.name`),
+      title: t(`${namespace}.testimonial.author.title`),
     },
   }
 
@@ -65,13 +69,17 @@ export default async function ({ searchParams }: PageProps<"/advertise">) {
 
       <Intro alignment="center">
         <IntroTitle size="h2" as="h3">
-          {t("cta.title")}
+          {t(`${namespace}.cta.title`)}
         </IntroTitle>
 
-        <IntroDescription className="max-w-lg">{t("cta.description")}</IntroDescription>
+        <IntroDescription className="max-w-lg">
+          {t(`${namespace}.cta.description`)}
+        </IntroDescription>
 
         <Button className="mt-4 min-w-40" asChild>
-          <ExternalLink href={`mailto:${siteConfig.email}`}>{t("cta.button")}</ExternalLink>
+          <ExternalLink href={`mailto:${siteConfig.email}`}>
+            {t(`${namespace}.cta.button`)}
+          </ExternalLink>
         </Button>
       </Intro>
 

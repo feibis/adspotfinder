@@ -2,6 +2,7 @@ import { removeQueryParams } from "@primoui/utils"
 import { ArrowUpRightIcon, HashIcon } from "lucide-react"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
+import { getTranslations } from "next-intl/server"
 import { cache, Suspense } from "react"
 import { Badge } from "~/components/common/badge"
 import { Button } from "~/components/common/button"
@@ -40,14 +41,15 @@ const getData = cache(async ({ params }: Props) => {
     notFound()
   }
 
+  const t = await getTranslations()
   const url = `/${tool.slug}`
   const title = `${tool.name}: ${tool.tagline}`
   const description = tool.description ?? ""
 
   const data = getPageData(url, title, description, {
     breadcrumbs: [
-      { title: "Tools", url: "/" },
-      { title: tool.name, url },
+      { url: "/", title: t("navigation.tools") },
+      { url, title: tool.name },
     ],
     structuredData: [generateCollectionPage(url, title, description)],
   })
@@ -74,6 +76,7 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
 
 export default async function (props: Props) {
   const { tool, metadata, structuredData } = await getData(props)
+  const t = await getTranslations()
 
   return (
     <>
@@ -142,8 +145,8 @@ export default async function (props: Props) {
 
           {/* Categories */}
           {!!tool.categories.length && (
-            <Stack size="lg" direction="column" className="w-full max-md:order-5">
-              <H5 as="strong">Categories:</H5>
+            <Stack direction="column" className="w-full max-md:order-5">
+              <H5 as="strong">{t("navigation.categories")}:</H5>
 
               <Stack className="gap-2">
                 {tool.categories?.map(({ slug, name }) => (
@@ -158,7 +161,7 @@ export default async function (props: Props) {
           {/* Tags */}
           {!!tool.tags.length && (
             <Stack direction="column" className="w-full max-md:order-6">
-              <H5 as="h4">Tags:</H5>
+              <H5 as="h4">{t("navigation.tags")}:</H5>
 
               <Stack>
                 {tool.tags.map(tag => (

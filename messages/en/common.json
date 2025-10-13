@@ -1,10 +1,14 @@
 {
   "or": "or",
-  "browse": "Browse",
-  "quick_links": "Quick Links",
   "built_with": "Built with",
   "verified": "Verified",
   "reset": "Reset",
+  "send": "Send",
+  "cancel": "Cancel",
   "loading": "Loading...",
-  "order_by": "Order by"
+  "order_by": "Order by",
+  "copy": "Copy",
+  "copied": "Copied!",
+  "featured": "Featured on",
+  "coming_soon": "Coming soon on"
 }

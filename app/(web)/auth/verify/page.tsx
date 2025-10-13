@@ -7,15 +7,15 @@ import { NavLink } from "~/components/web/ui/nav-link"
 import { siteConfig } from "~/config/site"
 import { getPageData, getPageMetadata } from "~/lib/pages"
 
-const searchParamsLoader = createLoader({
-  email: parseAsString.withDefault(""),
-})
+// I18n page namespace
+const namespace = "pages.auth.verify"
 
+// Get page data
 const getData = cache(async () => {
-  const t = await getTranslations("pages.auth.verify")
+  const t = await getTranslations()
   const url = "/auth/verify"
-  const title = t("meta.title")
-  const description = t("meta.description", { siteName: siteConfig.name })
+  const title = t(`${namespace}.title`)
+  const description = t(`${namespace}.description`, { siteName: siteConfig.name })
 
   return getPageData(url, title, description, {
     breadcrumbs: [{ url, title }],
@@ -28,19 +28,23 @@ export const generateMetadata = async (): Promise<Metadata> => {
 }
 
 export default async function ({ searchParams }: PageProps<"/auth/verify">) {
+  const searchParamsLoader = createLoader({ email: parseAsString.withDefault("") })
   const { email } = await searchParamsLoader(searchParams)
   const { metadata } = await getData()
-  const t = await getTranslations("pages.auth.verify")
+  const t = await getTranslations()
 
   return (
     <>
       <Intro>
         <IntroTitle size="h3">{metadata.title}</IntroTitle>
-        <IntroDescription className="text-sm!">{t("description", { email })}</IntroDescription>
+
+        <IntroDescription className="text-sm!">
+          {t(`${namespace}.instructions`, { email })}
+        </IntroDescription>
       </Intro>
 
       <p className="text-xs text-muted-foreground/75">
-        {t.rich("no_email", {
+        {t.rich(`${namespace}.no_email`, {
           link: chunks => (
             <NavLink href="/auth/login" className="inline font-medium">
               {chunks}

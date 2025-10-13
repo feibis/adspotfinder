@@ -18,6 +18,10 @@ export const dynamicParams = false
 
 type Props = PageProps<"/categories/[slug]">
 
+// I18n page namespace
+const namespace = "pages.category"
+
+// Get page data
 const getData = cache(async ({ params }: Props) => {
   const { slug } = await params
   const category = await findCategory({ where: { slug } })
@@ -26,18 +30,16 @@ const getData = cache(async ({ params }: Props) => {
     notFound()
   }
 
-  const t = await getTranslations("pages.categories")
+  const t = await getTranslations()
   const url = `/categories/${slug}`
-  const title = category.label || t("meta.title", { name: category.name })
-  const description = t("meta.description", {
-    description: lcFirst(category.description ?? noCase(title)),
-    siteName: siteConfig.name,
-  })
+  const title = category.label || t(`${namespace}.title`, { name: category.name })
+  const name = lcFirst(category.description ?? noCase(title))
+  const description = t(`${namespace}.description`, { name, siteName: siteConfig.name })
 
   const data = getPageData(url, title, description, {
     breadcrumbs: [
-      { url: "/categories", title: "Categories" },
-      { url, title },
+      { url: "/categories", title: t("navigation.categories") },
+      { url, title: category.name },
     ],
     structuredData: [generateCollectionPage(url, title, description)],
   })
@@ -57,7 +59,8 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
 
 export default async function (props: Props) {
   const { category, metadata, breadcrumbs, structuredData } = await getData(props)
-  const t = await getTranslations("pages.categories")
+  const t = await getTranslations()
+  const placeholder = t(`${namespace}.search.placeholder`, { name: metadata.title.toLowerCase() })
 
   return (
     <>
@@ -72,7 +75,7 @@ export default async function (props: Props) {
         <ToolQuery
           searchParams={props.searchParams}
           where={{ categories: { some: { slug: category.slug } } }}
-          search={{ placeholder: t("search.placeholder", { name: lcFirst(metadata.title) }) }}
+          search={{ placeholder }}
           ad="Tools"
         />
       </Suspense>

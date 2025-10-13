@@ -26,10 +26,10 @@ export default function ({ error }: ErrorProps) {
 
   return (
     <Intro alignment="center">
-      <IntroTitle>{t("meta.title")}</IntroTitle>
+      <IntroTitle>{t("title")}</IntroTitle>
 
       <IntroDescription className="max-w-xl">
-        {t.rich("meta.description", {
+        {t.rich("description", {
           link: chunks => <Link href={`mailto:${siteConfig.email}`}>{chunks}</Link>,
         })}
       </IntroDescription>

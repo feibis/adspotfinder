@@ -10,6 +10,10 @@ import { siteConfig } from "~/config/site"
 import { getPageData, getPageMetadata } from "~/lib/pages"
 import { generateBlog } from "~/lib/structured-data"
 
+// I18n page namespace
+const namespace = "pages.blog"
+
+// Get page data
 const getData = cache(async () => {
   const posts = allPosts.toSorted((a, b) => b.publishedAt.localeCompare(a.publishedAt))
 
@@ -20,10 +24,10 @@ const getData = cache(async () => {
     publishedAt: post.publishedAt,
   }))
 
-  const t = await getTranslations("pages.blog")
+  const t = await getTranslations()
   const url = "/blog"
-  const title = t("meta.title")
-  const description = t("meta.description", { siteName: siteConfig.name })
+  const title = t(`${namespace}.title`)
+  const description = t(`${namespace}.description`, { siteName: siteConfig.name })
 
   const data = getPageData(url, title, description, {
     breadcrumbs: [{ url, title }],

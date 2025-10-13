@@ -1,32 +1,23 @@
 import { getTranslations } from "next-intl/server"
-import { Suspense } from "react"
+import { cache, Suspense } from "react"
 import { Hero } from "~/app/(web)/(home)/hero"
+import { StructuredData } from "~/components/web/structured-data"
 import { ToolListingSkeleton } from "~/components/web/tools/tool-listing"
 import { ToolQuery } from "~/components/web/tools/tool-query"
 import { siteConfig } from "~/config/site"
-import {
-  createGraph,
-  generateBreadcrumbs,
-  generateItemList,
-  generateWebPage,
-  getOrganization,
-  getWebSite,
-} from "~/lib/structured-data"
+import { getPageData } from "~/lib/pages"
 
-const getStructuredData = async () => {
-  const t = await getTranslations("brand")
+// Get page data
+const getData = cache(async () => {
+  const t = await getTranslations()
+  const title = `${siteConfig.name} - ${t("brand.tagline")}`
+  const description = t("brand.description")
 
-  return createGraph([
-    getOrganization(),
-    getWebSite(),
-    generateBreadcrumbs([]),
-    generateItemList([]),
-    generateWebPage(siteConfig.url, t("name"), t("description")),
-  ])
-}
+  return getPageData(siteConfig.url, title, description)
+})
 
 export default async function (props: PageProps<"/">) {
-  const structuredData = await getStructuredData()
+  const { structuredData } = await getData()
 
   return (
     <>
@@ -36,11 +27,7 @@ export default async function (props: PageProps<"/">) {
         <ToolQuery searchParams={props.searchParams} options={{ enableFilters: true }} ad="Tools" />
       </Suspense>
 
-      {/* JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <StructuredData data={structuredData} />
     </>
   )
 }
