@@ -133,35 +133,6 @@ export const getProductFeatures = (product: Stripe.Product) => {
 }
 
 /**
- * Get the features of a product.
- *
- * @param product - The product to get the features of.
- * @param isPublished - Whether the tool is published.
- * @param queue - The length of the queue.
- * @returns The features of the product.
- */
-export const getProductListingFeatures = (
-  product: Stripe.Product,
-  isPublished: boolean,
-  queue: number,
-) => {
-  const queueTemplate = "{queue}"
-  const queueFootnote = "Calculated based on the number of tools in the queue."
-
-  return getProductFeatures(product)
-    .filter(({ name }) => !isPublished || !name.includes("processing time"))
-    .map(({ name, type }) => {
-      const isQueueFeature = name.includes(queueTemplate)
-
-      return {
-        type,
-        name: isQueueFeature ? name.replace(queueTemplate, calculateQueueDuration(queue)) : name,
-        footnote: isQueueFeature ? queueFootnote : undefined,
-      } satisfies ProductFeature
-    })
-}
-
-/**
  * Fetch prices for a list of products and prepare them for display.
  *
  * @param products - The list of products to prepare.

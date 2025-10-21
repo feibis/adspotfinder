@@ -8,9 +8,9 @@ const products: (Stripe.ProductCreateParams & { price_data?: Stripe.PriceCreateP
     active: true,
     metadata: {},
     marketing_features: [
-      { name: "• {queue} processing time" },
+      { name: "• Few weeks processing time" },
       { name: "✗ No content updates" },
-      { name: "✗ Do-follow link to your website" },
+      { name: "✗ No do-follow backlink" },
       { name: "✗ No featured spot" },
       { name: "✗ No prominent placement" },
     ],
@@ -27,7 +27,7 @@ const products: (Stripe.ProductCreateParams & { price_data?: Stripe.PriceCreateP
     marketing_features: [
       { name: "✓ 24h processing time" },
       { name: "✓ Unlimited content updates" },
-      { name: "✗ Do-follow link to your website" },
+      { name: "✗ Do-follow backlink" },
       { name: "✗ No featured spot" },
       { name: "✗ No prominent placement" },
     ],
@@ -44,7 +44,7 @@ const products: (Stripe.ProductCreateParams & { price_data?: Stripe.PriceCreateP
     marketing_features: [
       { name: "✓ 12h processing time" },
       { name: "✓ Unlimited content updates" },
-      { name: "✓ Do-follow link to your website" },
+      { name: "✓ Do-follow backlink" },
       { name: "✓ Featured spot on homepage" },
       { name: "✓ Prominent placement" },
     ],

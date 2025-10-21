@@ -1,13 +1,12 @@
 import type { ComponentProps, ReactNode } from "react"
 import type Stripe from "stripe"
 import { Product, ProductSkeleton } from "~/components/web/products/product"
-import { getProductFeatures, type ProductFeature, type ProductWithPrices } from "~/lib/products"
+import type { ProductWithPrices } from "~/lib/products"
 import { cx } from "~/lib/utils"
 
 type ProductListProps = ComponentProps<"div"> & {
   products: ProductWithPrices[]
   checkoutData: ComponentProps<typeof Product>["checkoutData"]
-  featuresMapper?: (product: Stripe.Product) => ProductFeature[]
   buttonLabel?: (product: Stripe.Product) => ReactNode
 }
 
@@ -15,7 +14,6 @@ export const ProductList = ({
   className,
   products,
   checkoutData,
-  featuresMapper = getProductFeatures,
   buttonLabel,
   ...props
 }: ProductListProps) => {
@@ -28,12 +26,7 @@ export const ProductList = ({
       {products.map(({ product, prices, coupon, isFeatured }) => (
         <Product
           key={product.id}
-          data={{
-            product,
-            prices,
-            coupon,
-            features: featuresMapper(product),
-          }}
+          data={{ product, prices, coupon }}
           checkoutData={checkoutData}
           isFeatured={isFeatured}
           buttonLabel={buttonLabel?.(product)}

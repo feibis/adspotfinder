@@ -8,10 +8,8 @@ import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { metadataConfig } from "~/config/metadata"
 import { siteConfig } from "~/config/site"
 import { getOpenGraphImageUrl } from "~/lib/opengraph"
-import { getProductListingFeatures } from "~/lib/products"
 import { isToolPublished } from "~/lib/tools"
 import { type ToolOne, toolOnePayload } from "~/server/web/tools/payloads"
-import { countSubmittedTools } from "~/server/web/tools/queries"
 import { db } from "~/services/db"
 
 type Props = PageProps<"/submit/[slug]">
@@ -59,8 +57,6 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
 export default async function (props: Props) {
   const tool = await getTool(props)
   const { title, description } = getMetadata(tool)
-
-  const queueLength = await countSubmittedTools({})
   const isPublished = isToolPublished(tool)
 
   return (
@@ -83,9 +79,6 @@ export default async function (props: Props) {
           }}
           productMapper={({ name, ...product }) => {
             return { ...product, name: name.replace("Listing", "").trim() }
-          }}
-          featuresMapper={({ ...product }) => {
-            return getProductListingFeatures(product, isPublished, queueLength)
           }}
           buttonLabel={({ name, metadata }) => {
             if (name.includes("Free")) {

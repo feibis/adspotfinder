@@ -18,7 +18,7 @@ import { ProductFeatures } from "~/components/web/products/product-features"
 import { ProductIntervalSwitch } from "~/components/web/products/product-interval-switch"
 import { siteConfig } from "~/config/site"
 import { useProductPrices } from "~/hooks/use-product-prices"
-import type { ProductFeature, ProductInterval } from "~/lib/products"
+import { getProductFeatures, type ProductInterval } from "~/lib/products"
 import { cx } from "~/lib/utils"
 import { createStripeCheckout } from "~/server/web/products/actions"
 
@@ -28,7 +28,6 @@ type ProductData = {
   product: Stripe.Product
   prices: Stripe.Price[]
   coupon?: Stripe.Coupon
-  features: ProductFeature[]
 }
 
 type ProductCheckoutData = Omit<
@@ -51,7 +50,8 @@ const Product = ({
   buttonLabel,
   ...props
 }: ProductProps) => {
-  const { product, prices, coupon, features } = data
+  const { product, prices, coupon } = data
+  const features = getProductFeatures(product)
 
   const [interval, setInterval] = useLocalStorage<ProductInterval>({
     key: `${siteConfig.slug}-product-interval`,
