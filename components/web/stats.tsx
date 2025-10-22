@@ -1,9 +1,27 @@
 import type { ComponentProps } from "react"
 import { MDXComponents } from "~/components/web/mdx-components"
 import { Stat } from "~/components/web/ui/stat"
-import { cx } from "~/lib/utils"
+import { cva, cx, type VariantProps } from "~/lib/utils"
 
-export const Stats = ({ className, ...props }: ComponentProps<"div">) => {
+const statsVariants = cva({
+  base: "flex flex-wrap items-start justify-between gap-x-4 gap-y-8",
+
+  variants: {
+    alignment: {
+      start: "items-start justify-between text-start",
+      center: "items-center justify-around text-center",
+      end: "items-end justify-between text-end",
+    },
+  },
+
+  defaultVariants: {
+    alignment: "center",
+  },
+})
+
+type StatsProps = ComponentProps<"div"> & VariantProps<typeof statsVariants>
+
+export const Stats = ({ alignment, className, ...props }: StatsProps) => {
   const stats = [
     { value: 250000, label: "Monthly Pageviews" },
     { value: 2000, label: "Listed Tools" },
@@ -11,14 +29,11 @@ export const Stats = ({ className, ...props }: ComponentProps<"div">) => {
   ]
 
   return (
-    <div
-      className={cx("flex flex-wrap items-center justify-around gap-x-4 gap-y-8", className)}
-      {...props}
-    >
+    <div className={cx(statsVariants({ alignment, className }))} {...props}>
       {stats.map(({ value, label }, index) => (
         <MDXComponents.a
           key={`${index}-${label}`}
-          className="flex flex-col items-center gap-1 basis-48 hover:[&[href]]:opacity-80"
+          className="space-y-1 basis-40 hover:[&[href]]:opacity-80 lg:basis-48"
         >
           <Stat
             value={value}
@@ -29,7 +44,7 @@ export const Stats = ({ className, ...props }: ComponentProps<"div">) => {
             className="text-5xl font-display font-semibold"
           />
 
-          <p className="text-muted-foreground">{label}</p>
+          <p className="text-sm text-muted-foreground lg:text-base">{label}</p>
         </MDXComponents.a>
       ))}
     </div>
