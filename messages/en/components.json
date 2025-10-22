@@ -1,4 +1,8 @@
 {
+  "search": {
+    "placeholder": "Type to search...",
+    "no_results": "No results found."
+  },
   "ads": {
     "ad_label": "Ad",
     "learn_more": "Learn More",
@@ -7,6 +11,10 @@
   },
   "bottom": {
     "popular_categories": "Popular Categories:"
+  },
+  "footer": {
+    "cta_title": "Subscribe to our newsletter",
+    "cta_description": "Join {count}+ other members and get updates straight to your inbox."
   },
   "count_badge": {
     "new_tools": "{count} new {count, plural, =0 {tools} =1 {tool} other {tools}} added",
@@ -36,20 +44,23 @@
     "page_of": "Page {page} of {pageCount}",
     "page_label": "Page:"
   },
-  "plan": {
-    "monthly": "Monthly",
-    "yearly": "Yearly",
-    "current_package": "Current Package",
-    "upgrade_listing": "Upgrade Listing",
-    "choose_plan": "Choose {planName}"
+  "product": {
+    "interval": {
+      "monthly": "Monthly",
+      "yearly": "Yearly"
+    },
+    "price_period": {
+      "month": "month",
+      "one_time": "one-time"
+    }
   },
   "price": {
-    "off": "off",
+    "off": "{discount}% off",
     "left": "left"
   },
-  "ui": {
-    "favicon_alt": "Favicon of {title}",
-    "favicon_alt_default": "Favicon",
-    "hamburger_icon": "Hamburger icon"
+  "stats": {
+    "pageviews": "Monthly Pageviews",
+    "tools": "Listed Tools",
+    "subscribers": "Newsletter Subscribers"
   }
 }

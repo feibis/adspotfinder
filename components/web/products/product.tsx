@@ -2,6 +2,7 @@
 
 import { useLocalStorage } from "@mantine/hooks"
 import { ArrowUpRightIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
 import type { InferSafeActionFnInput } from "next-safe-action"
 import { useAction } from "next-safe-action/hooks"
 import { posthog } from "posthog-js"
@@ -52,6 +53,7 @@ const Product = ({
 }: ProductProps) => {
   const { product, prices, coupon } = data
   const features = getProductFeatures(product)
+  const t = useTranslations("components.product")
 
   const [interval, setInterval] = useLocalStorage<ProductInterval>({
     key: `${siteConfig.slug}-product-interval`,
@@ -83,9 +85,6 @@ const Product = ({
   const priceCalculations = useProductPrices(prices, coupon, interval)
   const { isSubscription, currentPrice, price, fullPrice, discount } = priceCalculations
 
-  const hasPriceVariations = prices.length > 1
-  const priceDisplayInterval = isSubscription ? "month" : "one-time"
-
   return (
     <Card
       hover={false}
@@ -98,11 +97,11 @@ const Product = ({
         <Stack className="w-full justify-between">
           <H4 className="flex-1 truncate">{product.name}</H4>
 
-          {isSubscription && hasPriceVariations && (
+          {isSubscription && prices.length > 1 && (
             <ProductIntervalSwitch
               intervals={[
-                { label: "Monthly", value: "month" },
-                { label: "Yearly", value: "year" },
+                { label: t("interval.monthly"), value: "month" },
+                { label: t("interval.yearly"), value: "year" },
               ]}
               value={interval}
               onChange={setInterval}
@@ -118,7 +117,7 @@ const Product = ({
       <Price
         price={price}
         fullPrice={fullPrice}
-        interval={priceDisplayInterval}
+        interval={t(`price_period.${isSubscription ? "month" : "one_time"}`)}
         discount={discount}
         coupon={coupon}
         format={{ style: "decimal", notation: "compact", maximumFractionDigits: 0 }}
@@ -135,7 +134,7 @@ const Product = ({
         isPending={isPending}
         suffix={!currentPrice?.unit_amount ? <span /> : <ArrowUpRightIcon />}
       >
-        {buttonLabel || `Get ${product.name}`}
+        {buttonLabel}
       </Button>
     </Card>
   )

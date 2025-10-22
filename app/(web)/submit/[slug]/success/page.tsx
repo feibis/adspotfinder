@@ -29,9 +29,10 @@ const getData = cache(async ({ params }: Props) => {
 
   const prefix = tool.isFeatured ? "featured" : "success"
   const t = await getTranslations()
+  const name = tool.name
   const url = `/submit/${tool.slug}/success`
-  const title = t(`${namespace}.${prefix}.title`)
-  const description = t(`${namespace}.${prefix}.description`, { siteName: siteConfig.name })
+  const title = t(`${namespace}.${prefix}.title`, { name })
+  const description = t(`${namespace}.${prefix}.description`, { name, siteName: siteConfig.name })
 
   const data = getPageData(url, title, description, {
     breadcrumbs: [{ url, title }],

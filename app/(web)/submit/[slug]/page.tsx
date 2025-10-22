@@ -32,9 +32,10 @@ const getData = cache(async ({ params }: Props) => {
 
   const prefix = isToolPublished(tool) ? "feature" : "expedite"
   const t = await getTranslations()
+  const name = tool.name
   const url = `/submit/${tool.slug}`
-  const title = t(`${namespace}.${prefix}.title`)
-  const description = t(`${namespace}.${prefix}.description`, { siteName: siteConfig.name })
+  const title = t(`${namespace}.${prefix}.title`, { name })
+  const description = t(`${namespace}.${prefix}.description`, { name, siteName: siteConfig.name })
 
   const data = getPageData(url, title, description, {
     breadcrumbs: [{ url, title }],
@@ -50,6 +51,7 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
 
 export default async function (props: Props) {
   const { tool, url, metadata } = await getData(props)
+  const t = await getTranslations()
   const isPublished = isToolPublished(tool)
 
   return (
@@ -75,14 +77,14 @@ export default async function (props: Props) {
           }}
           buttonLabel={({ name, metadata }) => {
             if (name.includes("Free")) {
-              return "Current Package"
+              return t(`${namespace}.current_package`)
             }
 
             if (isPublished) {
-              return "Upgrade Listing"
+              return t(`${namespace}.upgrade_listing`)
             }
 
-            return metadata.label ?? `Choose ${name}`
+            return metadata.label ?? t(`${namespace}.choose_plan`, { name })
           }}
         />
       </Suspense>

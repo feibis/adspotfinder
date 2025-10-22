@@ -1,9 +1,8 @@
 "use client"
 
-import { NextIntlClientProvider } from "next-intl"
 import posthog from "posthog-js"
 import { PostHogProvider } from "posthog-js/react"
-import type { ComponentProps, PropsWithChildren } from "react"
+import type { PropsWithChildren } from "react"
 import { PosthogPageview } from "~/components/web/posthog-pageview"
 import { env } from "~/env"
 
@@ -17,15 +16,11 @@ if (typeof window !== "undefined") {
   })
 }
 
-type ProvidersProps = PropsWithChildren<ComponentProps<typeof NextIntlClientProvider>>
-
-export const Providers = ({ children, ...props }: ProvidersProps) => {
+export const Providers = ({ children }: PropsWithChildren) => {
   return (
-    <NextIntlClientProvider {...props}>
-      <PostHogProvider client={posthog}>
-        <PosthogPageview />
-        {children}
-      </PostHogProvider>
-    </NextIntlClientProvider>
+    <PostHogProvider client={posthog}>
+      <PosthogPageview />
+      {children}
+    </PostHogProvider>
   )
 }

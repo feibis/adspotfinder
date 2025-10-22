@@ -98,7 +98,7 @@ export const Price = ({
             animate="visible"
             exit="hidden"
           >
-            {discount}% {t("off")}
+            {t("off", { discount })}
             {!!maxRedemptions && (
               <span className="text-foreground/65">
                 ({maxRedemptions - timesRedeemed}

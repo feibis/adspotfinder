@@ -1,9 +1,11 @@
 "use server"
 
 import { getDomain } from "@primoui/utils"
+import { getTranslations } from "next-intl/server"
 import z from "zod"
 import { AdType, type Prisma } from "~/.generated/prisma/client"
 import { adsConfig } from "~/config/ads"
+import { siteConfig } from "~/config/site"
 import { getFaviconFetchUrl } from "~/lib/media"
 import { actionClient } from "~/lib/safe-actions"
 import { fetchMedia } from "~/server/web/actions/media"
@@ -36,7 +38,18 @@ const findAdWithFallbackSchema = z.object({
 export const findAdWithFallback = actionClient
   .inputSchema(findAdWithFallbackSchema)
   .action(async ({ parsedInput: { type, explicitAd, fallback } }) => {
+    const t = await getTranslations("ads")
     let ads: AdOne[] = []
+
+    const defaultAd = {
+      type: "All",
+      websiteUrl: `${siteConfig.url}/advertise`,
+      name: t("default_ad.name"),
+      description: t("default_ad.description"),
+      buttonLabel: t("default_ad.button_label", { siteName: siteConfig.name }),
+      faviconUrl: "/favicon.png",
+      bannerUrl: null,
+    } satisfies AdOne
 
     if (!adsConfig.enabled) {
       return null
@@ -59,7 +72,7 @@ export const findAdWithFallback = actionClient
 
     if (!ads.length && fallback.includes("default")) {
       // Try fallback to default ad if enabled and no ad found
-      return adsConfig.defaultAd
+      return defaultAd
     }
 
     if (!ads.length) {

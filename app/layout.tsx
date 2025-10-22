@@ -9,7 +9,8 @@ import { siteConfig } from "~/config/site"
 import { SearchProvider } from "~/contexts/search-context"
 import { fontSans } from "~/lib/fonts"
 import "./styles.css"
-import { getTranslations } from "next-intl/server"
+import { NextIntlClientProvider } from "next-intl"
+import { getLocale, getMessages, getTimeZone, getTranslations } from "next-intl/server"
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const t = await getTranslations()
@@ -26,7 +27,11 @@ export const generateMetadata = async (): Promise<Metadata> => {
   }
 }
 
-export default function ({ children }: LayoutProps<"/">) {
+export default async function ({ children }: LayoutProps<"/">) {
+  const locale = await getLocale()
+  const messages = await getMessages()
+  const timeZone = await getTimeZone()
+
   return (
     <html
       lang="en"
@@ -35,17 +40,19 @@ export default function ({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className="min-h-dvh flex flex-col bg-background text-foreground font-sans">
-        <NuqsAdapter>
-          <TooltipProvider delayDuration={250}>
-            <SearchProvider>
-              <ThemeProvider attribute="class" disableTransitionOnChange>
-                {children}
-                <Toaster />
-                <Search />
-              </ThemeProvider>
-            </SearchProvider>
-          </TooltipProvider>
-        </NuqsAdapter>
+        <NextIntlClientProvider locale={locale} messages={messages} timeZone={timeZone}>
+          <NuqsAdapter>
+            <TooltipProvider delayDuration={250}>
+              <SearchProvider>
+                <ThemeProvider attribute="class" disableTransitionOnChange>
+                  {children}
+                  <Toaster />
+                  <Search />
+                </ThemeProvider>
+              </SearchProvider>
+            </TooltipProvider>
+          </NuqsAdapter>
+        </NextIntlClientProvider>
       </body>
     </html>
   )

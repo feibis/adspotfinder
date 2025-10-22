@@ -7,13 +7,13 @@ import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
 import { cx } from "~/lib/utils"
 
 export const Hero = async ({ className, ...props }: ComponentProps<"section">) => {
-  const t = await getTranslations("brand")
+  const t = await getTranslations()
 
   return (
     <section className={cx("flex flex-col gap-y-6 w-full pb-6", className)} {...props}>
       <Intro alignment="center">
-        <IntroTitle className="max-w-[16em] lg:text-5xl/[1.1]!">{t("tagline")}</IntroTitle>
-        <IntroDescription className="lg:mt-2">{t("description")}</IntroDescription>
+        <IntroTitle className="max-w-[16em] lg:text-5xl/[1.1]!">{t("brand.tagline")}</IntroTitle>
+        <IntroDescription className="lg:mt-2">{t("brand.description")}</IntroDescription>
 
         <Suspense fallback={<CountBadgeSkeleton />}>
           <CountBadge />

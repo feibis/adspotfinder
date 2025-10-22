@@ -4,6 +4,7 @@ import { type HotkeyItem, useDebouncedState, useHotkeys } from "@mantine/hooks"
 import { getDomain } from "@primoui/utils"
 import { LoaderIcon, MoonIcon, SunIcon } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import type { InferSafeActionFnResult } from "next-safe-action"
 import { useAction } from "next-safe-action/hooks"
 import { useTheme } from "next-themes"
@@ -68,6 +69,7 @@ type CommandSection = {
 }
 
 export const Search = () => {
+  const t = useTranslations()
   const { data: session } = useSession()
   const router = useRouter()
   const pathname = usePathname()
@@ -101,20 +103,20 @@ export const Search = () => {
   // Admin command sections & hotkeys
   if (isAdmin) {
     commandSections.push({
-      name: "Create",
+      name: t("navigation.create"),
       items: [
         {
-          label: "New Tool",
+          label: t("navigation.new_tool"),
           shortcut: { meta: true, children: "1" },
           onSelect: () => navigateTo("/admin/tools/new"),
         },
         {
-          label: "New Category",
+          label: t("navigation.new_category"),
           shortcut: { meta: true, children: "2" },
           onSelect: () => navigateTo("/admin/categories/new"),
         },
         {
-          label: "New Tag",
+          label: t("navigation.new_tag"),
           shortcut: { meta: true, children: "3" },
           onSelect: () => navigateTo("/admin/tags/new"),
         },
@@ -124,25 +126,27 @@ export const Search = () => {
     // User command sections & hotkeys
   } else {
     commandSections.push({
-      name: "Quick Links",
+      name: t("navigation.quick_links"),
       items: [
-        { label: "Tools", onSelect: () => navigateTo("/") },
-        { label: "Categories", onSelect: () => navigateTo("/categories") },
-        { label: "Tags", onSelect: () => navigateTo("/tags") },
+        { label: t("navigation.tools"), onSelect: () => navigateTo("/") },
+        { label: t("navigation.categories"), onSelect: () => navigateTo("/categories") },
+        { label: t("navigation.tags"), onSelect: () => navigateTo("/tags") },
       ],
     })
   }
 
   if (!forcedTheme) {
+    const nextTheme = resolvedTheme === "dark" ? "light" : "dark"
+
     commandSections.push({
-      name: "Appearance",
+      name: t("navigation.appearance"),
       items: [
         {
           value: "theme",
-          label: `Switch to ${resolvedTheme === "dark" ? "Light" : "Dark"} Mode`,
-          icon: resolvedTheme === "dark" ? <SunIcon /> : <MoonIcon />,
+          label: t("navigation.switch_theme", { theme: t(`common.themes.${nextTheme}`) }),
+          icon: nextTheme === "dark" ? <MoonIcon /> : <SunIcon />,
           shortcut: { meta: true, shift: true, children: "L" },
-          onSelect: () => setTheme(resolvedTheme === "dark" ? "light" : "dark"),
+          onSelect: () => setTheme(nextTheme),
         },
       ],
     })
@@ -197,14 +201,14 @@ export const Search = () => {
   return (
     <CommandDialog open={search.isOpen} onOpenChange={handleOpenChange} shouldFilter={false}>
       <CommandInput
-        placeholder="Type to search..."
+        placeholder={t("components.search.placeholder")}
         onValueChange={setQuery}
         className="pr-10"
         prefix={isPending && <LoaderIcon className="animate-spin" />}
         suffix={<Kbd meta>K</Kbd>}
       />
 
-      {hasQuery && !isPending && <CommandEmpty>No results found.</CommandEmpty>}
+      {hasQuery && !isPending && <CommandEmpty>{t("components.search.no_results")}</CommandEmpty>}
 
       <CommandList ref={listRef}>
         {!hasQuery &&
@@ -227,7 +231,7 @@ export const Search = () => {
           ))}
 
         <SearchResults
-          name="Tools"
+          name={t("navigation.tools")}
           items={results?.tools}
           onItemSelect={navigateTo}
           getHref={({ slug }) => `${isAdminPath ? "/admin/tools" : ""}/${slug}`}
@@ -241,7 +245,7 @@ export const Search = () => {
         />
 
         <SearchResults
-          name="Categories"
+          name={t("navigation.categories")}
           items={results?.categories}
           onItemSelect={navigateTo}
           getHref={({ slug }) => `${isAdminPath ? "/admin" : ""}/categories/${slug}`}
@@ -249,7 +253,7 @@ export const Search = () => {
         />
 
         <SearchResults
-          name="Tags"
+          name={t("navigation.tags")}
           items={results?.tags}
           onItemSelect={navigateTo}
           getHref={({ slug }) => `${isAdminPath ? "/admin" : ""}/tags/${slug}`}

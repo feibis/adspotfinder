@@ -25,13 +25,13 @@ const statsVariants = cva({
 type StatsProps = ComponentProps<"div"> & VariantProps<typeof statsVariants>
 
 export const Stats = ({ alignment, className, ...props }: StatsProps) => {
-  const t = useTranslations("stats")
+  const t = useTranslations("components.stats")
   const locale = useLocale()
 
   const stats = [
-    { value: 250000, label: t("monthly_pageviews") },
-    { value: 2000, label: t("listed_tools") },
-    { value: 5000, label: t("newsletter_subscribers") },
+    { value: 250000, label: t("pageviews") },
+    { value: 2000, label: t("tools") },
+    { value: 5000, label: t("subscribers") },
   ]
 
   return (

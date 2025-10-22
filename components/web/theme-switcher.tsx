@@ -1,7 +1,7 @@
 "use client"
 
-import { capitalCase } from "change-case"
 import { LaptopIcon, MoonIcon, SunIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useTheme } from "next-themes"
 import { type ComponentProps, useEffect, useState } from "react"
 import {
@@ -15,6 +15,7 @@ import { NavLink } from "~/components/web/ui/nav-link"
 type ThemeSwitcherProps = ComponentProps<typeof DropdownMenuTrigger>
 
 export const ThemeSwitcher = ({ className, ...props }: ThemeSwitcherProps) => {
+  const t = useTranslations("common")
   const { themes, theme, setTheme, resolvedTheme, forcedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
@@ -41,9 +42,9 @@ export const ThemeSwitcher = ({ className, ...props }: ThemeSwitcherProps) => {
       </NavLink>
 
       <DropdownMenuContent align="start">
-        {themes.map(t => (
-          <NavLink key={t} isActive={theme === t} isPadded={false} prefix={getThemeIcon(t)} asChild>
-            <DropdownMenuItem onClick={() => setTheme(t)}>{capitalCase(t)}</DropdownMenuItem>
+        {themes.map(k => (
+          <NavLink key={k} isActive={theme === k} isPadded={false} prefix={getThemeIcon(k)} asChild>
+            <DropdownMenuItem onClick={() => setTheme(k)}>{t(`themes.${k}`)}</DropdownMenuItem>
           </NavLink>
         ))}
       </DropdownMenuContent>

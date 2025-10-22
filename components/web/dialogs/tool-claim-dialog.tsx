@@ -275,7 +275,7 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
                   className="min-w-28"
                   isPending={verifyOtpAction.action.isPending}
                 >
-                  {t("title", { toolName: tool.name })}
+                  {t("claim_button", { toolName: tool.name })}
                 </Button>
               </DialogFooter>
             </form>

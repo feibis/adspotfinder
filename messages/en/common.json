@@ -7,8 +7,11 @@
   "cancel": "Cancel",
   "loading": "Loading...",
   "order_by": "Order by",
-  "copy": "Copy",
-  "copied": "Copied!",
   "featured": "Featured on",
-  "coming_soon": "Coming soon on"
+  "coming_soon": "Coming soon on",
+  "themes": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  }
 }

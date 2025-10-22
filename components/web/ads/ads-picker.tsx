@@ -19,7 +19,7 @@ import { Tooltip } from "~/components/common/tooltip"
 import { AdsCalendar } from "~/components/web/ads/ads-calendar"
 import { Price } from "~/components/web/price"
 import { adsConfig } from "~/config/ads"
-import { useAds } from "~/hooks/use-ads"
+import { type AdSpot, useAds } from "~/hooks/use-ads"
 import type { AdMany } from "~/server/web/ads/payloads"
 import { createStripeCheckout } from "~/server/web/products/actions"
 
@@ -30,7 +30,34 @@ type AdsCalendarProps = ComponentProps<"div"> & {
 
 export const AdsPicker = ({ className, ads, type, ...props }: AdsCalendarProps) => {
   const t = useTranslations("ads")
-  const { price, selections, hasSelections, findAdSpot, clearSelection, updateSelection } = useAds()
+
+  // Ad spots available for purchase
+  const spots = [
+    {
+      type: "Tools",
+      label: t("spots.listing.label"),
+      description: t("spots.listing.description"),
+      price: 25,
+      preview: "https://share.cleanshot.com/7CFqSw0b",
+    },
+    {
+      type: "Banner",
+      label: t("spots.banner.label"),
+      description: t("spots.banner.description"),
+      price: 25,
+      preview: "https://share.cleanshot.com/SvqTztKT",
+    },
+    {
+      type: "ToolPage",
+      label: t("spots.tool_page.label"),
+      description: t("spots.tool_page.description"),
+      price: 15,
+      preview: "https://share.cleanshot.com/dXDbZPFv",
+    },
+  ] satisfies AdSpot[]
+
+  const { price, selections, hasSelections, findAdSpot, clearSelection, updateSelection } =
+    useAds(spots)
 
   const { execute, isPending } = useAction(createStripeCheckout, {
     onSuccess: ({ input }) => {
@@ -81,7 +108,7 @@ export const AdsPicker = ({ className, ads, type, ...props }: AdsCalendarProps) 
   return (
     <div className={cx("flex flex-col min-w-md border divide-y rounded-md", className)} {...props}>
       <div className="flex flex-wrap overflow-clip">
-        {adsConfig.adSpots.map(adSpot => (
+        {spots.map(adSpot => (
           <AdsCalendar
             key={adSpot.type}
             adSpot={adSpot}

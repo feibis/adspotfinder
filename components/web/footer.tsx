@@ -37,11 +37,11 @@ export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) 
         >
           <Stack size="lg" direction="column" className="min-w-0 max-w-64">
             <H5 as="strong" className="px-0.5">
-              {t("footer.subscribe_title")}
+              {t("components.footer.cta_title")}
             </H5>
 
             <Note className="-mt-2 px-0.5 first:mt-0">
-              {t("footer.subscribe_description", { count: formatNumber(5000, "standard") })}
+              {t("components.footer.cta_description", { count: formatNumber(5000, "standard") })}
             </Note>
 
             <CTAForm />

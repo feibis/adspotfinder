@@ -10,6 +10,8 @@
     "benefit_promote": "Promote it on {siteName}",
     "email_label": "Email Address",
     "email_placeholder": "e.g. hello@{domain}",
+    "cancel_button": "Cancel",
+    "claim_button": "Claim {toolName}",
     "send_code_button": "Send Verification Code",
     "verification_intro": "We've sent a verification code to {email}. Enter the code below to complete the verification process.",
     "verification_label": "Verification Code",
@@ -28,7 +30,9 @@
     "width_label": "Width",
     "height_label": "Height",
     "preview_label": "Preview",
-    "code_label": "Embed code"
+    "code_label": "Embed code",
+    "copy_button": "Copy",
+    "copied": "Copied!"
   },
   "report": {
     "title": "Report {toolName}",
@@ -39,6 +43,8 @@
     "type_label": "Type",
     "message_label": "Message",
     "message_placeholder": "Provide additional details about the issue...",
+    "send_button": "Send",
+    "cancel_button": "Cancel",
     "errors": {
       "rate_limited": "You're sending reports too quickly. Please wait a moment and try again.",
       "failed": "We couldn't send your report. Please try again later.",

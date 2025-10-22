@@ -35,12 +35,9 @@ import { siteConfig } from "~/config/site"
 import { cx } from "~/lib/utils"
 import type { ToolOne } from "~/server/web/tools/payloads"
 
-const THEMES = [
-  { value: "light", label: "theme_light" },
-  { value: "dark", label: "theme_dark" },
-] as const
+const THEMES = ["light", "dark"] as const
 
-type Theme = (typeof THEMES)[number]["value"]
+type Theme = (typeof THEMES)[number]
 
 type EmbedForm = {
   theme: Theme
@@ -58,20 +55,16 @@ export const ToolEmbedDialog = ({ tool, isOpen, setIsOpen }: ToolEmbedDialogProp
   const { resolvedTheme } = useTheme()
   const clipboard = useClipboard({ timeout: 2000 })
   const t = useTranslations("dialogs.embed")
+  const tCommon = useTranslations("common")
 
   const form = useForm<EmbedForm>({
     defaultValues: { theme: resolvedTheme as Theme, width: 200, height: 50 },
     mode: "onChange",
   })
 
-  const { watch } = form
-  const theme = watch("theme")
-  const width = watch("width")
-  const height = watch("height")
+  const [theme, width, height] = form.watch(["theme", "width", "height"])
 
-  const toolLink = useMemo(() => {
-    return `${siteConfig.url}/${tool.slug}`
-  }, [tool.slug])
+  const toolLink = useMemo(() => `${siteConfig.url}/${tool.slug}`, [tool.slug])
 
   const badgeUrl = useMemo(() => {
     const params = new URLSearchParams({ theme, width: String(width), height: String(height) })
@@ -119,9 +112,9 @@ export const ToolEmbedDialog = ({ tool, isOpen, setIsOpen }: ToolEmbedDialogProp
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {THEMES.map(opt => (
-                          <SelectItem key={opt.value} value={opt.value}>
-                            {t(opt.label)}
+                        {THEMES.map(theme => (
+                          <SelectItem key={theme} value={theme}>
+                            {tCommon(`themes.${theme}`)}
                           </SelectItem>
                         ))}
                       </SelectContent>

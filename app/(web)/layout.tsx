@@ -1,5 +1,4 @@
 import Script from "next/script"
-import { getLocale, getMessages, getTimeZone } from "next-intl/server"
 import { type PropsWithChildren, Suspense } from "react"
 import { Providers } from "~/app/(web)/providers"
 import { Wrapper } from "~/components/common/wrapper"
@@ -12,13 +11,9 @@ import { Backdrop } from "~/components/web/ui/backdrop"
 import { Container } from "~/components/web/ui/container"
 import { env } from "~/env"
 
-export default async function ({ children }: PropsWithChildren) {
-  const locale = await getLocale()
-  const messages = await getMessages()
-  const timeZone = await getTimeZone()
-
+export default function ({ children }: PropsWithChildren) {
   return (
-    <Providers locale={locale} messages={messages} timeZone={timeZone}>
+    <Providers>
       <div className="flex flex-col min-h-dvh overflow-clip pt-(--header-inner-offset)">
         <Header />
 

@@ -3,8 +3,15 @@
 import { useCallback, useMemo, useState } from "react"
 import type { DateRange } from "react-day-picker"
 import type { AdType } from "~/.generated/prisma/browser"
-import { adsConfig } from "~/config/ads"
 import { calculateAdsPrice } from "~/lib/ads"
+
+export type AdSpot = {
+  label: string
+  type: AdType
+  description: string
+  price: number
+  preview?: string
+}
 
 export type AdsPicker = {
   label: string
@@ -19,9 +26,8 @@ export type AdsSelection = {
   duration?: number
 }
 
-export const useAds = () => {
+export const useAds = (spots: AdSpot[]) => {
   const [selections, setSelections] = useState<AdsSelection[]>([])
-  const spots = adsConfig.adSpots
 
   const findAdSpot = useCallback((type: AdType) => {
     return spots.find(s => s.type === type) ?? spots[0]
