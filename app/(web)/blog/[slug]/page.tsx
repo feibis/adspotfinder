@@ -26,6 +26,8 @@ import {
   getWebSite,
 } from "~/lib/structured-data"
 
+export const dynamicParams = false
+
 const findPostBySlug = cache(async ({ params }: PageProps<"/blog/[slug]">) => {
   const { slug } = await params
   const post = allPosts.find(({ _meta }) => _meta.path === slug)

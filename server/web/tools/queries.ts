@@ -1,6 +1,6 @@
 import { performance } from "node:perf_hooks"
 import { getRandomElement } from "@primoui/utils"
-import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
+import { cacheLife, cacheTag } from "next/cache"
 import { type Prisma, ToolStatus } from "~/.generated/prisma/client"
 import { toolManyPayload, toolOnePayload } from "~/server/web/tools/payloads"
 import type { ToolFilterParams } from "~/server/web/tools/schema"
@@ -10,7 +10,7 @@ export const searchTools = async (search: ToolFilterParams, where?: Prisma.ToolW
   "use cache"
 
   cacheTag("tools")
-  cacheLife("max")
+  cacheLife("infinite")
 
   const { q, category, sort, page, perPage } = search
   const start = performance.now()
@@ -90,7 +90,7 @@ export const findTools = async ({ where, orderBy, ...args }: Prisma.ToolFindMany
   "use cache"
 
   cacheTag("tools")
-  cacheLife("max")
+  cacheLife("infinite")
 
   return db.tool.findMany({
     ...args,
@@ -104,7 +104,7 @@ export const findToolSlugs = async ({ where, orderBy, ...args }: Prisma.ToolFind
   "use cache"
 
   cacheTag("tools")
-  cacheLife("max")
+  cacheLife("infinite")
 
   return db.tool.findMany({
     ...args,
@@ -129,7 +129,7 @@ export const findTool = async ({ where, ...args }: Prisma.ToolFindFirstArgs = {}
   "use cache"
 
   cacheTag("tool", `tool-${where?.slug}`)
-  cacheLife("max")
+  cacheLife("infinite")
 
   return db.tool.findFirst({
     ...args,

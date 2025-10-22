@@ -1,14 +1,18 @@
 import { setQueryParams } from "@primoui/utils"
+import { cacheLife, cacheTag } from "next/cache"
+import { cache } from "react"
 import RSS from "rss"
 import { ToolStatus } from "~/.generated/prisma/client"
 import { siteConfig } from "~/config/site"
 import { db } from "~/services/db"
 
-export const GET = async () => {
-  const { url, domain, name, tagline } = siteConfig
-  const rssSearchParams = { utm_source: domain, utm_medium: "rss" }
+const findTools = cache(async () => {
+  "use cache"
 
-  const tools = await db.tool.findMany({
+  cacheTag("tools")
+  cacheLife("infinite")
+
+  return db.tool.findMany({
     where: { status: ToolStatus.Published },
     orderBy: { publishedAt: "desc" },
     take: 50,
@@ -21,6 +25,12 @@ export const GET = async () => {
       categories: true,
     },
   })
+})
+
+export const GET = async () => {
+  const { url, domain, name, tagline } = siteConfig
+  const rssSearchParams = { utm_source: domain, utm_medium: "rss" }
+  const tools = await findTools()
 
   const feed = new RSS({
     title: name,

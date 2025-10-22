@@ -24,10 +24,11 @@ import { Container } from "~/components/web/ui/container"
 import { Hamburger } from "~/components/web/ui/hamburger"
 import { Logo } from "~/components/web/ui/logo"
 import { NavLink } from "~/components/web/ui/nav-link"
+import { UserMenu } from "~/components/web/user-menu"
 import { useSearch } from "~/contexts/search-context"
 import { cx } from "~/lib/utils"
 
-const Header = ({ children, className, ...props }: ComponentProps<"div">) => {
+const Header = ({ className, ...props }: ComponentProps<"div">) => {
   const pathname = usePathname()
   const search = useSearch()
   const [isNavOpen, setNavOpen] = useState(false)
@@ -103,7 +104,7 @@ const Header = ({ children, className, ...props }: ComponentProps<"div">) => {
               <Link href="/submit">Submit</Link>
             </Button>
 
-            {children}
+            <UserMenu />
           </Stack>
         </div>
 

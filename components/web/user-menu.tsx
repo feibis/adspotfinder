@@ -1,5 +1,6 @@
 import { getInitials } from "@primoui/utils"
 import { LogOutIcon, ShieldHalfIcon, UserIcon } from "lucide-react"
+import { motion } from "motion/react"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/common/avatar"
 import { Box } from "~/components/common/box"
 import { Button } from "~/components/common/button"
@@ -14,71 +15,81 @@ import {
 import { Link } from "~/components/common/link"
 import { NavLink } from "~/components/web/ui/nav-link"
 import { UserLogout } from "~/components/web/user-logout"
-import { getServerSession } from "~/lib/auth"
+import { useSession } from "~/lib/auth-client"
 
-const UserMenu = async () => {
-  const session = await getServerSession()
+export const UserMenu = () => {
+  const { data: session, isPending } = useSession()
 
-  if (!session?.user) {
+  if (isPending) {
     return (
-      <Button size="sm" variant="secondary" asChild>
-        <Link href="/auth/login">Sign In</Link>
+      <Button size="sm" variant="secondary" disabled>
+        Sign In
       </Button>
     )
   }
 
+  if (!session?.user) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
+      >
+        <Button size="sm" variant="secondary" asChild>
+          <Link href="/auth/login">Sign In</Link>
+        </Button>
+      </motion.div>
+    )
+  }
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Box hover focus>
-          <Avatar className="size-6 duration-100">
-            <AvatarImage src={session.user.image ?? undefined} />
-            <AvatarFallback>{getInitials(session.user.name)}</AvatarFallback>
-          </Avatar>
-        </Box>
-      </DropdownMenuTrigger>
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+    >
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Box hover focus>
+            <Avatar className="size-6 duration-100">
+              <AvatarImage src={session.user.image ?? undefined} />
+              <AvatarFallback>{getInitials(session.user.name)}</AvatarFallback>
+            </Avatar>
+          </Box>
+        </DropdownMenuTrigger>
 
-      <DropdownMenuContent side="bottom" align="end">
-        <DropdownMenuLabel className="max-w-48 truncate font-normal leading-relaxed">
-          {session.user.name}
+        <DropdownMenuContent side="bottom" align="end">
+          <DropdownMenuLabel className="max-w-48 truncate font-normal leading-relaxed">
+            {session.user.name}
 
-          {session.user.name !== session.user.email && (
-            <div className="text-muted-foreground truncate">{session.user.email}</div>
+            {session.user.name !== session.user.email && (
+              <div className="text-muted-foreground truncate">{session.user.email}</div>
+            )}
+          </DropdownMenuLabel>
+
+          <DropdownMenuSeparator />
+
+          {session.user.role === "admin" && (
+            <DropdownMenuItem asChild>
+              <NavLink href="/admin" prefix={<ShieldHalfIcon />}>
+                Admin Panel
+              </NavLink>
+            </DropdownMenuItem>
           )}
-        </DropdownMenuLabel>
 
-        <DropdownMenuSeparator />
-
-        {session.user.role === "admin" && (
           <DropdownMenuItem asChild>
-            <NavLink href="/admin" prefix={<ShieldHalfIcon />}>
-              Admin Panel
+            <NavLink href="/dashboard" prefix={<UserIcon />}>
+              Dashboard
             </NavLink>
           </DropdownMenuItem>
-        )}
 
-        <DropdownMenuItem asChild>
-          <NavLink href="/dashboard" prefix={<UserIcon />}>
-            Dashboard
-          </NavLink>
-        </DropdownMenuItem>
-
-        <DropdownMenuItem asChild>
-          <NavLink prefix={<LogOutIcon />} asChild>
-            <UserLogout>Logout</UserLogout>
-          </NavLink>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          <DropdownMenuItem asChild>
+            <NavLink prefix={<LogOutIcon />} asChild>
+              <UserLogout>Logout</UserLogout>
+            </NavLink>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </motion.div>
   )
 }
-
-const UserMenuSkeleton = () => {
-  return (
-    <Button size="sm" variant="secondary" disabled>
-      Sign In
-    </Button>
-  )
-}
-
-export { UserMenu, UserMenuSkeleton }

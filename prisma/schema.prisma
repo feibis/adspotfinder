@@ -145,6 +145,7 @@ model Tool {
   @@index([name])
   @@index([status])
   @@index([ownerId])
+  @@index([createdAt])
 }
 
 model Category {

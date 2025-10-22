@@ -1,5 +1,5 @@
 import { noCase } from "change-case"
-import { revalidatePath, revalidateTag } from "next/cache"
+import { revalidatePath, updateTag } from "next/cache"
 import { createSafeActionClient } from "next-safe-action"
 import { Prisma } from "~/.generated/prisma/client"
 import { getServerSession } from "~/lib/auth"
@@ -20,7 +20,7 @@ const revalidate = ({ paths = [], tags = [] }: RevalidateOptions) => {
   }
 
   for (const tag of tags) {
-    revalidateTag(tag)
+    updateTag(tag)
   }
 }
 

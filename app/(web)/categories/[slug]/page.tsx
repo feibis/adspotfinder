@@ -20,6 +20,8 @@ import {
 import type { CategoryOne } from "~/server/web/categories/payloads"
 import { findCategory, findCategorySlugs } from "~/server/web/categories/queries"
 
+export const dynamicParams = false
+
 type Props = PageProps<"/categories/[slug]">
 
 const getCategory = cache(async ({ params }: Props) => {

@@ -1,4 +1,4 @@
-import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
+import { cacheLife, cacheTag } from "next/cache"
 import { type Prisma, ToolStatus } from "~/.generated/prisma/client"
 import { tagManyPayload, tagOnePayload } from "~/server/web/tags/payloads"
 import type { TagsFilterParams } from "~/server/web/tags/schema"
@@ -8,7 +8,7 @@ export const searchTags = async (search: TagsFilterParams, where?: Prisma.TagWhe
   "use cache"
 
   cacheTag("tags")
-  cacheLife("max")
+  cacheLife("infinite")
 
   const { q, letter, sort, page, perPage } = search
   const start = performance.now()
@@ -62,7 +62,7 @@ export const findTagSlugs = async ({ where, orderBy, ...args }: Prisma.TagFindMa
   "use cache"
 
   cacheTag("tags")
-  cacheLife("max")
+  cacheLife("infinite")
 
   return db.tag.findMany({
     ...args,
@@ -76,7 +76,7 @@ export const findTag = async ({ where, ...args }: Prisma.TagFindFirstArgs = {}) 
   "use cache"
 
   cacheTag("tag", `tag-${where?.slug}`)
-  cacheLife("max")
+  cacheLife("infinite")
 
   return db.tag.findFirst({
     ...args,

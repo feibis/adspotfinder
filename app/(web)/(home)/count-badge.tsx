@@ -1,6 +1,6 @@
 import { formatNumber } from "@primoui/utils"
 import { subDays } from "date-fns"
-import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
+import { cacheLife, cacheTag } from "next/cache"
 import plur from "plur"
 import { ToolStatus } from "~/.generated/prisma/client"
 import { Badge } from "~/components/common/badge"

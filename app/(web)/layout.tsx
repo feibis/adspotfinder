@@ -3,25 +3,19 @@ import { type PropsWithChildren, Suspense } from "react"
 import { Providers } from "~/app/(web)/providers"
 import { Wrapper } from "~/components/common/wrapper"
 import { AdBanner } from "~/components/web/ads/ad-banner"
-import { AdBottom } from "~/components/web/ads/ad-bottom"
 import { Bottom } from "~/components/web/bottom"
 import { FeedbackWidget } from "~/components/web/feedback-widget"
 import { Footer } from "~/components/web/footer"
 import { Header } from "~/components/web/header"
 import { Backdrop } from "~/components/web/ui/backdrop"
 import { Container } from "~/components/web/ui/container"
-import { UserMenu, UserMenuSkeleton } from "~/components/web/user-menu"
 import { env } from "~/env"
 
 export default function ({ children }: PropsWithChildren) {
   return (
     <Providers>
       <div className="flex flex-col min-h-dvh overflow-clip pt-(--header-inner-offset)">
-        <Header>
-          <Suspense fallback={<UserMenuSkeleton />}>
-            <UserMenu />
-          </Suspense>
-        </Header>
+        <Header />
 
         <Backdrop isFixed />
 
@@ -33,16 +27,13 @@ export default function ({ children }: PropsWithChildren) {
           <Wrapper className="grow py-fluid-md">
             {children}
 
-            <Suspense>
-              <AdBottom />
-            </Suspense>
-
             <Footer />
           </Wrapper>
         </Container>
       </div>
 
       <Bottom />
+
       <FeedbackWidget />
 
       {/* Plausible */}

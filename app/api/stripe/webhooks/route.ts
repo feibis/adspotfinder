@@ -62,7 +62,7 @@ export const POST = async (req: Request) => {
               })
 
               // Revalidate the cache
-              revalidateTag("tools")
+              revalidateTag("tools", "infinite")
 
               // Notify the submitter of the premium tool
               after(async () => await notifySubmitterOfPremiumTool(tool))
@@ -89,7 +89,7 @@ export const POST = async (req: Request) => {
           })
 
           // Revalidate the cache
-          revalidateTag("tools")
+          revalidateTag("tools", "infinite")
         }
 
         break

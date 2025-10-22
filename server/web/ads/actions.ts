@@ -8,7 +8,7 @@ import { getFaviconFetchUrl } from "~/lib/media"
 import { actionClient } from "~/lib/safe-actions"
 import { fetchMedia } from "~/server/web/actions/media"
 import type { AdOne } from "~/server/web/ads/payloads"
-import { findAd } from "~/server/web/ads/queries"
+import { findActiveAds } from "~/server/web/ads/queries"
 import { adDetailsSchema } from "~/server/web/shared/schema"
 import { stripe } from "~/services/stripe"
 
@@ -36,33 +36,43 @@ const findAdWithFallbackSchema = z.object({
 export const findAdWithFallback = actionClient
   .inputSchema(findAdWithFallbackSchema)
   .action(async ({ parsedInput: { type, explicitAd, fallback } }) => {
-    let ad: AdOne | null = null
+    let ads: AdOne[] = []
 
     if (!adsConfig.enabled) {
       return null
     }
 
-    // If ad is explicitly provided, use it directly
     if (explicitAd !== undefined) {
+      // If ad is explicitly provided, use it directly
       return explicitAd as AdOne | null
     }
 
-    // Try to find ad for specific type
     if (type) {
-      ad = await findAd({ where: { type } })
+      // Try to find ad for specific type
+      ads = await findActiveAds({ where: { type } })
     }
 
-    // Try fallback to "All" type if enabled and specific type not found
-    if (!ad && fallback.includes("all")) {
-      ad = await findAd({ where: { type: "All" } })
+    if (!ads.length && fallback.includes("all")) {
+      // Try fallback to "All" type if enabled and specific type not found
+      ads = await findActiveAds({ where: { type: "All" } })
     }
 
-    // Try fallback to default ad if enabled and no ad found
-    if (!ad && fallback.includes("default")) {
-      ad = adsConfig.defaultAd
+    if (!ads.length && fallback.includes("default")) {
+      // Try fallback to default ad if enabled and no ad found
+      return adsConfig.defaultAd
     }
 
-    return ad
+    if (!ads.length) {
+      // Return null if no ads found
+      return null
+    }
+
+    if (ads.length === 1) {
+      return ads[0]
+    }
+
+    // Return a random ad from the matching ones
+    return ads[Math.floor(Math.random() * ads.length)]
   })
 
 export const createAdFromCheckout = actionClient

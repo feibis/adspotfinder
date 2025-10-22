@@ -30,15 +30,15 @@ export const GET = async (req: Request) => {
       })
 
       // Revalidate the tool
-      revalidateTag(`tool-${updatedTool.slug}`)
+      revalidateTag(`tool-${updatedTool.slug}`, "infinite")
 
       // Notify the submitter of the tool published
       after(async () => await notifySubmitterOfToolPublished(updatedTool))
     }
 
     // Revalidate cache
-    revalidateTag("tools")
-    revalidateTag("schedule")
+    revalidateTag("tools", "infinite")
+    revalidateTag("schedule", "infinite")
   }
 
   // Disconnect from DB

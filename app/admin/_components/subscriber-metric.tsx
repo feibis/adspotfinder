@@ -1,5 +1,5 @@
 import { eachDayOfInterval, format, startOfDay, subDays } from "date-fns"
-import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
+import { cacheLife, cacheTag } from "next/cache"
 import type { ComponentProps } from "react"
 import type { ChartData } from "~/components/admin/chart"
 import { MetricChart } from "~/components/admin/metrics/metric-chart"

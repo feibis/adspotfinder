@@ -19,6 +19,8 @@ import {
 import type { TagOne } from "~/server/web/tags/payloads"
 import { findTag, findTagSlugs } from "~/server/web/tags/queries"
 
+export const dynamicParams = false
+
 type Props = PageProps<"/tags/[slug]">
 
 const getTag = cache(async ({ params }: Props) => {

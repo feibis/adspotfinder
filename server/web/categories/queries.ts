@@ -1,4 +1,4 @@
-import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
+import { cacheLife, cacheTag } from "next/cache"
 import { type Prisma, ToolStatus } from "~/.generated/prisma/client"
 import { categoryManyPayload, categoryOnePayload } from "~/server/web/categories/payloads"
 import { db } from "~/services/db"
@@ -7,7 +7,7 @@ export const findCategories = async ({ where, orderBy, ...args }: Prisma.Categor
   "use cache"
 
   cacheTag("categories")
-  cacheLife("max")
+  cacheLife("infinite")
 
   return db.category.findMany({
     ...args,
@@ -25,7 +25,7 @@ export const findCategorySlugs = async ({
   "use cache"
 
   cacheTag("categories")
-  cacheLife("max")
+  cacheLife("infinite")
 
   return db.category.findMany({
     ...args,
@@ -39,7 +39,7 @@ export const findCategory = async ({ where, ...args }: Prisma.CategoryFindFirstA
   "use cache"
 
   cacheTag("category", `category-${where?.slug}`)
-  cacheLife("max")
+  cacheLife("infinite")
 
   return db.category.findFirst({
     ...args,

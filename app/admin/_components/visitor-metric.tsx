@@ -1,4 +1,4 @@
-import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
+import { cacheLife, cacheTag } from "next/cache"
 import type { ComponentProps } from "react"
 import { MetricChart } from "~/components/admin/metrics/metric-chart"
 import type { Card } from "~/components/common/card"

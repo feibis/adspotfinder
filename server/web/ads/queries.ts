@@ -1,4 +1,4 @@
-import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
+import { cacheLife, cacheTag } from "next/cache"
 import type { Prisma } from "~/.generated/prisma/client"
 import { adManyPayload, adOnePayload } from "~/server/web/ads/payloads"
 import { db } from "~/services/db"
@@ -11,31 +11,21 @@ export const findAds = async ({ where, orderBy, ...args }: Prisma.AdFindManyArgs
 
   return db.ad.findMany({
     ...args,
-    orderBy: orderBy ?? { startsAt: "desc" },
+    orderBy: orderBy ?? { startsAt: "asc" },
     select: adManyPayload,
   })
 }
 
-export const findAd = async ({ where, orderBy, ...args }: Prisma.AdFindFirstArgs) => {
+export const findActiveAds = async ({ where, orderBy, ...args }: Prisma.AdFindManyArgs) => {
   "use cache"
 
-  cacheTag("ad")
-  cacheLife("minutes")
+  cacheTag("ads")
+  cacheLife("hours")
 
-  // Find all matching ads
-  const matchingAds = await db.ad.findMany({
+  return db.ad.findMany({
     ...args,
-    orderBy: orderBy ?? { startsAt: "desc" },
+    orderBy: orderBy ?? { startsAt: "asc" },
     where: { startsAt: { lte: new Date() }, endsAt: { gt: new Date() }, ...where },
     select: adOnePayload,
   })
-
-  // Return null if no ads found
-  if (matchingAds.length === 0) {
-    return null
-  }
-
-  // Return a random ad from the matching ones
-  const randomIndex = Math.floor(Math.random() * matchingAds.length)
-  return matchingAds[randomIndex]
 }
