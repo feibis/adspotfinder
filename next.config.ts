@@ -5,17 +5,17 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   reactStrictMode: false,
 
+  cacheLife: {
+    infinite: {
+      stale: Number.POSITIVE_INFINITY,
+      revalidate: Number.POSITIVE_INFINITY,
+      expire: Number.POSITIVE_INFINITY,
+    },
+  },
+
   experimental: {
     useCache: true,
     turbopackFileSystemCacheForDev: true,
-
-    cacheLife: {
-      infinite: {
-        stale: Number.POSITIVE_INFINITY,
-        revalidate: Number.POSITIVE_INFINITY,
-        expire: Number.POSITIVE_INFINITY,
-      },
-    },
 
     optimizePackageImports: [
       "@content-collections/core",
