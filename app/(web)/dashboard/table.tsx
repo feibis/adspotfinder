@@ -12,7 +12,7 @@ import {
   SparklesIcon,
 } from "lucide-react"
 import { useQueryStates } from "nuqs"
-import { use, useMemo } from "react"
+import { useMemo } from "react"
 import { type Tool, ToolStatus } from "~/.generated/prisma/browser"
 import { Button } from "~/components/common/button"
 import { Link } from "~/components/common/link"
@@ -28,12 +28,7 @@ import type { findTools } from "~/server/admin/tools/queries"
 import { toolsTableParamsSchema } from "~/server/admin/tools/schema"
 import type { DataTableFilterField } from "~/types"
 
-type DashboardTableProps = {
-  toolsPromise: ReturnType<typeof findTools>
-}
-
-export const DashboardTable = ({ toolsPromise }: DashboardTableProps) => {
-  const { tools, pageCount } = use(toolsPromise)
+export const DashboardTable = ({ tools, pageCount }: Awaited<ReturnType<typeof findTools>>) => {
   const [{ perPage, sort }] = useQueryStates(toolsTableParamsSchema)
 
   // Memoize the columns so they don't re-render on every render

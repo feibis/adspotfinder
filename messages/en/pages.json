@@ -39,6 +39,11 @@
     }
   },
 
+  "dashboard": {
+    "title": "Dashboard",
+    "description": "Manage your account and tools on {siteName}."
+  },
+
   "blog": {
     "title": "Blog",
     "description": "A collection of useful articles for developers and software enthusiasts. Learn about the latest trends and technologies in the community."

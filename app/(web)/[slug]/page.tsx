@@ -33,6 +33,7 @@ import { findTool, findToolSlugs } from "~/server/web/tools/queries"
 
 type Props = PageProps<"/[slug]">
 
+// Get page data
 const getData = cache(async ({ params }: Props) => {
   const { slug } = await params
   const tool = await findTool({ where: { slug } })

@@ -12,7 +12,7 @@ const getCounts = async () => {
   "use cache"
 
   cacheTag("tools")
-  cacheLife("max")
+  cacheLife("infinite")
 
   return await db.$transaction([
     db.tool.count({
