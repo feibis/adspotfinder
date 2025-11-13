@@ -1,5 +1,8 @@
+"use client"
+
 import type { Column } from "@tanstack/react-table"
 import { PlusCircleIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { Slot } from "radix-ui"
 import { Badge } from "~/components/common/badge"
 import { Button } from "~/components/common/button"
@@ -28,6 +31,7 @@ export function DataTableFacetedFilter<TData, TValue>({
   title,
   options,
 }: DataTableFacetedFilterProps<TData, TValue>) {
+  const t = useTranslations("components.data_table.faceted_filter")
   const selectedValues = new Set(column?.getFilterValue() as string[])
 
   return (
@@ -43,7 +47,9 @@ export function DataTableFacetedFilter<TData, TValue>({
 
               <div className="hidden space-x-1 lg:flex">
                 {selectedValues.size > 2 ? (
-                  <Badge className="-my-1 rounded">{selectedValues.size} selected</Badge>
+                  <Badge className="-my-1 rounded">
+                    {selectedValues.size} {t("selected")}
+                  </Badge>
                 ) : (
                   options
                     .filter(option => selectedValues.has(option.value))
@@ -63,7 +69,7 @@ export function DataTableFacetedFilter<TData, TValue>({
         <Command>
           <CommandInput placeholder={title} />
           <CommandList>
-            <CommandEmpty>No results found.</CommandEmpty>
+            <CommandEmpty>{t("no_results")}</CommandEmpty>
             <CommandGroup>
               {options.map(option => {
                 const isSelected = selectedValues.has(option.value)
@@ -113,7 +119,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                     onSelect={() => column?.setFilterValue(undefined)}
                     className="justify-center text-center"
                   >
-                    Clear filters
+                    {t("clear_filters")}
                   </CommandItem>
                 </CommandGroup>
               </>

@@ -3,6 +3,7 @@
 import type { Table } from "@tanstack/react-table"
 import { sentenceCase } from "change-case"
 import { Check, ChevronsUpDown, Settings2 } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useRef } from "react"
 import { Button } from "~/components/common/button"
 import {
@@ -21,6 +22,7 @@ type DataTableViewOptionsProps<TData> = {
 }
 
 export function DataTableViewOptions<TData>({ table }: DataTableViewOptionsProps<TData>) {
+  const t = useTranslations("components.data_table.view_options")
   const triggerRef = useRef<HTMLButtonElement>(null)
 
   return (
@@ -28,25 +30,26 @@ export function DataTableViewOptions<TData>({ table }: DataTableViewOptionsProps
       <PopoverTrigger asChild>
         <Button
           ref={triggerRef}
-          aria-label="Toggle columns"
+          aria-label={t("toggle_columns")}
           variant="secondary"
           size="md"
           className="ml-auto flex gap-2 max-md:hidden"
           prefix={<Settings2 />}
           suffix={<ChevronsUpDown />}
         >
-          View
+          {t("view")}
         </Button>
       </PopoverTrigger>
+
       <PopoverContent
         align="end"
         className="w-44 p-0"
         onCloseAutoFocus={() => triggerRef.current?.focus()}
       >
         <Command>
-          <CommandInput placeholder="Search columns..." />
+          <CommandInput placeholder={t("search_columns")} />
           <CommandList>
-            <CommandEmpty>No columns found.</CommandEmpty>
+            <CommandEmpty>{t("no_columns")}</CommandEmpty>
             <CommandGroup>
               {table
                 .getAllColumns()

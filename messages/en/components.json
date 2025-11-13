@@ -62,5 +62,43 @@
     "pageviews": "Monthly Pageviews",
     "tools": "Listed Tools",
     "subscribers": "Newsletter Subscribers"
+  },
+  "data_table": {
+    "empty_state": "No results.",
+    "column_header": {
+      "sorted_desc": "Sorted descending. Click to sort ascending.",
+      "sorted_asc": "Sorted ascending. Click to sort descending.",
+      "not_sorted": "Not sorted. Click to sort ascending.",
+      "sort_asc": "Sort ascending",
+      "asc": "Asc",
+      "sort_desc": "Sort descending",
+      "desc": "Desc",
+      "hide_column": "Hide column",
+      "hide": "Hide"
+    },
+    "pagination": {
+      "rows_selected": "{selected} of {total} row(s) selected.",
+      "per_page": "Per page",
+      "page_of": "Page {page} of {total}",
+      "go_to_first": "Go to first page",
+      "go_to_previous": "Go to previous page",
+      "go_to_next": "Go to next page",
+      "go_to_last": "Go to last page"
+    },
+    "view_options": {
+      "toggle_columns": "Toggle columns",
+      "view": "View",
+      "search_columns": "Search columns...",
+      "no_columns": "No columns found."
+    },
+    "toolbar": {
+      "reset_filters": "Reset filters",
+      "reset": "Reset"
+    },
+    "faceted_filter": {
+      "selected": "selected",
+      "no_results": "No results found.",
+      "clear_filters": "Clear filters"
+    }
   }
 }

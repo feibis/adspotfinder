@@ -3,6 +3,7 @@
 import { useHotkeys } from "@mantine/hooks"
 import type { Table } from "@tanstack/react-table"
 import { XIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
 import * as React from "react"
 import { type ComponentProps, useRef } from "react"
 import { Button } from "~/components/common/button"
@@ -25,6 +26,7 @@ export function DataTableToolbar<TData>({
   className,
   ...props
 }: DataTableToolbarProps<TData>) {
+  const t = useTranslations("components.data_table.toolbar")
   const isFiltered = table.getState().columnFilters.length > 0
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -80,13 +82,13 @@ export function DataTableToolbar<TData>({
 
         {isFiltered && (
           <Button
-            aria-label="Reset filters"
+            aria-label={t("reset_filters")}
             variant="ghost"
             size="md"
             onClick={() => table.resetColumnFilters()}
             suffix={<XIcon />}
           >
-            Reset
+            {t("reset")}
           </Button>
         )}
       </Stack>

@@ -1,5 +1,8 @@
+"use client"
+
 import type { Column } from "@tanstack/react-table"
 import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDownIcon, EyeOffIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 
 import {
@@ -32,16 +35,18 @@ export function DataTableColumnHeader<TData, TValue>({
   className,
   ...props
 }: DataTableColumnHeaderProps<TData, TValue>) {
+  const t = useTranslations("components.data_table.column_header")
+
   if (!column.getCanSort() && !column.getCanHide()) {
     return <div className={cx(dataTableColumnHeaderVariants({ className }))}>{title}</div>
   }
 
   const buttonLabel =
     column.getCanSort() && column.getIsSorted() === "desc"
-      ? "Sorted descending. Click to sort ascending."
+      ? t("sorted_desc")
       : column.getIsSorted() === "asc"
-        ? "Sorted ascending. Click to sort descending."
-        : "Not sorted. Click to sort ascending."
+        ? t("sorted_asc")
+        : t("not_sorted")
 
   const buttonSuffix =
     column.getCanSort() && column.getIsSorted() === "desc" ? (
@@ -67,27 +72,30 @@ export function DataTableColumnHeader<TData, TValue>({
         {column.getCanSort() && (
           <>
             <DropdownMenuItem
-              aria-label="Sort ascending"
+              aria-label={t("sort_asc")}
               onClick={() => column.toggleSorting(false)}
             >
               <ArrowUpIcon className="mr-2 text-muted-foreground/70" aria-hidden="true" />
-              Asc
+              {t("asc")}
             </DropdownMenuItem>
 
             <DropdownMenuItem
-              aria-label="Sort descending"
+              aria-label={t("sort_desc")}
               onClick={() => column.toggleSorting(true)}
             >
               <ArrowDownIcon className="mr-2 text-muted-foreground/70" aria-hidden="true" />
-              Desc
+              {t("desc")}
             </DropdownMenuItem>
           </>
         )}
         {column.getCanSort() && column.getCanHide() && <DropdownMenuSeparator />}
         {column.getCanHide() && (
-          <DropdownMenuItem aria-label="Hide column" onClick={() => column.toggleVisibility(false)}>
+          <DropdownMenuItem
+            aria-label={t("hide_column")}
+            onClick={() => column.toggleVisibility(false)}
+          >
             <EyeOffIcon className="mr-2 text-muted-foreground/70" aria-hidden="true" />
-            Hide
+            {t("hide")}
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

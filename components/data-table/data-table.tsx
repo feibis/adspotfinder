@@ -1,4 +1,7 @@
+"use client"
+
 import { flexRender, type Table as TanstackTable } from "@tanstack/react-table"
+import { useTranslations } from "next-intl"
 import type { ComponentProps, CSSProperties, ReactNode } from "react"
 import {
   Table,
@@ -39,11 +42,13 @@ type DataTableProps<TData> = ComponentProps<typeof Table> & {
 export function DataTable<TData>({
   table,
   floatingBar = null,
-  emptyState = "No results.",
+  emptyState,
   children,
   className,
   ...props
 }: DataTableProps<TData>) {
+  const t = useTranslations("components.data_table")
+  const defaultEmptyState = emptyState ?? t("empty_state")
   const visibleColumns = table.getVisibleLeafColumns()
 
   // Calculate grid columns based on the visible columns and their sizes
@@ -97,7 +102,7 @@ export function DataTable<TData>({
             ))
           ) : (
             <TableRow className="h-24" aria-disabled>
-              <TableCell className="col-span-full text-center">{emptyState}</TableCell>
+              <TableCell className="col-span-full text-center">{defaultEmptyState}</TableCell>
             </TableRow>
           )}
         </TableBody>

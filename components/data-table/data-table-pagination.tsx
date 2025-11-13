@@ -1,3 +1,5 @@
+"use client"
+
 import type { Table } from "@tanstack/react-table"
 import {
   ChevronLeftIcon,
@@ -5,6 +7,7 @@ import {
   ChevronsLeftIcon,
   ChevronsRightIcon,
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { Button } from "~/components/common/button"
 import { Note } from "~/components/common/note"
@@ -26,21 +29,23 @@ export function DataTablePagination<TData>({
   table,
   pageSizeOptions = [10, 25, 50],
 }: DataTablePaginationProps<TData>) {
+  const t = useTranslations("components.data_table.pagination")
+
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 tabular-nums sm:gap-4 lg:gap-6">
       <Note className="grow whitespace-nowrap max-sm:hidden">
-        {table.getFilteredSelectedRowModel().rows.length} of{" "}
-        {table.getFilteredRowModel().rows.length} row(s) selected.
+        {t("rows_selected", {
+          selected: table.getFilteredSelectedRowModel().rows.length,
+          total: table.getFilteredRowModel().rows.length,
+        })}
       </Note>
 
       <Stack className="max-sm:grow">
-        <p className="text-sm font-medium">Per page</p>
+        <p className="text-sm font-medium">{t("per_page")}</p>
 
         <Select
           value={`${table.getState().pagination.pageSize}`}
-          onValueChange={value => {
-            table.setPageSize(Number(value))
-          }}
+          onValueChange={value => table.setPageSize(Number(value))}
         >
           <SelectTrigger className="w-auto tabular-nums">
             <SelectValue placeholder={table.getState().pagination.pageSize} />
@@ -57,12 +62,15 @@ export function DataTablePagination<TData>({
       </Stack>
 
       <div className="text-sm font-medium max-sm:hidden">
-        Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount() || 1}
+        {t("page_of", {
+          page: table.getState().pagination.pageIndex + 1,
+          total: table.getPageCount() || 1,
+        })}
       </div>
 
       <Stack size="sm" wrap={false}>
         <Button
-          aria-label="Go to first page"
+          aria-label={t("go_to_first")}
           variant="secondary"
           size="md"
           className="max-lg:hidden"
@@ -72,7 +80,7 @@ export function DataTablePagination<TData>({
         />
 
         <Button
-          aria-label="Go to previous page"
+          aria-label={t("go_to_previous")}
           variant="secondary"
           size="md"
           onClick={() => table.previousPage()}
@@ -81,7 +89,7 @@ export function DataTablePagination<TData>({
         />
 
         <Button
-          aria-label="Go to next page"
+          aria-label={t("go_to_next")}
           variant="secondary"
           size="md"
           onClick={() => table.nextPage()}
@@ -90,7 +98,7 @@ export function DataTablePagination<TData>({
         />
 
         <Button
-          aria-label="Go to last page"
+          aria-label={t("go_to_last")}
           variant="secondary"
           size="md"
           className="max-lg:hidden"
