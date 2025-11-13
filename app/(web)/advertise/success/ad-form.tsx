@@ -21,7 +21,7 @@ import { TextArea } from "~/components/common/textarea"
 import { cx } from "~/lib/utils"
 import { createAdFromCheckout } from "~/server/web/ads/actions"
 import type { AdOne } from "~/server/web/ads/payloads"
-import { adDetailsSchema } from "~/server/web/shared/schema"
+import { createAdDetailsSchema } from "~/server/web/shared/schema"
 
 type AdFormProps = ComponentProps<"form"> & {
   sessionId: string
@@ -30,10 +30,13 @@ type AdFormProps = ComponentProps<"form"> & {
 
 export const AdForm = ({ className, sessionId, ad, ...props }: AdFormProps) => {
   const t = useTranslations("forms.ad_details")
-  const formAaction = createAdFromCheckout
-  const resolver = zodResolver(adDetailsSchema)
+  const tSchema = useTranslations("schema")
 
-  const { form, action, handleSubmitWithAction } = useHookFormAction(formAaction, resolver, {
+  const formAction = createAdFromCheckout
+  const schema = createAdDetailsSchema(tSchema)
+  const resolver = zodResolver(schema)
+
+  const { form, action, handleSubmitWithAction } = useHookFormAction(formAction, resolver, {
     formProps: {
       defaultValues: {
         sessionId,

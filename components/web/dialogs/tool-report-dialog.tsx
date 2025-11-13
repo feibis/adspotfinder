@@ -29,7 +29,7 @@ import { LoginDialog } from "~/components/web/auth/login-dialog"
 import { reportsConfig } from "~/config/reports"
 import { useSession } from "~/lib/auth-client"
 import { reportTool } from "~/server/web/actions/report"
-import { reportToolSchema } from "~/server/web/shared/schema"
+import { createReportToolSchema } from "~/server/web/shared/schema"
 import type { ToolOne } from "~/server/web/tools/payloads"
 
 type ToolReportDialogProps = {
@@ -40,8 +40,11 @@ type ToolReportDialogProps = {
 
 export const ToolReportDialog = ({ tool, isOpen, setIsOpen }: ToolReportDialogProps) => {
   const { data: session } = useSession()
-  const resolver = zodResolver(reportToolSchema)
   const t = useTranslations("dialogs.report")
+  const tSchema = useTranslations("schema")
+
+  const schema = createReportToolSchema(tSchema)
+  const resolver = zodResolver(schema)
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(reportTool, resolver, {
     formProps: {

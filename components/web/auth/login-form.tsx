@@ -18,7 +18,6 @@ export const LoginForm = ({ ...props }: ComponentProps<"form">) => {
   const { form, handleSignIn, isPending } = useMagicLink({
     onSuccess: email => {
       router.push(`/auth/verify?email=${email}`)
-      toast.success(t("forms.sign_in.success_message"))
     },
 
     onError: ({ error }) => {

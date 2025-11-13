@@ -4,13 +4,14 @@ import { getDomain } from "@primoui/utils"
 import { revalidateTag } from "next/cache"
 import { headers } from "next/headers"
 import { after } from "next/server"
+import { getTranslations } from "next-intl/server"
 import { siteConfig } from "~/config/site"
 import { EmailVerifyDomain } from "~/emails/verify-domain"
 import { auth } from "~/lib/auth"
 import { sendEmail } from "~/lib/email"
 import { getIP, isRateLimited } from "~/lib/rate-limiter"
 import { userActionClient } from "~/lib/safe-actions"
-import { claimToolEmailSchema, claimToolOtpSchema } from "~/server/web/shared/schema"
+import { createClaimToolEmailSchema, createClaimToolOtpSchema } from "~/server/web/shared/schema"
 import { db } from "~/services/db"
 
 /**
@@ -98,7 +99,10 @@ const claimToolForUser = async (toolId: string, userId: string) => {
  * Send OTP to verify domain ownership
  */
 export const sendToolClaimOtp = userActionClient
-  .inputSchema(claimToolEmailSchema)
+  .inputSchema(async () => {
+    const t = await getTranslations("schema")
+    return createClaimToolEmailSchema(t)
+  })
   .action(async ({ parsedInput: { toolId, email } }) => {
     // Check rate limiting
     await checkRateLimit("otp")
@@ -119,7 +123,10 @@ export const sendToolClaimOtp = userActionClient
  * Verify OTP and claim tool
  */
 export const verifyToolClaimOtp = userActionClient
-  .inputSchema(claimToolOtpSchema)
+  .inputSchema(async () => {
+    const t = await getTranslations("schema")
+    return createClaimToolOtpSchema(t)
+  })
   .action(async ({ parsedInput: { toolId, otp } }) => {
     // Check rate limiting
     await checkRateLimit("verify")
@@ -134,6 +141,9 @@ export const verifyToolClaimOtp = userActionClient
 
     // Claim tool and revalidate
     await claimToolForUser(tool.id, user.id)
+
+    // Revalidate tool
+    revalidateTag(`tool-${tool.slug}`, "infinite")
 
     return { success: true }
   })

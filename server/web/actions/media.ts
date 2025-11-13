@@ -1,27 +1,17 @@
 "use server"
 
 import { tryCatch } from "@primoui/utils"
+import { getTranslations } from "next-intl/server"
 import wretch from "wretch"
-import { z } from "zod"
 import { getFaviconFetchUrl, getScreenshotFetchUrl, uploadToS3Storage } from "~/lib/media"
 import { actionClient } from "~/lib/safe-actions"
-import { fileSchema } from "~/server/web/shared/schema"
-
-const pathSchema = z.object({
-  path: z.string().regex(/^[a-z0-9/_-]+$/i),
-})
-
-const fetchMediaSchema = pathSchema.extend({
-  url: z.url().min(1),
-  type: z.enum(["favicon", "screenshot"]).default("favicon"),
-})
-
-const uploadMediaSchema = pathSchema.extend({
-  file: fileSchema,
-})
+import { createFetchMediaSchema, createUploadMediaSchema } from "~/server/web/shared/schema"
 
 export const fetchMedia = actionClient
-  .inputSchema(fetchMediaSchema)
+  .inputSchema(async () => {
+    const t = await getTranslations("schema")
+    return createFetchMediaSchema(t)
+  })
   .action(async ({ parsedInput: { url, path, type } }) => {
     const endpoint = type === "favicon" ? getFaviconFetchUrl(url) : getScreenshotFetchUrl(url)
     const { data, error } = await tryCatch(wretch(endpoint).get().arrayBuffer().then(Buffer.from))
@@ -35,7 +25,10 @@ export const fetchMedia = actionClient
   })
 
 export const uploadMedia = actionClient
-  .inputSchema(uploadMediaSchema)
+  .inputSchema(async () => {
+    const t = await getTranslations("schema")
+    return createUploadMediaSchema(t)
+  })
   .action(async ({ parsedInput: { file, path } }) => {
     const buffer = Buffer.from(await file.arrayBuffer())
 

@@ -1,9 +1,10 @@
 "use server"
 
+import { getTranslations } from "next-intl/server"
 import { isDisposableEmail } from "~/lib/email"
 import { getIP, isRateLimited } from "~/lib/rate-limiter"
 import { actionClient } from "~/lib/safe-actions"
-import { newsletterSchema } from "~/server/web/shared/schema"
+import { createNewsletterSchema } from "~/server/web/shared/schema"
 import { createResendContact } from "~/services/resend"
 
 /**
@@ -12,8 +13,11 @@ import { createResendContact } from "~/services/resend"
  * @returns The newsletter that was subscribed to
  */
 export const subscribeToNewsletter = actionClient
-  .inputSchema(newsletterSchema)
-  .action(async ({ parsedInput: { value: email, captcha, ...payload } }) => {
+  .inputSchema(async () => {
+    const t = await getTranslations("schema")
+    return createNewsletterSchema(t)
+  })
+  .action(async ({ parsedInput: { value: email } }) => {
     const ip = await getIP()
     const rateLimitKey = `newsletter:${ip}`
 
@@ -28,7 +32,7 @@ export const subscribeToNewsletter = actionClient
     }
 
     // Create a resend contact
-    await createResendContact({ email, ...payload })
+    await createResendContact({ email })
 
     return "You've been subscribed to the newsletter."
   })

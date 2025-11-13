@@ -17,8 +17,9 @@ import { TextArea } from "~/components/common/textarea"
 import { feedbackConfig } from "~/config/feedback"
 import { siteConfig } from "~/config/site"
 import { useSession } from "~/lib/auth-client"
+import { cx } from "~/lib/utils"
 import { reportFeedback } from "~/server/web/actions/report"
-import { feedbackSchema } from "~/server/web/shared/schema"
+import { createFeedbackSchema } from "~/server/web/shared/schema"
 
 type FeedbackWidgetFormProps = {
   toastId: string
@@ -26,9 +27,12 @@ type FeedbackWidgetFormProps = {
 }
 
 const FeedbackWidgetForm = ({ toastId, setDismissed }: FeedbackWidgetFormProps) => {
-  const t = useTranslations("components.feedback_widget")
   const { data: session } = useSession()
-  const resolver = useMemo(() => zodResolver(feedbackSchema), [])
+  const t = useTranslations("forms.feedback")
+  const tSchema = useTranslations("schema")
+
+  const schema = createFeedbackSchema(tSchema)
+  const resolver = zodResolver(schema)
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(reportFeedback, resolver, {
     formProps: {
@@ -71,14 +75,14 @@ const FeedbackWidgetForm = ({ toastId, setDismissed }: FeedbackWidgetFormProps) 
             <FormField
               control={form.control}
               name="email"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormControl>
                     <Input
                       type="email"
                       size="sm"
                       placeholder={t("email_placeholder")}
-                      className="text-xs"
+                      className={cx("text-xs", fieldState.error ? "bg-destructive/5!" : "")}
                       data-1p-ignore
                       {...field}
                     />
@@ -91,13 +95,13 @@ const FeedbackWidgetForm = ({ toastId, setDismissed }: FeedbackWidgetFormProps) 
           <FormField
             control={form.control}
             name="message"
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem>
                 <FormControl>
                   <TextArea
                     size="sm"
                     placeholder={t("feedback_placeholder")}
-                    className="h-20 text-xs"
+                    className={cx("h-20 text-xs", fieldState.error ? "bg-destructive/5!" : "")}
                     {...field}
                   />
                 </FormControl>

@@ -12,7 +12,7 @@ import { Hint } from "~/components/common/hint"
 import { Input } from "~/components/common/input"
 import { cx } from "~/lib/utils"
 import { subscribeToNewsletter as subscribe } from "~/server/web/actions/subscribe"
-import { newsletterSchema } from "~/server/web/shared/schema"
+import { createNewsletterSchema } from "~/server/web/shared/schema"
 
 type ButtonProps = ComponentProps<typeof Button>
 type InputProps = ComponentProps<typeof Input>
@@ -32,7 +32,10 @@ export const CTAForm = ({
   ...props
 }: CTAFormProps) => {
   const t = useTranslations("forms.cta")
-  const resolver = zodResolver(newsletterSchema)
+  const tSchema = useTranslations("schema")
+
+  const schema = createNewsletterSchema(tSchema)
+  const resolver = zodResolver(schema)
 
   const defaultPlaceholder = placeholder || t("email_placeholder")
   const defaultButtonProps = buttonProps || { size: "sm" }

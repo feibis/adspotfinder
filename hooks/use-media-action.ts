@@ -1,9 +1,10 @@
+import { useTranslations } from "next-intl"
 import { useAction } from "next-safe-action/hooks"
 import type { ChangeEvent } from "react"
 import type { FieldPath, FieldValues, Path, PathValue, UseFormReturn } from "react-hook-form"
 import { toast } from "sonner"
 import { fetchMedia, uploadMedia } from "~/server/web/actions/media"
-import { fileSchema } from "~/server/web/shared/schema"
+import { createFileSchema } from "~/server/web/shared/schema"
 
 type MediaActionConfig<T extends FieldValues> = {
   form: UseFormReturn<T>
@@ -22,6 +23,9 @@ export const useMediaAction = <T extends FieldValues>({
   successMessage = "Media successfully uploaded. Please save to update.",
   errorMessage = "Failed to upload media. Please try again.",
 }: MediaActionConfig<T>) => {
+  const tSchema = useTranslations("schema")
+  const schema = createFileSchema(tSchema)
+
   const fetch = useAction(fetchMedia, {
     onSuccess: ({ data }) => {
       toast.success(successMessage)
@@ -54,7 +58,7 @@ export const useMediaAction = <T extends FieldValues>({
 
   const handleUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    const { data, error } = await fileSchema.safeParseAsync(file)
+    const { data, error } = schema.safeParse(file)
 
     if (error) {
       const message = JSON.parse(error.message)[0]?.message ?? errorMessage

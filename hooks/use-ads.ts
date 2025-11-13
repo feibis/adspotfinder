@@ -1,5 +1,3 @@
-"use client"
-
 import { useCallback, useMemo, useState } from "react"
 import type { DateRange } from "react-day-picker"
 import type { AdType } from "~/.generated/prisma/browser"

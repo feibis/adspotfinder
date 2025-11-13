@@ -11,7 +11,7 @@ import { actionClient } from "~/lib/safe-actions"
 import { fetchMedia } from "~/server/web/actions/media"
 import type { AdOne } from "~/server/web/ads/payloads"
 import { findActiveAds } from "~/server/web/ads/queries"
-import { adDetailsSchema } from "~/server/web/shared/schema"
+import { createAdDetailsSchema } from "~/server/web/shared/schema"
 import { stripe } from "~/services/stripe"
 
 const findAdWithFallbackSchema = z.object({
@@ -89,7 +89,10 @@ export const findAdWithFallback = actionClient
   })
 
 export const createAdFromCheckout = actionClient
-  .inputSchema(adDetailsSchema)
+  .inputSchema(async () => {
+    const t = await getTranslations("schema")
+    return createAdDetailsSchema(t)
+  })
   .action(async ({ parsedInput: { sessionId, ...adDetails }, ctx: { db, revalidate } }) => {
     const session = await stripe.checkout.sessions.retrieve(sessionId)
     const email = session.customer_details?.email ?? ""

@@ -30,7 +30,7 @@ import { claimsConfig } from "~/config/claims"
 import { siteConfig } from "~/config/site"
 import { useSession } from "~/lib/auth-client"
 import { sendToolClaimOtp, verifyToolClaimOtp } from "~/server/web/actions/claim"
-import { claimToolEmailSchema, claimToolOtpSchema } from "~/server/web/shared/schema"
+import { createClaimToolEmailSchema, createClaimToolOtpSchema } from "~/server/web/shared/schema"
 import type { ToolOne } from "~/server/web/tools/payloads"
 
 type ToolClaimDialogProps = {
@@ -43,16 +43,17 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
   const { data: session } = useSession()
   const router = useRouter()
   const t = useTranslations("dialogs.claim")
+  const tSchema = useTranslations("schema")
   const [step, setStep] = useState<"email" | "otp">("email")
   const [verificationEmail, setVerificationEmail] = useState("")
   const [cooldownRemaining, setCooldownRemaining] = useState(0)
 
-  const emailResolver = zodResolver(claimToolEmailSchema)
-  const otpResolver = zodResolver(claimToolOtpSchema)
+  const emailSchema = createClaimToolEmailSchema(tSchema)
+  const otpSchema = createClaimToolOtpSchema(tSchema)
 
   const toolDomain = getDomain(tool.websiteUrl)
 
-  const sendOtpAction = useHookFormAction(sendToolClaimOtp, emailResolver, {
+  const sendOtpAction = useHookFormAction(sendToolClaimOtp, zodResolver(emailSchema), {
     formProps: {
       defaultValues: {
         toolId: tool.id,
@@ -74,7 +75,7 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
     },
   })
 
-  const verifyOtpAction = useHookFormAction(verifyToolClaimOtp, otpResolver, {
+  const verifyOtpAction = useHookFormAction(verifyToolClaimOtp, zodResolver(otpSchema), {
     formProps: {
       defaultValues: {
         toolId: tool.id,
@@ -85,7 +86,7 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
     actionProps: {
       onSuccess: () => {
         toast.success(t("success_message", { toolName: tool.name }))
-        router.refresh()
+        router.push(`/${tool.slug}`)
       },
 
       onError: ({ error }) => {
@@ -116,7 +117,7 @@ export const ToolClaimDialog = ({ tool, isOpen, setIsOpen }: ToolClaimDialogProp
     return () => clearInterval(interval)
   }, [cooldownRemaining])
 
-  const handleEmailSubmit = ({ email }: z.infer<typeof claimToolEmailSchema>) => {
+  const handleEmailSubmit = ({ email }: z.infer<typeof emailSchema>) => {
     if (toolDomain !== email.split("@")[1]) {
       sendOtpAction.form.setError("email", {
         type: "manual",

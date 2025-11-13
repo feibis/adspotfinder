@@ -1,14 +1,18 @@
 "use server"
 
 import { tryCatch } from "@primoui/utils"
+import { getTranslations } from "next-intl/server"
 import { reportsConfig } from "~/config/reports"
 import { getIP, isRateLimited } from "~/lib/rate-limiter"
 import { actionClient, userActionClient } from "~/lib/safe-actions"
-import { feedbackSchema, reportToolSchema } from "~/server/web/shared/schema"
+import { createFeedbackSchema, createReportToolSchema } from "~/server/web/shared/schema"
 import { db } from "~/services/db"
 
 export const reportTool = (reportsConfig.requireSignIn ? userActionClient : actionClient)
-  .inputSchema(reportToolSchema)
+  .inputSchema(async () => {
+    const t = await getTranslations("schema")
+    return createReportToolSchema(t)
+  })
   .action(async ({ parsedInput: { toolId, type, email, message } }) => {
     const ip = await getIP()
     const rateLimitKey = `report:${ip}`
@@ -38,7 +42,10 @@ export const reportTool = (reportsConfig.requireSignIn ? userActionClient : acti
   })
 
 export const reportFeedback = actionClient
-  .inputSchema(feedbackSchema)
+  .inputSchema(async () => {
+    const t = await getTranslations("report")
+    return createFeedbackSchema(t)
+  })
   .action(async ({ parsedInput: { email, message } }) => {
     const ip = await getIP()
     const rateLimitKey = `feedback:${ip}`

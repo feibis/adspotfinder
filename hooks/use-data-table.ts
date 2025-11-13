@@ -1,5 +1,3 @@
-"use client"
-
 import { useDebouncedCallback } from "@mantine/hooks"
 import {
   type ColumnFiltersState,

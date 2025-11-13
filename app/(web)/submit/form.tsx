@@ -25,13 +25,16 @@ import { useSession } from "~/lib/auth-client"
 import { isToolPublished } from "~/lib/tools"
 import { cx } from "~/lib/utils"
 import { submitTool } from "~/server/web/actions/submit"
-import { submitToolSchema } from "~/server/web/shared/schema"
+import { createSubmitToolSchema } from "~/server/web/shared/schema"
 
 export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
-  const t = useTranslations("pages.submit.form")
   const router = useRouter()
   const { data: session } = useSession()
-  const resolver = zodResolver(submitToolSchema)
+  const t = useTranslations("forms.submit")
+  const tSchema = useTranslations("schema")
+
+  const schema = createSubmitToolSchema(tSchema)
+  const resolver = zodResolver(schema)
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(submitTool, resolver, {
     formProps: {
@@ -84,7 +87,7 @@ export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
           name="submitterName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel isRequired>{t("your_name_label")}</FormLabel>
+              <FormLabel isRequired>{t("your_name_label")}:</FormLabel>
               <FormControl>
                 <Input size="lg" placeholder={t("your_name_placeholder")} {...field} />
               </FormControl>
@@ -98,7 +101,7 @@ export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
           name="submitterEmail"
           render={({ field }) => (
             <FormItem>
-              <FormLabel isRequired>{t("your_email_label")}</FormLabel>
+              <FormLabel isRequired>{t("your_email_label")}:</FormLabel>
               <FormControl>
                 <Input
                   type="email"
@@ -117,7 +120,7 @@ export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel isRequired>{t("name_label")}</FormLabel>
+              <FormLabel isRequired>{t("name_label")}:</FormLabel>
               <FormControl>
                 <Input size="lg" placeholder={t("name_placeholder")} data-1p-ignore {...field} />
               </FormControl>
@@ -131,7 +134,7 @@ export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
           name="websiteUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel isRequired>{t("website_label")}</FormLabel>
+              <FormLabel isRequired>{t("website_label")}:</FormLabel>
               <FormControl>
                 <Input type="url" size="lg" placeholder={t("website_placeholder")} {...field} />
               </FormControl>
@@ -145,7 +148,7 @@ export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
           name="submitterNote"
           render={({ field }) => (
             <FormItem className="col-span-full">
-              <FormLabel>{t("note_label")}</FormLabel>
+              <FormLabel>{t("note_label")}:</FormLabel>
               <FormControl>
                 <TextArea size="lg" placeholder={t("note_placeholder")} {...field} />
               </FormControl>
@@ -158,7 +161,7 @@ export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
           control={form.control}
           name="newsletterOptIn"
           render={({ field }) => (
-            <FormItem className="flex-row items-center col-span-full">
+            <FormItem className="flex-row items-center col-span-full gap-2">
               <FormControl>
                 <Checkbox checked={field.value} onCheckedChange={field.onChange} />
               </FormControl>

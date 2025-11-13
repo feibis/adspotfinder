@@ -2,13 +2,14 @@
 
 import { getDomain, slugify, tryCatch } from "@primoui/utils"
 import { after } from "next/server"
+import { getTranslations } from "next-intl/server"
 import { isDev } from "~/env"
 import { getServerSession } from "~/lib/auth"
 import { isDisposableEmail } from "~/lib/email"
 import { notifySubmitterOfToolSubmitted } from "~/lib/notifications"
 import { getIP, isRateLimited } from "~/lib/rate-limiter"
 import { actionClient } from "~/lib/safe-actions"
-import { submitToolSchema } from "~/server/web/shared/schema"
+import { createSubmitToolSchema } from "~/server/web/shared/schema"
 import { db } from "~/services/db"
 import { createResendContact } from "~/services/resend"
 
@@ -44,7 +45,10 @@ const generateUniqueSlug = async (baseName: string): Promise<string> => {
  * @returns The tool that was submitted
  */
 export const submitTool = actionClient
-  .inputSchema(submitToolSchema)
+  .inputSchema(async () => {
+    const t = await getTranslations("schema")
+    return createSubmitToolSchema(t)
+  })
   .action(async ({ parsedInput: { newsletterOptIn, ...data } }) => {
     const session = await getServerSession()
     const ip = await getIP()
