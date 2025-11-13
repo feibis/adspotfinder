@@ -2,7 +2,6 @@
 
 import { formatDate } from "@primoui/utils"
 import type { ColumnDef } from "@tanstack/react-table"
-import { formatDistanceToNowStrict } from "date-fns"
 import {
   CalendarPlusIcon,
   CircleDashedIcon,
@@ -11,6 +10,7 @@ import {
   PlusIcon,
   SparklesIcon,
 } from "lucide-react"
+import { useLocale, useTranslations } from "next-intl"
 import { useQueryStates } from "nuqs"
 import { useMemo } from "react"
 import { type Tool, ToolStatus } from "~/.generated/prisma/browser"
@@ -29,6 +29,8 @@ import { toolsTableParamsSchema } from "~/server/admin/tools/schema"
 import type { DataTableFilterField } from "~/types"
 
 export const DashboardTable = ({ tools, pageCount }: Awaited<ReturnType<typeof findTools>>) => {
+  const locale = useLocale()
+  const t = useTranslations("pages.dashboard.table")
   const [{ perPage, sort }] = useQueryStates(toolsTableParamsSchema)
 
   // Memoize the columns so they don't re-render on every render
@@ -38,7 +40,7 @@ export const DashboardTable = ({ tools, pageCount }: Awaited<ReturnType<typeof f
         accessorKey: "name",
         enableHiding: false,
         size: 160,
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
+        header: ({ column }) => <DataTableColumnHeader column={column} title={t("columns.name")} />,
         cell: ({ row }) => {
           const { name, slug, faviconUrl } = row.original
 
@@ -48,7 +50,9 @@ export const DashboardTable = ({ tools, pageCount }: Awaited<ReturnType<typeof f
       {
         accessorKey: "publishedAt",
         enableHiding: false,
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Published At" />,
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("columns.published_at")} />
+        ),
         cell: ({ row }) => {
           const { status, publishedAt } = row.original
 
@@ -57,20 +61,15 @@ export const DashboardTable = ({ tools, pageCount }: Awaited<ReturnType<typeof f
               return (
                 <Stack size="sm" wrap={false}>
                   <CircleIcon className="stroke-3 text-green-600/75 dark:text-green-500/75" />
-                  <Note className="font-medium">{formatDate(publishedAt!)}</Note>
+                  <Note className="font-medium">{formatDate(publishedAt!, "medium", locale)}</Note>
                 </Stack>
               )
             case ToolStatus.Scheduled:
               return (
-                <Stack size="sm" wrap={false} title={formatDate(publishedAt!)}>
+                <Stack size="sm" wrap={false}>
                   <CircleDotDashedIcon className="stroke-3 text-yellow-700/75 dark:text-yellow-500/75" />
                   <Note className="font-medium">
-                    Scheduled{" "}
-                    {formatDistanceToNowStrict(publishedAt!, {
-                      unit: "day",
-                      roundingMethod: "ceil",
-                      addSuffix: true,
-                    })}
+                    {formatDate(publishedAt!, "medium", locale)} ({t("status.scheduled")})
                   </Note>
                 </Stack>
               )
@@ -78,7 +77,7 @@ export const DashboardTable = ({ tools, pageCount }: Awaited<ReturnType<typeof f
               return (
                 <Stack size="sm" wrap={false}>
                   <CircleDashedIcon className="stroke-3 text-muted-foreground/75" />
-                  <span className="text-muted-foreground/75">Awaiting review</span>
+                  <span className="text-muted-foreground/75">{t("status.awaiting_review")}</span>
                 </Stack>
               )
             default:
@@ -89,7 +88,9 @@ export const DashboardTable = ({ tools, pageCount }: Awaited<ReturnType<typeof f
       {
         accessorKey: "createdAt",
         enableHiding: false,
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Created At" />,
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("columns.created_at")} />
+        ),
         cell: ({ row }) => <Note>{formatDate(row.getValue<Date>("createdAt"))}</Note>,
       },
       {
@@ -117,20 +118,22 @@ export const DashboardTable = ({ tools, pageCount }: Awaited<ReturnType<typeof f
               className="float-right -my-1"
               asChild
             >
-              <Link href={`/submit/${slug}`}>{!isPublished ? "Publish now" : "Get featured"}</Link>
+              <Link href={`/submit/${slug}`}>
+                {!isPublished ? t("actions.publish") : t("actions.feature")}
+              </Link>
             </Button>
           )
         },
       },
     ]
-  }, [])
+  }, [t])
 
   // Search filters
   const filterFields: DataTableFilterField<Tool>[] = [
     {
       id: "name",
-      label: "Name",
-      placeholder: "Search by name...",
+      label: t("filters.name_label"),
+      placeholder: t("filters.name_placeholder"),
     },
   ]
 
@@ -151,10 +154,10 @@ export const DashboardTable = ({ tools, pageCount }: Awaited<ReturnType<typeof f
   })
 
   return (
-    <DataTable table={table} emptyState="No tools found. Submit or claim a tool to get started.">
+    <DataTable table={table} emptyState={t("empty_state")}>
       <DataTableToolbar table={table} filterFields={filterFields}>
         <Button size="md" variant="primary" prefix={<PlusIcon />} asChild>
-          <Link href="/submit">Submit a tool</Link>
+          <Link href="/submit">{t("submit_button")}</Link>
         </Button>
       </DataTableToolbar>
     </DataTable>
