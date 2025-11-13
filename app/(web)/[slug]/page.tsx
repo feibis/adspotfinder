@@ -117,7 +117,7 @@ export default async function (props: Props) {
                     source: "button",
                   }}
                 >
-                  Visit {tool.name}
+                  {t("common.visit")} {tool.name}
                 </ExternalLink>
               </Button>
             </Stack>
