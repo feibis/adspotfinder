@@ -7,7 +7,8 @@
     "ad_label": "Ad",
     "learn_more": "Learn More",
     "visit_button": "Visit {name}",
-    "preview_ad": "Preview this ad"
+    "preview_ad": "Preview this ad",
+    "day": "day"
   },
   "bottom": {
     "popular_categories": "Popular Categories:"

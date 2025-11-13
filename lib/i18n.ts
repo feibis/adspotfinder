@@ -27,8 +27,7 @@ const loadMessages = async (locale: Locale) => {
 export default getRequestConfig(async () => {
   // TODO: get locale from headers or URL params
   const locale = defaultLocale
-  const timeZone = "America/New_York"
   const messages = await loadMessages(locale)
 
-  return { locale, timeZone, messages }
+  return { locale, messages }
 })

@@ -43,7 +43,7 @@ export const reportTool = (reportsConfig.requireSignIn ? userActionClient : acti
 
 export const reportFeedback = actionClient
   .inputSchema(async () => {
-    const t = await getTranslations("report")
+    const t = await getTranslations("schema")
     return createFeedbackSchema(t)
   })
   .action(async ({ parsedInput: { email, message } }) => {

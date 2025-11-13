@@ -1,7 +1,9 @@
 "use client"
 
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
+import { useFormatter } from "next-intl"
 import type { ComponentProps } from "react"
+import type { Formatters } from "react-day-picker"
 import { type Chevron, DayPicker } from "react-day-picker"
 import { buttonVariants } from "~/components/common/button"
 
@@ -14,14 +16,24 @@ const CalendarChevron = ({ orientation }: ComponentProps<typeof Chevron>) => {
 }
 
 const Calendar = ({ classNames, ...props }: ComponentProps<typeof DayPicker>) => {
+  const format = useFormatter()
+
   const buttonClasses = buttonVariants({
     variant: "ghost",
     className: "text-lg p-1 pointer-events-auto",
   })
 
+  // Use next-intl formatter for i18n date formatting
+  const formatters: Partial<Formatters> = {
+    formatCaption: date => format.dateTime(date, { month: "long", year: "numeric" }),
+    formatWeekdayName: date => format.dateTime(date, { weekday: "short" }),
+    formatMonthDropdown: date => format.dateTime(date, { month: "long" }),
+  }
+
   return (
     <DayPicker
       weekStartsOn={1}
+      formatters={formatters}
       classNames={{
         months: "relative flex flex-col sm:flex-row gap-y-4 sm:gap-x-4 sm:gap-y-0",
         month: "group/month space-y-4 w-full",
