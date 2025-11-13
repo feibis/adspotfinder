@@ -10,7 +10,7 @@ import {
   PlusIcon,
   SparklesIcon,
 } from "lucide-react"
-import { useLocale, useTranslations } from "next-intl"
+import { useFormatter, useTranslations } from "next-intl"
 import { useQueryStates } from "nuqs"
 import { useMemo } from "react"
 import { type Tool, ToolStatus } from "~/.generated/prisma/browser"
@@ -29,8 +29,8 @@ import { toolsTableParamsSchema } from "~/server/admin/tools/schema"
 import type { DataTableFilterField } from "~/types"
 
 export const DashboardTable = ({ tools, pageCount }: Awaited<ReturnType<typeof findTools>>) => {
-  const locale = useLocale()
   const t = useTranslations("pages.dashboard.table")
+  const format = useFormatter()
   const [{ perPage, sort }] = useQueryStates(toolsTableParamsSchema)
 
   // Memoize the columns so they don't re-render on every render
@@ -61,7 +61,9 @@ export const DashboardTable = ({ tools, pageCount }: Awaited<ReturnType<typeof f
               return (
                 <Stack size="sm" wrap={false}>
                   <CircleIcon className="stroke-3 text-green-600/75 dark:text-green-500/75" />
-                  <Note className="font-medium">{formatDate(publishedAt!, "medium", locale)}</Note>
+                  <Note className="font-medium">
+                    {format.dateTime(publishedAt!, { dateStyle: "medium" })}
+                  </Note>
                 </Stack>
               )
             case ToolStatus.Scheduled:
@@ -69,7 +71,8 @@ export const DashboardTable = ({ tools, pageCount }: Awaited<ReturnType<typeof f
                 <Stack size="sm" wrap={false}>
                   <CircleDotDashedIcon className="stroke-3 text-yellow-700/75 dark:text-yellow-500/75" />
                   <Note className="font-medium">
-                    {formatDate(publishedAt!, "medium", locale)} ({t("status.scheduled")})
+                    {format.dateTime(publishedAt!, { dateStyle: "medium" })} (
+                    {t("status.scheduled")})
                   </Note>
                 </Stack>
               )

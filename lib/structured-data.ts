@@ -13,6 +13,7 @@ import type {
   WebPage,
   WebSite,
 } from "schema-dts"
+import type { Post } from "~/.content-collections/generated"
 import { siteConfig } from "~/config/site"
 import type { ToolMany, ToolOne } from "~/server/web/tools/payloads"
 
@@ -216,22 +217,16 @@ export const generateFAQ = (questions: Array<{ question: string; answer: string 
 /**
  * Generates article/blog posting schema
  */
-export const generateArticle = (
-  url: string,
-  title: string,
-  description: string | undefined,
-  publishedAt: string,
-  author?: { name: string; url?: string },
-  image?: string,
-  wordCount?: number,
-): Article => {
+export const generateArticle = (url: string, post: Post): Article => {
+  const { title, description, publishedAt, author, image, content, locale } = post
+
   return {
     "@type": "Article",
     headline: title,
     description,
     url: toAbsoluteUrl(url),
-    datePublished: publishedAt,
-    dateModified: publishedAt,
+    datePublished: publishedAt.toISOString(),
+    dateModified: publishedAt.toISOString(),
     publisher: getOrganization(),
     author: author
       ? {
@@ -248,8 +243,8 @@ export const generateArticle = (
           height: "630",
         }
       : undefined,
-    wordCount,
-    inLanguage: "en-US",
+    wordCount: content.split(/\s+/).length,
+    inLanguage: locale,
   }
 }
 
@@ -283,7 +278,7 @@ export const generateBlog = (
   url: string,
   name: string,
   description: string | undefined,
-  posts: Array<{ title: string; description: string | null; path: string; publishedAt: string }>,
+  posts: Post[],
 ): Blog => {
   const absoluteUrl = toAbsoluteUrl(url)
   return {
@@ -296,8 +291,8 @@ export const generateBlog = (
       "@type": "BlogPosting",
       headline: post.title,
       description: post.description || undefined,
-      url: toAbsoluteUrl(`/blog/${post.path}`),
-      datePublished: post.publishedAt,
+      url: toAbsoluteUrl(`/blog/${post._meta.path}`),
+      datePublished: post.publishedAt.toISOString(),
     })),
   }
 }

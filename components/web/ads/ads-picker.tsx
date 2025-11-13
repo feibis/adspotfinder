@@ -1,10 +1,9 @@
 "use client"
 
-import { formatDateRange } from "@primoui/utils"
 import { cx } from "cva"
 import { endOfDay, startOfDay } from "date-fns"
 import { XIcon } from "lucide-react"
-import { useLocale, useTranslations } from "next-intl"
+import { useFormatter, useTranslations } from "next-intl"
 import { useAction } from "next-safe-action/hooks"
 import posthog from "posthog-js"
 import type { ComponentProps } from "react"
@@ -30,7 +29,7 @@ type AdsCalendarProps = ComponentProps<"div"> & {
 
 export const AdsPicker = ({ className, ads, type, ...props }: AdsCalendarProps) => {
   const t = useTranslations("ads")
-  const locale = useLocale()
+  const format = useFormatter()
 
   // Ad spots available for purchase
   const spots = [
@@ -155,7 +154,7 @@ export const AdsPicker = ({ className, ads, type, ...props }: AdsCalendarProps) 
                     </div>
                   </span>
 
-                  <span>{formatDateRange(from, to, "medium", locale)}</span>
+                  <span>{format.dateTimeRange(from, to, { dateStyle: "medium" })}</span>
                 </div>
               )
             })}

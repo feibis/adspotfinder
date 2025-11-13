@@ -1,9 +1,9 @@
-import { formatDate, getReadTime } from "@primoui/utils"
+import { getReadTime } from "@primoui/utils"
 import { allPosts } from "content-collections"
 import type { Metadata } from "next"
 import Image from "next/image"
 import { notFound } from "next/navigation"
-import { getLocale, getTranslations } from "next-intl/server"
+import { getFormatter, getTranslations } from "next-intl/server"
 import { cache, Suspense } from "react"
 import { H6 } from "~/components/common/heading"
 import { Note } from "~/components/common/note"
@@ -41,17 +41,7 @@ const getData = cache(async ({ params }: Props) => {
       { url: "/blog", title: t("navigation.blog") },
       { url, title: post.title },
     ],
-    structuredData: [
-      generateArticle(
-        url,
-        post.title,
-        post.description,
-        post.publishedAt,
-        post.author,
-        post.image,
-        post.content.split(/\s+/).length,
-      ),
-    ],
+    structuredData: [generateArticle(url, post)],
   })
 
   return { post, ...data }
@@ -69,7 +59,7 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
 export default async function (props: Props) {
   const { post, breadcrumbs, structuredData } = await getData(props)
   const t = await getTranslations()
-  const locale = await getLocale()
+  const format = await getFormatter()
 
   return (
     <>
@@ -84,8 +74,8 @@ export default async function (props: Props) {
 
           <Note>
             {post.publishedAt && (
-              <time dateTime={post.publishedAt}>
-                {formatDate(post.publishedAt, "long", locale)}
+              <time dateTime={post.publishedAt.toISOString()}>
+                {format.dateTime(post.publishedAt, { dateStyle: "long" })}
               </time>
             )}
 

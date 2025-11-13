@@ -2,7 +2,7 @@
 title: "The Rise of Edge Computing in Modern Web Development"
 description: "Explore how edge computing is revolutionizing web development, improving performance, and enabling new possibilities for modern applications."
 image: "/content/example.webp"
-publishedAt: 2025-03-19
+publishedAt: 2025-11-13
 author:
   name: Piotr Kulpinski
   image: "/authors/piotrkulpinski.webp"

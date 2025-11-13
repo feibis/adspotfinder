@@ -15,14 +15,7 @@ const namespace = "pages.blog"
 
 // Get page data
 const getData = cache(async () => {
-  const posts = allPosts.toSorted((a, b) => b.publishedAt.localeCompare(a.publishedAt))
-
-  const blogPosts = posts.map(post => ({
-    title: post.title,
-    description: post.description,
-    path: post._meta.path,
-    publishedAt: post.publishedAt,
-  }))
+  const posts = allPosts.toSorted((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
 
   const t = await getTranslations()
   const url = "/blog"
@@ -31,7 +24,7 @@ const getData = cache(async () => {
 
   const data = getPageData(url, title, description, {
     breadcrumbs: [{ url, title }],
-    structuredData: [generateBlog(url, title, description, blogPosts)],
+    structuredData: [generateBlog(url, title, description, posts)],
   })
 
   return { posts, ...data }
