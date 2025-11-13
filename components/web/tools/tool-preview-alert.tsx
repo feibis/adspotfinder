@@ -1,5 +1,5 @@
-import { formatDate } from "@primoui/utils"
-import { ClockIcon } from "lucide-react"
+import { CalendarPlusIcon } from "lucide-react"
+import { getFormatter, getTranslations } from "next-intl/server"
 import type { ComponentProps } from "react"
 import { Button } from "~/components/common/button"
 import { Card } from "~/components/common/card"
@@ -13,23 +13,29 @@ type ToolPreviewAlertProps = ComponentProps<typeof Card> & {
   tool: ToolOne
 }
 
-export const ToolPreviewAlert = ({ tool, ...props }: ToolPreviewAlertProps) => {
-  if (isToolPublished(tool)) return null
+export const ToolPreviewAlert = async ({ tool, ...props }: ToolPreviewAlertProps) => {
+  const t = await getTranslations("tools.preview_alert")
+  const format = await getFormatter()
+
+  if (isToolPublished(tool)) {
+    return null
+  }
 
   return (
     <Card hover={false} focus={false} isHighlighted {...props}>
       <H5>
-        This is a preview only.{" "}
-        {tool.publishedAt && `${tool.name} will be published on ${formatDate(tool.publishedAt)}`}
+        {t("title")}{" "}
+        {tool.publishedAt &&
+          t("scheduled", {
+            toolName: tool.name,
+            date: format.dateTime(tool.publishedAt, { dateStyle: "long" }),
+          })}
       </H5>
 
-      <Note className="-mt-2">
-        {tool.name} is not yet published and is only visible on this page. If you want to speed up
-        the process, you can expedite the review below.
-      </Note>
+      <Note className="-mt-2">{t("description", { toolName: tool.name })}</Note>
 
-      <Button variant="fancy" prefix={<ClockIcon />} asChild>
-        <Link href={`/submit/${tool.slug}`}>Publish within 24h</Link>
+      <Button variant="fancy" prefix={<CalendarPlusIcon />} asChild>
+        <Link href={`/submit/${tool.slug}`}>{t("publish_button")}</Link>
       </Button>
     </Card>
   )

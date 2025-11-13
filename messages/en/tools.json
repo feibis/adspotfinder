@@ -23,5 +23,11 @@
     "link_copied": "Link copied to clipboard",
     "share": "Share",
     "share_on": "Share on {platform}"
+  },
+  "preview_alert": {
+    "title": "This is a preview only.",
+    "scheduled": "{toolName} will be published on {date}.",
+    "description": "{toolName} is not yet published and is only visible on this page. If you want to speed up the process, you can expedite the review below.",
+    "publish_button": "Publish within 24h"
   }
 }
