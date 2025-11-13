@@ -3,7 +3,7 @@ import { allPosts } from "content-collections"
 import type { Metadata } from "next"
 import Image from "next/image"
 import { notFound } from "next/navigation"
-import { getTranslations } from "next-intl/server"
+import { getLocale, getTranslations } from "next-intl/server"
 import { cache, Suspense } from "react"
 import { H6 } from "~/components/common/heading"
 import { Note } from "~/components/common/note"
@@ -69,6 +69,7 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
 export default async function (props: Props) {
   const { post, breadcrumbs, structuredData } = await getData(props)
   const t = await getTranslations()
+  const locale = await getLocale()
 
   return (
     <>
@@ -83,7 +84,9 @@ export default async function (props: Props) {
 
           <Note>
             {post.publishedAt && (
-              <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
+              <time dateTime={post.publishedAt}>
+                {formatDate(post.publishedAt, "long", locale)}
+              </time>
             )}
 
             <span className="px-2">&bull;</span>
@@ -115,7 +118,7 @@ export default async function (props: Props) {
           {post.author && (
             <Stack direction="column" className="lg:mx-5">
               <H6 as="strong" className="text-muted-foreground">
-                Written by
+                {t("posts.written_by")}
               </H6>
 
               <ExternalLink href={post.author.url} className="group">
