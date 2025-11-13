@@ -2,8 +2,9 @@
 
 import { formatDate } from "@primoui/utils"
 import type { ColumnDef } from "@tanstack/react-table"
-import { differenceInDays, formatDistanceToNowStrict } from "date-fns"
+import { formatDistanceToNowStrict } from "date-fns"
 import {
+  CalendarPlusIcon,
   CircleDashedIcon,
   CircleDotDashedIcon,
   CircleIcon,
@@ -22,6 +23,7 @@ import { DataTableColumnHeader } from "~/components/data-table/data-table-column
 import { DataTableLink } from "~/components/data-table/data-table-link"
 import { DataTableToolbar } from "~/components/data-table/data-table-toolbar"
 import { useDataTable } from "~/hooks/use-data-table"
+import { isToolPublished } from "~/lib/tools"
 import type { findTools } from "~/server/admin/tools/queries"
 import { toolsTableParamsSchema } from "~/server/admin/tools/schema"
 import type { DataTableFilterField } from "~/types"
@@ -99,29 +101,29 @@ export const DashboardTable = ({ toolsPromise }: DashboardTableProps) => {
         id: "actions",
         enableHiding: false,
         cell: ({ row }) => {
-          const { slug, isFeatured, publishedAt } = row.original
-          const isLongQueue = !publishedAt || differenceInDays(publishedAt, new Date()) >= 7
+          const { slug, isFeatured } = row.original
+          const isPublished = isToolPublished(row.original)
+
+          if (isPublished && isFeatured) {
+            return null
+          }
 
           return (
-            <Stack size="sm" className="float-right -my-1">
-              {isLongQueue && (
-                <Button size="sm" variant="secondary" asChild>
-                  <Link href={`/submit/${slug}`}>Expedite</Link>
-                </Button>
-              )}
-
-              {!isFeatured && (
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  prefix={<SparklesIcon className="text-inherit" />}
-                  className="text-blue-600 dark:text-blue-400"
-                  asChild
-                >
-                  <Link href={`/submit/${slug}`}>Promote</Link>
-                </Button>
-              )}
-            </Stack>
+            <Button
+              size="sm"
+              variant="secondary"
+              prefix={
+                !isPublished ? (
+                  <CalendarPlusIcon className="text-green-600 dark:text-green-400" />
+                ) : (
+                  <SparklesIcon className="text-blue-600 dark:text-blue-400" />
+                )
+              }
+              className="float-right -my-1"
+              asChild
+            >
+              <Link href={`/submit/${slug}`}>{!isPublished ? "Publish now" : "Get featured"}</Link>
+            </Button>
           )
         },
       },
