@@ -5,13 +5,10 @@ import type { ComponentProps } from "react"
 import { Card } from "~/components/common/card"
 import { H5 } from "~/components/common/heading"
 import { Link } from "~/components/common/link"
-import { Note } from "~/components/common/note"
-import { Stack } from "~/components/common/stack"
 import { Tooltip } from "~/components/common/tooltip"
 import { ExternalLink } from "~/components/web/external-link"
 import { ToolHoverCard } from "~/components/web/tools/tool-hover-card"
 import { Favicon } from "~/components/web/ui/favicon"
-import { siteConfig } from "~/config/site"
 import { findTools } from "~/server/web/tools/queries"
 
 export const FeaturedToolsIcons = async ({ ...props }: ComponentProps<typeof Card>) => {
@@ -25,12 +22,9 @@ export const FeaturedToolsIcons = async ({ ...props }: ComponentProps<typeof Car
 
   return (
     <Card hover={false} focus={false} {...props}>
-      <Stack size="sm" direction="column">
-        <H5 as="strong">{t("title")}</H5>
-        <Note>{t("description", { siteName: siteConfig.name })}</Note>
-      </Stack>
+      <H5 as="strong">{t("title")}:</H5>
 
-      <Stack className="gap-[7px]">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(2.25rem,1fr))] gap-2 w-full -mt-1">
         {tools.map(tool => (
           <ToolHoverCard key={tool.slug} tool={tool}>
             <ExternalLink
@@ -65,7 +59,7 @@ export const FeaturedToolsIcons = async ({ ...props }: ComponentProps<typeof Car
             </Link>
           </Tooltip>
         )}
-      </Stack>
+      </div>
     </Card>
   )
 }
