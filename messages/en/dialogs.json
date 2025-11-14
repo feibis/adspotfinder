@@ -3,7 +3,7 @@
     "title": "Claim {toolName}",
     "otp_sent": "OTP code sent to your email",
     "success_message": "You've successfully claimed {toolName}",
-    "intro": "To claim this listing, you need to verify the ownership of the {domain} domain. This helps us to ensure that you represent the organization.",
+    "intro": "To claim this listing, you need to verify ownership of the {domain} domain. This helps us ensure that you represent the organization.",
     "benefits_title": "By claiming this tool, it will get a verified badge and you'll be able to:",
     "benefit_update": "Update tool information",
     "benefit_manage": "Manage its categories and alternatives",

@@ -19,13 +19,13 @@
   },
   "count_badge": {
     "new_tools": "{count} new {count, plural, =0 {tools} =1 {tool} other {tools}} added",
-    "total_tools": "{count} {count, plural, =0 {tools} =1 {tool} other {tools}} collected"
+    "total_tools": "{count} {count, plural, =0 {tools} =1 {tool} other {tools}} listed"
   },
   "cta_proof": {
     "message": "Join {count}+ directory enthusiasts"
   },
   "feature_nudge": {
-    "message": "{name} has already been published on {siteName}. If you want, you can feature it for extra exposure.",
+    "message": "{name} has already been published on {siteName}. You can feature it for extra exposure.",
     "feature_button": "Feature {toolName}",
     "dismiss_button": "Dismiss"
   },
