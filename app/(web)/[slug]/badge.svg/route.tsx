@@ -8,7 +8,6 @@ import { LogoSymbol } from "~/components/web/ui/logo-symbol"
 import { siteConfig } from "~/config/site"
 import { loadGoogleFont } from "~/lib/fonts"
 import { isToolPublished } from "~/lib/tools"
-import type { ToolOne } from "~/server/web/tools/payloads"
 import { findTool } from "~/server/web/tools/queries"
 
 const THEMES = {
@@ -28,12 +27,10 @@ const THEMES = {
 
 type SvgBadgeProps = {
   theme: keyof typeof THEMES
-  tool: ToolOne
+  label: string
 }
 
-const SvgBadge = async ({ theme, tool }: SvgBadgeProps) => {
-  const t = await getTranslations()
-  const prefix = isToolPublished(tool) ? "featured" : "coming_soon"
+const SvgBadge = ({ theme, label }: SvgBadgeProps) => {
   const colors = THEMES[theme]
 
   return (
@@ -80,7 +77,7 @@ const SvgBadge = async ({ theme, tool }: SvgBadgeProps) => {
             opacity: 0.75,
           }}
         >
-          {t(`common.${prefix}`)}
+          {label}
         </span>
 
         <span
@@ -134,7 +131,10 @@ export const GET = async ({ url }: NextRequest, { params }: RouteContext<"/[slug
     notFound()
   }
 
-  const svg = await satori(<SvgBadge theme={theme} tool={tool} />, {
+  const t = await getTranslations()
+  const label = t(`common.${isToolPublished(tool) ? "featured" : "coming_soon"}`)
+
+  const svg = await satori(<SvgBadge theme={theme} label={label} />, {
     width,
     height,
     fonts: [
