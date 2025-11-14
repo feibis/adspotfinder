@@ -4,12 +4,12 @@ import { EmailExpediteNudge } from "~/emails/components/expedite-nudge"
 import { EmailWrapper, type EmailWrapperProps } from "~/emails/components/wrapper"
 import { calculateQueueDuration } from "~/lib/products"
 
-export type EmailProps = EmailWrapperProps & {
+type EmailProps = EmailWrapperProps & {
   tool: Tool
   queue?: number
 }
 
-const EmailSubmission = ({ tool, queue = 100, ...props }: EmailProps) => {
+export const EmailSubmission = ({ tool, queue = 100, ...props }: EmailProps) => {
   return (
     <EmailWrapper {...props}>
       <Text>Hey {tool.submitterName?.trim()}!</Text>
@@ -24,5 +24,3 @@ const EmailSubmission = ({ tool, queue = 100, ...props }: EmailProps) => {
     </EmailWrapper>
   )
 }
-
-export default EmailSubmission

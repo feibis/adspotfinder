@@ -8,7 +8,7 @@ import type { NextRequest } from "next/server"
 import { cache } from "react"
 import { claimsConfig } from "~/config/claims"
 import { siteConfig } from "~/config/site"
-import EmailMagicLink from "~/emails/magic-link"
+import { EmailMagicLink } from "~/emails/magic-link"
 import { env } from "~/env"
 import { sendEmail } from "~/lib/email"
 import { db } from "~/services/db"
@@ -63,7 +63,7 @@ export const auth = betterAuth({
       sendMagicLink: async ({ email, url }) => {
         const to = email
         const subject = `Your ${siteConfig.name} Login Link`
-        await sendEmail({ to, subject, react: EmailMagicLink({ to, url }) })
+        await sendEmail({ to, subject, react: await EmailMagicLink({ to, url }) })
       },
     }),
 

@@ -6,11 +6,11 @@ import { EmailActionNudge } from "~/emails/components/action-nudge"
 import { EmailExpediteNudge } from "~/emails/components/expedite-nudge"
 import { EmailWrapper, type EmailWrapperProps } from "~/emails/components/wrapper"
 
-export type EmailProps = EmailWrapperProps & {
+type EmailProps = EmailWrapperProps & {
   tool: Tool
 }
 
-const EmailSubmissionScheduled = ({ tool, ...props }: EmailProps) => {
+export const EmailSubmissionScheduled = ({ tool, ...props }: EmailProps) => {
   const publishedAt = addHours(tool.publishedAt || new Date(), 2)
   const isLongQueue = differenceInDays(publishedAt, new Date()) > 7
   const dateRelative = formatDistanceToNowStrict(publishedAt, { addSuffix: true })
@@ -39,5 +39,3 @@ const EmailSubmissionScheduled = ({ tool, ...props }: EmailProps) => {
     </EmailWrapper>
   )
 }
-
-export default EmailSubmissionScheduled

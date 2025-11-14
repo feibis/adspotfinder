@@ -6,11 +6,11 @@ import { EmailButton } from "~/emails/components/button"
 import { EmailFeatureNudge } from "~/emails/components/feature-nudge"
 import { EmailWrapper, type EmailWrapperProps } from "~/emails/components/wrapper"
 
-export type EmailProps = EmailWrapperProps & {
+type EmailProps = EmailWrapperProps & {
   tool: Tool
 }
 
-const EmailSubmissionPublished = ({ tool, ...props }: EmailProps) => {
+export const EmailSubmissionPublished = ({ tool, ...props }: EmailProps) => {
   const toolUrl = `${siteConfig.url}/${tool.slug}`
 
   return (
@@ -38,5 +38,3 @@ const EmailSubmissionPublished = ({ tool, ...props }: EmailProps) => {
     </EmailWrapper>
   )
 }
-
-export default EmailSubmissionPublished

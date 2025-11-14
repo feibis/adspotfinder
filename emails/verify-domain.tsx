@@ -7,7 +7,7 @@ type EmailProps = EmailWrapperProps & {
   otp: string
 }
 
-const EmailVerifyDomain = ({ otp, ...props }: EmailProps) => {
+export const EmailVerifyDomain = ({ otp, ...props }: EmailProps) => {
   const previewText = `Your code to verify domain ownership on ${siteConfig.name}`
 
   return (
@@ -40,5 +40,3 @@ const EmailVerifyDomain = ({ otp, ...props }: EmailProps) => {
     </EmailWrapper>
   )
 }
-
-export default EmailVerifyDomain

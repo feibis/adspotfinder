@@ -4,11 +4,11 @@ import { siteConfig } from "~/config/site"
 import { EmailButton } from "~/emails/components/button"
 import { EmailWrapper, type EmailWrapperProps } from "~/emails/components/wrapper"
 
-export type EmailProps = EmailWrapperProps & {
+type EmailProps = EmailWrapperProps & {
   tool: Tool
 }
 
-const EmailAdminSubmissionPremium = ({ tool, ...props }: EmailProps) => {
+export const EmailAdminSubmissionPremium = ({ tool, ...props }: EmailProps) => {
   return (
     <EmailWrapper {...props}>
       <Text>Hi!</Text>
@@ -24,5 +24,3 @@ const EmailAdminSubmissionPremium = ({ tool, ...props }: EmailProps) => {
     </EmailWrapper>
   )
 }
-
-export default EmailAdminSubmissionPremium
