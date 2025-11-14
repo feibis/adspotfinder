@@ -1,6 +1,4 @@
-"use client"
-
-import { useTranslations } from "next-intl"
+import { getTranslations } from "next-intl/server"
 import type { ComponentProps } from "react"
 import { Link } from "~/components/common/link"
 import { Skeleton } from "~/components/common/skeleton"
@@ -11,8 +9,8 @@ type CategoryCardProps = ComponentProps<typeof Tile> & {
   category: CategoryMany
 }
 
-const CategoryCard = ({ category, ...props }: CategoryCardProps) => {
-  const t = useTranslations()
+const CategoryCard = async ({ category, ...props }: CategoryCardProps) => {
+  const t = await getTranslations()
   const count = category._count.tools
 
   return (

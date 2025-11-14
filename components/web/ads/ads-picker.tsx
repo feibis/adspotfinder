@@ -8,7 +8,7 @@ import { useAction } from "next-safe-action/hooks"
 import posthog from "posthog-js"
 import type { ComponentProps } from "react"
 import { toast } from "sonner"
-import type { AdType } from "~/.generated/prisma/browser"
+import { AdType } from "~/.generated/prisma/browser"
 import { AnimatedContainer } from "~/components/common/animated-container"
 import { Badge } from "~/components/common/badge"
 import { Button } from "~/components/common/button"
@@ -34,21 +34,21 @@ export const AdsPicker = ({ className, ads, type, ...props }: AdsCalendarProps) 
   // Ad spots available for purchase
   const spots = [
     {
-      type: "Tools",
+      type: AdType.Tools,
       label: t("spots.listing.label"),
       description: t("spots.listing.description"),
       price: 25,
       preview: "https://share.cleanshot.com/7CFqSw0b",
     },
     {
-      type: "Banner",
+      type: AdType.Banner,
       label: t("spots.banner.label"),
       description: t("spots.banner.description"),
       price: 25,
       preview: "https://share.cleanshot.com/SvqTztKT",
     },
     {
-      type: "ToolPage",
+      type: AdType.ToolPage,
       label: t("spots.tool_page.label"),
       description: t("spots.tool_page.description"),
       price: 15,

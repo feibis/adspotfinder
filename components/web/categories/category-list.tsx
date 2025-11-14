@@ -1,6 +1,4 @@
-"use client"
-
-import { useTranslations } from "next-intl"
+import { getTranslations } from "next-intl/server"
 import type { ComponentProps } from "react"
 import { CategoryCard, CategoryCardSkeleton } from "~/components/web/categories/category-card"
 import { EmptyList } from "~/components/web/empty-list"
@@ -12,8 +10,8 @@ type CategoryListProps = ComponentProps<typeof Grid> & {
   categories: CategoryMany[]
 }
 
-const CategoryList = ({ categories, className, ...props }: CategoryListProps) => {
-  const t = useTranslations()
+const CategoryList = async ({ categories, className, ...props }: CategoryListProps) => {
+  const t = await getTranslations()
 
   return (
     <Grid className={cx("gap-x-8", className)} {...props}>

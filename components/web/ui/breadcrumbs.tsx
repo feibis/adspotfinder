@@ -15,7 +15,7 @@ const BreadcrumbsSeparator = ({ ...props }: ComponentProps<"span">) => {
 
 type Breadcrumb = {
   url: string
-  title: string | ReactNode
+  title: ReactNode
 }
 
 type BreadcrumbsProps = ComponentProps<typeof Stack> & {

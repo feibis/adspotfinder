@@ -22,7 +22,7 @@ import { findAdWithFallback } from "~/server/web/ads/actions"
 type AdCardProps = CardProps & InferSafeActionFnInput<typeof findAdWithFallback>["clientInput"]
 
 const AdCard = async ({ className, type, explicitAd, fallback, ...props }: AdCardProps) => {
-  const t = await getTranslations("components.ads")
+  const t = await getTranslations()
   const { data: ad } = await findAdWithFallback({ type, explicitAd, fallback })
 
   if (!ad) {
@@ -60,7 +60,7 @@ const AdCard = async ({ className, type, explicitAd, fallback, ...props }: AdCar
             </CardDescription>
 
             <Button className="pointer-events-none md:w-full" suffix={<ArrowUpRightIcon />} asChild>
-              <span>{ad.buttonLabel ?? t("visit_button", { name: ad.name })}</span>
+              <span>{ad.buttonLabel ?? t("common.visit", { name: ad.name })}</span>
             </Button>
 
             <CardIcon>
