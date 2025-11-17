@@ -14,6 +14,7 @@ import { CTAForm } from "~/components/web/cta-form"
 import { ExternalLink } from "~/components/web/external-link"
 import { ThemeSwitcher } from "~/components/web/theme-switcher"
 import { NavLink, navLinkVariants } from "~/components/web/ui/nav-link"
+import { adsConfig } from "~/config/ads"
 import { linksConfig } from "~/config/links"
 import { siteConfig } from "~/config/site"
 import { cx } from "~/lib/utils"
@@ -86,7 +87,7 @@ export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) 
 
           <NavLink href="/submit">{t("navigation.submit")}</NavLink>
           <NavLink href="/about">{t("navigation.about")}</NavLink>
-          <NavLink href="/advertise">{t("navigation.advertise")}</NavLink>
+          {adsConfig.enabled && <NavLink href="/advertise">{t("navigation.advertise")}</NavLink>}
         </Stack>
       </div>
 

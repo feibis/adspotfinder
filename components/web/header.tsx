@@ -26,6 +26,7 @@ import { Hamburger } from "~/components/web/ui/hamburger"
 import { Logo } from "~/components/web/ui/logo"
 import { NavLink } from "~/components/web/ui/nav-link"
 import { UserMenu } from "~/components/web/user-menu"
+import { adsConfig } from "~/config/ads"
 import { useSearch } from "~/contexts/search-context"
 import { cx } from "~/lib/utils"
 
@@ -90,8 +91,8 @@ const Header = ({ className, ...props }: ComponentProps<"div">) => {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <NavLink href="/advertise">{t("navigation.advertise")}</NavLink>
             <NavLink href="/about">{t("navigation.about")}</NavLink>
+            {adsConfig.enabled && <NavLink href="/advertise">{t("navigation.advertise")}</NavLink>}
           </nav>
 
           <Stack size="sm" wrap={false} className="justify-end max-lg:grow">
@@ -117,24 +118,12 @@ const Header = ({ className, ...props }: ComponentProps<"div">) => {
             isNavOpen ? "opacity-100" : "opacity-0 pointer-events-none",
           )}
         >
-          <NavLink href="/?sort=publishedAt.desc" className="text-base">
-            {t("navigation.browse_tools")}
-          </NavLink>
-          <NavLink href="/categories" className="text-base">
-            {t("navigation.categories")}
-          </NavLink>
-          <NavLink href="/tags" className="text-base">
-            {t("navigation.tags")}
-          </NavLink>
-          <NavLink href="/submit" className="text-base">
-            {t("navigation.submit")}
-          </NavLink>
-          <NavLink href="/advertise" className="text-base">
-            {t("navigation.advertise")}
-          </NavLink>
-          <NavLink href="/about" className="text-base">
-            {t("navigation.about")}
-          </NavLink>
+          <NavLink href="/?sort=publishedAt.desc">{t("navigation.latest_tools")}</NavLink>
+          <NavLink href="/categories">{t("navigation.categories")}</NavLink>
+          <NavLink href="/tags">{t("navigation.tags")}</NavLink>
+          <NavLink href="/submit">{t("navigation.submit")}</NavLink>
+          <NavLink href="/about">{t("navigation.about")}</NavLink>
+          {adsConfig.enabled && <NavLink href="/advertise">{t("navigation.advertise")}</NavLink>}
         </nav>
       </Container>
     </header>
