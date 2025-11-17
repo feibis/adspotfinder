@@ -23,6 +23,7 @@ enum AdType {
 enum ToolStatus {
   Draft
   Scheduled
+  Pending
   Published
 }
 

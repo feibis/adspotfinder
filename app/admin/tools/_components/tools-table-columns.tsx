@@ -18,6 +18,10 @@ export const getColumns = (): ColumnDef<Tool>[] => {
       variant: "soft",
     },
 
+    [ToolStatus.Pending]: {
+      variant: "warning",
+    },
+
     [ToolStatus.Scheduled]: {
       variant: "info",
     },

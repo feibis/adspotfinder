@@ -94,7 +94,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                         className="pointer-events-none"
                       />
 
-                      <Slot.Root className="-mr-0.5" aria-hidden="true">
+                      <Slot.Root className="-mr-0.5 stroke-[2.5]" aria-hidden="true">
                         {option.icon}
                       </Slot.Root>
 

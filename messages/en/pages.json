@@ -50,7 +50,8 @@
       },
       "status": {
         "scheduled": "Scheduled",
-        "awaiting_review": "Awaiting review"
+        "pending": "Pending review",
+        "draft": "Draft"
       },
       "actions": {
         "publish": "Publish now",

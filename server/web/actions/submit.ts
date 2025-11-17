@@ -3,6 +3,7 @@
 import { getDomain, slugify, tryCatch } from "@primoui/utils"
 import { after } from "next/server"
 import { getTranslations } from "next-intl/server"
+import { ToolStatus } from "~/.generated/prisma/client"
 import { isDev } from "~/env"
 import { getServerSession } from "~/lib/auth"
 import { isDisposableEmail } from "~/lib/email"
@@ -98,9 +99,9 @@ export const submitTool = actionClient
     // Generate a unique slug
     const slug = await generateUniqueSlug(data.name)
 
-    // Save the tool to the database
+    // Save the tool to the database with Pending status for user submissions
     const { data: tool, error } = await tryCatch(
-      db.tool.create({ data: { ...data, slug, ownerId } }),
+      db.tool.create({ data: { ...data, slug, ownerId, status: ToolStatus.Pending } }),
     )
 
     if (error) {

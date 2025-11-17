@@ -77,6 +77,51 @@ export const ToolPublishActions = ({
   }
 
   const toolActions: Record<ToolStatus, ActionConfig[]> = {
+    [ToolStatus.Pending]: [
+      {
+        type: "button",
+        children: "Review",
+        variant: "fancy",
+        popover: {
+          title: "Review the pending submission",
+          options: [
+            {
+              status: ToolStatus.Published,
+              title: "Publish now",
+              description: "Approve and publish this tool immediately",
+              button: {
+                onClick: handlePublished,
+                children: "Publish",
+              },
+            },
+            {
+              status: ToolStatus.Scheduled,
+              title: "Schedule for later",
+              description: "Set automatic future publish date",
+              button: {
+                onClick: handleScheduled,
+                children: "Schedule",
+              },
+            },
+            {
+              status: ToolStatus.Draft,
+              title: "Convert to draft",
+              description: "Make this tool a draft for further editing",
+              button: {
+                onClick: handleDraft,
+                children: "Convert",
+              },
+            },
+          ],
+        },
+      },
+      {
+        type: "submit",
+        children: "Update",
+        variant: "primary",
+      },
+    ],
+
     [ToolStatus.Draft]: [
       {
         type: "button",
@@ -108,7 +153,7 @@ export const ToolPublishActions = ({
       },
       {
         type: "submit",
-        children: "Save Draft",
+        children: "Update",
         variant: "primary",
       },
     ],
@@ -232,7 +277,7 @@ export const ToolPublishActions = ({
                       <Stack size="sm" className="items-start" key={option.status}>
                         <RadioGroupItem id={option.status} value={option.status} />
 
-                        <Stack size="sm" direction="column" className="grow" asChild>
+                        <Stack size="sm" direction="column" className="flex-1" asChild>
                           <label htmlFor={option.status}>
                             <H6>{option.title}</H6>
 

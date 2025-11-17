@@ -4,14 +4,16 @@ import { formatDate } from "@primoui/utils"
 import type { ColumnDef } from "@tanstack/react-table"
 import {
   CalendarPlusIcon,
+  CircleCheckIcon,
   CircleDashedIcon,
   CircleDotDashedIcon,
-  CircleIcon,
+  CircleDotIcon,
   PlusIcon,
   SparklesIcon,
 } from "lucide-react"
 import { useFormatter, useTranslations } from "next-intl"
 import { useQueryStates } from "nuqs"
+import { Slot } from "radix-ui"
 import { useMemo } from "react"
 import { type Tool, ToolStatus } from "~/.generated/prisma/browser"
 import { Button } from "~/components/common/button"
@@ -38,7 +40,6 @@ export const DashboardTable = ({ tools, pageCount }: Awaited<ReturnType<typeof f
     return [
       {
         accessorKey: "name",
-        enableHiding: false,
         size: 160,
         header: ({ column }) => <DataTableColumnHeader column={column} title={t("columns.name")} />,
         cell: ({ row }) => {
@@ -48,57 +49,52 @@ export const DashboardTable = ({ tools, pageCount }: Awaited<ReturnType<typeof f
         },
       },
       {
-        accessorKey: "publishedAt",
-        enableHiding: false,
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} title={t("columns.published_at")} />
-        ),
-        cell: ({ row }) => {
-          const { status, publishedAt } = row.original
-
-          switch (status) {
-            case ToolStatus.Published:
-              return (
-                <Stack size="sm" wrap={false}>
-                  <CircleIcon className="stroke-3 text-green-600/75 dark:text-green-500/75" />
-                  <Note className="font-medium">
-                    {format.dateTime(publishedAt!, { dateStyle: "medium" })}
-                  </Note>
-                </Stack>
-              )
-            case ToolStatus.Scheduled:
-              return (
-                <Stack size="sm" wrap={false}>
-                  <CircleDotDashedIcon className="stroke-3 text-yellow-700/75 dark:text-yellow-500/75" />
-                  <Note className="font-medium">
-                    {format.dateTime(publishedAt!, { dateStyle: "medium" })} (
-                    {t("status.scheduled")})
-                  </Note>
-                </Stack>
-              )
-            case ToolStatus.Draft:
-              return (
-                <Stack size="sm" wrap={false}>
-                  <CircleDashedIcon className="stroke-3 text-muted-foreground/75" />
-                  <span className="text-muted-foreground/75">{t("status.awaiting_review")}</span>
-                </Stack>
-              )
-            default:
-              return ""
-          }
-        },
-      },
-      {
         accessorKey: "createdAt",
-        enableHiding: false,
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title={t("columns.created_at")} />
         ),
         cell: ({ row }) => <Note>{formatDate(row.getValue<Date>("createdAt"))}</Note>,
       },
       {
+        accessorKey: "publishedAt",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("columns.published_at")} />
+        ),
+        cell: ({ row }) => {
+          const { status, publishedAt } = row.original
+
+          const statusIcons = {
+            [ToolStatus.Published]: {
+              label: format.dateTime(publishedAt!, { dateStyle: "medium" }),
+              icon: <CircleCheckIcon className="text-green-500" />,
+            },
+            [ToolStatus.Scheduled]: {
+              label: `${format.dateTime(publishedAt!, { dateStyle: "medium" })} (${t("status.scheduled")})`,
+              icon: <CircleDotIcon className="text-blue-500" />,
+            },
+            [ToolStatus.Pending]: {
+              label: t("status.pending"),
+              icon: <CircleDotDashedIcon className="text-yellow-500" />,
+            },
+            [ToolStatus.Draft]: {
+              label: t("status.draft"),
+              icon: <CircleDashedIcon className="text-gray-500" />,
+            },
+          }
+
+          return (
+            <Stack size="sm" wrap={false}>
+              <Slot.Root className="-mr-0.5 stroke-[2.5]" aria-hidden="true">
+                {statusIcons[status].icon}
+              </Slot.Root>
+
+              <Note className="font-medium">{statusIcons[status].label}</Note>
+            </Stack>
+          )
+        },
+      },
+      {
         id: "actions",
-        enableHiding: false,
         cell: ({ row }) => {
           const { slug, isFeatured } = row.original
           const isPublished = isToolPublished(row.original)
@@ -147,11 +143,11 @@ export const DashboardTable = ({ tools, pageCount }: Awaited<ReturnType<typeof f
     filterFields,
     shallow: false,
     clearOnDefault: true,
+    enableHiding: false,
     initialState: {
       pagination: { pageIndex: 0, pageSize: perPage },
       sorting: sort,
       columnPinning: { right: ["actions"] },
-      columnVisibility: { createdAt: false },
     },
     getRowId: originalRow => originalRow.slug,
   })

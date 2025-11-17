@@ -1,6 +1,12 @@
 "use client"
 
-import { CircleDashedIcon, CircleDotDashedIcon, CircleDotIcon, PlusIcon } from "lucide-react"
+import {
+  CircleCheckIcon,
+  CircleDashedIcon,
+  CircleDotDashedIcon,
+  CircleDotIcon,
+  PlusIcon,
+} from "lucide-react"
 import { useQueryStates } from "nuqs"
 import { use, useMemo } from "react"
 import { type Tool, ToolStatus } from "~/.generated/prisma/browser"
@@ -43,12 +49,17 @@ export function ToolsTable({ toolsPromise }: ToolsTableProps) {
         {
           label: "Published",
           value: ToolStatus.Published,
-          icon: <CircleDotIcon className="text-green-500" />,
+          icon: <CircleCheckIcon className="text-green-500" />,
         },
         {
           label: "Scheduled",
           value: ToolStatus.Scheduled,
-          icon: <CircleDotDashedIcon className="text-blue-500" />,
+          icon: <CircleDotIcon className="text-blue-500" />,
+        },
+        {
+          label: "Pending",
+          value: ToolStatus.Pending,
+          icon: <CircleDotDashedIcon className="text-yellow-600" />,
         },
         {
           label: "Draft",

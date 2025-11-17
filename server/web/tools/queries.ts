@@ -118,7 +118,7 @@ export const countSubmittedTools = async ({ where, ...args }: Prisma.ToolCountAr
   return db.tool.count({
     ...args,
     where: {
-      status: { in: [ToolStatus.Scheduled, ToolStatus.Draft] },
+      status: { notIn: [ToolStatus.Published] },
       submitterEmail: { not: null },
       ...where,
     },
