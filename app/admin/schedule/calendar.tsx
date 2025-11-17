@@ -1,7 +1,7 @@
 "use client"
 
 import { addMonths, eachDayOfInterval, format, isSameDay, isSameMonth, subMonths } from "date-fns"
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
+import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 import type { ComponentProps } from "react"
 import { ToolStatus } from "~/.generated/prisma/browser"
 import { Button } from "~/components/common/button"
@@ -83,10 +83,19 @@ export const Calendar = ({
   const length = Math.ceil(days.length / 7)
   const weeks = Array.from({ length }, (_, i) => days.slice(i * 7, (i + 1) * 7))
 
+  const today = new Date()
+  const isCurrentMonth = isSameMonth(month, today)
+
   return (
     <div className={cx("space-y-2", className)} {...props}>
       <Stack size="sm">
         <H5 className="mr-auto">{format(month, "MMM yyyy")}</H5>
+
+        {!isCurrentMonth && (
+          <Button variant="secondary" size="md" prefix={<CalendarIcon />} asChild>
+            <Link href={`/admin/schedule?month=${format(today, "yyyy-MM")}`}>Today</Link>
+          </Button>
+        )}
 
         <Button variant="secondary" size="md" prefix={<ChevronLeftIcon />} asChild>
           <Link href={`/admin/schedule?month=${format(subMonths(month, 1), "yyyy-MM")}`}>
@@ -101,36 +110,38 @@ export const Calendar = ({
         </Button>
       </Stack>
 
-      <table className="w-full table-fixed border-collapse text-sm">
-        <thead>
-          <tr>
-            {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, index) => (
-              <th
-                key={day}
-                style={{ width: index < 5 ? "16%" : "10%" }}
-                className="text-start text-muted-foreground p-2 text-xs font-normal"
-              >
-                {day}
-              </th>
-            ))}
-          </tr>
-        </thead>
-
-        <tbody>
-          {weeks.map((week, weekIndex) => (
-            <tr key={weekIndex}>
-              {week.map(day => (
-                <CalendarDay
-                  key={day.toISOString()}
-                  day={day}
-                  month={month}
-                  tools={tools.filter(tool => isSameDay(tool.publishedAt!, day))}
-                />
+      <div className="overflow-x-auto">
+        <table className="min-w-3xl w-full table-fixed border-collapse text-sm">
+          <thead>
+            <tr>
+              {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, index) => (
+                <th
+                  key={day}
+                  style={{ width: index < 5 ? "16%" : "10%" }}
+                  className="text-start text-muted-foreground p-2 text-xs font-normal"
+                >
+                  {day}
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {weeks.map((week, weekIndex) => (
+              <tr key={weekIndex}>
+                {week.map(day => (
+                  <CalendarDay
+                    key={day.toISOString()}
+                    day={day}
+                    month={month}
+                    tools={tools.filter(tool => isSameDay(tool.publishedAt!, day))}
+                  />
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }
