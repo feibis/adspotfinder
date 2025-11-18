@@ -41,7 +41,8 @@ export default async function ({ searchParams }: PageProps<"/advertise">) {
     quote: t(`${namespace}.testimonial.quote`),
     author: {
       name: t(`${namespace}.testimonial.author.name`),
-      title: t(`${namespace}.testimonial.author.title`),
+      note: t(`${namespace}.testimonial.author.note`),
+      image: "/authors/piotrkulpinski.webp",
     },
   }
 
@@ -60,10 +61,7 @@ export default async function ({ searchParams }: PageProps<"/advertise">) {
 
       <Stats />
 
-      <Testimonial
-        quote={testimonial.quote}
-        author={{ ...testimonial.author, image: "/authors/piotrkulpinski.webp" }}
-      />
+      <Testimonial quote={testimonial.quote} author={testimonial.author} />
 
       <hr />
 

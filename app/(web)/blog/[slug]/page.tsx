@@ -5,11 +5,8 @@ import Image from "next/image"
 import { notFound } from "next/navigation"
 import { getFormatter, getTranslations } from "next-intl/server"
 import { cache, Suspense } from "react"
-import { H6 } from "~/components/common/heading"
-import { Note } from "~/components/common/note"
-import { Stack } from "~/components/common/stack"
 import { AdCard, AdCardSkeleton } from "~/components/web/ads/ad-card"
-import { ExternalLink } from "~/components/web/external-link"
+import { TableOfContents } from "~/components/web/blog/table-of-contents"
 import { MDX } from "~/components/web/mdx"
 import { Nav } from "~/components/web/nav"
 import { StructuredData } from "~/components/web/structured-data"
@@ -69,20 +66,24 @@ export default async function (props: Props) {
         <IntroTitle>{post.title}</IntroTitle>
         <IntroDescription>{post.description}</IntroDescription>
 
-        <Stack size="lg" className="mt-4">
-          <Nav title={post.title} />
-
-          <Note>
-            {post.publishedAt && (
-              <time dateTime={post.publishedAt.toISOString()}>
-                {format.dateTime(post.publishedAt, { dateStyle: "long" })}
-              </time>
-            )}
-
-            <span className="px-2">&bull;</span>
-            <span>{t("posts.read_time", { count: getReadTime(post.content) })}</span>
-          </Note>
-        </Stack>
+        {post.author && (
+          <Author
+            prefix={t("posts.written_by")}
+            note={
+              <>
+                {post.publishedAt && (
+                  <time dateTime={post.publishedAt.toISOString()}>
+                    {format.dateTime(post.publishedAt, { dateStyle: "long" })}
+                  </time>
+                )}
+                <span className="px-1.5">&bull;</span>
+                <span>{t("posts.read_time", { count: getReadTime(post.content) })}</span>
+              </>
+            }
+            className="mt-4"
+            {...post.author}
+          />
+        )}
       </Intro>
 
       <Section>
@@ -100,21 +101,13 @@ export default async function (props: Props) {
           <MDX code={post.content} />
         </Section.Content>
 
-        <Section.Sidebar>
-          <Suspense fallback={<AdCardSkeleton className="max-md:hidden" />}>
-            <AdCard type="BlogPost" className="max-md:hidden" />
+        <Section.Sidebar className="max-h-(--sidebar-max-height)">
+          <Suspense fallback={<AdCardSkeleton />}>
+            <AdCard type="BlogPost" />
           </Suspense>
 
-          {post.author && (
-            <Stack direction="column" className="lg:mx-5">
-              <H6 as="strong" className="text-muted-foreground">
-                {t("posts.written_by")}
-              </H6>
-
-              <ExternalLink href={post.author.url} className="group">
-                <Author {...post.author} />
-              </ExternalLink>
-            </Stack>
+          {!!post.headings?.length && (
+            <TableOfContents headings={post.headings} className="flex-1 max-md:hidden lg:mx-5" />
           )}
         </Section.Sidebar>
       </Section>
