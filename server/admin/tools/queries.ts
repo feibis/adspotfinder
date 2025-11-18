@@ -36,7 +36,7 @@ export const findTools = async (search: ToolsTableSchema, where?: Prisma.ToolWhe
   const [tools, total] = await db.$transaction([
     db.tool.findMany({
       where: { ...whereQuery, ...where },
-      orderBy,
+      orderBy: [...orderBy, { createdAt: "asc" }],
       take: perPage,
       skip: offset,
     }),

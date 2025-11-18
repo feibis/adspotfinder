@@ -36,7 +36,7 @@ export const findCategories = async (
   const [categories, categoriesTotal] = await db.$transaction([
     db.category.findMany({
       where: { ...whereQuery, ...where },
-      orderBy,
+      orderBy: [...orderBy, { createdAt: "asc" }],
       take: perPage,
       skip: offset,
       include: { _count: { select: { tools: true } } },

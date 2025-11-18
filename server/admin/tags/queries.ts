@@ -33,7 +33,7 @@ export const findTags = async (search: TagsTableSchema, where?: Prisma.TagWhereI
   const [tags, tagsTotal] = await db.$transaction([
     db.tag.findMany({
       where: { ...whereQuery, ...where },
-      orderBy,
+      orderBy: [...orderBy, { createdAt: "asc" }],
       take: perPage,
       skip: offset,
       include: { _count: { select: { tools: true } } },
