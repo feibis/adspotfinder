@@ -7,6 +7,32 @@ export type Heading = {
 }
 
 /**
+ * Strip markdown formatting from text, leaving only plain text.
+ * Handles common markdown syntax like bold, italic, links, code, etc.
+ */
+const stripMarkdown = (text: string): string => {
+  return (
+    text
+      // Remove inline code
+      .replace(/`([^`]+)`/g, "$1")
+      // Remove bold/italic (**, __, *, _)
+      .replace(/(\*\*|__)(.*?)\1/g, "$2")
+      .replace(/(\*|_)(.*?)\1/g, "$2")
+      // Remove links [text](url) -> text
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+      // Remove images ![alt](url) -> alt
+      .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1")
+      // Remove strikethrough ~~text~~
+      .replace(/~~(.*?)~~/g, "$1")
+      // Remove HTML tags
+      .replace(/<[^>]+>/g, "")
+      // Clean up extra whitespace
+      .replace(/\s+/g, " ")
+      .trim()
+  )
+}
+
+/**
  * Extract headings from raw markdown/MDX content without compiling to HTML.
  * Generates GitHub-compatible slug IDs (same as rehype-slug).
  */
@@ -26,7 +52,10 @@ export const extractHeadings = (markdown: string): Heading[] => {
     if (!match) break
 
     const level = match[1].length
-    const text = match[2].trim()
+    const rawText = match[2].trim()
+
+    // Strip markdown formatting from heading text
+    const text = stripMarkdown(rawText)
 
     // Generate GitHub-compatible slug (matches rehype-slug behavior)
     const id = slugger.slug(text)

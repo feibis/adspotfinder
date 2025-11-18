@@ -13,7 +13,7 @@ locale: "en"
 
 In recent years, the web development landscape has undergone a significant transformation with the emergence of edge computing. This paradigm shift is revolutionizing how we build and deploy web applications, offering unprecedented performance improvements and enabling new possibilities for developers worldwide.
 
-## What is **Edge Computing**?
+## What is Edge Computing?
 
 Edge computing brings computation and data storage closer to the location where it's needed, reducing latency and bandwidth usage. In web development, this means running your code at the network edge – in data centers distributed globally – rather than in a centralized location.
 
