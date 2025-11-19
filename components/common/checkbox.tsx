@@ -11,13 +11,13 @@ const Checkbox = ({ className, ...props }: ComponentProps<typeof CheckboxPrimiti
     <Box focusWithin>
       <CheckboxPrimitive.Root
         className={cx(
-          "peer size-4 shrink-0 border-foreground/50! rounded-md shadow disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground",
+          "peer size-4 shrink-0 border-foreground/50! rounded-sm shadow disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground",
           className,
         )}
         {...props}
       >
         <CheckboxPrimitive.Indicator className="grid place-items-center">
-          <CheckIcon className="size-3" />
+          <CheckIcon className="size-3 stroke-3" />
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
     </Box>

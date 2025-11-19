@@ -28,11 +28,11 @@ type CommandDialogProps = Pick<ComponentProps<typeof Dialog>, "open" | "onOpenCh
 const CommandDialog = ({ open, onOpenChange, ...props }: CommandDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTitle className="sr-only">Command Menu</DialogTitle>
-
       <DialogContent className="overflow-hidden p-0! max-w-sm rounded-md">
+        <DialogTitle className="sr-only">Command Menu</DialogTitle>
+
         <Command
-          className="[&_[cmdk-group]]:p-2 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground/75 [&_[cmdk-input]]:h-12"
+          className="**:[[cmdk-group]]:p-2 **:[[cmdk-group-heading]]:px-2 **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:text-muted-foreground/75 **:[[cmdk-input]]:h-12"
           {...props}
         />
       </DialogContent>
@@ -79,7 +79,7 @@ const CommandGroup = ({ className, ...props }: ComponentProps<typeof CommandPrim
   return (
     <CommandPrimitive.Group
       className={cx(
-        "overflow-hidden p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground",
+        "overflow-hidden p-1 text-foreground **:[[cmdk-group-heading]]:px-2 **:[[cmdk-group-heading]]:py-1.5 **:[[cmdk-group-heading]]:text-xs **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:text-muted-foreground",
         className,
       )}
       {...props}
