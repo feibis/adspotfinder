@@ -5,7 +5,6 @@ import { ArrowUpRightIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import type { InferSafeActionFnInput } from "next-safe-action"
 import { useAction } from "next-safe-action/hooks"
-import { posthog } from "posthog-js"
 import type { ComponentProps, ReactNode } from "react"
 import { toast } from "sonner"
 import type Stripe from "stripe"
@@ -61,10 +60,6 @@ const Product = ({
   })
 
   const { execute, isPending } = useAction(createStripeCheckout, {
-    onSuccess: ({ input }) => {
-      posthog.capture("stripe_checkout", input)
-    },
-
     onError: ({ error }) => {
       console.error("Checkout error:", error)
       toast.error(error.serverError)

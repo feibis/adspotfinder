@@ -1,8 +1,10 @@
 import { withContentCollections } from "@content-collections/next"
 import type { NextConfig } from "next"
 import createNextIntlPlugin from "next-intl/plugin"
+import { withPlausibleProxy } from "next-plausible"
 
 const withNextIntl = createNextIntlPlugin("./lib/i18n.ts")
+const withPlausible = withPlausibleProxy()
 
 const nextConfig: NextConfig = {
   typedRoutes: true,
@@ -26,26 +28,6 @@ const nextConfig: NextConfig = {
       "@content-collections/next",
     ],
   },
-
-  async rewrites() {
-    const posthogUrl = process.env.NEXT_PUBLIC_POSTHOG_HOST
-
-    return [
-      // PostHog proxy
-      {
-        source: "/_proxy/posthog/ingest/static/:path*",
-        destination: `${posthogUrl?.replace("us", "us-assets")}/static/:path*`,
-      },
-      {
-        source: "/_proxy/posthog/ingest/:path*",
-        destination: `${posthogUrl}/:path*`,
-      },
-      {
-        source: "/_proxy/posthog/ingest/decide",
-        destination: `${posthogUrl}/decide`,
-      },
-    ]
-  },
 }
 
-export default withContentCollections(withNextIntl(nextConfig))
+export default withContentCollections(withNextIntl(withPlausible(nextConfig)))

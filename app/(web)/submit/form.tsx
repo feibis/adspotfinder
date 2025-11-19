@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
-import { posthog } from "posthog-js"
 import type { ComponentProps } from "react"
 import { toast } from "sonner"
 import { Button } from "~/components/common/button"
@@ -21,6 +20,7 @@ import { Hint } from "~/components/common/hint"
 import { Input } from "~/components/common/input"
 import { TextArea } from "~/components/common/textarea"
 import { FeatureNudge } from "~/components/web/feature-nudge"
+import { useTrackEvent } from "~/hooks/use-track-event"
 import { useSession } from "~/lib/auth-client"
 import { isToolPublished } from "~/lib/tools"
 import { cx } from "~/lib/utils"
@@ -29,6 +29,7 @@ import { createSubmitToolSchema } from "~/server/web/shared/schema"
 
 export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
   const router = useRouter()
+  const trackEvent = useTrackEvent()
   const { data: session } = useSession()
   const t = useTranslations("forms.submit")
   const tSchema = useTranslations("schema")
@@ -54,8 +55,8 @@ export const SubmitForm = ({ className, ...props }: ComponentProps<"form">) => {
 
         if (!data) return
 
-        // Capture event
-        posthog.capture("submit_tool", { slug: data.slug })
+        // Track event
+        trackEvent("submit_tool", { slug: data.slug })
 
         if (isToolPublished(data)) {
           if (data.isFeatured) {

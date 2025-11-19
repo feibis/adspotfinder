@@ -21,7 +21,7 @@ If you found anything that could be improved, please let me know or contribute t
 Dirstarter uses the following third-party services:
 
 - Database: [Postgres](https://postgres.org)
-- Analytics: [Plausible](https://plausible.io), [PostHog](https://posthog.com)
+- Analytics: [Plausible](https://plausible.io)
 - Marketing & Transactional Email: [Resend](https://resend.com)
 - Scraping: [Jina](https://jina.ai)
 - File Storage: [AWS S3](https://aws.amazon.com/s3)

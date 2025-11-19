@@ -1,6 +1,6 @@
 import { tryCatch } from "@primoui/utils"
 import { eachDayOfInterval, format, startOfDay, subDays } from "date-fns"
-import { env } from "~/env"
+import { siteConfig } from "~/config/site"
 import { getPlausibleApi } from "~/services/plausible"
 
 type AnalyticsPageResponse = {
@@ -15,7 +15,7 @@ type AnalyticsPageResponse = {
  */
 export const getPageAnalytics = async (page: string, period = "30d") => {
   const query = {
-    site_id: env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN,
+    site_id: siteConfig.domain,
     metrics: ["visitors", "pageviews"],
     date_range: period,
     filters: [["is", "event:page", [page]]],
@@ -47,7 +47,7 @@ type VisitorsTotalResponse = {
  */
 export const getTotalVisitors = async (period = "30d") => {
   const query = {
-    site_id: env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN,
+    site_id: siteConfig.domain,
     metrics: ["visitors"],
     date_range: period,
     dimensions: ["time:day"],

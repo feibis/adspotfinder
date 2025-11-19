@@ -5,7 +5,6 @@ import { endOfDay, startOfDay } from "date-fns"
 import { XIcon } from "lucide-react"
 import { useFormatter, useTranslations } from "next-intl"
 import { useAction } from "next-safe-action/hooks"
-import posthog from "posthog-js"
 import type { ComponentProps } from "react"
 import { toast } from "sonner"
 import { AdType } from "~/.generated/prisma/browser"
@@ -60,10 +59,6 @@ export const AdsPicker = ({ className, ads, type, ...props }: AdsCalendarProps) 
     useAds(spots)
 
   const { execute, isPending } = useAction(createStripeCheckout, {
-    onSuccess: ({ input }) => {
-      posthog.capture("stripe_checkout", input)
-    },
-
     onError: ({ error }) => {
       toast.error(error.serverError)
     },

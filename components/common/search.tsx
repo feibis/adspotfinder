@@ -8,7 +8,6 @@ import { useTranslations } from "next-intl"
 import type { InferSafeActionFnResult } from "next-safe-action"
 import { useAction } from "next-safe-action/hooks"
 import { useTheme } from "next-themes"
-import posthog from "posthog-js"
 import { type ComponentProps, type ReactNode, useEffect, useRef, useState } from "react"
 import {
   CommandDialog,
@@ -186,10 +185,6 @@ export const Search = () => {
 
         execute({ query })
         listRef.current?.scrollTo({ top: 0, behavior: "smooth" })
-
-        if (query.length > 1) {
-          posthog.capture("search", { query })
-        }
       } else {
         setResults(undefined)
       }

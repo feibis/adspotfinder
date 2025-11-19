@@ -3,13 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { useTranslations } from "next-intl"
-import { posthog } from "posthog-js"
 import type { ComponentProps } from "react"
 import { Box } from "~/components/common/box"
 import { Button } from "~/components/common/button"
 import { Form, FormControl, FormField } from "~/components/common/form"
 import { Hint } from "~/components/common/hint"
 import { Input } from "~/components/common/input"
+import { useTrackEvent } from "~/hooks/use-track-event"
 import { cx } from "~/lib/utils"
 import { subscribeToNewsletter as subscribe } from "~/server/web/actions/subscribe"
 import { createNewsletterSchema } from "~/server/web/shared/schema"
@@ -33,6 +33,7 @@ export const CTAForm = ({
 }: CTAFormProps) => {
   const t = useTranslations("forms.cta")
   const tSchema = useTranslations("schema")
+  const trackEvent = useTrackEvent()
 
   const schema = createNewsletterSchema(tSchema)
   const resolver = zodResolver(schema)
@@ -50,7 +51,7 @@ export const CTAForm = ({
 
     actionProps: {
       onSuccess: () => {
-        posthog.capture("subscribe_newsletter", { email: form.getValues("value") })
+        trackEvent("subscribe_newsletter", { email: form.getValues("value") })
       },
 
       onSettled: () => {
