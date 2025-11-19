@@ -1,6 +1,5 @@
 import { slugify } from "@primoui/utils"
 import { Prisma } from "~/.generated/prisma/client"
-import { db } from "~/services/db"
 
 /**
  * Generates a unique slug by checking for collisions and appending a suffix if necessary.
@@ -39,25 +38,23 @@ const generateUniqueSlug = async (
   throw new Error(`Failed to generate unique slug for "${baseName}".`)
 }
 
-const findUniqueRecord = async (model: "Tool" | "Category" | "Tag", slug: string) => {
-  const payload = {
-    where: { slug },
-    select: { slug: true },
-  }
-
-  switch (model) {
-    case "Tool":
-      return Boolean(await db.tool.findUnique(payload))
-    case "Category":
-      return Boolean(await db.category.findUnique(payload))
-    case "Tag":
-      return Boolean(await db.tag.findUnique(payload))
-    default:
-      throw new Error(`Model "${model}" is not supported.`)
-  }
-}
-
 export const uniqueSlugsExtension = Prisma.defineExtension(client => {
+  const findUniqueRecord = async (model: "Tool" | "Category" | "Tag", slug: string) => {
+    const payload = {
+      where: { slug },
+      select: { slug: true },
+    }
+
+    switch (model) {
+      case "Tool":
+        return Boolean(await client.tool.findUnique(payload))
+      case "Category":
+        return Boolean(await client.category.findUnique(payload))
+      case "Tag":
+        return Boolean(await client.tag.findUnique(payload))
+    }
+  }
+
   return client.$extends({
     name: "unique-slugs",
     query: {

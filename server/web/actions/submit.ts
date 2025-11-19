@@ -77,7 +77,9 @@ export const submitTool = actionClient
 
     // Save the tool to the database with Pending status for user submissions
     const { data: tool, error } = await tryCatch(
-      db.tool.create({ data: { ...data, slug: "", ownerId, status: ToolStatus.Pending } }),
+      db.tool.create({
+        data: { ...data, slug: "", websiteUrl, ownerId, status: ToolStatus.Pending },
+      }),
     )
 
     if (error) {
