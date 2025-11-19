@@ -28,10 +28,12 @@ export const TagActions = ({ tag, className, ...props }: TagActionsProps) => {
   const pathname = usePathname()
   const router = useRouter()
 
+  const tagPath = `/admin/tags/${tag.slug}`
+  const isTagPage = pathname === tagPath
+
   const { executeAsync } = useAction(duplicateTag, {
     onSuccess: ({ data }) => {
-      // If the user is on the tag page, redirect to the new tag page
-      if (pathname.includes(tag.slug)) {
+      if (isTagPage) {
         router.push(`/admin/tags/${data.slug}`)
       }
     },
@@ -69,9 +71,9 @@ export const TagActions = ({ tag, className, ...props }: TagActionsProps) => {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" sideOffset={8}>
-          {pathname !== `/admin/tags/${tag.slug}` && (
+          {!isTagPage && (
             <DropdownMenuItem asChild>
-              <Link href={`/admin/tags/${tag.slug}`}>Edit</Link>
+              <Link href={tagPath}>Edit</Link>
             </DropdownMenuItem>
           )}
 

@@ -28,10 +28,12 @@ export const CategoryActions = ({ category, className, ...props }: CategoryActio
   const pathname = usePathname()
   const router = useRouter()
 
+  const categoryPath = `/admin/categories/${category.slug}`
+  const isCategoryPage = pathname === categoryPath
+
   const { executeAsync } = useAction(duplicateCategory, {
     onSuccess: ({ data }) => {
-      // If the user is on the category page, redirect to the new category page
-      if (pathname.includes(category.slug)) {
+      if (isCategoryPage) {
         router.push(`/admin/categories/${data.slug}`)
       }
     },
@@ -69,9 +71,9 @@ export const CategoryActions = ({ category, className, ...props }: CategoryActio
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" sideOffset={8}>
-          {pathname !== `/admin/categories/${category.slug}` && (
+          {!isCategoryPage && (
             <DropdownMenuItem asChild>
-              <Link href={`/admin/categories/${category.slug}`}>Edit</Link>
+              <Link href={categoryPath}>Edit</Link>
             </DropdownMenuItem>
           )}
 

@@ -30,10 +30,12 @@ export const ToolActions = ({ className, tool, ...props }: ToolActionsProps) => 
   const pathname = usePathname()
   const router = useRouter()
 
+  const toolPath = `/admin/tools/${tool.slug}`
+  const isToolPage = pathname === toolPath
+
   const { executeAsync } = useAction(duplicateTool, {
     onSuccess: ({ data }) => {
-      // If the user is on the tool page, redirect to the new tool page
-      if (pathname.includes(tool.slug)) {
+      if (isToolPage) {
         router.push(`/admin/tools/${data.slug}`)
       }
     },
@@ -72,9 +74,9 @@ export const ToolActions = ({ className, tool, ...props }: ToolActionsProps) => 
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" sideOffset={8}>
-          {pathname !== `/admin/tools/${tool.slug}` && (
+          {!isToolPage && (
             <DropdownMenuItem asChild>
-              <Link href={`/admin/tools/${tool.slug}`}>Edit</Link>
+              <Link href={toolPath}>Edit</Link>
             </DropdownMenuItem>
           )}
 
