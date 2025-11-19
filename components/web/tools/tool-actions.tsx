@@ -1,9 +1,11 @@
 "use client"
 
+import { useWindowScroll } from "@mantine/hooks"
 import { BadgeCheckIcon, CodeXmlIcon, FlagIcon, SparklesIcon } from "lucide-react"
+import { AnimatePresence, motion } from "motion/react"
 import { useTranslations } from "next-intl"
 import { parseAsStringEnum, useQueryState } from "nuqs"
-import type { ComponentProps, SetStateAction } from "react"
+import { type ComponentProps, type SetStateAction, useEffect, useState } from "react"
 import { Button } from "~/components/common/button"
 import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
@@ -11,9 +13,10 @@ import { Tooltip } from "~/components/common/tooltip"
 import { ToolClaimDialog } from "~/components/web/dialogs/tool-claim-dialog"
 import { ToolEmbedDialog } from "~/components/web/dialogs/tool-embed-dialog"
 import { ToolReportDialog } from "~/components/web/dialogs/tool-report-dialog"
+import { ToolButton } from "~/components/web/tools/tool-button"
 import { reportsConfig } from "~/config/reports"
 import { useSession } from "~/lib/auth-client"
-import { isToolApproved } from "~/lib/tools"
+import { isToolApproved, isToolPublished } from "~/lib/tools"
 import { cx } from "~/lib/utils"
 import type { ToolOne } from "~/server/web/tools/payloads"
 
@@ -30,7 +33,15 @@ enum Dialog {
 export const ToolActions = ({ tool, children, className, ...props }: ToolActionsProps) => {
   const t = useTranslations("tools.actions")
   const { data: session } = useSession()
+  const [scroll] = useWindowScroll()
   const [dialog, setDialog] = useQueryState("dialog", parseAsStringEnum(Object.values(Dialog)))
+  const [isStickyButtonVisible, setIsStickyButtonVisible] = useState(false)
+
+  useEffect(() => {
+    if (isToolPublished(tool)) {
+      setIsStickyButtonVisible(scroll.y > 250)
+    }
+  }, [scroll])
 
   const handleClose = (isOpen: SetStateAction<boolean>) => {
     !isOpen && setDialog(null)
@@ -38,6 +49,26 @@ export const ToolActions = ({ tool, children, className, ...props }: ToolActions
 
   return (
     <Stack size="sm" wrap={false} className={cx("justify-end", className)} {...props}>
+      <AnimatePresence>
+        {isStickyButtonVisible && (
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, x: -4, scale: 0.9 },
+              visible: { opacity: 1, x: 0, scale: 1 },
+            }}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            transition={{ type: "spring", duration: 0.3, ease: "easeInOut" }}
+            className="order-first origin-right max-md:hidden"
+          >
+            <ToolButton tool={tool} size="md">
+              <span className="@max-xl:sr-only">{t("visit_button")}</span>
+            </ToolButton>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {!tool.isFeatured && tool.ownerId && tool.ownerId === session?.user.id && (
         <Tooltip tooltip={t("promote_tooltip")}>
           <Button

@@ -9,7 +9,8 @@
     "report_tooltip": "Send a report/suggestion",
     "report_button": "Report",
     "embed_tooltip": "Embed this tool on your website",
-    "embed_button": "Embed"
+    "embed_button": "Embed",
+    "visit_button": "Visit"
   },
   "filters": {
     "search_placeholder": "Search tools...",

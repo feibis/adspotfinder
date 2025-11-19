@@ -1,16 +1,14 @@
 import { removeQueryParams } from "@primoui/utils"
-import { ArrowUpRightIcon, HashIcon } from "lucide-react"
+import { HashIcon } from "lucide-react"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getTranslations } from "next-intl/server"
 import { cache, Suspense } from "react"
 import { Badge } from "~/components/common/badge"
-import { Button } from "~/components/common/button"
 import { H2, H5 } from "~/components/common/heading"
 import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
 import { AdCard, AdCardSkeleton } from "~/components/web/ads/ad-card"
-import { ExternalLink } from "~/components/web/external-link"
 import { FeaturedToolsIcons } from "~/components/web/listings/featured-tools-icons"
 import { RelatedTools, RelatedToolsSkeleton } from "~/components/web/listings/related-tools"
 import { Markdown } from "~/components/web/markdown"
@@ -18,6 +16,7 @@ import { Nav } from "~/components/web/nav"
 import { OverlayImage } from "~/components/web/overlay-image"
 import { StructuredData } from "~/components/web/structured-data"
 import { ToolActions } from "~/components/web/tools/tool-actions"
+import { ToolButton } from "~/components/web/tools/tool-button"
 import { ToolPreviewAlert } from "~/components/web/tools/tool-preview-alert"
 import { Backdrop } from "~/components/web/ui/backdrop"
 import { Favicon } from "~/components/web/ui/favicon"
@@ -95,6 +94,10 @@ export default async function (props: Props) {
                 {tool.ownerId && <VerifiedBadge size="lg" />}
               </Stack>
 
+              <Suspense>
+                <ToolActions tool={tool} className="max-sm:hidden" />
+              </Suspense>
+
               <Backdrop />
             </Stack>
           </Sticky>
@@ -105,21 +108,7 @@ export default async function (props: Props) {
 
           {isToolPublished(tool) && (
             <Stack className="w-full -mt-fluid-md pt-8">
-              <Button suffix={<ArrowUpRightIcon />} className="md:min-w-36" asChild>
-                <ExternalLink
-                  href={tool.affiliateUrl || tool.websiteUrl}
-                  doFollow={tool.isFeatured}
-                  doTrack
-                  eventName="click_website"
-                  eventProps={{
-                    url: removeQueryParams(tool.websiteUrl),
-                    isFeatured: tool.isFeatured,
-                    source: "button",
-                  }}
-                >
-                  {t("common.visit", { name: tool.name })}
-                </ExternalLink>
-              </Button>
+              <ToolButton tool={tool} className="md:min-w-36" />
             </Stack>
           )}
 
@@ -180,7 +169,7 @@ export default async function (props: Props) {
             <Nav className="mr-auto" title={metadata.title} />
 
             <Suspense>
-              <ToolActions tool={tool} />
+              <ToolActions tool={tool} className="sm:hidden" />
             </Suspense>
           </Stack>
         </Section.Content>
