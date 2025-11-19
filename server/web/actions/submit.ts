@@ -1,6 +1,6 @@
 "use server"
 
-import { getDomain, slugify, tryCatch } from "@primoui/utils"
+import { getDomain, tryCatch } from "@primoui/utils"
 import { after } from "next/server"
 import { getTranslations } from "next-intl/server"
 import { ToolStatus } from "~/.generated/prisma/client"
@@ -13,32 +13,6 @@ import { actionClient } from "~/lib/safe-actions"
 import { createSubmitToolSchema } from "~/server/web/shared/schema"
 import { db } from "~/services/db"
 import { createResendContact } from "~/services/resend"
-
-/**
- * Generates a unique slug by adding a numeric suffix if needed
- */
-const generateUniqueSlug = async (baseName: string): Promise<string> => {
-  const baseSlug = slugify(baseName)
-  const maxAttempts = 10
-  let slug = baseSlug
-  let suffix = 2
-  let attempts = 0
-
-  while (attempts < maxAttempts) {
-    // Check if slug exists
-    if (!(await db.tool.findUnique({ where: { slug } }))) {
-      return slug
-    }
-
-    // Add/increment suffix and try again
-    slug = `${baseSlug}-${suffix}`
-    suffix++
-    attempts++
-  }
-
-  // If we've exhausted all attempts, throw an error
-  throw new Error("Unable to generate unique slug after maximum attempts")
-}
 
 /**
  * Submit a tool to the database
@@ -96,12 +70,9 @@ export const submitTool = actionClient
       return existingTool
     }
 
-    // Generate a unique slug
-    const slug = await generateUniqueSlug(data.name)
-
     // Save the tool to the database with Pending status for user submissions
     const { data: tool, error } = await tryCatch(
-      db.tool.create({ data: { ...data, slug, ownerId, status: ToolStatus.Pending } }),
+      db.tool.create({ data: { ...data, slug: "", ownerId, status: ToolStatus.Pending } }),
     )
 
     if (error) {
