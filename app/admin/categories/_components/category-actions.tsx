@@ -1,8 +1,10 @@
 "use client"
 
-import { EllipsisIcon, TrashIcon } from "lucide-react"
+import { CopyIcon, EllipsisIcon, TrashIcon } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
+import { useAction } from "next-safe-action/hooks"
 import type { ComponentProps } from "react"
+import { toast } from "sonner"
 import type { Category } from "~/.generated/prisma/browser"
 import { CategoriesDeleteDialog } from "~/app/admin/categories/_components/categories-delete-dialog"
 import { Button } from "~/components/common/button"
@@ -10,11 +12,13 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/common/dropdown-menu"
 import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
 import { cx } from "~/lib/utils"
+import { duplicateCategory } from "~/server/admin/categories/actions"
 
 type CategoryActionsProps = ComponentProps<typeof Button> & {
   category: Category
@@ -23,6 +27,32 @@ type CategoryActionsProps = ComponentProps<typeof Button> & {
 export const CategoryActions = ({ category, className, ...props }: CategoryActionsProps) => {
   const pathname = usePathname()
   const router = useRouter()
+
+  const { executeAsync } = useAction(duplicateCategory, {
+    onSuccess: ({ data }) => {
+      // If the user is on the category page, redirect to the new category page
+      if (pathname.includes(category.slug)) {
+        router.push(`/admin/categories/${data.slug}`)
+      }
+    },
+  })
+
+  const handleDuplicate = () => {
+    toast.promise(
+      async () => {
+        const { serverError } = await executeAsync({ id: category.id })
+
+        if (serverError) {
+          throw new Error(serverError)
+        }
+      },
+      {
+        loading: "Duplicating category...",
+        success: "Category duplicated successfully",
+        error: err => `Failed to duplicate category: ${err.message}`,
+      },
+    )
+  }
 
   return (
     <Stack size="sm" wrap={false}>
@@ -49,6 +79,13 @@ export const CategoryActions = ({ category, className, ...props }: CategoryActio
             <Link href={`/categories/${category.slug}`} target="_blank">
               View
             </Link>
+          </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuItem onSelect={handleDuplicate}>
+            <CopyIcon />
+            Duplicate
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

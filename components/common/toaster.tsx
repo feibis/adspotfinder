@@ -23,7 +23,7 @@ const Toaster = ({ className, ...props }: ComponentProps<typeof Sonner>) => {
           error: "bg-destructive text-destructive-foreground!",
           content: "w-full",
           description: "text-muted-foreground",
-          icon: "mt-0.5",
+          icon: "relative size-4 mt-0.5",
         },
       }}
       icons={{

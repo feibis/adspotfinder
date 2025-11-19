@@ -29,6 +29,13 @@ export const contentSchema = z.object({
 export const descriptionSchema = contentSchema.pick({ description: true })
 
 /**
+ * The schema for the ID validation.
+ */
+export const idSchema = z.object({
+  id: z.string(),
+})
+
+/**
  * The schema for the IDs validation.
  */
 export const idsSchema = z.object({

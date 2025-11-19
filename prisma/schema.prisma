@@ -119,7 +119,7 @@ model Tool {
   id             String     @id @default(cuid())
   name           String     @db.Citext
   slug           String     @unique
-  websiteUrl     String     @unique
+  websiteUrl     String
   affiliateUrl   String?
   tagline        String?
   description    String?

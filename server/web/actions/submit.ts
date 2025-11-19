@@ -1,6 +1,6 @@
 "use server"
 
-import { getDomain, tryCatch } from "@primoui/utils"
+import { getDomain, normalizeUrl, tryCatch } from "@primoui/utils"
 import { after } from "next/server"
 import { getTranslations } from "next-intl/server"
 import { ToolStatus } from "~/.generated/prisma/client"
@@ -29,6 +29,7 @@ export const submitTool = actionClient
     const ip = await getIP()
     const rateLimitKey = `submission:${ip}`
     const domain = getDomain(data.websiteUrl)
+    const websiteUrl = normalizeUrl(data.websiteUrl)
 
     // Rate limiting check
     if (await isRateLimited(rateLimitKey, "submission")) {
@@ -41,9 +42,13 @@ export const submitTool = actionClient
     }
 
     if (newsletterOptIn) {
+      const [firstName, ...restOfName] = data.submitterName.trim().split(/\s+/)
+      const lastName = restOfName.join(" ")
+
       await createResendContact({
         email: data.submitterEmail,
-        firstName: data.submitterName,
+        firstName,
+        lastName,
       })
     }
 
@@ -52,7 +57,7 @@ export const submitTool = actionClient
 
     // Check if the tool already exists
     const existingTool = await db.tool.findFirst({
-      where: { websiteUrl: { contains: domain } },
+      where: { websiteUrl },
     })
 
     // If the tool exists, redirect to the tool or submit page

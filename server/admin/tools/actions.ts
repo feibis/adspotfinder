@@ -1,11 +1,10 @@
 "use server"
 
-import { slugify } from "@primoui/utils"
 import { after } from "next/server"
 import { removeS3Directories } from "~/lib/media"
 import { notifySubmitterOfToolPublished, notifySubmitterOfToolScheduled } from "~/lib/notifications"
 import { adminActionClient } from "~/lib/safe-actions"
-import { idsSchema } from "~/server/admin/shared/schema"
+import { idSchema, idsSchema } from "~/server/admin/shared/schema"
 import { toolSchema } from "~/server/admin/tools/schema"
 
 export const upsertTool = adminActionClient
@@ -22,7 +21,7 @@ export const upsertTool = adminActionClient
           where: { id },
           data: {
             ...input,
-            slug: input.slug || slugify(input.name),
+            slug: input.slug || "",
             categories: { set: categoryIds },
             tags: { set: tagIds },
           },
@@ -31,7 +30,7 @@ export const upsertTool = adminActionClient
         await db.tool.create({
           data: {
             ...input,
-            slug: input.slug || slugify(input.name),
+            slug: input.slug || "",
             categories: { connect: categoryIds },
             tags: { connect: tagIds },
           },
@@ -48,12 +47,55 @@ export const upsertTool = adminActionClient
       }
     })
 
-    revalidate({
-      paths: ["/admin/tools"],
-      tags: ["tools", `tool-${tool.slug}`, "schedule"],
+    after(async () => {
+      revalidate({
+        paths: ["/admin/tools"],
+        tags: ["tools", `tool-${tool.slug}`, "schedule"],
+      })
     })
 
     return tool
+  })
+
+export const duplicateTool = adminActionClient
+  .inputSchema(idSchema)
+  .action(async ({ parsedInput: { id }, ctx: { db, revalidate } }) => {
+    const originalTool = await db.tool.findUnique({
+      where: { id },
+      include: {
+        categories: { select: { id: true } },
+        tags: { select: { id: true } },
+      },
+    })
+
+    if (!originalTool) {
+      throw new Error("Tool not found")
+    }
+
+    const newName = `${originalTool.name} (Copy)`
+
+    const duplicatedTool = await db.tool.create({
+      data: {
+        name: newName,
+        slug: "", // Slug will be auto-generated
+        websiteUrl: originalTool.websiteUrl,
+        affiliateUrl: originalTool.affiliateUrl,
+        tagline: originalTool.tagline,
+        description: originalTool.description,
+        content: originalTool.content,
+        faviconUrl: originalTool.faviconUrl,
+        screenshotUrl: originalTool.screenshotUrl,
+        categories: { connect: originalTool.categories },
+        tags: { connect: originalTool.tags },
+      },
+    })
+
+    revalidate({
+      paths: ["/admin/tools"],
+      tags: ["tools"],
+    })
+
+    return duplicatedTool
   })
 
 export const deleteTools = adminActionClient

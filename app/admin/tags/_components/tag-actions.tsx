@@ -1,8 +1,10 @@
 "use client"
 
-import { EllipsisIcon, TrashIcon } from "lucide-react"
+import { CopyIcon, EllipsisIcon, TrashIcon } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
+import { useAction } from "next-safe-action/hooks"
 import type { ComponentProps } from "react"
+import { toast } from "sonner"
 import type { Tag } from "~/.generated/prisma/browser"
 import { TagsDeleteDialog } from "~/app/admin/tags/_components/tags-delete-dialog"
 import { Button } from "~/components/common/button"
@@ -10,11 +12,13 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/common/dropdown-menu"
 import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
 import { cx } from "~/lib/utils"
+import { duplicateTag } from "~/server/admin/tags/actions"
 
 type TagActionsProps = ComponentProps<typeof Button> & {
   tag: Tag
@@ -23,6 +27,32 @@ type TagActionsProps = ComponentProps<typeof Button> & {
 export const TagActions = ({ tag, className, ...props }: TagActionsProps) => {
   const pathname = usePathname()
   const router = useRouter()
+
+  const { executeAsync } = useAction(duplicateTag, {
+    onSuccess: ({ data }) => {
+      // If the user is on the tag page, redirect to the new tag page
+      if (pathname.includes(tag.slug)) {
+        router.push(`/admin/tags/${data.slug}`)
+      }
+    },
+  })
+
+  const handleDuplicate = () => {
+    toast.promise(
+      async () => {
+        const { serverError } = await executeAsync({ id: tag.id })
+
+        if (serverError) {
+          throw new Error(serverError)
+        }
+      },
+      {
+        loading: "Duplicating tag...",
+        success: "Tag duplicated successfully",
+        error: err => `Failed to duplicate tag: ${err.message}`,
+      },
+    )
+  }
 
   return (
     <Stack size="sm" wrap={false}>
@@ -49,6 +79,13 @@ export const TagActions = ({ tag, className, ...props }: TagActionsProps) => {
             <Link href={`/tags/${tag.slug}`} target="_blank">
               View
             </Link>
+          </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuItem onSelect={handleDuplicate}>
+            <CopyIcon />
+            Duplicate
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

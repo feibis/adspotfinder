@@ -1,9 +1,9 @@
 "use server"
 
-import { slugify } from "@primoui/utils"
+import { after } from "next/server"
 import { adminActionClient } from "~/lib/safe-actions"
 import { categorySchema } from "~/server/admin/categories/schema"
-import { idsSchema } from "~/server/admin/shared/schema"
+import { idSchema, idsSchema } from "~/server/admin/shared/schema"
 
 export const upsertCategory = adminActionClient
   .inputSchema(categorySchema)
@@ -15,24 +15,58 @@ export const upsertCategory = adminActionClient
           where: { id },
           data: {
             ...input,
-            slug: input.slug || slugify(input.name),
+            slug: input.slug || "",
             tools: { set: toolIds },
           },
         })
       : await db.category.create({
           data: {
             ...input,
-            slug: input.slug || slugify(input.name),
+            slug: input.slug || "",
             tools: { connect: toolIds },
           },
         })
 
-    revalidate({
-      paths: ["/admin/categories"],
-      tags: ["categories", `category-${category.slug}`],
+    after(async () => {
+      revalidate({
+        paths: ["/admin/categories"],
+        tags: ["categories", `category-${category.slug}`],
+      })
     })
 
     return category
+  })
+
+export const duplicateCategory = adminActionClient
+  .inputSchema(idSchema)
+  .action(async ({ parsedInput: { id }, ctx: { db, revalidate } }) => {
+    const originalCategory = await db.category.findUnique({
+      where: { id },
+      include: { tools: { select: { id: true } } },
+    })
+
+    if (!originalCategory) {
+      throw new Error("Category not found")
+    }
+
+    const newName = `${originalCategory.name} (Copy)`
+
+    const duplicatedCategory = await db.category.create({
+      data: {
+        name: newName,
+        slug: "", // Slug will be auto-generated
+        label: originalCategory.label,
+        description: originalCategory.description,
+        tools: { connect: originalCategory.tools },
+      },
+    })
+
+    revalidate({
+      paths: ["/admin/categories"],
+      tags: ["categories"],
+    })
+
+    return duplicatedCategory
   })
 
 export const deleteCategories = adminActionClient
