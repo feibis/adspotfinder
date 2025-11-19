@@ -48,6 +48,7 @@ export function UsersTable({ usersPromise }: UsersTableProps) {
       columnPinning: { right: ["actions"] },
     },
     getRowId: (originalRow, index) => `${originalRow.id}-${index}`,
+    enableRowSelection: (row) => row.original.role !== "admin",
   })
 
   return (

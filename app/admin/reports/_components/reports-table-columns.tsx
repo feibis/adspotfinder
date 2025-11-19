@@ -29,11 +29,13 @@ export const getColumns = (): ColumnDef<Report>[] => {
           aria-label="Select all"
         />
       ),
-      cell: ({ row }) => (
+      cell: ({ row, table }) => (
         <RowCheckbox
           checked={row.getIsSelected()}
           onChange={e => row.toggleSelected(e.target.checked)}
           aria-label="Select row"
+          table={table}
+          row={row}
         />
       ),
     },

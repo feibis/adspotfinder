@@ -17,10 +17,10 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table"
 import {
-  type Parser,
   parseAsArrayOf,
   parseAsInteger,
   parseAsString,
+  type SingleParser,
   type UseQueryStateOptions,
   useQueryState,
   useQueryStates,
@@ -185,16 +185,19 @@ export function useDataTable<TData>({
 
   // Create parsers for each filter field
   const filterParsers = useMemo(() => {
-    return filterFields.reduce<Record<string, Parser<string> | Parser<string[]>>>((acc, field) => {
-      if (field.options) {
-        // Faceted filter
-        acc[field.id] = parseAsArrayOf(parseAsString, ",").withOptions(queryStateOptions)
-      } else {
-        // Search filter
-        acc[field.id] = parseAsString.withOptions(queryStateOptions)
-      }
-      return acc
-    }, {})
+    return filterFields.reduce<Record<string, SingleParser<string> | SingleParser<string[]>>>(
+      (acc, field) => {
+        if (field.options) {
+          // Faceted filter
+          acc[field.id] = parseAsArrayOf(parseAsString, ",").withOptions(queryStateOptions)
+        } else {
+          // Search filter
+          acc[field.id] = parseAsString.withOptions(queryStateOptions)
+        }
+        return acc
+      },
+      {},
+    )
   }, [filterFields, queryStateOptions])
 
   const [filterValues, setFilterValues] = useQueryStates(filterParsers)
@@ -306,7 +309,7 @@ export function useDataTable<TData>({
       size: 0,
       minSize: 0,
     },
-    enableRowSelection: true,
+    enableRowSelection: props.enableRowSelection ?? true,
     onRowSelectionChange: setRowSelection,
     onPaginationChange,
     onSortingChange,

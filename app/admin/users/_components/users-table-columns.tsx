@@ -41,12 +41,14 @@ export const getColumns = (): ColumnDef<User>[] => {
           aria-label="Select all"
         />
       ),
-      cell: ({ row }) => (
+      cell: ({ row, table }) => (
         <RowCheckbox
           checked={row.getIsSelected()}
           onChange={e => row.toggleSelected(e.target.checked)}
           disabled={row.original.role === "admin"}
           aria-label="Select row"
+          table={table}
+          row={row}
         />
       ),
     },
