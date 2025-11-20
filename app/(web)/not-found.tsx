@@ -1,33 +1,20 @@
-"use client"
-
-import { SearchIcon } from "lucide-react"
-import { usePathname } from "next/navigation"
-import { useTranslations } from "next-intl"
+import { ArrowLeftIcon } from "lucide-react"
+import { getTranslations } from "next-intl/server"
 import { Button } from "~/components/common/button"
 import { Link } from "~/components/common/link"
-import { Stack } from "~/components/common/stack"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
-import { useSearch } from "~/contexts/search-context"
 
-export default function () {
-  const t = useTranslations("pages.not_found")
-  const pathname = usePathname()
-  const search = useSearch()
+export default async function NotFound() {
+  const t = await getTranslations("pages.not_found")
 
   return (
     <Intro alignment="center">
       <IntroTitle>{t("title")}</IntroTitle>
-      <IntroDescription className="max-w-xl">{t("description", { pathname })}</IntroDescription>
+      <IntroDescription className="max-w-lg">{t("description")}</IntroDescription>
 
-      <Stack className="mt-4">
-        <Button variant="fancy" onClick={search.open} prefix={<SearchIcon />}>
-          {t("search_button")}
-        </Button>
-
-        <Button variant="soft" asChild>
-          <Link href="/">{t("home_button")}</Link>
-        </Button>
-      </Stack>
+      <Button className="mt-4" prefix={<ArrowLeftIcon />} asChild>
+        <Link href="/">{t("home_button")}</Link>
+      </Button>
     </Intro>
   )
 }

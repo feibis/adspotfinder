@@ -106,7 +106,7 @@
 
   "not_found": {
     "title": "404 Not Found",
-    "description": "We're sorry, but the page {pathname} could not be found. You may have mistyped the address or the page may have moved.",
+    "description": "We're sorry, but the page could not be found. You may have mistyped the address or the page may have moved.",
     "search_button": "Search for tools",
     "home_button": "Go back home"
   },
