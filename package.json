@@ -17,7 +17,8 @@
     "db:reset": "prisma migrate reset",
     "db:seed": "prisma db seed",
     "prebuild": "bun run db:migrate deploy",
-    "postbuild": "next-sitemap --config next-sitemap.config.cjs"
+    "postbuild": "next-sitemap --config next-sitemap.config.cjs",
+    "postinstall": "bun run db:generate"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.38",
@@ -32,8 +33,8 @@
     "@next-safe-action/adapter-react-hook-form": "^2.0.0",
     "@number-flow/react": "^0.5.10",
     "@primoui/utils": "^1.3.3",
-    "@prisma/adapter-pg": "^6.19.0",
-    "@prisma/client": "^6.19.0",
+    "@prisma/adapter-pg": "^7.0.0",
+    "@prisma/client": "^7.0.0",
     "@react-email/components": "^0.1.1",
     "@t3-oss/env-nextjs": "^0.13.8",
     "@tanstack/react-table": "^8.21.3",
@@ -84,7 +85,7 @@
     "@types/react-dom": "^19.2.3",
     "@types/rss": "^0.0.32",
     "postcss": "^8.5.6",
-    "prisma": "^6.19.0",
+    "prisma": "^7.0.0",
     "schema-dts": "^1.1.5",
     "tailwindcss": "^4.1.17",
     "tailwindcss-animate": "^1.0.7",
