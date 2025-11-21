@@ -39,7 +39,7 @@ export const PostCard = ({ className, post, ...props }: PostCardProps) => {
         {post.description && <CardDescription>{post.description}</CardDescription>}
 
         {post.publishedAt && (
-          <CardFooter>
+          <CardFooter className="mt-auto">
             <time dateTime={post.publishedAt.toISOString()}>
               {format.dateTime(post.publishedAt, { dateStyle: "medium" })}
             </time>

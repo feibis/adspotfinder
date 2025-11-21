@@ -2,8 +2,8 @@ import { defineCollection, defineConfig } from "@content-collections/core"
 import { compileMDX, type Options } from "@content-collections/mdx"
 import rehypeAutolinkHeadings from "rehype-autolink-headings"
 import rehypeSlug from "rehype-slug"
-import { extractHeadings } from "~/lib/headings"
 import { defaultLocale, locales } from "~/lib/i18n"
+import { extractHeadingsFromMDX, extractToolsFromMDX } from "~/lib/mdx"
 
 const mdxOptions: Options = {
   rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
@@ -37,17 +37,15 @@ const posts = defineCollection({
         }),
       )
       .optional(),
+    tools: z.array(z.string()).optional(),
   }),
 
   transform: async (data, context) => {
-    // Extract headings from raw content BEFORE compilation
-    const headings = extractHeadings(data.content)
+    const tools = extractToolsFromMDX(data.content)
+    const headings = extractHeadingsFromMDX(data.content)
+    const content = await compileMDX(context, data, mdxOptions)
 
-    // Compile MDX
-    const result = await compileMDX(context, data, mdxOptions)
-    const content = typeof result === "string" ? result : (result as { content: string }).content
-
-    return { ...data, content, headings }
+    return { ...data, content, headings, tools }
   },
 })
 

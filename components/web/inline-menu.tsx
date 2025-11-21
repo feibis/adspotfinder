@@ -1,59 +1,72 @@
 "use client"
 
 import { useScrollSpy } from "@mantine/hooks"
-import type { ComponentProps } from "react"
-import { useEffect, useMemo } from "react"
-import { Button, type ButtonProps } from "~/components/common/button"
+import { AlignLeftIcon, ChevronDownIcon } from "lucide-react"
+import { AnimatePresence, motion } from "motion/react"
+import { useTranslations } from "next-intl"
+import type { ComponentProps, ReactNode } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Stack } from "~/components/common/stack"
 import { cx } from "~/lib/utils"
 
-type InlineMenuProps = ComponentProps<typeof Stack> & {
-  items: ({ id: string } & ButtonProps)[]
+type InlineMenuProps<T extends { id: string }> = ComponentProps<"div"> & {
+  items: T[]
+  renderItem: (item: T, isActive: boolean, index: number) => ReactNode
 }
 
-export const InlineMenu = ({ children, className, items, ...props }: InlineMenuProps) => {
-  const selector = useMemo(() => items.map(item => `[id="${item.id}"]`).join(","), [items])
+export const InlineMenu = <T extends { id: string }>({
+  children,
+  className,
+  items,
+  renderItem,
+  title,
+  ...props
+}: InlineMenuProps<T>) => {
+  const t = useTranslations("common")
+  const [isOpen, setIsOpen] = useState(true)
+  const selector = useMemo(() => items.map(({ id }) => `[id="${id}"]`).join(","), [items])
   const { active, data } = useScrollSpy({ selector })
   const activeId = data[active]?.id
 
   useEffect(() => {
     if (!activeId) return
 
-    const activeMenuElement = document.querySelector(`a[href="#${activeId}"]`)
+    const activeMenuElement = document.querySelector(`nav a[href="#${activeId}"]`)
     activeMenuElement?.scrollIntoView({ block: "nearest", inline: "nearest" })
   }, [activeId])
 
   return (
-    <Stack
-      size="xs"
-      direction="column"
-      wrap={false}
-      className={cx("items-stretch overflow-y-auto overscroll-contain scroll-smooth", className)}
-      asChild
+    <div
+      className={cx("flex flex-col flex-1 overflow-hidden max-md:hidden lg:mx-5", className)}
       {...props}
     >
-      <nav>
-        {items.map(({ id, children, className, ...props }) => (
-          <Button
-            key={id}
-            size="lg"
-            variant="ghost"
-            className={cx(
-              "py-2 *:only:text-start hover:ring-transparent! focus-visible:ring-transparent",
-              activeId === id
-                ? "bg-accent text-foreground"
-                : "text-muted-foreground font-normal hover:text-foreground",
-              className,
-            )}
-            {...props}
-            asChild
-          >
-            <a href={`#${id}`}>{children}</a>
-          </Button>
-        ))}
+      <Stack
+        size="sm"
+        wrap={false}
+        className="group text-start w-full text-muted-foreground hover:text-foreground"
+        asChild
+      >
+        <button type="button" onClick={() => setIsOpen(!isOpen)}>
+          <AlignLeftIcon />
+          <span className="flex-1 truncate text-sm">{title || t("on_this_page")}</span>
+          <ChevronDownIcon className={cx("duration-200", isOpen && "rotate-180")} />
+        </button>
+      </Stack>
 
-        {children}
-      </nav>
-    </Stack>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.nav
+            initial={{ height: 0 }}
+            animate={{ height: isOpen ? "auto" : 0 }}
+            exit={{ height: 0 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className="mt-3 overflow-y-auto overscroll-contain scroll-smooth"
+          >
+            {items.map((item, index) => renderItem(item, activeId === item.id, index))}
+            {children}
+          </motion.nav>
+        )}
+      </AnimatePresence>
+    </div>
   )
 }

@@ -36,7 +36,7 @@ const stripMarkdown = (text: string): string => {
  * Extract headings from raw markdown/MDX content without compiling to HTML.
  * Generates GitHub-compatible slug IDs (same as rehype-slug).
  */
-export const extractHeadings = (markdown: string): Heading[] => {
+export const extractHeadingsFromMDX = (markdown: string): Heading[] => {
   const slugger = new GithubSlugger()
   const headings: Heading[] = []
 
@@ -64,4 +64,31 @@ export const extractHeadings = (markdown: string): Heading[] => {
   }
 
   return headings
+}
+
+/**
+ * Extracts tool slugs from MDX content by parsing <ToolEntry> components.
+ * Returns tools in the order they appear in the content.
+ */
+export const extractToolsFromMDX = (content: string): string[] => {
+  // Match <ToolEntry tool="slug" or <ToolEntry tool='slug'
+  // Handles both single and double quotes, and various whitespace patterns
+  // Uses non-greedy matching to stay within a single ToolEntry tag
+  const toolEntryRegex = /<ToolEntry[^>]*?tool\s*=\s*["']([^"']+)["']/g
+
+  const tools: string[] = []
+  let match: RegExpExecArray | null = toolEntryRegex.exec(content)
+
+  while (match !== null) {
+    const toolSlug = match[1]
+
+    // Avoid duplicates while preserving order
+    if (!tools.includes(toolSlug)) {
+      tools.push(toolSlug)
+    }
+
+    match = toolEntryRegex.exec(content)
+  }
+
+  return tools
 }
