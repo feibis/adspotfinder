@@ -17,8 +17,7 @@
     "db:reset": "prisma migrate reset",
     "db:seed": "prisma db seed",
     "prebuild": "bun run db:migrate deploy",
-    "postbuild": "next-sitemap --config next-sitemap.config.cjs",
-    "postinstall": "bun run db:generate"
+    "postbuild": "next-sitemap --config next-sitemap.config.cjs"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.38",
