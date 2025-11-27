@@ -17,7 +17,7 @@ const cardVariants = cva({
     },
 
     isHighlighted: {
-      true: "bg-yellow-500/10",
+      true: "bg-yellow-500/10 hover:bg-yellow-500/15",
     },
   },
 

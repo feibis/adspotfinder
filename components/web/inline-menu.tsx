@@ -37,7 +37,7 @@ export const InlineMenu = <T extends { id: string }>({
 
   return (
     <div
-      className={cx("flex flex-col flex-1 overflow-hidden max-md:hidden lg:mx-5", className)}
+      className={cx("flex flex-col flex-1 p-1 overflow-hidden max-md:hidden lg:px-5", className)}
       {...props}
     >
       <Stack
