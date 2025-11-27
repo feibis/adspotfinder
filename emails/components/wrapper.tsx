@@ -8,6 +8,7 @@ import {
   Img,
   Link,
   Preview,
+  pixelBasedPreset,
   Tailwind,
   Text,
 } from "@react-email/components"
@@ -24,9 +25,9 @@ export const EmailWrapper = ({ to, preview, children, ...props }: EmailWrapperPr
       <Head />
       {preview && <Preview>{preview}</Preview>}
 
-      <Tailwind>
+      <Tailwind config={{ presets: [pixelBasedPreset] }}>
         <Body className="mx-auto my-auto bg-background font-sans">
-          <Container className="w-full max-w-[580px] mx-auto px-10" {...props}>
+          <Container className="w-full max-w-[560px] mx-auto py-4 px-8" {...props}>
             <Link href={siteConfig.url} className="inline-block mt-6 mb-2">
               <Img
                 src={`${siteConfig.url}/logo.png`}

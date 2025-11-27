@@ -63,7 +63,7 @@ export const auth = betterAuth({
       sendMagicLink: async ({ email, url }) => {
         const to = email
         const subject = `Your ${siteConfig.name} Login Link`
-        await sendEmail({ to, subject, react: await EmailMagicLink({ to, url }) })
+        await sendEmail({ to, subject, react: EmailMagicLink({ to, url }) })
       },
     }),
 

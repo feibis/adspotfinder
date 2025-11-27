@@ -1,3 +1,5 @@
+import "dotenv/config"
+
 import { Text } from "@react-email/components"
 import { siteConfig } from "~/config/site"
 import { EmailButton } from "~/emails/components/button"
@@ -22,3 +24,10 @@ export const EmailMagicLink = ({ url, ...props }: EmailProps) => {
     </EmailWrapper>
   )
 }
+
+EmailMagicLink.PreviewProps = {
+  to: "alex@example.com",
+  url: "https://example.com",
+} satisfies EmailProps
+
+export default EmailMagicLink

@@ -1,3 +1,5 @@
+import "dotenv/config"
+
 import { Preview, Section, Text } from "@react-email/components"
 import { claimsConfig } from "~/config/claims"
 import { siteConfig } from "~/config/site"
@@ -40,3 +42,10 @@ export const EmailVerifyDomain = ({ otp, ...props }: EmailProps) => {
     </EmailWrapper>
   )
 }
+
+EmailVerifyDomain.PreviewProps = {
+  to: "alex@example.com",
+  otp: "123456",
+} satisfies EmailProps
+
+export default EmailVerifyDomain

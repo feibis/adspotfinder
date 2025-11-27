@@ -1,3 +1,5 @@
+import "dotenv/config"
+
 import { Text } from "@react-email/components"
 import type { Tool } from "~/.generated/prisma/client"
 import { siteConfig } from "~/config/site"
@@ -38,3 +40,17 @@ export const EmailSubmissionPublished = ({ tool, ...props }: EmailProps) => {
     </EmailWrapper>
   )
 }
+
+EmailSubmissionPublished.PreviewProps = {
+  to: "alex@example.com",
+  tool: {
+    name: "Example Tool",
+    slug: "example-tool",
+    websiteUrl: "https://example.com",
+    submitterName: "John Doe",
+    publishedAt: new Date(),
+    status: "Published",
+  } as Tool,
+} satisfies EmailProps
+
+export default EmailSubmissionPublished

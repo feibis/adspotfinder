@@ -1,3 +1,5 @@
+import "dotenv/config"
+
 import { Text } from "@react-email/components"
 import { addHours, differenceInDays, format, formatDistanceToNowStrict } from "date-fns"
 import type { Tool } from "~/.generated/prisma/client"
@@ -39,3 +41,17 @@ export const EmailSubmissionScheduled = ({ tool, ...props }: EmailProps) => {
     </EmailWrapper>
   )
 }
+
+EmailSubmissionScheduled.PreviewProps = {
+  to: "alex@example.com",
+  tool: {
+    name: "Example Tool",
+    slug: "example-tool",
+    websiteUrl: "https://example.com",
+    submitterName: "John Doe",
+    publishedAt: addHours(new Date(), 2),
+    status: "Scheduled",
+  } as Tool,
+} satisfies EmailProps
+
+export default EmailSubmissionScheduled

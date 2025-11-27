@@ -1,3 +1,5 @@
+import "dotenv/config"
+
 import { Text } from "@react-email/components"
 import type { Tool } from "~/.generated/prisma/client"
 import { EmailFeatureNudge } from "~/emails/components/feature-nudge"
@@ -40,3 +42,17 @@ export const EmailSubmissionPremium = ({ tool, ...props }: EmailProps) => {
     </EmailWrapper>
   )
 }
+
+EmailSubmissionPremium.PreviewProps = {
+  to: "alex@example.com",
+  tool: {
+    name: "Example Tool",
+    slug: "example-tool",
+    websiteUrl: "https://example.com",
+    submitterName: "John Doe",
+    publishedAt: null,
+    status: "Draft",
+  } as Tool,
+} satisfies EmailProps
+
+export default EmailSubmissionPremium
