@@ -4,7 +4,7 @@ import createNextIntlPlugin from "next-intl/plugin"
 import { withPlausibleProxy } from "next-plausible"
 
 const withNextIntl = createNextIntlPlugin("./lib/i18n.ts")
-const withPlausible = withPlausibleProxy()
+const withPlausible = withPlausibleProxy({ customDomain: process.env.NEXT_PUBLIC_PLAUSIBLE_URL })
 
 const nextConfig: NextConfig = {
   typedRoutes: true,
