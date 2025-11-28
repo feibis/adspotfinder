@@ -1,6 +1,6 @@
 import { getRandomDigits } from "@primoui/utils"
-import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
+import { betterAuth } from "better-auth/minimal"
 import { admin, createAuthMiddleware, magicLink, oneTimeToken } from "better-auth/plugins"
 import { revalidatePath } from "next/cache"
 import { headers } from "next/headers"
