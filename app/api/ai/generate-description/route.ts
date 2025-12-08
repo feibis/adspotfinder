@@ -15,7 +15,7 @@ export const POST = withAdminAuth(async req => {
     .parse(await req.json())
 
   const result = streamObject({
-    model: google("gemini-2.5-pro-preview-05-06"),
+    model: google("gemini-2.5-pro"),
     schema: descriptionSchema,
     system: `
       You are an expert content creator specializing in reasearching and writing about tools.
