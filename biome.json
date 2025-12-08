@@ -58,7 +58,8 @@
       },
       "correctness": {
         "useUniqueElementIds": "off",
-        "useExhaustiveDependencies": "off"
+        "useExhaustiveDependencies": "off",
+        "noUnusedImports": { "fix": "safe", "level": "error" }
       },
       "security": {
         "noDangerouslySetInnerHtml": "off",
