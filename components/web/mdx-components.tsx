@@ -38,4 +38,12 @@ const img = ({ className, ...props }: ComponentProps<"img">) => {
   )
 }
 
-export const MDXComponents = { a, img }
+const table = ({ ...props }: ComponentProps<"table">) => {
+  return (
+    <div className="overflow-x-auto">
+      <table {...props} />
+    </div>
+  )
+}
+
+export const MDXComponents = { a, img, table }

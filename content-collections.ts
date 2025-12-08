@@ -2,12 +2,14 @@ import { defineCollection, defineConfig } from "@content-collections/core"
 import { compileMDX, type Options } from "@content-collections/mdx"
 import rehypeAutolinkHeadings from "rehype-autolink-headings"
 import rehypeSlug from "rehype-slug"
+import remarkGfm from "remark-gfm"
 import { z } from "zod"
 import { defaultLocale, locales } from "~/lib/i18n"
 import { extractHeadingsFromMDX, extractToolsFromMDX } from "~/lib/mdx"
 
 const mdxOptions: Options = {
   rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
+  remarkPlugins: [[remarkGfm]],
 }
 
 const posts = defineCollection({
