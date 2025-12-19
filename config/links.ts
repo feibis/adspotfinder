@@ -2,7 +2,7 @@ import { siteConfig } from "~/config/site"
 
 export const linksConfig = {
   author: "https://kulpinski.pl",
-  builtWith: "https://dirstarter.com",
-  github: "https://github.com/dirstarter/dirstarter",
+  builtWith: "https://adspotfinder.com",
+  github: "https://github.com/adspotfinder/adspotfinder",
   feed: `${siteConfig.url}/rss.xml`,
 }

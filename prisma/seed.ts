@@ -2,8 +2,8 @@ import { addDays } from "date-fns"
 import { ToolStatus } from "~/.generated/prisma/client"
 import { db } from "~/services/db"
 
-const ADMIN_EMAIL = "admin@dirstarter.com"
-const USER_EMAIL = "user@dirstarter.com"
+const ADMIN_EMAIL = "admin@adspotfinder.com"
+const USER_EMAIL = "user@adspotfinder.com"
 
 const DUMMY_CONTENT = `This tool has revolutionized the way developers approach modern software development. With its **intuitive interface** and powerful features, it streamlines workflows and enhances productivity across teams of all sizes. Whether you're a beginner just starting your development journey or an experienced professional working on complex enterprise applications, this tool provides the flexibility and reliability you need to succeed.
 
@@ -134,7 +134,7 @@ async function main() {
       screenshotUrl: "https://code.visualstudio.com/opengraphimg/opengraph-home.png",
       categories: ["frontend"],
       tags: ["free", "open-source"],
-      owner: { connect: { email: "admin@dirstarter.com" } },
+      owner: { connect: { email: "admin@adspotfinder.com" } },
     },
     {
       name: "Next.js",
@@ -326,7 +326,7 @@ async function main() {
       screenshotUrl: "https://svelte.dev/images/twitter-thumbnail.jpg",
       categories: ["frontend"],
       tags: ["svelte", "javascript", "free", "open-source"],
-      owner: { connect: { email: "admin@dirstarter.com" } },
+      owner: { connect: { email: "admin@adspotfinder.com" } },
     },
     {
       name: "Rust",
@@ -339,7 +339,7 @@ async function main() {
       screenshotUrl: "https://www.rust-lang.org/static/images/rust-social-wide.jpg",
       categories: ["backend"],
       tags: ["rust", "free", "open-source"],
-      owner: { connect: { email: "admin@dirstarter.com" } },
+      owner: { connect: { email: "admin@adspotfinder.com" } },
     },
     {
       name: "Kubernetes",
@@ -352,7 +352,7 @@ async function main() {
       screenshotUrl: "https://kubernetes.io/images/kubernetes-open-graph.png",
       categories: ["devops"],
       tags: ["kubernetes", "free", "open-source"],
-      owner: { connect: { email: "admin@dirstarter.com" } },
+      owner: { connect: { email: "admin@adspotfinder.com" } },
     },
   ]
 

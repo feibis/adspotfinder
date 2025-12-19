@@ -1,4 +1,4 @@
-![Dirstarter](https://dirstarter.com/opengraph.png)
+![Adspotfinder](https://adspotfinder.com/opengraph.png)
 
 # DirStarter - Next.js Directory Boilerplate
 
@@ -12,13 +12,13 @@ If you are interested in building profitable directory websites, please follow m
 
 ## Documentation
 
-The documentation is available on the [website](https://dirstarter.com/docs). It includes guides, tutorials, and detailed explanations of the code. I designed it to be as beginner-friendly as possible, so you can start making money from day one.
+The documentation is available on the [website](https://adspotfinder.com/docs). It includes guides, tutorials, and detailed explanations of the code. I designed it to be as beginner-friendly as possible, so you can start making money from day one.
 
 If you found anything that could be improved, please let me know or contribute to the documentation yourself.
 
 ## Third-Party Services
 
-Dirstarter uses the following third-party services:
+Adspotfinder uses the following third-party services:
 
 - Database: [Postgres](https://postgres.org)
 - Analytics: [Plausible](https://plausible.io)
@@ -32,4 +32,4 @@ Make sure to set up accounts with these services and have the credentials ready.
 
 ## License
 
-For any details on the license, please refer to the [License Policy](https://dirstarter.com/license-policy) page.
+For any details on the license, please refer to the [License Policy](https://adspotfinder.com/license-policy) page.
