@@ -19,9 +19,6 @@ export default function ({ children }: PropsWithChildren) {
 
         <Backdrop isFixed />
 
-        <Suspense>
-          <AdBanner />
-        </Suspense>
 
         <Container asChild>
           <Wrapper className="grow py-fluid-md">
