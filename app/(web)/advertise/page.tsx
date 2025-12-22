@@ -42,7 +42,7 @@ export default async function ({ searchParams }: PageProps<"/advertise">) {
     author: {
       name: t(`${namespace}.testimonial.author.name`),
       note: t(`${namespace}.testimonial.author.note`),
-      image: "/authors/piotrkulpinski.webp",
+      image: "/authors/feibis.webp",
     },
   }
 

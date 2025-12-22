@@ -21,7 +21,7 @@
     "total_tools": "{count} {count, plural, =0 {tools} =1 {tool} other {tools}} listed"
   },
   "cta_proof": {
-    "message": "Join {count}+ directory enthusiasts"
+    "message": "Join {count}+ Storage Proffesionals"
   },
   "feature_nudge": {
     "message": "{name} has already been published on {siteName}. You can feature it for extra exposure.",

@@ -1,25 +1,25 @@
 ---
-title: "Why Adspotfinder is the Ultimate Next.js Boilerplate for Directory Websites"
-description: "Discover how Adspotfinder helps you launch profitable directory websites in days, not months. Built with Next.js 15, TypeScript, and everything you need to monetize from day one."
+title: "Why Litelocker is the Ultimate Next.js Boilerplate for Directory Websites"
+description: "Discover how Litelocker helps you launch profitable directory websites in days, not months. Built with Next.js 15, TypeScript, and everything you need to monetize from day one."
 image: "/content/boilerplate.webp"
 publishedAt: 2025-11-13
 author:
-  name: Piotr Kulpinski
-  image: "/authors/piotrkulpinski.webp"
-  title: "@piotrkulpinski"
-  url: "https://twitter.com/piotrkulpinski"
+  name: Fabian Likam
+  image: "/authors/feibis.webp"
+  title: "@feibis"
+  url: "https://twitter.com/feibis"
 locale: "en"
 ---
 
-Building a directory website from scratch is a time-consuming endeavor. Between setting up authentication, payment processing, admin panels, SEO optimization, and content management, months can fly by before you even launch. That's exactly why we built Adspotfinder – a comprehensive Next.js boilerplate that handles all the technical complexity so you can focus on growing your business.
+Building a directory website from scratch is a time-consuming endeavor. Between setting up authentication, payment processing, admin panels, SEO optimization, and content management, months can fly by before you even launch. That's exactly why we built Litelocker – a comprehensive Next.js boilerplate that handles all the technical complexity so you can focus on growing your business.
 
-## What Makes Adspotfinder Different?
+## What Makes Litelocker Different?
 
-Adspotfinder isn't just another template. It's a battle-tested, production-ready foundation that combines the latest web technologies with real-world business logic. Built on Next.js 15 with React 19, TypeScript, and Prisma ORM, it provides everything you need to launch a profitable directory website.
+Litelocker isn't just another template. It's a battle-tested, production-ready foundation that combines the latest web technologies with real-world business logic. Built on Next.js 15 with React 19, TypeScript, and Prisma ORM, it provides everything you need to launch a profitable directory website.
 
 ### Built for Monetization
 
-The biggest challenge with directory websites isn't building them – it's making them profitable. Adspotfinder comes with multiple revenue streams built-in:
+The biggest challenge with directory websites isn't building them – it's making them profitable. Litelocker comes with multiple revenue streams built-in:
 
 1. **Featured Listings** - Spotlight premium tools at the top of your directory
 2. **Sponsored Content** - Flexible ad placement system
@@ -27,7 +27,7 @@ The biggest challenge with directory websites isn't building them – it's makin
 
 ## Technical Excellence Out of the Box
 
-Adspotfinder leverages modern web technologies to ensure your directory is fast, scalable, and maintainable:
+Litelocker leverages modern web technologies to ensure your directory is fast, scalable, and maintainable:
 
 ### Performance First
 
@@ -76,24 +76,24 @@ Everything you need is already built:
 
 ## Launch in Hours, Not Weeks
 
-Here's what you get when you choose Adspotfinder:
+Here's what you get when you choose Litelocker:
 
 ### Immediate Value
 
 - **No Vendor Lock-in**: Buy once, own the code forever
-- **Unlimited Projects**: Use Adspotfinder for as many directories as you want
+- **Unlimited Projects**: Use Litelocker for as many directories as you want
 - **Regular Updates**: Get new features and improvements as they're released
 - **Comprehensive Documentation**: Detailed guides for every feature
 
 ### Real Results
 
-Don't just take our word for it. Developers are launching successful directories with Adspotfinder:
+Don't just take our word for it. Developers are launching successful directories with Litelocker:
 
-> "Adspotfinder is FANTASTIC ⭐ This codebase is insane... Used it to launch my website in 1 day, best money I spent this year."
+> "Litelocker is FANTASTIC ⭐ This codebase is insane... Used it to launch my website in 1 day, best money I spent this year."
 
-### Who Is Adspotfinder For?
+### Who Is Litelocker For?
 
-Adspotfinder is perfect for:
+Litelocker is perfect for:
 
 - **Entrepreneurs** building their first directory business
 - **Makers** who want to validate ideas quickly
@@ -104,7 +104,7 @@ You don't need to be a Next.js expert – just basic React/JavaScript knowledge 
 
 ## Beyond the Code
 
-Adspotfinder includes thoughtful features that make a difference:
+Litelocker includes thoughtful features that make a difference:
 
 ### Email System
 
@@ -131,7 +131,7 @@ Rank higher with built-in SEO tools:
 
 ## Getting Started Is Easy
 
-1. Purchase Adspotfinder and clone the repository
+1. Purchase Litelocker and clone the repository
 2. Configure your database and environment variables
 3. Run `bun dev` to start development
 4. Customize the design and content to match your brand
@@ -141,6 +141,6 @@ The entire setup process takes less than an hour, and you'll have a fully functi
 
 ## Invest in Your Success
 
-Building a directory website shouldn't take months of development work. With Adspotfinder, you get a proven foundation that lets you focus on what really matters: finding great tools, building your audience, and growing your revenue.
+Building a directory website shouldn't take months of development work. With Litelocker, you get a proven foundation that lets you focus on what really matters: finding great tools, building your audience, and growing your revenue.
 
-Stop reinventing the wheel. Start with Adspotfinder and launch your directory website today.
+Stop reinventing the wheel. Start with Litelocker and launch your directory website today.

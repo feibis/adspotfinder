@@ -1,13 +1,13 @@
 ---
-title: "How to Mention Tools in Your Blog Posts with Adspotfinder"
-description: "Learn how to create engaging, SEO-friendly blog posts by embedding tool entries directly in your content. A unique feature that sets Adspotfinder apart."
+title: "How to Mention Tools in Your Blog Posts with Litelocker"
+description: "Learn how to create engaging, SEO-friendly blog posts by embedding tool entries directly in your content. A unique feature that sets Litelocker apart."
 image: "/content/tool-mentions.webp"
 publishedAt: 2025-01-15
 author:
-  name: Piotr Kulpinski
-  image: "/authors/piotrkulpinski.webp"
-  title: "@piotrkulpinski"
-  url: "https://twitter.com/piotrkulpinski"
+  name: Fabian Likam
+  image: "/authors/feibis.webp"
+  title: "@feibis"
+  url: "https://twitter.com/feibis"
 locale: "en"
 ---
 

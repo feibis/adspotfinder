@@ -12,8 +12,8 @@ export const metadataConfig: Metadata = {
     images: { url: getOpenGraphImageUrl({}), width: 1200, height: 630 },
   },
   twitter: {
-    site: "@adspotfinder",
-    creator: "@piotrkulpinski",
+    site: "@litelocker",
+    creator: "@feibis",
     card: "summary_large_image",
   },
   alternates: {

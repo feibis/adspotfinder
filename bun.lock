@@ -3,7 +3,7 @@
   "configVersion": 0,
   "workspaces": {
     "": {
-      "name": "adspotfinder",
+      "name": "litelocker",
       "dependencies": {
         "@ai-sdk/google": "^2.0.49",
         "@ai-sdk/react": "^2.0.117",
