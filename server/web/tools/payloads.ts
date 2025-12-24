@@ -1,6 +1,7 @@
 import type { Prisma } from "~/.generated/prisma/client"
 import { categoryManyPayload } from "~/server/web/categories/payloads"
 import { tagManyPayload } from "~/server/web/tags/payloads"
+import { locationManyPayload } from "~/server/web/locations/payloads"
 
 export const toolCategoriesPayload = {
   select: categoryManyPayload,
@@ -11,6 +12,11 @@ export const toolTagsPayload = {
   select: tagManyPayload,
   orderBy: { name: "asc" },
 } satisfies Prisma.Tool$tagsArgs
+
+export const toolLocationsPayload = {
+  select: locationManyPayload,
+  orderBy: { name: "asc" },
+} satisfies Prisma.Tool$locationsArgs
 
 export const toolOwnerPayload = {
   select: { id: true },
@@ -35,6 +41,7 @@ export const toolOnePayload = {
   ownerId: true,
   categories: toolCategoriesPayload,
   tags: toolTagsPayload,
+  locations: toolLocationsPayload,
 } satisfies Prisma.ToolSelect
 
 export const toolManyPayload = {

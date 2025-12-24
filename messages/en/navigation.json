@@ -3,6 +3,7 @@
   "tools": "Tools",
   "categories": "Categories",
   "tags": "Tags",
+  "locations": "Locations",
   "blog": "Blog",
   "submit": "Submit",
   "about": "About Us",
@@ -17,6 +18,7 @@
   "browse_tools": "Browse tools",
   "browse_categories": "Browse categories",
   "browse_tags": "Browse tags",
+  "browse_locations": "Browse locations",
   "latest_tools": "Latest tools",
   "quick_links": "Quick Links",
   "create": "Create",
@@ -24,6 +26,7 @@
   "new_tool": "New Tool",
   "new_category": "New Category",
   "new_tag": "New Tag",
+  "new_location": "New Location",
   "toggle_theme": "Toggle theme",
   "admin_panel": "Admin panel",
   "switch_theme": "Switch to {theme} Mode"

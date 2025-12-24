@@ -42,6 +42,7 @@ export const toolSchema = z.object({
   status: z.enum(ToolStatus).default("Draft"),
   categories: z.array(z.string()).optional(),
   tags: z.array(z.string()).optional(),
+  locations: z.array(z.string()).optional(),
   notifySubmitter: z.boolean().default(true),
 })
 

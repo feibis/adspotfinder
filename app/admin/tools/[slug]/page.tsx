@@ -4,6 +4,7 @@ import { withAdminPage } from "~/components/admin/auth-hoc"
 import { Wrapper } from "~/components/common/wrapper"
 import { findCategoryList } from "~/server/admin/categories/queries"
 import { findTagList } from "~/server/admin/tags/queries"
+import { findLocationList } from "~/server/admin/locations/queries"
 import { findToolBySlug } from "~/server/admin/tools/queries"
 
 export default withAdminPage(async ({ params }: PageProps<"/admin/tools/[slug]">) => {
@@ -21,6 +22,7 @@ export default withAdminPage(async ({ params }: PageProps<"/admin/tools/[slug]">
         tool={tool}
         categoriesPromise={findCategoryList()}
         tagsPromise={findTagList()}
+        locationsPromise={findLocationList()}
       />
     </Wrapper>
   )

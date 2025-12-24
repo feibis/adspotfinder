@@ -96,6 +96,17 @@
       "placeholder": "Search in \"{name}\"..."
     }
   },
+  "locations": {
+    "title": "Browse Locations",
+    "description": "Browse all available locations to discover tools by specific locations."
+  },
+  "location": {
+    "title": "Tools located in \"{name}\"",
+    "description": "Explore tools and software located in {name} to find solutions that match your specific needs.",
+    "search": {
+      "placeholder": "Search in \"{name}\"..."
+    }
+  },
 
   "error": {
     "title": "Something went wrong!",

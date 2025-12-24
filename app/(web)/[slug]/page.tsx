@@ -1,5 +1,5 @@
 import { removeQueryParams } from "@primoui/utils"
-import { HashIcon } from "lucide-react"
+import { HashIcon, GlobeIcon } from "lucide-react"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getTranslations } from "next-intl/server"
@@ -157,6 +157,20 @@ export default async function (props: Props) {
                 {tool.tags.map(tag => (
                   <Tag key={tag.slug} prefix={<HashIcon />} asChild>
                     <Link href={`/tags/${tag.slug}`}>{tag.slug}</Link>
+                  </Tag>
+                ))}
+              </Stack>
+            </Stack>
+          )}
+
+          {/* Locations */}
+          {!!tool.locations.length && (
+            <Stack direction="column" className="w-full max-md:order-7">
+              <H5 as="h4">{t("navigation.locations")}:</H5>
+              <Stack>
+                {tool.locations.map(location => (
+                  <Tag key={location.slug} prefix={<GlobeIcon />} asChild>
+                    <Link href={`/locations/${location.slug}`}>{location.slug}</Link>
                   </Tag>
                 ))}
               </Stack>

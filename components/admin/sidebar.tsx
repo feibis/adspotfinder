@@ -85,6 +85,11 @@ export const Sidebar = () => {
           prefix: <TagIcon />,
         },
         {
+          title: "Locations",
+          href: "/admin/locations",
+          prefix: <TagIcon />,
+        },
+        {
           title: "Users",
           href: "/admin/users",
           prefix: <UsersIcon />,

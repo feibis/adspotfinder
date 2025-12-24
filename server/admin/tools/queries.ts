@@ -73,6 +73,7 @@ export const findToolBySlug = async (slug: string) => {
     include: {
       categories: { select: { id: true } },
       tags: { select: { id: true } },
+      locations: { select: { id: true } },
     },
   })
 }

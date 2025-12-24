@@ -39,6 +39,7 @@ import { cx } from "~/lib/utils"
 import type { findCategoryList } from "~/server/admin/categories/queries"
 import { contentSchema } from "~/server/admin/shared/schema"
 import type { findTagList } from "~/server/admin/tags/queries"
+import type { findLocationList } from "~/server/admin/locations/queries"
 import { upsertTool } from "~/server/admin/tools/actions"
 import type { findToolBySlug } from "~/server/admin/tools/queries"
 import { toolSchema } from "~/server/admin/tools/schema"
@@ -64,6 +65,7 @@ type ToolFormProps = ComponentProps<"form"> & {
   tool?: NonNullable<Awaited<ReturnType<typeof findToolBySlug>>>
   categoriesPromise: ReturnType<typeof findCategoryList>
   tagsPromise: ReturnType<typeof findTagList>
+  locationsPromise: ReturnType<typeof findLocationList>
 }
 
 export function ToolForm({
@@ -105,6 +107,7 @@ export function ToolForm({
         publishedAt: tool?.publishedAt ?? undefined,
         categories: tool?.categories.map(c => c.id) ?? [],
         tags: tool?.tags.map(t => t.id) ?? [],
+        locations: tool?.locations.map(l => l.id) ?? [],
         notifySubmitter: true,
       },
     },

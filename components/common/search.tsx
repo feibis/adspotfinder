@@ -130,6 +130,7 @@ export const Search = () => {
         { label: t("navigation.tools"), onSelect: () => navigateTo("/") },
         { label: t("navigation.categories"), onSelect: () => navigateTo("/categories") },
         { label: t("navigation.tags"), onSelect: () => navigateTo("/tags") },
+        { label: t("navigation.locations"), onSelect: () => navigateTo("/locations") },
       ],
     })
   }
@@ -244,6 +245,14 @@ export const Search = () => {
           items={results?.categories}
           onItemSelect={navigateTo}
           getHref={({ slug }) => `${isAdminPath ? "/admin" : ""}/categories/${slug}`}
+          renderItemDisplay={({ name }) => name}
+        />
+        
+        <SearchResults
+          name={t("navigation.locations")}
+          items={results?.locations}
+          onItemSelect={navigateTo}
+          getHref={({ slug }) => `${isAdminPath ? "/admin" : ""}/locations/${slug}`}
           renderItemDisplay={({ name }) => name}
         />
 
