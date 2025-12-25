@@ -3,20 +3,20 @@ import { type Prisma, ToolStatus } from "~/.generated/prisma/client"
 export const locationOnePayload = {
   name: true,
   slug: true,
-  type: true,
   country: true,
   countryCode: true,
-  emoji: true,
+  displayName: true,
+  flag: true,
   _count: { select: { tools: { where: { status: ToolStatus.Published } } } },
 } satisfies Prisma.LocationSelect
 
 export const locationManyPayload = {
   name: true,
   slug: true,
-  type: true,
   country: true,
   countryCode: true,
-  emoji: true,
+  displayName: true,
+  flag: true,
   _count: { select: { tools: { where: { status: ToolStatus.Published } } } },
 } satisfies Prisma.LocationSelect
 
