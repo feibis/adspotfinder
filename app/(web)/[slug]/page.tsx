@@ -169,11 +169,8 @@ export default async function (props: Props) {
               <H5 as="h4">{t("navigation.locations")}:</H5>
               <Stack>
                 {tool.locations.map(location => (
-                  <Tag key={location.slug} asChild>
-                    <Link href={`/locations/${location.slug}`}>
-                      {location.emoji && <span className="mr-1">{location.emoji}</span>}
-                      {location.name}
-                    </Link>
+                  <Tag key={location.slug} prefix={location.flag ? <span>{location.flag}</span> : <GlobeIcon />} asChild>
+                    <Link href={`/locations/${location.slug}`}>{location.displayName || location.name}</Link>
                   </Tag>
                 ))}
               </Stack>
