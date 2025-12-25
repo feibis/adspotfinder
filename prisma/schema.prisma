@@ -184,27 +184,28 @@ model Location {
   id          String   @id @default(cuid())
   name        String   @db.Citext
   slug        String   @unique
-  
+
   // Geographic data
-  type        String   @default("country") // "country" or "city"
-  country     String?  // Country name
-  countryCode String?  // ISO code: "US", "GB", "CA"
-  stateCode   String?  // State/Province code
-  
+  type        String   @default("country") // "country" | "city"
+  country     String?
+  countryCode String?
+  stateCode   String?
+
   // Display
-  emoji       String?  // Country flag emoji
-  
+  displayName String?
+  flag        String?
+
   updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
 
   // Relations
   tools Tool[]
 
-  // Indexes
   @@index([name])
   @@index([countryCode])
   @@index([type])
 }
+
 
 model Report {
   id        String   @id @default(cuid())
