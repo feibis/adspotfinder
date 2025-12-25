@@ -25,6 +25,11 @@ export const locationSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   slug: z.string().optional(),
+  type: z.enum(["country", "city"]).default("country"),
+  country: z.string().optional(),
+  countryCode: z.string().optional(),
+  stateCode: z.string().optional(),
+  emoji: z.string().optional(),
   tools: z.array(z.string()).optional(),
 })
 

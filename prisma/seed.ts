@@ -1,6 +1,7 @@
 import { addDays } from "date-fns"
 import { ToolStatus } from "~/.generated/prisma/client"
 import { db } from "~/services/db"
+import { seedLocations } from "./seed-locations"
 
 const ADMIN_EMAIL = "admin@adspotfinder.com"
 const USER_EMAIL = "user@adspotfinder.com"
@@ -245,6 +246,10 @@ async function main() {
   }
 
   console.log(`Successfully seeded ${platformsData.length} self-storage providers with full descriptions!`)
+  
+  // Seed locations
+  await seedLocations()
+  
   console.log("Fresh seeding completed!")
 }
 
