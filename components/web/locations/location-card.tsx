@@ -19,8 +19,8 @@ const LocationCard = ({ location, ...props }: LocationCardProps) => {
     <Tile asChild {...props}>
       <Link href={`/locations/${location.slug}`}>
         <TileTitle>
-          {location.emoji && <span className="mr-2">{location.emoji}</span>}
-          {location.name}
+          {location.flag && <span className="mr-2">{location.flag}</span>}
+          {location.displayName || location.name}
         </TileTitle>
 
         <TileDivider />
