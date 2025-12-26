@@ -7,6 +7,7 @@ import {
   type AttributeListProps,
   AttributeListSkeleton,
 } from "~/components/web/attributes/attribute-list"
+import { AttributeSearch, type AttributeSearchProps } from "~/components/web/attributes/attribute-search"
 import { Pagination, type PaginationProps } from "~/components/web/pagination"
 import { FiltersProvider, type FiltersProviderProps } from "~/contexts/filter-context"
 import { attributesSearchParams } from "~/server/web/attributes/schema"
@@ -14,13 +15,15 @@ import { attributesSearchParams } from "~/server/web/attributes/schema"
 type AttributeListingProps = {
   list: AttributeListProps
   pagination: PaginationProps
+  search?: AttributeSearchProps
   options?: Omit<FiltersProviderProps, "schema">
 }
 
-const AttributeListing = ({ list, pagination, options }: AttributeListingProps) => {
+const AttributeListing = ({ list, pagination, search, options }: AttributeListingProps) => {
   return (
     <FiltersProvider schema={attributesSearchParams} {...options}>
       <div className="space-y-10" id="attributes">
+        <AttributeSearch {...search} />
         <AttributeList {...list} />
       </div>
 

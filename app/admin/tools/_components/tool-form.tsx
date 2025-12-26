@@ -40,6 +40,7 @@ import type { findCategoryList } from "~/server/admin/categories/queries"
 import { contentSchema } from "~/server/admin/shared/schema"
 import type { findTagList } from "~/server/admin/tags/queries"
 import type { findLocationList } from "~/server/admin/locations/queries"
+import type { findAttributeList } from "~/server/admin/attributes/queries"
 import { upsertTool } from "~/server/admin/tools/actions"
 import type { findToolBySlug } from "~/server/admin/tools/queries"
 import { toolSchema } from "~/server/admin/tools/schema"
@@ -66,6 +67,7 @@ type ToolFormProps = ComponentProps<"form"> & {
   categoriesPromise: ReturnType<typeof findCategoryList>
   tagsPromise: ReturnType<typeof findTagList>
   locationsPromise: ReturnType<typeof findLocationList>
+  attributesPromise: ReturnType<typeof findAttributeList>
 }
 
 export function ToolForm({
@@ -75,11 +77,15 @@ export function ToolForm({
   tool,
   categoriesPromise,
   tagsPromise,
+  locationsPromise,
+  attributesPromise,
   ...props
 }: ToolFormProps) {
   const router = useRouter()
   const categories = use(categoriesPromise)
   const tags = use(tagsPromise)
+  const locations = use(locationsPromise)
+  const attributes = use(attributesPromise)
   const resolver = zodResolver(toolSchema)
   const [isPreviewing, setIsPreviewing] = useState(false)
   const [isStatusPending, setIsStatusPending] = useState(false)
@@ -108,6 +114,7 @@ export function ToolForm({
         categories: tool?.categories.map(c => c.id) ?? [],
         tags: tool?.tags.map(t => t.id) ?? [],
         locations: tool?.locations.map(l => l.id) ?? [],
+        attributes: tool?.attributes.map(a => a.id) ?? [],
         notifySubmitter: true,
       },
     },
@@ -501,6 +508,38 @@ export function ToolForm({
                     - Meta description: ${description}.`
                     : undefined
                 }
+              />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="locations"
+          render={({ field }) => (
+            <FormItem className="col-span-full">
+              <FormLabel>Locations</FormLabel>
+              <RelationSelector
+                relations={locations}
+                selectedIds={field.value ?? []}
+                setSelectedIds={field.onChange}
+                maxSuggestions={5}
+              />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="attributes"
+          render={({ field }) => (
+            <FormItem className="col-span-full">
+              <FormLabel>Attributes</FormLabel>
+              <RelationSelector
+                relations={attributes}
+                selectedIds={field.value ?? []}
+                setSelectedIds={field.onChange}
+                maxSuggestions={10}
               />
             </FormItem>
           )}
