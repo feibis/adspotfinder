@@ -6,9 +6,11 @@ import {
   CalendarIcon,
   DockIcon,
   ExternalLinkIcon,
+  FilterIcon,
   GalleryHorizontalEndIcon,
   GemIcon,
   LogOutIcon,
+  MapPinIcon,
   TagIcon,
   TriangleAlertIcon,
   UsersIcon,
@@ -87,7 +89,12 @@ export const Sidebar = () => {
         {
           title: "Locations",
           href: "/admin/locations",
-          prefix: <TagIcon />,
+          prefix: <MapPinIcon />,
+        },
+        {
+          title: "Attributes",
+          href: "/admin/attributes",
+          prefix: <FilterIcon />,
         },
         {
           title: "Users",

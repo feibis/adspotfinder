@@ -131,6 +131,7 @@ export const Search = () => {
         { label: t("navigation.categories"), onSelect: () => navigateTo("/categories") },
         { label: t("navigation.tags"), onSelect: () => navigateTo("/tags") },
         { label: t("navigation.locations"), onSelect: () => navigateTo("/locations") },
+        { label: t("navigation.attributes"), onSelect: () => navigateTo("/attributes") },
       ],
     })
   }
@@ -261,6 +262,14 @@ export const Search = () => {
           items={results?.tags}
           onItemSelect={navigateTo}
           getHref={({ slug }) => `${isAdminPath ? "/admin" : ""}/tags/${slug}`}
+          renderItemDisplay={({ name }) => name}
+        />
+
+        <SearchResults
+          name={t("navigation.attributes")}
+          items={results?.attributes}
+          onItemSelect={navigateTo}
+          getHref={({ slug }) => `${isAdminPath ? "/admin" : ""}/attributes/${slug}`}
           renderItemDisplay={({ name }) => name}
         />
       </CommandList>

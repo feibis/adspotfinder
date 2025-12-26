@@ -43,6 +43,7 @@ export const toolSchema = z.object({
   categories: z.array(z.string()).optional(),
   tags: z.array(z.string()).optional(),
   locations: z.array(z.string()).optional(),
+  attributes: z.array(z.string()).optional(),
   notifySubmitter: z.boolean().default(true),
 })
 

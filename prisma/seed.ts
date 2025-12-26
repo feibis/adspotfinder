@@ -1,6 +1,7 @@
 import { addDays } from "date-fns"
 import { ToolStatus } from "~/.generated/prisma/client"
 import { db } from "~/services/db"
+import { seedAttributes } from "./seed-attributes"
 import { seedLocations } from "./seed-locations"
 
 const ADMIN_EMAIL = "admin@adspotfinder.com"
@@ -10,6 +11,12 @@ async function main() {
   const now = new Date()
 
   console.log("Starting fresh seeding for self-storage providers with online booking...")
+
+  // Seed attributes first
+  await seedAttributes(db)
+
+  // Seed locations
+  await seedLocations(db)
 
   // Create users
   await db.user.upsert({

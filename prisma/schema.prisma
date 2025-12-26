@@ -138,6 +138,7 @@ model Tool {
   categories Category[]
   tags       Tag[]
   locations  Location[]
+  attributes Attribute[]
   reports    Report[]
   owner      User?      @relation(fields: [ownerId], references: [id])
   ownerId    String?
@@ -206,6 +207,45 @@ model Location {
   @@index([type])
 }
 
+
+model AttributeGroup {
+  id          String      @id @default(cuid())
+  name        String      @db.Citext
+  slug        String      @unique
+  description String?
+  type        String      @default("multiple") // "single" | "multiple" | "range"
+  order       Int         @default(0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relations
+  attributes Attribute[]
+
+  // Indexes
+  @@index([slug])
+  @@index([order])
+}
+
+model Attribute {
+  id        String         @id @default(cuid())
+  name      String         @db.Citext
+  slug      String         @unique
+  value     String?        // For numeric values like "50" for 50 sq ft
+  unit      String?        // "sq ft", "sq m", etc.
+  order     Int            @default(0)
+  groupId   String
+  group     AttributeGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  // Relations
+  tools Tool[]
+
+  // Indexes
+  @@index([groupId])
+  @@index([slug])
+  @@index([order])
+}
 
 model Report {
   id        String   @id @default(cuid())

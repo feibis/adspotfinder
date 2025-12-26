@@ -177,7 +177,21 @@ export default async function (props: Props) {
             </Stack>
           )}
 
-          <Stack className="w-full md:sticky md:bottom-2 md:z-10 max-md:order-7">
+          {/* Attributes */}
+          {!!tool.attributes.length && (
+            <Stack direction="column" className="w-full max-md:order-8">
+              <H5 as="h4">Storage Details:</H5>
+              <Stack>
+                {tool.attributes.map(attribute => (
+                  <Tag key={attribute.slug} asChild>
+                    <Link href={`/attributes/${attribute.slug}`}>{attribute.name}</Link>
+                  </Tag>
+                ))}
+              </Stack>
+            </Stack>
+          )}
+
+          <Stack className="w-full md:sticky md:bottom-2 md:z-10 max-md:order-9">
             <div className="absolute -inset-x-1 -bottom-3 -top-8 -z-1 pointer-events-none bg-background mask-t-from-66% max-md:hidden" />
 
             <Nav className="mr-auto" title={metadata.title} />

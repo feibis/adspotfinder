@@ -108,6 +108,19 @@
     }
   },
 
+  "attributes": {
+    "title": "Browse Storage Attributes",
+    "description": "Browse storage facilities by size, type, and features on {siteName}."
+  },
+  "attribute": {
+    "title": "{name}",
+    "description": "Find storage facilities with {name} on {siteName}.",
+    "search": {
+      "placeholder": "Search {name} storage..."
+    },
+    "group_label": "Category: {group}"
+  },
+
   "error": {
     "title": "Something went wrong!",
     "description": "Please try again. If the problem persists, <link>contact support</link>.",

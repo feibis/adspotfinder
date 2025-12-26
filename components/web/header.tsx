@@ -4,7 +4,9 @@ import { useHotkeys } from "@mantine/hooks"
 import {
   CalendarDaysIcon,
   ChevronDownIcon,
+  FilterIcon,
   GalleryHorizontalEndIcon,
+  MapPinIcon,
   SearchIcon,
   TagIcon,
 } from "lucide-react"
@@ -88,6 +90,16 @@ const Header = ({ className, ...props }: ComponentProps<"div">) => {
                     {t("navigation.tags")}
                   </NavLink>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <NavLink href="/locations" prefix={<MapPinIcon />}>
+                    {t("navigation.locations")}
+                  </NavLink>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <NavLink href="/attributes" prefix={<FilterIcon />}>
+                    {t("navigation.attributes")}
+                  </NavLink>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -121,6 +133,8 @@ const Header = ({ className, ...props }: ComponentProps<"div">) => {
           <NavLink href="/?sort=publishedAt.desc">{t("navigation.latest_tools")}</NavLink>
           <NavLink href="/categories">{t("navigation.categories")}</NavLink>
           <NavLink href="/tags">{t("navigation.tags")}</NavLink>
+          <NavLink href="/locations">{t("navigation.locations")}</NavLink>
+          <NavLink href="/attributes">{t("navigation.attributes")}</NavLink>
           <NavLink href="/submit">{t("navigation.submit")}</NavLink>
           <NavLink href="/about">{t("navigation.about")}</NavLink>
           {adsConfig.enabled && <NavLink href="/advertise">{t("navigation.advertise")}</NavLink>}

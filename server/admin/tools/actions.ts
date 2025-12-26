@@ -10,10 +10,11 @@ import { toolSchema } from "~/server/admin/tools/schema"
 export const upsertTool = adminActionClient
   .inputSchema(toolSchema)
   .action(async ({ parsedInput, ctx: { db, revalidate } }) => {
-    const { id, categories, tags, locations, notifySubmitter, ...input } = parsedInput
+    const { id, categories, tags, locations, attributes, notifySubmitter, ...input } = parsedInput
     const categoryIds = categories?.map(id => ({ id }))
     const tagIds = tags?.map(id => ({ id }))
     const locationIds = locations?.map(id => ({ id }))
+    const attributeIds = attributes?.map(id => ({ id }))
     const existingTool = id ? await db.tool.findUnique({ where: { id } }) : null
 
     const tool = id
@@ -26,6 +27,7 @@ export const upsertTool = adminActionClient
             categories: { set: categoryIds },
             tags: { set: tagIds },
             locations: { set: locationIds },
+            attributes: { set: attributeIds },
           },
         })
       : // Otherwise, create it
@@ -36,6 +38,7 @@ export const upsertTool = adminActionClient
             categories: { connect: categoryIds },
             tags: { connect: tagIds },
             locations: { connect: locationIds },
+            attributes: { connect: attributeIds },
           },
         })
 
@@ -68,7 +71,8 @@ export const duplicateTool = adminActionClient
       include: {
         categories: { select: { id: true } },
         tags: { select: { id: true } },
-        locations: { select: { slug: true } },
+        locations: { select: { id: true } },
+        attributes: { select: { id: true } },
       },
     })
 
@@ -92,6 +96,7 @@ export const duplicateTool = adminActionClient
         categories: { connect: originalTool.categories },
         tags: { connect: originalTool.tags },
         locations: { connect: originalTool.locations },
+        attributes: { connect: originalTool.attributes },
       },
     })
 

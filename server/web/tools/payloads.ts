@@ -1,7 +1,8 @@
 import type { Prisma } from "~/.generated/prisma/client"
+import { attributeManyPayload } from "~/server/web/attributes/payloads"
 import { categoryManyPayload } from "~/server/web/categories/payloads"
-import { tagManyPayload } from "~/server/web/tags/payloads"
 import { locationManyPayload } from "~/server/web/locations/payloads"
+import { tagManyPayload } from "~/server/web/tags/payloads"
 
 export const toolCategoriesPayload = {
   select: categoryManyPayload,
@@ -17,6 +18,11 @@ export const toolLocationsPayload = {
   select: locationManyPayload,
   orderBy: { name: "asc" },
 } satisfies Prisma.Tool$locationsArgs
+
+export const toolAttributesPayload = {
+  select: attributeManyPayload,
+  orderBy: { order: "asc" },
+} satisfies Prisma.Tool$attributesArgs
 
 export const toolOwnerPayload = {
   select: { id: true },
@@ -42,6 +48,7 @@ export const toolOnePayload = {
   categories: toolCategoriesPayload,
   tags: toolTagsPayload,
   locations: toolLocationsPayload,
+  attributes: toolAttributesPayload,
 } satisfies Prisma.ToolSelect
 
 export const toolManyPayload = {
@@ -58,6 +65,7 @@ export const toolManyPayload = {
   updatedAt: true,
   ownerId: true,
   categories: toolCategoriesPayload,
+  attributes: toolAttributesPayload,
 } satisfies Prisma.ToolSelect
 
 export type ToolOne = Prisma.ToolGetPayload<{ select: typeof toolOnePayload }>
