@@ -24,6 +24,28 @@ export const toolAttributesPayload = {
   orderBy: { order: "asc" },
 } satisfies Prisma.Tool$attributesArgs
 
+export const toolPricingsPayload = {
+  select: {
+    id: true,
+    name: true,
+    price: true,
+    currency: true,
+    period: true,
+    unit: true,
+    isActive: true,
+    attributes: {
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        group: { select: { name: true, slug: true } },
+      },
+    },
+  },
+  where: { isActive: true },
+  orderBy: { order: "asc" },
+} satisfies Prisma.Tool$pricingsArgs
+
 export const toolOwnerPayload = {
   select: { id: true },
 } satisfies Prisma.Tool$ownerArgs
@@ -49,6 +71,7 @@ export const toolOnePayload = {
   tags: toolTagsPayload,
   locations: toolLocationsPayload,
   attributes: toolAttributesPayload,
+  pricings: toolPricingsPayload,
 } satisfies Prisma.ToolSelect
 
 export const toolManyPayload = {

@@ -75,6 +75,18 @@ export const findToolBySlug = async (slug: string) => {
       tags: { select: { id: true } },
       locations: { select: { id: true } },
       attributes: { select: { id: true } },
+      pricings: { 
+        select: { 
+          id: true, 
+          name: true, 
+          price: true, 
+          currency: true, 
+          period: true,
+          unit: true,
+          isActive: true,
+          attributes: { select: { id: true, name: true } },
+        } 
+      },
     },
   })
 }

@@ -139,6 +139,7 @@ model Tool {
   tags       Tag[]
   locations  Location[]
   attributes Attribute[]
+  pricings   Pricing[]
   reports    Report[]
   owner      User?      @relation(fields: [ownerId], references: [id])
   ownerId    String?
@@ -239,11 +240,42 @@ model Attribute {
   updatedAt DateTime       @updatedAt
 
   // Relations
-  tools Tool[]
+  tools    Tool[]
+  pricings Pricing[]
 
   // Indexes
   @@index([groupId])
   @@index([slug])
+  @@index([order])
+}
+
+model Pricing {
+  id          String      @id @default(cuid())
+  name        String?     @db.Citext // Optional name like "Small Climate Controlled Unit"
+  description String?
+  
+  // The combination of attributes that defines this price
+  attributes  Attribute[]
+  
+  // Pricing details
+  price       Decimal
+  currency    String      @default("USD")
+  period      String      @default("month") // month, year, day, week, one-time
+  unit        String?     // per sq ft, per cubic meter, per unit, etc.
+  
+  // Metadata
+  isActive    Boolean     @default(true)
+  order       Int         @default(0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relations
+  toolId      String
+  tool        Tool        @relation(fields: [toolId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  @@index([toolId])
+  @@index([isActive])
   @@index([order])
 }
 
