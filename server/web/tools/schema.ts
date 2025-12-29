@@ -12,6 +12,7 @@ export const toolFilterParams = {
   page: parseAsInteger.withDefault(1),
   perPage: parseAsInteger.withDefault(36 - (adsConfig.enabled ? adsConfig.adsPerPage : 0)),
   category: parseAsString.withDefault(""),
+  country: parseAsString.withDefault(""),
 }
 
 export const toolFilterParamsCache = createSearchParamsCache(toolFilterParams)

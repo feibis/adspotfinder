@@ -28,6 +28,7 @@ export const toolPricingsPayload = {
   select: {
     id: true,
     name: true,
+    description: true,
     price: true,
     currency: true,
     period: true,
@@ -38,6 +39,8 @@ export const toolPricingsPayload = {
         id: true,
         name: true,
         slug: true,
+        value: true,
+        unit: true,
         group: { select: { name: true, slug: true } },
       },
     },

@@ -36,8 +36,9 @@ export const ToolFilters = ({ ...props }: ComponentProps<typeof Select>) => {
           </SelectTrigger>
 
           <SelectContent align="end">
-            {options.map(({ slug, name }) => (
+            {options.map(({ slug, name, flag }) => (
               <SelectItem key={slug} value={slug}>
+                {flag && <span className="mr-2">{flag}</span>}
                 {name}
               </SelectItem>
             ))}

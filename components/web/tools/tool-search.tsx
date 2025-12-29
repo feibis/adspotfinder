@@ -21,6 +21,8 @@ export const ToolSearch = ({ placeholder, ...props }: ToolSearchProps) => {
     { value: "publishedAt.desc", label: t("sort_latest") },
     { value: "name.asc", label: t("sort_name_asc") },
     { value: "name.desc", label: t("sort_name_desc") },
+    { value: "price.asc", label: t("sort_price_asc") },
+    { value: "price.desc", label: t("sort_price_desc") },
   ]
 
   return (

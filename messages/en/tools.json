@@ -15,9 +15,12 @@
   "filters": {
     "search_placeholder": "Search tools...",
     "all_categories": "All categories",
+    "all_countries": "All countries",
     "sort_latest": "Latest",
     "sort_name_asc": "Name (A to Z)",
-    "sort_name_desc": "Name (Z to A)"
+    "sort_name_desc": "Name (Z to A)",
+    "sort_price_asc": "Price (Low to High)",
+    "sort_price_desc": "Price (High to Low)"
   },
   "nav": {
     "copy_link": "Copy Link",

@@ -17,6 +17,7 @@ import { OverlayImage } from "~/components/web/overlay-image"
 import { StructuredData } from "~/components/web/structured-data"
 import { ToolActions } from "~/components/web/tools/tool-actions"
 import { ToolButton } from "~/components/web/tools/tool-button"
+import { ToolPricing } from "~/components/web/tools/tool-pricing"
 import { ToolPreviewAlert } from "~/components/web/tools/tool-preview-alert"
 import { Backdrop } from "~/components/web/ui/backdrop"
 import { Favicon } from "~/components/web/ui/favicon"
@@ -188,6 +189,14 @@ export default async function (props: Props) {
                   </Tag>
                 ))}
               </Stack>
+            </Stack>
+          )}
+
+          {/* Pricing */}
+          {!!tool.pricings?.length && (
+            <Stack direction="column" className="w-full max-md:order-9">
+              <H5 as="h4">Pricing:</H5>
+              <ToolPricing tool={tool} />
             </Stack>
           )}
 

@@ -545,10 +545,34 @@ export function ToolForm({
           )}
         />
 
+        {tool && tool.pricings && tool.pricings.length > 0 && (
+          <div className="col-span-full">
+            <FormLabel>Pricings ({tool.pricings.length})</FormLabel>
+            <div className="mt-2 space-y-2">
+              {tool.pricings.slice(0, 3).map((pricing) => (
+                <div key={pricing.id} className="flex items-center gap-2 text-sm">
+                  <span className="font-medium">
+                    {Number(pricing.price)} {pricing.currency}/{pricing.period}
+                  </span>
+                  {pricing.name && <span className="text-muted-foreground">- {pricing.name}</span>}
+                </div>
+              ))}
+              {tool.pricings.length > 3 && (
+                <p className="text-sm text-muted-foreground">
+                  +{tool.pricings.length - 3} more...
+                </p>
+              )}
+            </div>
+            <Button size="sm" variant="secondary" className="mt-2" asChild>
+              <Link href={`/admin/pricings?toolId=${tool.id}`}>Manage Pricings</Link>
+            </Button>
+          </div>
+        )}
+
         <FormField
           control={form.control}
           name="isFeatured"
-          render={({ field }) => (
+          render={({ field}) => (
             <FormItem direction="row">
               <FormControl>
                 <Switch onCheckedChange={field.onChange} checked={field.value} />
