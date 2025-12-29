@@ -55,7 +55,9 @@ export const searchTools = async (search: ToolFilterParams, where?: Prisma.ToolW
     })
 
     // Maintain the order from the raw query
-    const orderedTools = toolIds.map(id => toolsData.find(t => t.id === id)).filter(Boolean)
+    const orderedTools = toolIds
+      .map(id => toolsData.find(t => t.id === id))
+      .filter((tool): tool is NonNullable<typeof tool> => tool !== undefined)
 
     const total = await db.tool.count({ where: { ...whereQuery, ...where } })
 
