@@ -54,10 +54,11 @@ export const searchTools = async (search: ToolFilterParams, where?: Prisma.ToolW
       select: toolManyPayload,
     })
 
-    // Maintain the order from the raw query
-    const orderedTools = toolIds
-      .map(id => toolsData.find(t => t.id === id))
-      .filter((tool): tool is NonNullable<typeof tool> => tool !== undefined)
+    // Create a map for O(1) lookup
+    const toolsMap = new Map(toolsData.map(tool => [tool.id, tool]))
+    
+    // Maintain the order from the raw query, only include tools that exist
+    const orderedTools = toolIds.map(id => toolsMap.get(id)).filter((tool): tool is NonNullable<typeof tool> => !!tool)
 
     const total = await db.tool.count({ where: { ...whereQuery, ...where } })
 
