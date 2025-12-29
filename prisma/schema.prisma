@@ -137,6 +137,7 @@ model Tool {
   // Relations
   categories Category[]
   tags       Tag[]
+  shops      Shop[]
   locations  Location[]
   attributes Attribute[]
   pricings   Pricing[]
@@ -172,6 +173,20 @@ model Tag {
   name      String   @db.Citext
   slug      String   @unique
   updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+
+  // Relations
+  tools Tool[]
+
+  // Indexes
+  @@index([name])
+}
+
+model Shop {
+  id        String   @id @default(cuid())
+  name      String   @db.Citext
+  slug      String   @unique
+  updatedAt DateTime @updatedAt 
   createdAt DateTime @default(now())
 
   // Relations
