@@ -46,7 +46,7 @@ const getData = cache(async ({ params }: Props) => {
 
 export const generateStaticParams = async () => {
   const shops = await findShopSlugs({})
-  return shops.map(({ slug }) => ({ slug }))
+  return shops.map(({ slug }: { slug: string }) => ({ slug }))
 }
 
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
