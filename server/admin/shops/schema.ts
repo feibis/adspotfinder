@@ -12,7 +12,7 @@ export const shopsTableParamsSchema = {
   name: parseAsString.withDefault(""),
   page: parseAsInteger.withDefault(1),
   perPage: parseAsInteger.withDefault(25),
-  sort: getSortingStateParser().withDefault([{ id: "name", desc: false }]),
+  sort: getSortingStateParser<Shop>().withDefault([{ id: "name", desc: false }]),
   from: parseAsString.withDefault(""),
   to: parseAsString.withDefault(""),
   operator: parseAsStringEnum(["and", "or"]).withDefault("and"),
