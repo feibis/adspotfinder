@@ -16,6 +16,7 @@
     "db:push": "prisma db push --skip-generate",
     "db:reset": "prisma migrate reset",
     "db:seed": "prisma db seed",
+    "postinstall": "prisma generate",
     "postbuild": "next-sitemap --config next-sitemap.config.cjs",
     "prisma:generate": "prisma generate"
   },
