@@ -3,7 +3,7 @@
 import { PlusIcon } from "lucide-react"
 import { useQueryStates } from "nuqs"
 import { use, useMemo } from "react"
-import type { Shops } from "~/.generated/prisma/browser"
+import type { Shop } from "~/.generated/prisma/browser"
 import { getColumns } from "~/app/admin/shops/_components/shops-table-columns"
 import { ShopsTableToolbarActions } from "~/app/admin/shops/_components/shops-table-toolbar-actions"
 import { DateRangePicker } from "~/components/admin/date-range-picker"
@@ -30,7 +30,7 @@ export function ShopsTable({ shopsPromise }: ShopsTableProps) {
   const columns = useMemo(() => getColumns(), [])
 
   // Search filters
-  const filterFields: DataTableFilterField<Shops>[] = [
+  const filterFields: DataTableFilterField<Shop>[] = [
     {
       id: "name",
       label: "Name",

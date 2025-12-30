@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { useAction } from "next-safe-action/hooks"
 import type { ComponentProps } from "react"
 import { toast } from "sonner"
-import type { Shops } from "~/.generated/prisma/browser"
+import type { Shop } from "~/.generated/prisma/browser"
 import { ShopsDeleteDialog } from "~/app/admin/shops/_components/shops-delete-dialog"
 import { Button } from "~/components/common/button"
 import {
@@ -21,7 +21,7 @@ import { cx } from "~/lib/utils"
 import { duplicateShop } from "~/server/admin/shops/actions"
 
 type ShopActionsProps = ComponentProps<typeof Button> & {
-  shop: Shops
+  shop: Shop
 }
 
 export const ShopActions = ({ shop, className, ...props }: ShopActionsProps) => {

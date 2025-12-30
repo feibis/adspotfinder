@@ -9,7 +9,7 @@ import { type ShopsFilterParams, shopsSearchParamsCache } from "~/server/web/sho
 type ShopQueryProps = Omit<ShopListingProps, "list" | "pagination"> & {
   searchParams: Promise<SearchParams>
   overrideParams?: Partial<ShopsFilterParams>
-  where?: Prisma.ShopsWhereInput
+  where?: Prisma.ShopWhereInput
   list?: Partial<Omit<ShopListProps, "shops">>
   pagination?: Partial<Omit<PaginationProps, "total" | "pageSize">>
 }

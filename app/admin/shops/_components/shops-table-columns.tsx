@@ -3,7 +3,7 @@
 import { formatDate } from "@primoui/utils"
 import type { ColumnDef } from "@tanstack/react-table"
 import { HashIcon } from "lucide-react"
-import type { Shops } from "~/.generated/prisma/browser"
+import type { Shop } from "~/.generated/prisma/browser"
 import { ShopActions } from "~/app/admin/shops/_components/shop-actions"
 import { RowCheckbox } from "~/components/admin/row-checkbox"
 import { Badge } from "~/components/common/badge"
@@ -11,7 +11,7 @@ import { Note } from "~/components/common/note"
 import { DataTableColumnHeader } from "~/components/data-table/data-table-column-header"
 import { DataTableLink } from "~/components/data-table/data-table-link"
 
-export const getColumns = (): ColumnDef<Shops & { _count?: { tools: number } }>[] => {
+export const getColumns = (): ColumnDef<Shop & { _count?: { tools: number } }>[] => {
   return [
     {
       id: "select",

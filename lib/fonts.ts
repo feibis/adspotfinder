@@ -1,7 +1,7 @@
-import { Geist } from "next/font/google"
+import { Inter } from "next/font/google"
 import type { FontWeight } from "satori"
 
-export const fontSans = Geist({
+export const fontSans = Inter({
   variable: "--font-sans",
   display: "swap",
   subsets: ["latin"],

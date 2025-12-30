@@ -4,7 +4,7 @@ import { shopManyPayload, shopOnePayload } from "~/server/web/shops/payloads"
 import type { ShopsFilterParams } from "~/server/web/shops/schema"
 import { db } from "~/services/db"
 
-export const searchShops = async (search: ShopsFilterParams, where?: Prisma.ShopsWhereInput) => {
+export const searchShops = async (search: ShopsFilterParams, where?: Prisma.ShopWhereInput) => {
   "use cache"
 
   cacheTag("shops")
@@ -16,7 +16,7 @@ export const searchShops = async (search: ShopsFilterParams, where?: Prisma.Shop
   const take = perPage
   const [sortBy, sortOrder] = sort.split(".")
 
-  const whereQuery: Prisma.ShopsWhereInput = {
+  const whereQuery: Prisma.ShopWhereInput = {
     tools: { some: { status: ToolStatus.Published } },
     ...(q && { name: { contains: q, mode: "insensitive" } }),
   }
@@ -40,7 +40,7 @@ export const searchShops = async (search: ShopsFilterParams, where?: Prisma.Shop
   }
 
   const [shops, total] = await db.$transaction([
-    db.shops.findMany({
+    db.shop.findMany({
       orderBy: sortBy ? { [sortBy]: sortOrder } : { name: "asc" },
       where: { ...whereQuery, ...where },
       select: shopManyPayload,
@@ -48,7 +48,7 @@ export const searchShops = async (search: ShopsFilterParams, where?: Prisma.Shop
       skip,
     }),
 
-    db.shops.count({
+    db.shop.count({
       where: { ...whereQuery, ...where },
     }),
   ])
@@ -58,13 +58,13 @@ export const searchShops = async (search: ShopsFilterParams, where?: Prisma.Shop
   return { shops, total, page, perPage }
 }
 
-export const findShopSlugs = async ({ where, orderBy, ...args }: Prisma.ShopsFindManyArgs) => {
+export const findShopSlugs = async ({ where, orderBy, ...args }: Prisma.ShopFindManyArgs) => {
   "use cache"
 
   cacheTag("shops")
   cacheLife("infinite")
 
-  return db.shops.findMany({
+  return db.shop.findMany({
     ...args,
     orderBy: orderBy ?? { name: "asc" },
     where: { tools: { some: { status: ToolStatus.Published } }, ...where },
@@ -72,13 +72,13 @@ export const findShopSlugs = async ({ where, orderBy, ...args }: Prisma.ShopsFin
   })
 }
 
-export const findShop = async ({ where, ...args }: Prisma.ShopsFindFirstArgs = {}) => {
+export const findShop = async ({ where, ...args }: Prisma.ShopFindFirstArgs = {}) => {
   "use cache"
 
   cacheTag("shop", `shop-${where?.slug}`)
   cacheLife("infinite")
 
-  return db.shops.findFirst({
+  return db.shop.findFirst({
     ...args,
     where,
     select: shopOnePayload,

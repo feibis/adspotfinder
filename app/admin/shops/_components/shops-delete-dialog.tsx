@@ -1,11 +1,11 @@
 import type { PropsWithChildren } from "react"
 import { toast } from "sonner"
-import type { Shops } from "~/.generated/prisma/client"
+import type { Shop } from "~/.generated/prisma/client"
 import { DeleteDialog } from "~/components/admin/dialogs/delete-dialog"
 import { deleteShops } from "~/server/admin/shops/actions"
 
 type ShopsDeleteDialogProps = PropsWithChildren<{
-  shops: Shops[]
+  shops: Shop[]
   onExecute?: () => void
 }>
 

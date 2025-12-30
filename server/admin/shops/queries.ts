@@ -4,7 +4,7 @@ import type { Prisma } from "~/.generated/prisma/client"
 import type { ShopsTableSchema } from "~/server/admin/shops/schema"
 import { db } from "~/services/db"
 
-export const findShops = async (search: ShopsTableSchema, where?: Prisma.ShopsWhereInput) => {
+export const findShops = async (search: ShopsTableSchema, where?: Prisma.ShopWhereInput) => {
   const { name, page, perPage, sort, from, to, operator } = search
 
   // Offset to paginate the results
@@ -17,7 +17,7 @@ export const findShops = async (search: ShopsTableSchema, where?: Prisma.ShopsWh
   const fromDate = from ? startOfDay(new Date(from)) : undefined
   const toDate = to ? endOfDay(new Date(to)) : undefined
 
-  const expressions: (Prisma.ShopsWhereInput | undefined)[] = [
+  const expressions: (Prisma.ShopWhereInput | undefined)[] = [
     // Filter by name
     name ? { name: { contains: name, mode: "insensitive" } } : undefined,
 
@@ -25,13 +25,13 @@ export const findShops = async (search: ShopsTableSchema, where?: Prisma.ShopsWh
     fromDate || toDate ? { createdAt: { gte: fromDate, lte: toDate } } : undefined,
   ]
 
-  const whereQuery: Prisma.ShopsWhereInput = {
+  const whereQuery: Prisma.ShopWhereInput = {
     [operator.toUpperCase()]: expressions.filter(isTruthy),
   }
 
   // Transaction is used to ensure both queries are executed in a single transaction
   const [shops, shopsTotal] = await db.$transaction([
-    db.shops.findMany({
+    db.shop.findMany({
       where: { ...whereQuery, ...where },
       orderBy: [...orderBy, { createdAt: "asc" }],
       take: perPage,
@@ -39,7 +39,7 @@ export const findShops = async (search: ShopsTableSchema, where?: Prisma.ShopsWh
       include: { _count: { select: { tools: true } } },
     }),
 
-    db.shops.count({
+    db.shop.count({
       where: { ...whereQuery, ...where },
     }),
   ])
@@ -48,8 +48,8 @@ export const findShops = async (search: ShopsTableSchema, where?: Prisma.ShopsWh
   return { shops, shopsTotal, pageCount }
 }
 
-export const findShopList = async ({ ...args }: Prisma.ShopsFindManyArgs = {}) => {
-  return db.shops.findMany({
+export const findShopList = async ({ ...args }: Prisma.ShopFindManyArgs = {}) => {
+  return db.shop.findMany({
     ...args,
     select: { id: true, name: true },
     orderBy: { name: "asc" },
@@ -57,7 +57,7 @@ export const findShopList = async ({ ...args }: Prisma.ShopsFindManyArgs = {}) =
 }
 
 export const findShopBySlug = async (slug: string) => {
-  return db.shops.findUnique({
+  return db.shop.findUnique({
     where: { slug },
     include: {
       tools: { select: { id: true } },

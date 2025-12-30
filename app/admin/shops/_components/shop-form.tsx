@@ -44,7 +44,7 @@ export function ShopForm({ children, className, title, shop, toolsPromise, ...pr
         id: shop?.id ?? "",
         name: shop?.name ?? "",
         slug: shop?.slug ?? "",
-        tools: shop?.tools.map(t => t.id) ?? [],
+        tools: shop?.tools.map((t: { id: string }) => t.id) ?? [],
       },
     },
 

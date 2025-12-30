@@ -11,7 +11,7 @@ export const upsertShop = adminActionClient
     const toolIds = tools?.map(id => ({ id }))
 
     const shop = id
-      ? await db.shops.update({
+      ? await db.shop.update({
           where: { id },
           data: {
             ...input,
@@ -19,7 +19,7 @@ export const upsertShop = adminActionClient
             tools: { set: toolIds },
           },
         })
-      : await db.shops.create({
+      : await db.shop.create({
           data: {
             ...input,
             slug: input.slug || "",
@@ -40,7 +40,7 @@ export const upsertShop = adminActionClient
 export const duplicateShop = adminActionClient
   .inputSchema(idSchema)
   .action(async ({ parsedInput: { id }, ctx: { db, revalidate } }) => {
-    const originalShop = await db.shops.findUnique({
+    const originalShop = await db.shop.findUnique({
       where: { id },
       include: { tools: { select: { id: true } } },
     })
@@ -51,7 +51,7 @@ export const duplicateShop = adminActionClient
 
     const newName = `${originalShop.name} (Copy)`
 
-    const duplicatedShop = await db.shops.create({
+    const duplicatedShop = await db.shop.create({
       data: {
         name: newName,
         slug: "", // Slug will be auto-generated
@@ -70,7 +70,7 @@ export const duplicateShop = adminActionClient
 export const deleteShops = adminActionClient
   .inputSchema(idsSchema)
   .action(async ({ parsedInput: { ids }, ctx: { db, revalidate } }) => {
-    await db.shops.deleteMany({
+    await db.shop.deleteMany({
       where: { id: { in: ids } },
     })
 

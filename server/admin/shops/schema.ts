@@ -5,7 +5,7 @@ import {
   parseAsStringEnum,
 } from "nuqs/server"
 import * as z from "zod"
-import type { Shops } from "~/.generated/prisma/browser"
+import type { Shop } from "~/.generated/prisma/browser"
 import { getSortingStateParser } from "~/lib/parsers"
 
 export const shopsTableParamsSchema = {
