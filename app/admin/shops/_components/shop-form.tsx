@@ -26,16 +26,19 @@ import { cx } from "~/lib/utils"
 import { upsertShop } from "~/server/admin/shops/actions"
 import type { findShopBySlug } from "~/server/admin/shops/queries"
 import { shopSchema } from "~/server/admin/shops/schema"
-import type { findToolList } from "~/server/admin/tools/queries"
+import { findLocationList } from "~/server/admin/locations/queries"
+import { findShopCategoryList } from "~/server/admin/categories/queries"
 
 type ShopFormProps = ComponentProps<"form"> & {
   shop?: Awaited<ReturnType<typeof findShopBySlug>>
-  toolsPromise: ReturnType<typeof findToolList>
+  locationsPromise: ReturnType<typeof findLocationList>
+  categoriesPromise: ReturnType<typeof findShopCategoryList>
 }
 
-export function ShopForm({ children, className, title, shop, toolsPromise, ...props }: ShopFormProps) {
+export function ShopForm({ children, className, title, shop, locationsPromise, categoriesPromise, ...props }: ShopFormProps) {
   const router = useRouter()
-  const tools = use(toolsPromise)
+  const locations = use(locationsPromise)
+  const categories = use(categoriesPromise)
   const resolver = zodResolver(shopSchema)
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(upsertShop, resolver, {
@@ -44,7 +47,12 @@ export function ShopForm({ children, className, title, shop, toolsPromise, ...pr
         id: shop?.id ?? "",
         name: shop?.name ?? "",
         slug: shop?.slug ?? "",
-        tools: shop?.tools.map((t: { id: string }) => t.id) ?? [],
+        email: shop?.email ?? "",
+        phone: shop?.phone ?? "",
+        websiteUrl: shop?.websiteUrl ?? "",
+        description: shop?.description ?? "",
+        locations: shop?.locations.map(l => l.id) ?? [],
+        categories: shop?.categories.map(c => c.id) ?? [],
       },
     },
 
@@ -115,12 +123,83 @@ export function ShopForm({ children, className, title, shop, toolsPromise, ...pr
 
         <FormField
           control={form.control}
-          name="tools"
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input type="email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="phone"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Phone</FormLabel>
+              <FormControl>
+                <Input type="tel" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="websiteUrl"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Website URL</FormLabel>
+              <FormControl>
+                <Input type="url" placeholder="https://example.com" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="description"
           render={({ field }) => (
             <FormItem className="col-span-full">
-              <FormLabel>Tools</FormLabel>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="locations"
+          render={({ field }) => (
+            <FormItem className="col-span-full">
+              <FormLabel>Locations</FormLabel>
               <RelationSelector
-                relations={tools}
+                relations={locations}
+                selectedIds={field.value ?? []}
+                setSelectedIds={field.onChange}
+              />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="categories"
+          render={({ field }) => (
+            <FormItem className="col-span-full">
+              <FormLabel>Categories</FormLabel>
+              <RelationSelector
+                relations={categories}
                 selectedIds={field.value ?? []}
                 setSelectedIds={field.onChange}
               />

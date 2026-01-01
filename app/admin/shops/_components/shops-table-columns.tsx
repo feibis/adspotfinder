@@ -2,7 +2,7 @@
 
 import { formatDate } from "@primoui/utils"
 import type { ColumnDef } from "@tanstack/react-table"
-import { HashIcon } from "lucide-react"
+import { HashIcon, MapPinIcon, FolderIcon } from "lucide-react"
 import type { Shop } from "~/.generated/prisma/browser"
 import { ShopActions } from "~/app/admin/shops/_components/shop-actions"
 import { RowCheckbox } from "~/components/admin/row-checkbox"
@@ -11,7 +11,7 @@ import { Note } from "~/components/common/note"
 import { DataTableColumnHeader } from "~/components/data-table/data-table-column-header"
 import { DataTableLink } from "~/components/data-table/data-table-link"
 
-export const getColumns = (): ColumnDef<Shop & { _count?: { tools: number } }>[] => {
+export const getColumns = (): ColumnDef<Shop & { _count?: { locations: number; categories: number } }>[] => {
   return [
     {
       id: "select",
@@ -50,12 +50,22 @@ export const getColumns = (): ColumnDef<Shop & { _count?: { tools: number } }>[]
       ),
     },
     {
-      accessorKey: "_count.tools",
+      accessorKey: "_count.locations",
       enableSorting: false,
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Tools" />,
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Locations" />,
       cell: ({ row }) => (
-        <Badge prefix={<HashIcon className="opacity-50 size-3!" />} className="tabular-nums">
-          {row.original._count?.tools || 0}
+        <Badge prefix={<MapPinIcon className="opacity-50 size-3!" />} className="tabular-nums">
+          {row.original._count?.locations || 0}
+        </Badge>
+      ),
+    },
+    {
+      accessorKey: "_count.categories",
+      enableSorting: false,
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Categories" />,
+      cell: ({ row }) => (
+        <Badge prefix={<FolderIcon className="opacity-50 size-3!" />} className="tabular-nums">
+          {row.original._count?.categories || 0}
         </Badge>
       ),
     },

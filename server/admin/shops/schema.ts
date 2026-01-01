@@ -25,7 +25,12 @@ export const shopSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   slug: z.string().optional(),
-  tools: z.array(z.string()).optional(),
+  email: z.string().email("Invalid email").optional().or(z.literal("")),
+  phone: z.string().optional(),
+  websiteUrl: z.string().url("Invalid URL").optional().or(z.literal("")),
+  description: z.string().optional(),
+  locations: z.array(z.string()).optional(),
+  categories: z.array(z.string()).optional(),
 })
 
 export type ShopSchema = z.infer<typeof shopSchema>

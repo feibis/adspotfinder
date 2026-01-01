@@ -17,7 +17,6 @@ export const searchShops = async (search: ShopsFilterParams, where?: Prisma.Shop
   const [sortBy, sortOrder] = sort.split(".")
 
   const whereQuery: Prisma.ShopWhereInput = {
-    tools: { some: { status: ToolStatus.Published } },
     ...(q && { name: { contains: q, mode: "insensitive" } }),
   }
 
@@ -67,7 +66,7 @@ export const findShopSlugs = async ({ where, orderBy, ...args }: Prisma.ShopFind
   return db.shop.findMany({
     ...args,
     orderBy: orderBy ?? { name: "asc" },
-    where: { tools: { some: { status: ToolStatus.Published } }, ...where },
+    where: where,
     select: { slug: true, updatedAt: true },
   })
 }

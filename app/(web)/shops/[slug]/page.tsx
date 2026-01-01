@@ -70,7 +70,7 @@ export default async function (props: Props) {
       <Suspense fallback={<ToolListingSkeleton />}>
         <ToolQuery
           searchParams={props.searchParams}
-          where={{ shops: { some: { slug: shop.slug } } }}
+          where={{ categories: { some: { shops: { some: { slug: shop.slug } } } } }}
           search={{ placeholder }}
           ad="Tools"
         />

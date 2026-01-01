@@ -7,8 +7,9 @@ import { shopSchema } from "~/server/admin/shops/schema"
 
 export const upsertShop = adminActionClient
   .inputSchema(shopSchema)
-  .action(async ({ parsedInput: { id, tools, ...input }, ctx: { db, revalidate } }) => {
-    const toolIds = tools?.map(id => ({ id }))
+  .action(async ({ parsedInput: { id, locations, categories, ...input }, ctx: { db, revalidate } }) => {
+    const locationIds = locations?.map(id => ({ id }))
+    const categoryIds = categories?.map(id => ({ id }))
 
     const shop = id
       ? await db.shop.update({
@@ -16,14 +17,16 @@ export const upsertShop = adminActionClient
           data: {
             ...input,
             slug: input.slug || "",
-            tools: { set: toolIds },
+            locations: { set: locationIds },
+            categories: { set: categoryIds },
           },
         })
       : await db.shop.create({
           data: {
             ...input,
             slug: input.slug || "",
-            tools: { connect: toolIds },
+            locations: { connect: locationIds },
+            categories: { connect: categoryIds },
           },
         })
 
@@ -42,7 +45,10 @@ export const duplicateShop = adminActionClient
   .action(async ({ parsedInput: { id }, ctx: { db, revalidate } }) => {
     const originalShop = await db.shop.findUnique({
       where: { id },
-      include: { tools: { select: { id: true } } },
+      include: {
+        locations: { select: { id: true } },
+        categories: { select: { id: true } }
+      },
     })
 
     if (!originalShop) {
@@ -55,7 +61,8 @@ export const duplicateShop = adminActionClient
       data: {
         name: newName,
         slug: "", // Slug will be auto-generated
-        tools: { connect: originalShop.tools },
+        locations: { connect: originalShop.locations },
+        categories: { connect: originalShop.categories },
       },
     })
 

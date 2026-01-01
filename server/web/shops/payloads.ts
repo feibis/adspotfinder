@@ -3,13 +3,29 @@ import { type Prisma, ToolStatus } from "~/.generated/prisma/client"
 export const shopOnePayload = {
   name: true,
   slug: true,
-  _count: { select: { tools: { where: { status: ToolStatus.Published } } } },
+  email: true,
+  phone: true,
+  websiteUrl: true,
+  description: true,
+  _count: { 
+    select: { 
+      locations: true,
+      categories: true
+    } 
+  },
+  locations: { select: { id: true, name: true, slug: true } },
+  categories: { select: { id: true, name: true, slug: true } },
 } satisfies Prisma.ShopSelect
 
 export const shopManyPayload = {
   name: true,
   slug: true,
-  _count: { select: { tools: { where: { status: ToolStatus.Published } } } },
+  _count: { 
+    select: { 
+      locations: true,
+      categories: true
+    } 
+  },
 } satisfies Prisma.ShopSelect
 
 export type ShopOne = Prisma.ShopGetPayload<{ select: typeof shopOnePayload }>

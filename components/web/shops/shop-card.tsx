@@ -13,7 +13,7 @@ type ShopCardProps = ComponentProps<typeof Tile> & {
 
 const ShopCard = ({ shop, ...props }: ShopCardProps) => {
   const t = useTranslations()
-  const count = shop._count.tools
+  const count = shop._count.locations
 
   return (
     <Tile asChild {...props}>
@@ -22,7 +22,7 @@ const ShopCard = ({ shop, ...props }: ShopCardProps) => {
 
         <TileDivider />
 
-        <TileCaption>{`${count} ${t("tools.count_tools", { count })}`}</TileCaption>
+        <TileCaption>{`${count} ${t("shops.count_locations", { count })}`}</TileCaption>
       </Link>
     </Tile>
   )
