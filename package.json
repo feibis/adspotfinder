@@ -1,5 +1,5 @@
 {
-  "name": "litelocker",
+  "name": "adspotfinder",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -16,6 +16,9 @@
     "db:push": "prisma db push --skip-generate",
     "db:reset": "prisma migrate reset",
     "db:seed": "prisma db seed",
+    "db:fetch-locations": "bun run scripts/fetch-locations.ts",
+    "db:populate-locations": "bun run scripts/populate-locations.ts",
+    "db:test-connection": "bun run scripts/test-db-connection.ts",
     "postinstall": "prisma generate",
     "postbuild": "next-sitemap --config next-sitemap.config.cjs",
     "prisma:generate": "prisma generate"
