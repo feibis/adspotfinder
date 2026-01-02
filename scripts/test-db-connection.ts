@@ -60,7 +60,7 @@ async function testConnection() {
     console.log("\n🎉 Database is working correctly!")
     console.log("You can now run: bun run db:populate-locations")
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("❌ Database connection failed:")
     console.error("Message:", error.message)
     console.error("Code:", error.code || 'Unknown')

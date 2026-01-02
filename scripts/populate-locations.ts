@@ -135,7 +135,7 @@ async function main() {
     console.log("- Global (global)")
     console.log("\n... and", LOCATIONS.length - 4, "more countries/regions")
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error populating locations:")
     console.error("Message:", error.message)
     console.error("Code:", error.code)
