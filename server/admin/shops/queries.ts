@@ -36,7 +36,18 @@ export const findShops = async (search: ShopsTableSchema, where?: Prisma.ShopWhe
       orderBy: [...orderBy, { createdAt: "asc" }],
       take: perPage,
       skip: offset,
-      include: {
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        email: true,
+        phone: true,
+        websiteUrl: true,
+        description: true,
+        instagramFollowers: true,
+        tiktokFollowers: true,
+        createdAt: true,
+        updatedAt: true,
         _count: {
           select: {
             locations: true,
@@ -66,7 +77,18 @@ export const findShopList = async ({ ...args }: Prisma.ShopFindManyArgs = {}) =>
 export const findShopBySlug = async (slug: string) => {
   return db.shop.findUnique({
     where: { slug },
-    include: {
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      email: true,
+      phone: true,
+      websiteUrl: true,
+      description: true,
+      instagramFollowers: true,
+      tiktokFollowers: true,
+      createdAt: true,
+      updatedAt: true,
       locations: { select: { id: true, name: true } },
       categories: { select: { id: true, name: true } },
     },

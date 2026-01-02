@@ -51,6 +51,8 @@ export function ShopForm({ children, className, title, shop, locationsPromise, c
         phone: shop?.phone ?? "",
         websiteUrl: shop?.websiteUrl ?? "",
         description: shop?.description ?? "",
+        instagramFollowers: shop?.instagramFollowers ?? undefined,
+        tiktokFollowers: shop?.tiktokFollowers ?? undefined,
         locations: shop?.locations.map(l => l.id) ?? [],
         categories: shop?.categories.map(c => c.id) ?? [],
       },
@@ -171,6 +173,46 @@ export function ShopForm({ children, className, title, shop, locationsPromise, c
               <FormLabel>Description</FormLabel>
               <FormControl>
                 <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="instagramFollowers"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Instagram Followers</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  placeholder="0"
+                  {...field}
+                  value={field.value ?? ""}
+                  onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="tiktokFollowers"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>TikTok Followers</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  placeholder="0"
+                  {...field}
+                  value={field.value ?? ""}
+                  onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -29,6 +29,8 @@ export const shopSchema = z.object({
   phone: z.string().optional(),
   websiteUrl: z.string().url("Invalid URL").optional().or(z.literal("")),
   description: z.string().optional(),
+  instagramFollowers: z.number().int().min(0).optional(),
+  tiktokFollowers: z.number().int().min(0).optional(),
   locations: z.array(z.string()).optional(),
   categories: z.array(z.string()).optional(),
 })

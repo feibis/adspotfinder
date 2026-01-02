@@ -7,11 +7,13 @@ export const shopOnePayload = {
   phone: true,
   websiteUrl: true,
   description: true,
-  _count: { 
-    select: { 
+  instagramFollowers: true,
+  tiktokFollowers: true,
+  _count: {
+    select: {
       locations: true,
       categories: true
-    } 
+    }
   },
   locations: { select: { id: true, name: true, slug: true } },
   categories: { select: { id: true, name: true, slug: true } },
@@ -20,11 +22,13 @@ export const shopOnePayload = {
 export const shopManyPayload = {
   name: true,
   slug: true,
-  _count: { 
-    select: { 
+  instagramFollowers: true,
+  tiktokFollowers: true,
+  _count: {
+    select: {
       locations: true,
       categories: true
-    } 
+    }
   },
 } satisfies Prisma.ShopSelect
 

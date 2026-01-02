@@ -185,15 +185,17 @@ model Tag {
 }
 
 model Shop {
-  id          String   @id @default(cuid())
-  name        String   @db.Citext
-  slug        String   @unique
-  email       String?
-  phone       String?
-  websiteUrl  String?
-  description String?
-  updatedAt   DateTime @updatedAt 
-  createdAt   DateTime @default(now())
+  id               String   @id @default(cuid())
+  name             String   @db.Citext
+  slug             String   @unique
+  email            String?
+  phone            String?
+  websiteUrl       String?
+  description      String?
+  instagramFollowers Int?
+  tiktokFollowers  Int?
+  updatedAt        DateTime @updatedAt
+  createdAt        DateTime @default(now())
 
   // Relations
   locations  Location[]
