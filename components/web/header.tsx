@@ -137,7 +137,7 @@ const Header = ({ className, ...props }: ComponentProps<"div">) => {
             <Button size="md" variant="fancy" className="font-medium w-full" asChild>
               <Link href="/submit">{t("navigation.submit")}</Link>
             </Button>
-            <Button size="sm" variant="outline" className="w-full" asChild>
+            <Button size="sm" variant="ghost" className="w-full" asChild>
               <Link href="/auth/login">{t("navigation.sign_in")}</Link>
             </Button>
           </div>
