@@ -116,7 +116,7 @@ const Header = ({ className, ...props }: ComponentProps<"div">) => {
               <ThemeSwitcher />
             </Button>
 
-            <Button size="md" variant="default" className="font-medium hover:bg-primary/90" asChild>
+            <Button size="md" variant="fancy" className="font-medium" asChild>
               <Link href="/submit">{t("navigation.submit")}</Link>
             </Button>
 
