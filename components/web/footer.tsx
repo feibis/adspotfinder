@@ -33,7 +33,7 @@ export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) 
       >
         <Stack
           direction="column"
-          className="flex flex-col items-start gap-4 col-span-full md:col-span-5"
+          className="flex flex-col items-start gap-4 col-span-full md:col-span-4"
         >
           <Stack size="lg" direction="column" className="min-w-0 max-w-64">
             <H5 as="strong" className="px-0.5">
@@ -72,14 +72,14 @@ export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) 
           </Stack>
         </Stack>
 
-        <Stack direction="column" className="text-sm md:col-span-2 md:col-start-7">
+        <Stack direction="column" className="text-sm md:col-span-2 md:col-start-5">
           <H6 as="strong">For Clients:</H6>
 
           <NavLink href="/">{t("navigation.tools")}</NavLink>
           <NavLink href="/blog">{t("navigation.blog")}</NavLink>
         </Stack>
 
-        <Stack direction="column" className="text-sm md:col-span-2">
+        <Stack direction="column" className="text-sm md:col-span-2 md:col-start-7">
           <H6 as="strong">Navigation:</H6>
 
           <NavLink href="/shops">{t("navigation.shops")}</NavLink>
@@ -87,14 +87,14 @@ export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) 
           <NavLink href="/tags">{t("navigation.tags")}</NavLink>
         </Stack>
 
-        <Stack direction="column" className="text-sm md:col-span-2">
+        <Stack direction="column" className="text-sm md:col-span-2 md:col-start-9">
           <H6 as="strong">For Providers:</H6>
 
           <NavLink href="/submit">{t("navigation.submit")}</NavLink>
           {adsConfig.enabled && <NavLink href="/advertise">{t("navigation.advertise")}</NavLink>}
         </Stack>
 
-        <Stack direction="column" className="text-sm md:col-span-1">
+        <Stack direction="column" className="text-sm md:col-span-2 md:col-start-11">
           <H6 as="strong">Company:</H6>
 
           <NavLink href="/about">{t("navigation.about")}</NavLink>

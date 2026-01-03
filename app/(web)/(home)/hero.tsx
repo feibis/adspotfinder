@@ -64,25 +64,6 @@ export const Hero = async ({ className, ...props }: ComponentProps<"section">) =
         </div>
       </div>
 
-      {/* Stats Section */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-8 border-t border-border/50">
-        <div className="text-center">
-          <div className="text-3xl lg:text-4xl font-bold text-primary">1000+</div>
-          <div className="text-sm text-muted-foreground mt-1">Ad Spots Available</div>
-        </div>
-        <div className="text-center">
-          <div className="text-3xl lg:text-4xl font-bold text-primary">200+</div>
-          <div className="text-sm text-muted-foreground mt-1">Verified Agencies</div>
-        </div>
-        <div className="text-center">
-          <div className="text-3xl lg:text-4xl font-bold text-primary">50+</div>
-          <div className="text-sm text-muted-foreground mt-1">Countries Covered</div>
-        </div>
-        <div className="text-center">
-          <div className="text-3xl lg:text-4xl font-bold text-primary">4.8★</div>
-          <div className="text-sm text-muted-foreground mt-1">Average Rating</div>
-        </div>
-      </div>
     </section>
   )
 }

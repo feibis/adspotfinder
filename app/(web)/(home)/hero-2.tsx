@@ -66,25 +66,6 @@ export const Hero2 = async ({ className, ...props }: ComponentProps<"section">) 
         </div>
       </div>
 
-      {/* Stats Section */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-8 border-t border-border/50">
-        <div className="text-center">
-          <div className="text-3xl lg:text-4xl font-bold text-primary">500+</div>
-          <div className="text-sm text-muted-foreground mt-1">Verified Agencies</div>
-        </div>
-        <div className="text-center">
-          <div className="text-3xl lg:text-4xl font-bold text-primary">50+</div>
-          <div className="text-sm text-muted-foreground mt-1">Industries Served</div>
-        </div>
-        <div className="text-center">
-          <div className="text-3xl lg:text-4xl font-bold text-primary">10K+</div>
-          <div className="text-sm text-muted-foreground mt-1">Projects Completed</div>
-        </div>
-        <div className="text-center">
-          <div className="text-3xl lg:text-4xl font-bold text-primary">4.9★</div>
-          <div className="text-sm text-muted-foreground mt-1">Average Rating</div>
-        </div>
-      </div>
     </section>
   )
 }
