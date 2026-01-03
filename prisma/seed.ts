@@ -287,6 +287,36 @@ async function main() {
     })
   })
 
+  const adFormatGroup = await retryWithBackoff(async () => {
+    return await db.attributeGroup.create({
+      data: {
+        name: "Ad Format",
+        slug: "ad-format",
+        order: 4,
+      },
+    })
+  })
+
+  const targetAudienceGroup = await retryWithBackoff(async () => {
+    return await db.attributeGroup.create({
+      data: {
+        name: "Target Audience",
+        slug: "target-audience",
+        order: 5,
+      },
+    })
+  })
+
+  const durationGroup = await retryWithBackoff(async () => {
+    return await db.attributeGroup.create({
+      data: {
+        name: "Duration",
+        slug: "duration",
+        order: 6,
+      },
+    })
+  })
+
   console.log("Created attribute groups")
 
   // Create attributes using the actual group IDs
@@ -350,6 +380,111 @@ async function main() {
           groupId: integrationGroup.id,
           order: 3,
         },
+        // Ad Format attributes
+        {
+          name: "Banner",
+          slug: "banner",
+          groupId: adFormatGroup.id,
+          order: 1,
+        },
+        {
+          name: "Sidebar",
+          slug: "sidebar",
+          groupId: adFormatGroup.id,
+          order: 2,
+        },
+        {
+          name: "Header",
+          slug: "header",
+          groupId: adFormatGroup.id,
+          order: 3,
+        },
+        {
+          name: "Footer",
+          slug: "footer",
+          groupId: adFormatGroup.id,
+          order: 4,
+        },
+        {
+          name: "Popup",
+          slug: "popup",
+          groupId: adFormatGroup.id,
+          order: 5,
+        },
+        {
+          name: "Native",
+          slug: "native",
+          groupId: adFormatGroup.id,
+          order: 6,
+        },
+        // Target Audience attributes
+        {
+          name: "Developers",
+          slug: "developers",
+          groupId: targetAudienceGroup.id,
+          order: 1,
+        },
+        {
+          name: "Designers",
+          slug: "designers",
+          groupId: targetAudienceGroup.id,
+          order: 2,
+        },
+        {
+          name: "Startups",
+          slug: "startups",
+          groupId: targetAudienceGroup.id,
+          order: 3,
+        },
+        {
+          name: "Enterprise",
+          slug: "enterprise",
+          groupId: targetAudienceGroup.id,
+          order: 4,
+        },
+        {
+          name: "Students",
+          slug: "students",
+          groupId: targetAudienceGroup.id,
+          order: 5,
+        },
+        // Duration attributes
+        {
+          name: "1 Day",
+          slug: "1-day",
+          groupId: durationGroup.id,
+          order: 1,
+        },
+        {
+          name: "1 Week",
+          slug: "1-week",
+          groupId: durationGroup.id,
+          order: 2,
+        },
+        {
+          name: "1 Month",
+          slug: "1-month",
+          groupId: durationGroup.id,
+          order: 3,
+        },
+        {
+          name: "3 Months",
+          slug: "3-months",
+          groupId: durationGroup.id,
+          order: 4,
+        },
+        {
+          name: "6 Months",
+          slug: "6-months",
+          groupId: durationGroup.id,
+          order: 5,
+        },
+        {
+          name: "1 Year",
+          slug: "1-year",
+          groupId: durationGroup.id,
+          order: 6,
+        },
       ],
     })
   })
@@ -390,6 +525,76 @@ async function main() {
           instagramFollowers: 234000,
           tiktokFollowers: 312000,
         },
+        {
+          name: "AdSpace Solutions",
+          slug: "adspace-solutions",
+          email: "sales@adspace.com",
+          phone: "+1-555-0404",
+          websiteUrl: "https://adspace.com",
+          description: "Premium advertising space provider for tech companies worldwide.",
+          instagramFollowers: 45000,
+          tiktokFollowers: 23000,
+        },
+        {
+          name: "MediaHub Networks",
+          slug: "mediahub-networks",
+          email: "partners@mediahub.net",
+          phone: "+1-555-0505",
+          websiteUrl: "https://mediahub.net",
+          description: "Global media network specializing in developer-focused advertising.",
+          instagramFollowers: 89000,
+          tiktokFollowers: 67000,
+        },
+        {
+          name: "TechAds Pro",
+          slug: "techads-pro",
+          email: "info@techadspro.com",
+          phone: "+1-555-0606",
+          websiteUrl: "https://techadspro.com",
+          description: "Professional advertising solutions for technology companies.",
+          instagramFollowers: 156000,
+          tiktokFollowers: 98000,
+        },
+        {
+          name: "DevMarketing Hub",
+          slug: "devmarketing-hub",
+          email: "contact@devmarketinghub.com",
+          phone: "+1-555-0707",
+          websiteUrl: "https://devmarketinghub.com",
+          description: "Marketing and advertising platform designed for developers.",
+          instagramFollowers: 78000,
+          tiktokFollowers: 124000,
+        },
+        {
+          name: "CodeAds Network",
+          slug: "codeads-network",
+          email: "network@codeads.com",
+          phone: "+1-555-0808",
+          websiteUrl: "https://codeads.com",
+          description: "Comprehensive advertising network for coding communities.",
+          instagramFollowers: 203000,
+          tiktokFollowers: 178000,
+        },
+        {
+          name: "StartupAds Co",
+          slug: "startupads-co",
+          email: "hello@startupads.co",
+          phone: "+1-555-0909",
+          websiteUrl: "https://startupads.co",
+          description: "Advertising solutions tailored for startups and tech innovators.",
+          instagramFollowers: 67000,
+          tiktokFollowers: 45000,
+        },
+        {
+          name: "DigitalDev Ads",
+          slug: "digitaldev-ads",
+          email: "ads@digitaldev.com",
+          phone: "+1-555-1010",
+          websiteUrl: "https://digitaldev.com",
+          description: "Digital advertising platform for development tools and services.",
+          instagramFollowers: 112000,
+          tiktokFollowers: 89000,
+        },
       ],
     })
   })
@@ -427,7 +632,217 @@ async function main() {
     })
   })
 
+  // Connect new shops to locations and categories
+  await retryWithBackoff(async () => {
+    return await db.shop.update({
+      where: { slug: "adspace-solutions" },
+      data: {
+        locations: { connect: [{ slug: "united-states" }, { slug: "canada" }] },
+        categories: { connect: [{ slug: "productivity" }, { slug: "design-tools" }] },
+      },
+    })
+  })
+
+  await retryWithBackoff(async () => {
+    return await db.shop.update({
+      where: { slug: "mediahub-networks" },
+      data: {
+        locations: { connect: [{ slug: "united-states" }, { slug: "united-kingdom" }, { slug: "germany" }] },
+        categories: { connect: [{ slug: "frontend" }, { slug: "backend" }] },
+      },
+    })
+  })
+
+  await retryWithBackoff(async () => {
+    return await db.shop.update({
+      where: { slug: "techads-pro" },
+      data: {
+        locations: { connect: [{ slug: "united-states" }, { slug: "australia" }] },
+        categories: { connect: [{ slug: "devops" }, { slug: "testing" }] },
+      },
+    })
+  })
+
+  await retryWithBackoff(async () => {
+    return await db.shop.update({
+      where: { slug: "devmarketing-hub" },
+      data: {
+        locations: { connect: [{ slug: "united-states" }, { slug: "france" }, { slug: "netherlands" }] },
+        categories: { connect: [{ slug: "learning" }, { slug: "ai-tools" }] },
+      },
+    })
+  })
+
+  await retryWithBackoff(async () => {
+    return await db.shop.update({
+      where: { slug: "codeads-network" },
+      data: {
+        locations: { connect: [{ slug: "united-states" }, { slug: "japan" }, { slug: "south-korea" }] },
+        categories: { connect: [{ slug: "frontend" }, { slug: "productivity" }] },
+      },
+    })
+  })
+
+  await retryWithBackoff(async () => {
+    return await db.shop.update({
+      where: { slug: "startupads-co" },
+      data: {
+        locations: { connect: [{ slug: "united-states" }, { slug: "singapore" }] },
+        categories: { connect: [{ slug: "design-tools" }, { slug: "testing" }] },
+      },
+    })
+  })
+
+  await retryWithBackoff(async () => {
+    return await db.shop.update({
+      where: { slug: "digitaldev-ads" },
+      data: {
+        locations: { connect: [{ slug: "united-states" }, { slug: "brazil" }, { slug: "mexico" }] },
+        categories: { connect: [{ slug: "backend" }, { slug: "devops" }] },
+      },
+    })
+  })
+
   console.log("Connected shops to locations and categories")
+
+  // Create pricing combinations for tools with retry logic
+  console.log("Creating tool pricing combinations...")
+
+  // Get all attribute IDs for pricing combinations
+  const attributes = await db.attribute.findMany()
+  const getAttributeId = (slug: string) => attributes.find(attr => attr.slug === slug)?.id
+
+  // Get tool IDs for pricing
+  const tools = await db.tool.findMany()
+  const getToolId = (slug: string) => tools.find(tool => tool.slug === slug)?.id
+
+  // TechStart Inc. pricing combinations (first tool)
+  // Create pricing for vscode tool
+  if (getToolId("vscode")) {
+    const vscodePricing = await retryWithBackoff(async () => {
+      return await db.pricing.create({
+        data: {
+          name: "Basic Banner Ad",
+          description: "Standard banner advertisement placement",
+          price: 299.99,
+          currency: "USD",
+          period: "month",
+          toolId: getToolId("vscode")!
+        }
+      })
+    })
+
+    // Connect attributes
+    await retryWithBackoff(async () => {
+      return await db.pricing.update({
+        where: { id: vscodePricing.id },
+        data: {
+          attributes: {
+            connect: [
+              { id: getAttributeId("banner") },
+              { id: getAttributeId("developers") },
+              { id: getAttributeId("1-month") },
+            ].filter(attr => attr.id) as any
+          }
+        }
+      })
+    })
+  }
+
+  // Create pricing records first
+  const pricingData = []
+
+  // Get sample tools for pricing
+  const sampleTools = ["vscode", "react", "nextjs", "tailwindcss"]
+
+  for (const toolSlug of sampleTools) {
+    const toolId = getToolId(toolSlug)
+    if (!toolId) continue
+
+    pricingData.push(
+      {
+        name: "Basic Banner Ad",
+        description: "Standard banner advertisement placement",
+        price: 299.99,
+        currency: "USD",
+        period: "month",
+        toolId: toolId,
+      },
+      {
+        name: "Premium Package",
+        description: "Premium placement with advanced targeting",
+        price: 599.99,
+        currency: "USD",
+        period: "month",
+        toolId: toolId,
+      },
+      {
+        name: "Enterprise Solution",
+        description: "Enterprise-level advertising campaign",
+        price: 1299.99,
+        currency: "USD",
+        period: "month",
+        toolId: toolId,
+      }
+    )
+  }
+
+  // Create pricing records
+  const createdPricings = []
+  for (const pricing of pricingData) {
+    const created = await retryWithBackoff(async () => {
+      return await db.pricing.create({
+        data: pricing
+      })
+    })
+    createdPricings.push(created)
+  }
+
+  // Now connect attributes to pricings
+  for (let i = 0; i < createdPricings.length; i++) {
+    const pricing = createdPricings[i]
+    const toolSlug = sampleTools[Math.floor(i / 3)]
+    const pricingIndex = i % 3
+
+    let attributeIds = []
+    if (pricingIndex === 0) { // Basic Banner Ad
+      attributeIds = [
+        getAttributeId("banner"),
+        getAttributeId("developers"),
+        getAttributeId("1-month"),
+      ].filter(id => id)
+    } else if (pricingIndex === 1) { // Premium Package
+      attributeIds = [
+        getAttributeId("sidebar"),
+        getAttributeId("native"),
+        getAttributeId("developers"),
+        getAttributeId("3-months"),
+      ].filter(id => id)
+    } else { // Enterprise Solution
+      attributeIds = [
+        getAttributeId("header"),
+        getAttributeId("banner"),
+        getAttributeId("sidebar"),
+        getAttributeId("enterprise"),
+        getAttributeId("6-months"),
+      ].filter(id => id)
+    }
+
+    if (attributeIds.length > 0) {
+      await retryWithBackoff(async () => {
+        return await db.pricing.update({
+          where: { id: pricing.id },
+          data: {
+            attributes: {
+              connect: attributeIds.map(id => ({ id }))
+            }
+          }
+        })
+      })
+    }
+  }
+
+  console.log("Created shop pricing combinations")
 
   // Create tools
   const toolsData = [

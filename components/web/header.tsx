@@ -53,14 +53,6 @@ const Header = ({ className, ...props }: ComponentProps<"div">) => {
       <Container>
         <div className="flex items-center py-4 gap-6 text-base h-(--header-height) md:gap-8 lg:gap-10">
           <Stack size="md" wrap={false} className="min-w-0">
-            <button
-              type="button"
-              onClick={() => setNavOpen(!isNavOpen)}
-              className="block -m-1 -ml-1.5 lg:hidden p-2 hover:bg-primary/5 rounded-md transition-colors"
-            >
-              <Hamburger className="size-6" />
-            </button>
-
             <Logo className="min-w-0" />
           </Stack>
 
@@ -76,27 +68,27 @@ const Header = ({ className, ...props }: ComponentProps<"div">) => {
 
               <DropdownMenuContent align="start" className="min-w-48">
                 <DropdownMenuItem asChild>
-                  <NavLink href="/?sort=publishedAt.desc" prefix={<CalendarDaysIcon />} className="text-base py-3">
+                  <NavLink href="/?sort=publishedAt.desc" prefix={<CalendarDaysIcon />} className="text-base py-2">
                     {t("navigation.latest_tools")}
                   </NavLink>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <NavLink href="/categories" prefix={<GalleryHorizontalEndIcon />} className="text-base py-3">
+                  <NavLink href="/categories" prefix={<GalleryHorizontalEndIcon />} className="text-base py-2">
                     {t("navigation.categories")}
                   </NavLink>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <NavLink href="/tags" prefix={<TagIcon />} className="text-base py-3">
+                  <NavLink href="/tags" prefix={<TagIcon />} className="text-base py-2">
                     {t("navigation.tags")}
                   </NavLink>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <NavLink href="/locations" prefix={<MapPinIcon />} className="text-base py-3">
+                  <NavLink href="/locations" prefix={<MapPinIcon />} className="text-base py-2">
                     {t("navigation.locations")}
                   </NavLink>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <NavLink href="/attributes" prefix={<FilterIcon />} className="text-base py-3">
+                  <NavLink href="/attributes" prefix={<FilterIcon />} className="text-base py-2">
                     {t("navigation.attributes")}
                   </NavLink>
                 </DropdownMenuItem>
@@ -116,11 +108,21 @@ const Header = ({ className, ...props }: ComponentProps<"div">) => {
               <ThemeSwitcher />
             </Button>
 
-            <Button size="md" variant="fancy" className="font-medium" asChild>
+            <Button size="md" variant="fancy" className="font-medium max-lg:hidden" asChild>
               <Link href="/submit">{t("navigation.submit")}</Link>
             </Button>
 
-            <UserMenu />
+            <div className="max-lg:hidden">
+              <UserMenu />
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setNavOpen(!isNavOpen)}
+              className="lg:hidden p-2 hover:bg-primary/5 rounded-md transition-colors"
+            >
+              <Hamburger className="size-6" />
+            </button>
           </Stack>
         </div>
 
@@ -136,6 +138,7 @@ const Header = ({ className, ...props }: ComponentProps<"div">) => {
           <NavLink href="/locations">{t("navigation.locations")}</NavLink>
           <NavLink href="/attributes">{t("navigation.attributes")}</NavLink>
           <NavLink href="/submit">{t("navigation.submit")}</NavLink>
+          <NavLink href="/auth/login">{t("navigation.sign_in")}</NavLink>
           <NavLink href="/about">{t("navigation.about")}</NavLink>
           {adsConfig.enabled && <NavLink href="/advertise">{t("navigation.advertise")}</NavLink>}
         </nav>

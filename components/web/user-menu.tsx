@@ -24,7 +24,7 @@ export const UserMenu = () => {
 
   if (isPending) {
     return (
-      <Button size="sm" variant="secondary" disabled>
+      <Button size="sm" variant="ghost" disabled>
         {t("navigation.sign_in")}
       </Button>
     )
@@ -37,7 +37,7 @@ export const UserMenu = () => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.2, ease: "easeOut" }}
       >
-        <Button size="sm" variant="secondary" asChild>
+        <Button size="sm" variant="ghost" asChild>
           <Link href="/auth/login">{t("navigation.sign_in")}</Link>
         </Button>
       </motion.div>
