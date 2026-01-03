@@ -1,7 +1,7 @@
 {
   "about": {
     "title": "About Us",
-    "description": "{siteName} is a community driven list of tools and resources for developers."
+    "description": "{siteName} is a community driven platform for finding ad spots and advertising opportunities."
   },
 
   "advertise": {
@@ -28,7 +28,7 @@
   "auth": {
     "login": {
       "title": "Sign In",
-      "description": "Get access to the dashboard and manage your submitted tools."
+      "description": "Get access to the dashboard and manage your ad spots."
     },
 
     "verify": {
@@ -41,7 +41,7 @@
 
   "dashboard": {
     "title": "Dashboard",
-    "description": "Manage your account and tools on {siteName}.",
+    "description": "Manage your account and ad spots on {siteName}.",
     "table": {
       "columns": {
         "name": "Name",
@@ -61,8 +61,8 @@
         "name_label": "Name",
         "name_placeholder": "Search by name..."
       },
-      "empty_state": "No tools found. Submit or claim a tool to get started.",
-      "submit_button": "Submit a tool"
+      "empty_state": "No ad spots found. Submit an ad spot to get started.",
+      "submit_button": "Submit an ad spot"
     }
   },
 
@@ -73,12 +73,12 @@
 
   "categories": {
     "title": "Browse Categories",
-    "description": "Browse all tool categories to find the perfect software for your needs."
+    "description": "Browse all ad spot categories to find the perfect advertising opportunities for your needs."
   },
 
   "category": {
-    "title": "{name} Tools",
-    "description": "A curated collection of the best {name}",
+    "title": "{name} Ad Spots",
+    "description": "A curated collection of the best {name} ad spots",
     "search": {
       "placeholder": "Search {name}..."
     }
@@ -86,48 +86,48 @@
 
   "tags": {
     "title": "Browse Tags",
-    "description": "Browse all available tags to discover tools by specific features and capabilities."
+    "description": "Browse all available tags to discover ad spots by specific features and capabilities."
   },
 
   "tag": {
-    "title": "Tools tagged with \"{name}\"",
-    "description": "Explore tools and software tagged with {name} to find solutions that match your specific needs.",
+    "title": "Ad spots tagged with \"{name}\"",
+    "description": "Explore ad spots tagged with {name} to find opportunities that match your specific needs.",
     "search": {
       "placeholder": "Search in \"{name}\"..."
     }
   },
   "shops": {
-    "title": "Browse Shops",
-    "description": "Browse all available shops to discover tools by specific shops."
+    "title": "Browse Agencies",
+    "description": "Browse all available agencies to discover ad spots by specific agencies."
   },
   "shop": {
-    "title": "Tools from \"{name}\"",
-    "description": "Explore tools and software from {name} to find solutions that match your specific needs.",
+    "title": "Ad spots from \"{name}\"",
+    "description": "Explore ad spots from {name} to find opportunities that match your specific needs.",
     "search": {
       "placeholder": "Search in \"{name}\"..."
     }
   },
   "locations": {
     "title": "Browse Locations",
-    "description": "Browse all available locations to discover tools by specific locations."
+    "description": "Browse all available locations to discover ad spots by specific locations."
   },
   "location": {
-    "title": "Tools located in \"{name}\"",
-    "description": "Explore tools and software located in {name} to find solutions that match your specific needs.",
+    "title": "Ad spots located in \"{name}\"",
+    "description": "Explore ad spots located in {name} to find opportunities that match your specific needs.",
     "search": {
       "placeholder": "Search in \"{name}\"..."
     }
   },
 
   "attributes": {
-    "title": "Browse Storage Attributes",
-    "description": "Browse storage facilities by size, type, and features on {siteName}."
+    "title": "Browse Ad Spot Attributes",
+    "description": "Browse ad spots by size, type, and features on {siteName}."
   },
   "attribute": {
     "title": "{name}",
-    "description": "Find storage facilities with {name} on {siteName}.",
+    "description": "Find ad spots with {name} on {siteName}.",
     "search": {
-      "placeholder": "Search {name} storage..."
+      "placeholder": "Search {name} ad spots..."
     },
     "group_label": "Category: {group}"
   },
@@ -142,16 +142,16 @@
   "not_found": {
     "title": "404 Not Found",
     "description": "We're sorry, but the page could not be found. You may have mistyped the address or the page may have moved.",
-    "search_button": "Search for tools",
+    "search_button": "Search for ad spots",
     "home_button": "Go back home"
   },
 
   "submit": {
-    "title": "Add a free listing",
-    "description": "Listing on {siteName} is a great way to get more exposure for your tool. We only list high-quality tools that are useful for directory owners.",
+    "title": "Add a free ad spot",
+    "description": "Listing on {siteName} is a great way to get more exposure for your ad spot. We only list high-quality ad spots that are useful for businesses.",
     "feature": {
       "title": "Boost {name}'s Visibility",
-      "description": "Upgrade {name}'s listing on {siteName} to get a verified featured badge, prominent placement in listings, and a do-follow backlink."
+      "description": "Upgrade {name}'s ad spot on {siteName} to get a verified featured badge, prominent placement in listings, and a do-follow backlink."
     },
     "expedite": {
       "title": "Choose a plan for {name}",
@@ -163,7 +163,7 @@
     },
     "success": {
       "title": "Thank you for submitting {name}!",
-      "description": "We'll review {name}'s submission and publish it on {siteName} soon."
+      "description": "We'll review {name}'s ad spot and publish it on {siteName} soon."
     },
     "current_package": "Current Package",
     "upgrade_listing": "Upgrade Listing",

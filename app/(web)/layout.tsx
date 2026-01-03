@@ -2,7 +2,6 @@ import PlausibleProvider from "next-plausible"
 import { type PropsWithChildren, Suspense } from "react"
 import { Wrapper } from "~/components/common/wrapper"
 import { AdBanner } from "~/components/web/ads/ad-banner"
-import { Bottom } from "~/components/web/bottom"
 import { FeedbackWidget } from "~/components/web/feedback-widget"
 import { Footer } from "~/components/web/footer"
 import { Header } from "~/components/web/header"
@@ -28,8 +27,6 @@ export default function ({ children }: PropsWithChildren) {
           </Wrapper>
         </Container>
       </div>
-
-      <Bottom />
 
       <FeedbackWidget />
     </PlausibleProvider>

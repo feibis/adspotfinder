@@ -9,7 +9,6 @@ import { BrandGitHubIcon } from "~/components/common/icons/brand-github"
 import { Note } from "~/components/common/note"
 import { Stack } from "~/components/common/stack"
 import { Tooltip } from "~/components/common/tooltip"
-import { BuiltWith } from "~/components/web/built-with"
 import { CTAForm } from "~/components/web/cta-form"
 import { ExternalLink } from "~/components/web/external-link"
 import { ThemeSwitcher } from "~/components/web/theme-switcher"
@@ -92,8 +91,6 @@ export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) 
           {adsConfig.enabled && <NavLink href="/advertise">{t("navigation.advertise")}</NavLink>}
         </Stack>
       </div>
-
-      <BuiltWith medium="footer" className="self-start" />
 
       {children}
     </footer>

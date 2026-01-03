@@ -5,7 +5,7 @@ import { Stack } from "~/components/common/stack"
 import { cva, cx, type VariantProps } from "~/lib/utils"
 
 const cardVariants = cva({
-  base: "group relative flex flex-col items-start gap-4 w-full border bg-card p-5 rounded-lg transform-gpu",
+  base: "group relative flex flex-col items-start gap-4 w-full bg-card p-5 rounded-lg transform-gpu",
 
   variants: {
     hover: {
