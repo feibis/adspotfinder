@@ -47,13 +47,22 @@ export default async function () {
 
           <div className="max-w-4xl">
             <Prose>
-            <h2>What is {siteConfig.name}?</h2>
+            <h2>How Adspotfinder Started</h2>
 
             <p>
-              <Link href="/">{siteConfig.name}</Link> is a community driven list of{" "}
-              <strong>tools and resources for developers</strong>. The goal of the site is to be your
-              first stop when researching for a new tool or resource to help you grow your business. It
-              will help you find alternatives and reviews of the products you already use.
+              When I launched my open-source product, I struggled to find good advertising platforms to reach my target audience. Most free advertising sites required lengthy approval processes that could take weeks, and even then, there was no guarantee of placement or visibility.
+            </p>
+
+            <p>
+              Google Ads didn't work reliably for niche developer audiences - it was too much of a hit-or-miss approach. I needed more control over where my ads appeared and assurance that my budget was being spent effectively.
+            </p>
+
+            <p>
+              That's when I discovered the value of niche advertising platforms. These specialized sites offered clear pricing, straightforward approval processes, and most importantly - guaranteed placement in communities where my target users actually spent time. The processes were always clear, easy to understand, and budget-friendly.
+            </p>
+
+            <p>
+              <Link href="/">{siteConfig.name}</Link> was born from this experience. I wanted to create a platform that makes it easy for developers and creators to find high-quality, niche advertising opportunities without the hassle of unclear processes, hidden fees, or unreliable placements.
             </p>
 
             <h2>About the Author</h2>
