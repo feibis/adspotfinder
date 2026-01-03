@@ -101,7 +101,7 @@ const Header = ({ className, ...props }: ComponentProps<"div">) => {
 
           <Stack size="md" wrap={false} className="justify-end max-lg:grow">
             <Button size="md" variant="ghost" className="p-2 text-lg hover:bg-primary/5" onClick={search.open}>
-              <SearchIcon className="size-5" />
+              <SearchIcon className="size-6" />
             </Button>
 
             <Button size="md" variant="ghost" className="p-2 -ml-1 text-lg max-sm:hidden hover:bg-primary/5" asChild>
@@ -128,19 +128,30 @@ const Header = ({ className, ...props }: ComponentProps<"div">) => {
 
         <nav
           className={cx(
-            "absolute top-full inset-x-0 h-[calc(100dvh-var(--header-top)-var(--header-height))] -mt-px py-8 px-8 grid grid-cols-2 place-items-start place-content-start gap-x-8 gap-y-10 bg-background/95 backdrop-blur-xl border-t border-border/50 transition-all duration-300 lg:hidden text-lg",
+            "absolute top-full inset-x-0 h-[calc(100dvh-var(--header-top)-var(--header-height))] -mt-px py-6 px-6 grid grid-cols-1 place-items-start place-content-start gap-y-4 bg-background/95 backdrop-blur-xl border-t border-border/50 transition-all duration-300 lg:hidden",
             isNavOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none",
           )}
         >
-          <NavLink href="/?sort=publishedAt.desc">{t("navigation.latest_tools")}</NavLink>
-          <NavLink href="/categories">{t("navigation.categories")}</NavLink>
-          <NavLink href="/tags">{t("navigation.tags")}</NavLink>
-          <NavLink href="/locations">{t("navigation.locations")}</NavLink>
-          <NavLink href="/attributes">{t("navigation.attributes")}</NavLink>
-          <NavLink href="/submit">{t("navigation.submit")}</NavLink>
-          <NavLink href="/auth/login">{t("navigation.sign_in")}</NavLink>
-          <NavLink href="/about">{t("navigation.about")}</NavLink>
-          {adsConfig.enabled && <NavLink href="/advertise">{t("navigation.advertise")}</NavLink>}
+          {/* Primary Actions */}
+          <div className="w-full space-y-3 pb-4 border-b border-border/30">
+            <NavLink href="/submit" className="w-full justify-center py-3 px-4 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90">
+              {t("navigation.submit")}
+            </NavLink>
+            <NavLink href="/auth/login" className="w-full justify-center py-3 px-4 border border-border rounded-lg font-medium hover:bg-muted">
+              {t("navigation.sign_in")}
+            </NavLink>
+          </div>
+
+          {/* Navigation Links */}
+          <div className="w-full space-y-1 pt-2">
+            <NavLink href="/?sort=publishedAt.desc">{t("navigation.latest_tools")}</NavLink>
+            <NavLink href="/categories">{t("navigation.categories")}</NavLink>
+            <NavLink href="/tags">{t("navigation.tags")}</NavLink>
+            <NavLink href="/locations">{t("navigation.locations")}</NavLink>
+            <NavLink href="/attributes">{t("navigation.attributes")}</NavLink>
+            <NavLink href="/about">{t("navigation.about")}</NavLink>
+            {adsConfig.enabled && <NavLink href="/advertise">{t("navigation.advertise")}</NavLink>}
+          </div>
         </nav>
       </Container>
     </header>

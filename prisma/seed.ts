@@ -17,8 +17,8 @@ async function sleep(ms: number) {
 
 async function retryWithBackoff<T>(
   operation: () => Promise<T>,
-  maxRetries: number = 5,
-  baseDelay: number = 1000
+  maxRetries: number = 8,
+  baseDelay: number = 2000
 ): Promise<T> {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
@@ -29,16 +29,21 @@ async function retryWithBackoff<T>(
         error.code === 'ETIMEDOUT' ||
         error.message?.includes('ETIMEDOUT') ||
         error.message?.includes('timeout') ||
+        error.message?.includes('Connection lost') ||
+        error.message?.includes('connection') ||
         error.cause?.code === 'ETIMEDOUT' ||
-        String(error).includes('ETIMEDOUT')
+        String(error).includes('ETIMEDOUT') ||
+        error.code === 'P1001' || // Can't reach database server
+        error.code === 'P2028'    // Transaction API error
       )
 
       if (isLastAttempt || !isRetryableError) {
+        console.error(`❌ Final attempt failed:`, error.message || error)
         throw error
       }
 
-      const delay = baseDelay * Math.pow(2, attempt - 1) // Exponential backoff
-      console.log(`⏳ Attempt ${attempt} failed. Retrying in ${delay}ms...`)
+      const delay = Math.min(baseDelay * Math.pow(2, attempt - 1), 30000) // Cap at 30 seconds
+      console.log(`⏳ Attempt ${attempt}/${maxRetries} failed (${error.code || 'UNKNOWN'}). Retrying in ${delay}ms...`)
       await sleep(delay)
     }
   }
@@ -50,91 +55,117 @@ async function main() {
 
   console.log("Starting seeding...")
 
-  // Create users with retry logic for Neon serverless cold starts
-  await retryWithBackoff(async () => {
-    return await db.user.createMany({
-      data: [
-        {
+  // Create users individually with retry logic for Neon serverless cold starts
+  try {
+    await retryWithBackoff(async () => {
+      return await db.user.upsert({
+        where: { email: ADMIN_EMAIL },
+        update: {
+          name: "Admin User",
+          emailVerified: true,
+          role: "admin",
+        },
+        create: {
           name: "Admin User",
           email: ADMIN_EMAIL,
           emailVerified: true,
           role: "admin",
         },
-        {
+      })
+    })
+
+    await retryWithBackoff(async () => {
+      return await db.user.upsert({
+        where: { email: USER_EMAIL },
+        update: {
+          name: "User",
+          emailVerified: true,
+          role: "user",
+        },
+        create: {
           name: "User",
           email: USER_EMAIL,
           emailVerified: true,
           role: "user",
         },
-      ],
+      })
     })
-  })
 
-  console.log("Created users")
+    console.log("Created users")
+  } catch (error) {
+    console.error("Failed to create users:", error)
+    throw error
+  }
 
-  // Create categories with retry logic
-  await retryWithBackoff(async () => {
-    return await db.category.createMany({
-      data: [
-        {
-          name: "Frontend",
-          slug: "frontend",
-          type: "tool",
-          label: "Frontend Development",
-          description: "Tools for building the user interface of a website or application.",
-        },
-        {
-          name: "Backend",
-          slug: "backend",
-          type: "tool",
-          label: "Backend Development",
-          description: "Tools for building the server-side of a website or application.",
-        },
-        {
-          name: "DevOps",
-          slug: "devops",
-          type: "tool",
-          label: "DevOps & Deployment",
-          description: "Tools for deploying and managing applications.",
-        },
-        {
-          name: "Design Tools",
-          slug: "design-tools",
-          type: "tool",
-          label: "Design & UI/UX",
-          description: "Tools for designing and creating user interfaces.",
-        },
-        {
-          name: "Productivity",
-          slug: "productivity",
-          type: "tool",
-          label: "Productivity Tools",
-          description: "Tools for increasing productivity and efficiency.",
-        },
-        {
-          name: "Testing",
-          slug: "testing",
-          type: "tool",
-          label: "Testing & QA",
-          description: "Tools for testing and quality assurance.",
-        },
-        {
-          name: "Learning",
-          slug: "learning",
-          type: "tool",
-          label: "Learning Resources",
-          description: "Tools for learning and improving skills.",
-        },
-        {
-          name: "AI Tools",
-          slug: "ai-tools",
-          type: "tool",
-          label: "AI & Machine Learning",
-          description: "Tools for using AI and machine learning.",
-        },
-      ],
+  // Create categories individually with retry logic
+  const categoriesData = [
+    {
+      name: "Frontend",
+      slug: "frontend",
+      type: "tool",
+      label: "Frontend Development",
+      description: "Tools for building the user interface of a website or application.",
+    },
+    {
+      name: "Backend",
+      slug: "backend",
+      type: "tool",
+      label: "Backend Development",
+      description: "Tools for building the server-side of a website or application.",
+    },
+    {
+      name: "DevOps",
+      slug: "devops",
+      type: "tool",
+      label: "DevOps & Deployment",
+      description: "Tools for deploying and managing applications.",
+    },
+    {
+      name: "Design Tools",
+      slug: "design-tools",
+      type: "tool",
+      label: "Design & UI/UX",
+      description: "Tools for designing and creating user interfaces.",
+    },
+    {
+      name: "Productivity",
+      slug: "productivity",
+      type: "tool",
+      label: "Productivity Tools",
+      description: "Tools for increasing productivity and efficiency.",
+    },
+    {
+      name: "Testing",
+      slug: "testing",
+      type: "tool",
+      label: "Testing & QA",
+      description: "Tools for testing and quality assurance.",
+    },
+    {
+      name: "Learning",
+      slug: "learning",
+      type: "tool",
+      label: "Learning Resources",
+      description: "Tools for learning and improving skills.",
+    },
+    {
+      name: "AI Tools",
+      slug: "ai-tools",
+      type: "tool",
+      label: "AI & Machine Learning",
+      description: "Tools for using AI and machine learning.",
+    },
+  ]
+
+  for (const category of categoriesData) {
+    await retryWithBackoff(async () => {
+      return await db.category.upsert({
+        where: { slug: category.slug },
+        update: category,
+        create: category,
+      })
     })
-  })
+  }
 
   console.log("Created categories")
 
@@ -491,113 +522,119 @@ async function main() {
 
   console.log("Created attributes")
 
-  // Create shops with retry logic
-  await retryWithBackoff(async () => {
-    return await db.shop.createMany({
-      data: [
-        {
-          name: "TechStart Inc.",
-          slug: "techstart-inc",
-          email: "contact@techstart.com",
-          phone: "+1-555-0101",
-          websiteUrl: "https://techstart.com",
-          description: "Leading provider of innovative tech solutions and developer tools.",
-          instagramFollowers: 125000,
-          tiktokFollowers: 89000,
-        },
-        {
-          name: "DevTools Pro",
-          slug: "devtools-pro",
-          email: "hello@devtoolspro.com",
-          phone: "+1-555-0202",
-          websiteUrl: "https://devtoolspro.com",
-          description: "Professional development tools for modern software teams.",
-          instagramFollowers: 78000,
-          tiktokFollowers: 156000,
-        },
-        {
-          name: "CodeMasters",
-          slug: "codemasters",
-          email: "support@codemasters.io",
-          phone: "+1-555-0303",
-          websiteUrl: "https://codemasters.io",
-          description: "Empowering developers with cutting-edge coding solutions.",
-          instagramFollowers: 234000,
-          tiktokFollowers: 312000,
-        },
-        {
-          name: "AdSpace Solutions",
-          slug: "adspace-solutions",
-          email: "sales@adspace.com",
-          phone: "+1-555-0404",
-          websiteUrl: "https://adspace.com",
-          description: "Premium advertising space provider for tech companies worldwide.",
-          instagramFollowers: 45000,
-          tiktokFollowers: 23000,
-        },
-        {
-          name: "MediaHub Networks",
-          slug: "mediahub-networks",
-          email: "partners@mediahub.net",
-          phone: "+1-555-0505",
-          websiteUrl: "https://mediahub.net",
-          description: "Global media network specializing in developer-focused advertising.",
-          instagramFollowers: 89000,
-          tiktokFollowers: 67000,
-        },
-        {
-          name: "TechAds Pro",
-          slug: "techads-pro",
-          email: "info@techadspro.com",
-          phone: "+1-555-0606",
-          websiteUrl: "https://techadspro.com",
-          description: "Professional advertising solutions for technology companies.",
-          instagramFollowers: 156000,
-          tiktokFollowers: 98000,
-        },
-        {
-          name: "DevMarketing Hub",
-          slug: "devmarketing-hub",
-          email: "contact@devmarketinghub.com",
-          phone: "+1-555-0707",
-          websiteUrl: "https://devmarketinghub.com",
-          description: "Marketing and advertising platform designed for developers.",
-          instagramFollowers: 78000,
-          tiktokFollowers: 124000,
-        },
-        {
-          name: "CodeAds Network",
-          slug: "codeads-network",
-          email: "network@codeads.com",
-          phone: "+1-555-0808",
-          websiteUrl: "https://codeads.com",
-          description: "Comprehensive advertising network for coding communities.",
-          instagramFollowers: 203000,
-          tiktokFollowers: 178000,
-        },
-        {
-          name: "StartupAds Co",
-          slug: "startupads-co",
-          email: "hello@startupads.co",
-          phone: "+1-555-0909",
-          websiteUrl: "https://startupads.co",
-          description: "Advertising solutions tailored for startups and tech innovators.",
-          instagramFollowers: 67000,
-          tiktokFollowers: 45000,
-        },
-        {
-          name: "DigitalDev Ads",
-          slug: "digitaldev-ads",
-          email: "ads@digitaldev.com",
-          phone: "+1-555-1010",
-          websiteUrl: "https://digitaldev.com",
-          description: "Digital advertising platform for development tools and services.",
-          instagramFollowers: 112000,
-          tiktokFollowers: 89000,
-        },
-      ],
+  // Create shops individually with retry logic
+  const shopsData = [
+    {
+      name: "TechStart Inc.",
+      slug: "techstart-inc",
+      email: "contact@techstart.com",
+      phone: "+1-555-0101",
+      websiteUrl: "https://techstart.com",
+      description: "Leading provider of innovative tech solutions and developer tools.",
+      instagramFollowers: 125000,
+      tiktokFollowers: 89000,
+    },
+    {
+      name: "DevTools Pro",
+      slug: "devtools-pro",
+      email: "hello@devtoolspro.com",
+      phone: "+1-555-0202",
+      websiteUrl: "https://devtoolspro.com",
+      description: "Professional development tools for modern software teams.",
+      instagramFollowers: 78000,
+      tiktokFollowers: 156000,
+    },
+    {
+      name: "CodeMasters",
+      slug: "codemasters",
+      email: "support@codemasters.io",
+      phone: "+1-555-0303",
+      websiteUrl: "https://codemasters.io",
+      description: "Empowering developers with cutting-edge coding solutions.",
+      instagramFollowers: 234000,
+      tiktokFollowers: 312000,
+    },
+    {
+      name: "AdSpace Solutions",
+      slug: "adspace-solutions",
+      email: "sales@adspace.com",
+      phone: "+1-555-0404",
+      websiteUrl: "https://adspace.com",
+      description: "Premium advertising space provider for tech companies worldwide.",
+      instagramFollowers: 45000,
+      tiktokFollowers: 23000,
+    },
+    {
+      name: "MediaHub Networks",
+      slug: "mediahub-networks",
+      email: "partners@mediahub.net",
+      phone: "+1-555-0505",
+      websiteUrl: "https://mediahub.net",
+      description: "Global media network specializing in developer-focused advertising.",
+      instagramFollowers: 89000,
+      tiktokFollowers: 67000,
+    },
+    {
+      name: "TechAds Pro",
+      slug: "techads-pro",
+      email: "info@techadspro.com",
+      phone: "+1-555-0606",
+      websiteUrl: "https://techadspro.com",
+      description: "Professional advertising solutions for technology companies.",
+      instagramFollowers: 156000,
+      tiktokFollowers: 98000,
+    },
+    {
+      name: "DevMarketing Hub",
+      slug: "devmarketing-hub",
+      email: "contact@devmarketinghub.com",
+      phone: "+1-555-0707",
+      websiteUrl: "https://devmarketinghub.com",
+      description: "Marketing and advertising platform designed for developers.",
+      instagramFollowers: 78000,
+      tiktokFollowers: 124000,
+    },
+    {
+      name: "CodeAds Network",
+      slug: "codeads-network",
+      email: "network@codeads.com",
+      phone: "+1-555-0808",
+      websiteUrl: "https://codeads.com",
+      description: "Comprehensive advertising network for coding communities.",
+      instagramFollowers: 203000,
+      tiktokFollowers: 178000,
+    },
+    {
+      name: "StartupAds Co",
+      slug: "startupads-co",
+      email: "hello@startupads.co",
+      phone: "+1-555-0909",
+      websiteUrl: "https://startupads.co",
+      description: "Advertising solutions tailored for startups and tech innovators.",
+      instagramFollowers: 67000,
+      tiktokFollowers: 45000,
+    },
+    {
+      name: "DigitalDev Ads",
+      slug: "digitaldev-ads",
+      email: "ads@digitaldev.com",
+      phone: "+1-555-1010",
+      websiteUrl: "https://digitaldev.com",
+      description: "Digital advertising platform for development tools and services.",
+      instagramFollowers: 112000,
+      tiktokFollowers: 89000,
+    },
+  ]
+
+  for (const shop of shopsData) {
+    await retryWithBackoff(async () => {
+      return await db.shop.upsert({
+        where: { slug: shop.slug },
+        update: shop,
+        create: shop,
+      })
     })
-  })
+  }
 
   console.log("Created shops")
 
