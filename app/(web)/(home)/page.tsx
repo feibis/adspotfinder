@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server"
 import { cache } from "react"
+import { Hero } from "~/app/(web)/(home)/hero"
 import { Hero2 } from "~/app/(web)/(home)/hero-2"
 import { StructuredData } from "~/components/web/structured-data"
 import { siteConfig } from "~/config/site"
@@ -19,6 +20,8 @@ export default async function (props: PageProps<"/">) {
 
   return (
     <>
+      <Hero />
+
       <Hero2 />
 
       <StructuredData data={structuredData} />
