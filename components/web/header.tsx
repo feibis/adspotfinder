@@ -121,26 +121,24 @@ const Header = ({ className, ...props }: ComponentProps<"div">) => {
               onClick={() => setNavOpen(!isNavOpen)}
               className="lg:hidden p-2 hover:bg-primary/5 rounded-md transition-colors"
             >
-              <Hamburger className="size-6" />
+              <Hamburger className="size-7" />
             </button>
           </Stack>
         </div>
 
         <nav
           className={cx(
-            "absolute top-full inset-x-0 h-[calc(100dvh-var(--header-top)-var(--header-height))] -mt-px py-8 px-8 grid grid-cols-2 place-items-start place-content-start gap-x-8 gap-y-8 bg-background/95 backdrop-blur-xl border-t border-border/50 transition-all duration-300 lg:hidden text-lg",
+            "absolute top-full inset-x-0 h-[calc(100dvh-var(--header-top)-var(--header-height))] -mt-px py-8 px-8 grid grid-cols-2 place-items-start place-content-start gap-x-8 gap-y-6 bg-background/95 backdrop-blur-xl border-t border-border/50 transition-all duration-300 lg:hidden",
             isNavOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none",
           )}
         >
-          {/* Desktop-style buttons for mobile */}
-          <div className="col-span-2 flex flex-col gap-4 mb-6">
-            <Button size="md" variant="fancy" className="font-medium w-full" asChild>
-              <Link href="/submit">{t("navigation.submit")}</Link>
-            </Button>
-            <Button size="sm" variant="ghost" className="w-full" asChild>
-              <Link href="/auth/login">{t("navigation.sign_in")}</Link>
-            </Button>
-          </div>
+          {/* Submit and Sign In buttons in grid */}
+          <Button size="sm" variant="fancy" className="font-medium w-full" asChild>
+            <Link href="/submit">{t("navigation.submit")}</Link>
+          </Button>
+          <Button size="sm" variant="ghost" className="w-full" asChild>
+            <Link href="/auth/login">{t("navigation.sign_in")}</Link>
+          </Button>
 
           {/* Original navigation links */}
           <NavLink href="/?sort=publishedAt.desc">{t("navigation.latest_tools")}</NavLink>
