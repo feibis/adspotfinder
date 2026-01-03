@@ -100,8 +100,8 @@ const Header = ({ className, ...props }: ComponentProps<"div">) => {
           </nav>
 
           <Stack size="md" wrap={false} className="justify-end max-lg:grow">
-            <Button size="md" variant="ghost" className="p-2 text-lg hover:bg-primary/5" onClick={search.open}>
-              <SearchIcon className="size-6" />
+            <Button size="sm" variant="ghost" className="p-1.5 text-base hover:bg-primary/5 max-lg:p-1" onClick={search.open}>
+              <SearchIcon className="size-5 max-lg:size-4" />
             </Button>
 
             <Button size="md" variant="ghost" className="p-2 -ml-1 text-lg max-sm:hidden hover:bg-primary/5" asChild>
