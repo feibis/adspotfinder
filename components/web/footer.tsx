@@ -28,12 +28,12 @@ export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) 
   return (
     <footer className="flex flex-col gap-y-8 mt-auto pt-fluid-md border-t border-foreground/10">
       <div
-        className={cx("grid grid-cols-3 gap-y-8 gap-x-4 md:gap-x-6 md:grid-cols-16", className)}
+        className={cx("grid grid-cols-2 gap-y-8 gap-x-4 md:gap-x-6 md:grid-cols-12", className)}
         {...props}
       >
         <Stack
           direction="column"
-          className="flex flex-col items-start gap-4 col-span-full md:col-span-6"
+          className="flex flex-col items-start gap-4 col-span-full md:col-span-5"
         >
           <Stack size="lg" direction="column" className="min-w-0 max-w-64">
             <H5 as="strong" className="px-0.5">
@@ -72,23 +72,35 @@ export const Footer = ({ children, className, hideCTA, ...props }: FooterProps) 
           </Stack>
         </Stack>
 
-        <Stack direction="column" className="text-sm md:col-span-3 md:col-start-8">
-          <H6 as="strong">{t("navigation.browse")}:</H6>
+        <Stack direction="column" className="text-sm md:col-span-2 md:col-start-7">
+          <H6 as="strong">For Clients:</H6>
 
           <NavLink href="/">{t("navigation.tools")}</NavLink>
-          <NavLink href="/categories">{t("navigation.categories")}</NavLink>
-          <NavLink href="/tags">{t("navigation.tags")}</NavLink>
-          <NavLink href="/locations">{t("navigation.locations")}</NavLink>
-          <NavLink href="/attributes">{t("navigation.attributes")}</NavLink>
           <NavLink href="/blog">{t("navigation.blog")}</NavLink>
         </Stack>
 
-        <Stack direction="column" className="text-sm md:col-span-3">
-          <H6 as="strong">{t("navigation.quick_links")}:</H6>
+        <Stack direction="column" className="text-sm md:col-span-2">
+          <H6 as="strong">Navigation:</H6>
+
+          <NavLink href="/shops">{t("navigation.shops")}</NavLink>
+          <NavLink href="/categories">{t("navigation.categories")}</NavLink>
+          <NavLink href="/tags">{t("navigation.tags")}</NavLink>
+        </Stack>
+
+        <Stack direction="column" className="text-sm md:col-span-2">
+          <H6 as="strong">For Providers:</H6>
 
           <NavLink href="/submit">{t("navigation.submit")}</NavLink>
-          <NavLink href="/about">{t("navigation.about")}</NavLink>
           {adsConfig.enabled && <NavLink href="/advertise">{t("navigation.advertise")}</NavLink>}
+        </Stack>
+
+        <Stack direction="column" className="text-sm md:col-span-1">
+          <H6 as="strong">Company:</H6>
+
+          <NavLink href="/about">{t("navigation.about")}</NavLink>
+          <ExternalLink href={`mailto:${siteConfig.email}`} className={navLinkVariants()}>
+            {t("navigation.contact_us")}
+          </ExternalLink>
         </Stack>
       </div>
 
