@@ -59,10 +59,10 @@ export const findCategoryList = async ({ ...args }: Prisma.CategoryFindManyArgs 
   })
 }
 
-export const findShopCategoryList = async ({ ...args }: Prisma.CategoryFindManyArgs = {}) => {
+export const findAgencyCategoryList = async ({ ...args }: Prisma.CategoryFindManyArgs = {}) => {
   return db.category.findMany({
     ...args,
-    where: { type: "shop", ...args.where },
+    where: { type: "agency", ...args.where },
     select: { id: true, name: true },
     orderBy: { name: "asc" },
   })

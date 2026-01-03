@@ -1,23 +1,23 @@
 import type { PropsWithChildren } from "react"
 import { toast } from "sonner"
-import type { Shop } from "~/.generated/prisma/client"
+import type { Agency } from "~/.generated/prisma/client"
 import { DeleteDialog } from "~/components/admin/dialogs/delete-dialog"
-import { deleteShops } from "~/server/admin/shops/actions"
+import { deleteAgencys } from "~/server/admin/agencys/actions"
 
-type ShopsDeleteDialogProps = PropsWithChildren<{
-  shops: Shop[]
+type AgencysDeleteDialogProps = PropsWithChildren<{
+  agencys: Agency[]
   onExecute?: () => void
 }>
 
-export const ShopsDeleteDialog = ({ shops, onExecute, ...props }: ShopsDeleteDialogProps) => {
+export const AgencysDeleteDialog = ({ agencys, onExecute, ...props }: AgencysDeleteDialogProps) => {
   return (
     <DeleteDialog
-      ids={shops.map(({ id }) => id)}
-      label="shop"
-      action={deleteShops}
+      ids={agencys.map(({ id }) => id)}
+      label="agency"
+      action={deleteAgencys}
       callbacks={{
         onExecute: () => {
-          toast.success("Shop(s) deleted successfully")
+          toast.success("Agency(s) deleted successfully")
           onExecute?.()
         },
         onError: ({ error }) => toast.error(error.serverError),

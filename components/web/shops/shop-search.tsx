@@ -5,17 +5,17 @@ import type { ComponentProps } from "react"
 import type { Stack } from "~/components/common/stack"
 import { Filters } from "~/components/web/filters/filters"
 import { Sort } from "~/components/web/filters/sort"
-import { ShopFilters } from "~/components/web/shops/shop-filters"
+import { AgencyFilters } from "~/components/web/agencys/agency-filters"
 import { useFilters } from "~/contexts/filter-context"
-import type { ShopsFilterSchema } from "~/server/web/shops/schema"
+import type { AgencysFilterSchema } from "~/server/web/agencys/schema"
 
-export type ShopSearchProps = ComponentProps<typeof Stack> & {
+export type AgencySearchProps = ComponentProps<typeof Stack> & {
   placeholder?: string
 }
 
-export const ShopSearch = ({ placeholder, ...props }: ShopSearchProps) => {
-  const { enableSort, enableFilters } = useFilters<ShopsFilterSchema>()
-  const t = useTranslations("shops.filters")
+export const AgencySearch = ({ placeholder, ...props }: AgencySearchProps) => {
+  const { enableSort, enableFilters } = useFilters<AgencysFilterSchema>()
+  const t = useTranslations("agencys.filters")
 
   const sortOptions = [
     { value: "name.asc", label: t("sort_name_asc") },
@@ -25,7 +25,7 @@ export const ShopSearch = ({ placeholder, ...props }: ShopSearchProps) => {
   return (
     <Filters placeholder={placeholder || t("search_placeholder")} {...props}>
       {enableSort && <Sort options={sortOptions} />}
-      {enableFilters && <ShopFilters />}
+      {enableFilters && <AgencyFilters />}
     </Filters>
   )
 }

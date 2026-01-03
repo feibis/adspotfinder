@@ -522,8 +522,8 @@ async function main() {
 
   console.log("Created attributes")
 
-  // Create shops individually with retry logic
-  const shopsData = [
+  // Create agencys individually with retry logic
+  const agencysData = [
     {
       name: "TechStart Inc.",
       slug: "techstart-inc",
@@ -626,21 +626,21 @@ async function main() {
     },
   ]
 
-  for (const shop of shopsData) {
+  for (const agency of agencysData) {
     await retryWithBackoff(async () => {
-      return await db.shop.upsert({
-        where: { slug: shop.slug },
-        update: shop,
-        create: shop,
+      return await db.agency.upsert({
+        where: { slug: agency.slug },
+        update: agency,
+        create: agency,
       })
     })
   }
 
-  console.log("Created shops")
+  console.log("Created agencys")
 
-  // Connect shops to locations and categories with retry logic
+  // Connect agencys to locations and categories with retry logic
   await retryWithBackoff(async () => {
-    return await db.shop.update({
+    return await db.agency.update({
       where: { slug: "techstart-inc" },
       data: {
         locations: { connect: [{ slug: "united-states" }, { slug: "europe" }] },
@@ -650,7 +650,7 @@ async function main() {
   })
 
   await retryWithBackoff(async () => {
-    return await db.shop.update({
+    return await db.agency.update({
       where: { slug: "devtools-pro" },
       data: {
         locations: { connect: [{ slug: "united-states" }, { slug: "asia" }] },
@@ -660,7 +660,7 @@ async function main() {
   })
 
   await retryWithBackoff(async () => {
-    return await db.shop.update({
+    return await db.agency.update({
       where: { slug: "codemasters" },
       data: {
         locations: { connect: [{ slug: "europe" }, { slug: "asia" }] },
@@ -669,9 +669,9 @@ async function main() {
     })
   })
 
-  // Connect new shops to locations and categories
+  // Connect new agencys to locations and categories
   await retryWithBackoff(async () => {
-    return await db.shop.update({
+    return await db.agency.update({
       where: { slug: "adspace-solutions" },
       data: {
         locations: { connect: [{ slug: "united-states" }, { slug: "canada" }] },
@@ -681,7 +681,7 @@ async function main() {
   })
 
   await retryWithBackoff(async () => {
-    return await db.shop.update({
+    return await db.agency.update({
       where: { slug: "mediahub-networks" },
       data: {
         locations: { connect: [{ slug: "united-states" }, { slug: "united-kingdom" }, { slug: "germany" }] },
@@ -691,7 +691,7 @@ async function main() {
   })
 
   await retryWithBackoff(async () => {
-    return await db.shop.update({
+    return await db.agency.update({
       where: { slug: "techads-pro" },
       data: {
         locations: { connect: [{ slug: "united-states" }, { slug: "australia" }] },
@@ -701,7 +701,7 @@ async function main() {
   })
 
   await retryWithBackoff(async () => {
-    return await db.shop.update({
+    return await db.agency.update({
       where: { slug: "devmarketing-hub" },
       data: {
         locations: { connect: [{ slug: "united-states" }, { slug: "france" }, { slug: "netherlands" }] },
@@ -711,7 +711,7 @@ async function main() {
   })
 
   await retryWithBackoff(async () => {
-    return await db.shop.update({
+    return await db.agency.update({
       where: { slug: "codeads-network" },
       data: {
         locations: { connect: [{ slug: "united-states" }, { slug: "japan" }, { slug: "south-korea" }] },
@@ -721,7 +721,7 @@ async function main() {
   })
 
   await retryWithBackoff(async () => {
-    return await db.shop.update({
+    return await db.agency.update({
       where: { slug: "startupads-co" },
       data: {
         locations: { connect: [{ slug: "united-states" }, { slug: "singapore" }] },
@@ -731,7 +731,7 @@ async function main() {
   })
 
   await retryWithBackoff(async () => {
-    return await db.shop.update({
+    return await db.agency.update({
       where: { slug: "digitaldev-ads" },
       data: {
         locations: { connect: [{ slug: "united-states" }, { slug: "brazil" }, { slug: "mexico" }] },
@@ -740,7 +740,7 @@ async function main() {
     })
   })
 
-  console.log("Connected shops to locations and categories")
+  console.log("Connected agencys to locations and categories")
 
   // Create pricing combinations for tools with retry logic
   console.log("Creating tool pricing combinations...")
@@ -879,7 +879,7 @@ async function main() {
     }
   }
 
-  console.log("Created shop pricing combinations")
+  console.log("Created agency pricing combinations")
 
   // Create tools
   const toolsData = [

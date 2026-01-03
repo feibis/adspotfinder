@@ -1,6 +1,6 @@
 {
-  "count_shops": "{count, plural, =0 {agencies} =1 {agency} other {agencies}}",
-  "no_shops": "No agencies found for the given filters.",
+  "count_agencys": "{count, plural, =0 {agencies} =1 {agency} other {agencies}}",
+  "no_agencys": "No agencies found for the given filters.",
   "filters": {
     "search_placeholder": "Search agencies...",
     "sort_name_asc": "Name (A to Z)",

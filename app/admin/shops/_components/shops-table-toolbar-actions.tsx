@@ -2,15 +2,15 @@
 
 import type { Table } from "@tanstack/react-table"
 import { TrashIcon } from "lucide-react"
-import type { Shop } from "~/.generated/prisma/browser"
-import { ShopsDeleteDialog } from "~/app/admin/shops/_components/shops-delete-dialog"
+import type { Agency } from "~/.generated/prisma/browser"
+import { AgencysDeleteDialog } from "~/app/admin/agencys/_components/agencys-delete-dialog"
 import { Button } from "~/components/common/button"
 
-interface ShopsTableToolbarActionsProps {
-  table: Table<Shop>
+interface AgencysTableToolbarActionsProps {
+  table: Table<Agency>
 }
 
-export const ShopsTableToolbarActions = ({ table }: ShopsTableToolbarActionsProps) => {
+export const AgencysTableToolbarActions = ({ table }: AgencysTableToolbarActionsProps) => {
   const { rows } = table.getFilteredSelectedRowModel()
 
   if (!rows.length) {
@@ -18,10 +18,10 @@ export const ShopsTableToolbarActions = ({ table }: ShopsTableToolbarActionsProp
   }
 
   return (
-    <ShopsDeleteDialog shops={rows.map(row => row.original)}>
+    <AgencysDeleteDialog agencys={rows.map(row => row.original)}>
       <Button variant="secondary" size="md" prefix={<TrashIcon />}>
         Delete ({rows.length})
       </Button>
-    </ShopsDeleteDialog>
+    </AgencysDeleteDialog>
   )
 }

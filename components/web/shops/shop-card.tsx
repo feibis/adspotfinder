@@ -5,30 +5,30 @@ import type { ComponentProps } from "react"
 import { Link } from "~/components/common/link"
 import { Skeleton } from "~/components/common/skeleton"
 import { Tile, TileCaption, TileDivider, TileTitle } from "~/components/web/ui/tile"
-import type { ShopMany } from "~/server/web/shops/payloads"
+import type { AgencyMany } from "~/server/web/agencys/payloads"
 
-type ShopCardProps = ComponentProps<typeof Tile> & {
-  shop: ShopMany
+type AgencyCardProps = ComponentProps<typeof Tile> & {
+  agency: AgencyMany
 }
 
-const ShopCard = ({ shop, ...props }: ShopCardProps) => {
+const AgencyCard = ({ agency, ...props }: AgencyCardProps) => {
   const t = useTranslations()
-  const count = shop._count.locations
+  const count = agency._count.locations
 
   return (
     <Tile asChild {...props}>
-      <Link href={`/shops/${shop.slug}`}>
-        <TileTitle>{shop.slug}</TileTitle>
+      <Link href={`/agencys/${agency.slug}`}>
+        <TileTitle>{agency.slug}</TileTitle>
 
         <TileDivider />
 
-        <TileCaption>{`${count} ${t("shops.count_locations", { count })}`}</TileCaption>
+        <TileCaption>{`${count} ${t("agencys.count_locations", { count })}`}</TileCaption>
       </Link>
     </Tile>
   )
 }
 
-const ShopCardSkeleton = () => {
+const AgencyCardSkeleton = () => {
   return (
     <Tile>
       <TileTitle className="w-1/3">
@@ -44,4 +44,4 @@ const ShopCardSkeleton = () => {
   )
 }
 
-export { ShopCard, ShopCardSkeleton }
+export { AgencyCard, AgencyCardSkeleton }

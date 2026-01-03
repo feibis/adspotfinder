@@ -96,11 +96,11 @@
       "placeholder": "Search in \"{name}\"..."
     }
   },
-  "shops": {
+  "agencys": {
     "title": "Browse Agencies",
     "description": "Browse all available agencies to discover ad spots by specific agencies."
   },
-  "shop": {
+  "agency": {
     "title": "Ad spots from \"{name}\"",
     "description": "Explore ad spots from {name} to find opportunities that match your specific needs.",
     "search": {

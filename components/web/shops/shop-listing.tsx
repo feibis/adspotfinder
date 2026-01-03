@@ -3,24 +3,24 @@
 import { useTranslations } from "next-intl"
 import { Input } from "~/components/common/input"
 import { Pagination, type PaginationProps } from "~/components/web/pagination"
-import { ShopList, type ShopListProps, ShopListSkeleton } from "~/components/web/shops/shop-list"
-import { ShopSearch, type ShopSearchProps } from "~/components/web/shops/shop-search"
+import { AgencyList, type AgencyListProps, AgencyListSkeleton } from "~/components/web/agencys/agency-list"
+import { AgencySearch, type AgencySearchProps } from "~/components/web/agencys/agency-search"
 import { FiltersProvider, type FiltersProviderProps } from "~/contexts/filter-context"
-import { shopsSearchParams } from "~/server/web/shops/schema"
+import { agencysSearchParams } from "~/server/web/agencys/schema"
 
-type ShopListingProps = {
-  list: ShopListProps
+type AgencyListingProps = {
+  list: AgencyListProps
   pagination: PaginationProps
-  search?: ShopSearchProps
+  search?: AgencySearchProps
   options?: Omit<FiltersProviderProps, "schema">
 }
 
-const ShopListing = ({ list, pagination, options, search }: ShopListingProps) => {
+const AgencyListing = ({ list, pagination, options, search }: AgencyListingProps) => {
   return (
-    <FiltersProvider schema={shopsSearchParams} {...options}>
-      <div className="space-y-10" id="shops">
-        <ShopSearch {...search} />
-        <ShopList {...list} />
+    <FiltersProvider schema={agencysSearchParams} {...options}>
+      <div className="space-y-10" id="agencys">
+        <AgencySearch {...search} />
+        <AgencyList {...list} />
       </div>
 
       <Pagination {...pagination} />
@@ -28,15 +28,15 @@ const ShopListing = ({ list, pagination, options, search }: ShopListingProps) =>
   )
 }
 
-const ShopListingSkeleton = () => {
+const AgencyListingSkeleton = () => {
   const t = useTranslations("common")
 
   return (
     <div className="space-y-10">
       <Input size="lg" placeholder={t("loading")} disabled />
-      <ShopListSkeleton />
+      <AgencyListSkeleton />
     </div>
   )
 }
 
-export { ShopListing, ShopListingSkeleton, type ShopListingProps }
+export { AgencyListing, AgencyListingSkeleton, type AgencyListingProps }

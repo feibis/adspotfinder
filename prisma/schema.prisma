@@ -157,13 +157,13 @@ model Category {
   slug        String   @unique
   label       String?
   description String?
-  type        String   @default("tool") // "tool" | "shop"
+  type        String   @default("tool") // "tool" | "agency"
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   // Relations
   tools Tool[]
-  shops Shop[]
+  agencys Agency[]
 
   // Indexes
   @@index([slug])
@@ -184,7 +184,7 @@ model Tag {
   @@index([name])
 }
 
-model Shop {
+model Agency {
   id               String   @id @default(cuid())
   name             String   @db.Citext
   slug             String   @unique
@@ -226,7 +226,7 @@ model Location {
 
   // Relations
   tools Tool[]
-  shops Shop[]
+  agencys Agency[]
 
   @@index([name])
   @@index([countryCode])

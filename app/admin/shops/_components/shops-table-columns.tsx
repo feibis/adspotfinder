@@ -3,15 +3,15 @@
 import { formatDate } from "@primoui/utils"
 import type { ColumnDef } from "@tanstack/react-table"
 import { HashIcon, MapPinIcon, FolderIcon, InstagramIcon, MusicIcon } from "lucide-react"
-import type { Shop } from "~/.generated/prisma/browser"
-import { ShopActions } from "~/app/admin/shops/_components/shop-actions"
+import type { Agency } from "~/.generated/prisma/browser"
+import { AgencyActions } from "~/app/admin/agencys/_components/agency-actions"
 import { RowCheckbox } from "~/components/admin/row-checkbox"
 import { Badge } from "~/components/common/badge"
 import { Note } from "~/components/common/note"
 import { DataTableColumnHeader } from "~/components/data-table/data-table-column-header"
 import { DataTableLink } from "~/components/data-table/data-table-link"
 
-export const getColumns = (): ColumnDef<Shop & { _count?: { locations: number; categories: number } }>[] => {
+export const getColumns = (): ColumnDef<Agency & { _count?: { locations: number; categories: number } }>[] => {
   return [
     {
       id: "select",
@@ -46,7 +46,7 @@ export const getColumns = (): ColumnDef<Shop & { _count?: { locations: number; c
       size: 160,
       header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
       cell: ({ row }) => (
-        <DataTableLink href={`/admin/shops/${row.original.slug}`} title={row.original.name} />
+        <DataTableLink href={`/admin/agencys/${row.original.slug}`} title={row.original.name} />
       ),
     },
     {
@@ -94,7 +94,7 @@ export const getColumns = (): ColumnDef<Shop & { _count?: { locations: number; c
     },
     {
       id: "actions",
-      cell: ({ row }) => <ShopActions shop={row.original} className="float-right" />,
+      cell: ({ row }) => <AgencyActions agency={row.original} className="float-right" />,
     },
   ]
 }

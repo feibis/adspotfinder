@@ -1,6 +1,6 @@
 # Location Data Management
 
-This project includes several ways to populate location data for shops and tools.
+This project includes several ways to populate location data for agencys and tools.
 
 ## Available Methods
 

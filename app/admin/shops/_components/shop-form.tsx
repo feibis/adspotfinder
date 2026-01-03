@@ -6,7 +6,7 @@ import { slugify } from "@primoui/utils"
 import { useRouter } from "next/navigation"
 import { type ComponentProps, use } from "react"
 import { toast } from "sonner"
-import { ShopActions } from "~/app/admin/shops/_components/shop-actions"
+import { AgencyActions } from "~/app/admin/agencys/_components/agency-actions"
 import { RelationSelector } from "~/components/admin/relation-selector"
 import { Button } from "~/components/common/button"
 import {
@@ -23,45 +23,45 @@ import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
 import { useComputedField } from "~/hooks/use-computed-field"
 import { cx } from "~/lib/utils"
-import { upsertShop } from "~/server/admin/shops/actions"
-import type { findShopBySlug } from "~/server/admin/shops/queries"
-import { shopSchema } from "~/server/admin/shops/schema"
+import { upsertAgency } from "~/server/admin/agencys/actions"
+import type { findAgencyBySlug } from "~/server/admin/agencys/queries"
+import { agencySchema } from "~/server/admin/agencys/schema"
 import { findLocationList } from "~/server/admin/locations/queries"
-import { findShopCategoryList } from "~/server/admin/categories/queries"
+import { findAgencyCategoryList } from "~/server/admin/categories/queries"
 
-type ShopFormProps = ComponentProps<"form"> & {
-  shop?: Awaited<ReturnType<typeof findShopBySlug>>
+type AgencyFormProps = ComponentProps<"form"> & {
+  agency?: Awaited<ReturnType<typeof findAgencyBySlug>>
   locationsPromise: ReturnType<typeof findLocationList>
-  categoriesPromise: ReturnType<typeof findShopCategoryList>
+  categoriesPromise: ReturnType<typeof findAgencyCategoryList>
 }
 
-export function ShopForm({ children, className, title, shop, locationsPromise, categoriesPromise, ...props }: ShopFormProps) {
+export function AgencyForm({ children, className, title, agency, locationsPromise, categoriesPromise, ...props }: AgencyFormProps) {
   const router = useRouter()
   const locations = use(locationsPromise)
   const categories = use(categoriesPromise)
-  const resolver = zodResolver(shopSchema)
+  const resolver = zodResolver(agencySchema)
 
-  const { form, action, handleSubmitWithAction } = useHookFormAction(upsertShop, resolver, {
+  const { form, action, handleSubmitWithAction } = useHookFormAction(upsertAgency, resolver, {
     formProps: {
       defaultValues: {
-        id: shop?.id ?? "",
-        name: shop?.name ?? "",
-        slug: shop?.slug ?? "",
-        email: shop?.email ?? "",
-        phone: shop?.phone ?? "",
-        websiteUrl: shop?.websiteUrl ?? "",
-        description: shop?.description ?? "",
-        instagramFollowers: shop?.instagramFollowers ?? undefined,
-        tiktokFollowers: shop?.tiktokFollowers ?? undefined,
-        locations: shop?.locations.map(l => l.id) ?? [],
-        categories: shop?.categories.map(c => c.id) ?? [],
+        id: agency?.id ?? "",
+        name: agency?.name ?? "",
+        slug: agency?.slug ?? "",
+        email: agency?.email ?? "",
+        phone: agency?.phone ?? "",
+        websiteUrl: agency?.websiteUrl ?? "",
+        description: agency?.description ?? "",
+        instagramFollowers: agency?.instagramFollowers ?? undefined,
+        tiktokFollowers: agency?.tiktokFollowers ?? undefined,
+        locations: agency?.locations.map(l => l.id) ?? [],
+        categories: agency?.categories.map(c => c.id) ?? [],
       },
     },
 
     actionProps: {
       onSuccess: ({ data }) => {
-        toast.success(`Shop successfully ${shop ? "updated" : "created"}`)
-        router.push(`/admin/shops/${data?.slug}`)
+        toast.success(`Agency successfully ${agency ? "updated" : "created"}`)
+        router.push(`/admin/agencys/${data?.slug}`)
       },
 
       onError: ({ error }) => {
@@ -76,7 +76,7 @@ export function ShopForm({ children, className, title, shop, locationsPromise, c
     sourceField: "name",
     computedField: "slug",
     callback: slugify,
-    enabled: !shop,
+    enabled: !agency,
   })
 
   return (
@@ -85,7 +85,7 @@ export function ShopForm({ children, className, title, shop, locationsPromise, c
         <H3 className="flex-1 truncate">{title}</H3>
 
         <Stack size="sm" className="-my-0.5">
-          {shop && <ShopActions shop={shop} size="md" />}
+          {agency && <AgencyActions agency={agency} size="md" />}
         </Stack>
       </Stack>
 
@@ -251,11 +251,11 @@ export function ShopForm({ children, className, title, shop, locationsPromise, c
 
         <div className="flex justify-between gap-4 col-span-full">
           <Button size="md" variant="secondary" asChild>
-            <Link href="/admin/shops">Cancel</Link>
+            <Link href="/admin/agencys">Cancel</Link>
           </Button>
 
           <Button size="md" isPending={action.isPending}>
-            {shop ? "Update shop" : "Create shop"}
+            {agency ? "Update agency" : "Create agency"}
           </Button>
         </div>
       </form>

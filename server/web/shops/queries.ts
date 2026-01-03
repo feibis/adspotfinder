@@ -1,13 +1,13 @@
 import { cacheLife, cacheTag } from "next/cache"
 import { type Prisma, ToolStatus } from "~/.generated/prisma/client"
-import { shopManyPayload, shopOnePayload } from "~/server/web/shops/payloads"
-import type { ShopsFilterParams } from "~/server/web/shops/schema"
+import { agencyManyPayload, agencyOnePayload } from "~/server/web/agencys/payloads"
+import type { AgencysFilterParams } from "~/server/web/agencys/schema"
 import { db } from "~/services/db"
 
-export const searchShops = async (search: ShopsFilterParams, where?: Prisma.ShopWhereInput) => {
+export const searchAgencys = async (search: AgencysFilterParams, where?: Prisma.AgencyWhereInput) => {
   "use cache"
 
-  cacheTag("shops")
+  cacheTag("agencys")
   cacheLife("infinite")
 
   const { q, letter, sort, page, perPage } = search
@@ -16,20 +16,20 @@ export const searchShops = async (search: ShopsFilterParams, where?: Prisma.Shop
   const take = perPage
   const [sortBy, sortOrder] = sort.split(".")
 
-  const whereQuery: Prisma.ShopWhereInput = {
+  const whereQuery: Prisma.AgencyWhereInput = {
     ...(q && { name: { contains: q, mode: "insensitive" } }),
   }
 
   // Filter by letter if provided
   if (letter) {
     if (/^[A-Za-z]$/.test(letter)) {
-      // Single alphabet letter - find shops starting with this letter
+      // Single alphabet letter - find agencys starting with this letter
       whereQuery.name = {
         startsWith: letter.toUpperCase(),
         mode: "insensitive",
       }
     } else {
-      // Non-alphabetic character (e.g., "#" for numbers/symbols) - find shops that don't start with alphabet letters
+      // Non-alphabetic character (e.g., "#" for numbers/symbols) - find agencys that don't start with alphabet letters
       whereQuery.NOT = {
         OR: "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(char => ({
           name: { startsWith: char, mode: "insensitive" },
@@ -38,32 +38,32 @@ export const searchShops = async (search: ShopsFilterParams, where?: Prisma.Shop
     }
   }
 
-  const [shops, total] = await db.$transaction([
-    db.shop.findMany({
+  const [agencys, total] = await db.$transaction([
+    db.agency.findMany({
       orderBy: sortBy ? { [sortBy]: sortOrder } : { name: "asc" },
       where: { ...whereQuery, ...where },
-      select: shopManyPayload,
+      select: agencyManyPayload,
       take,
       skip,
     }),
 
-    db.shop.count({
+    db.agency.count({
       where: { ...whereQuery, ...where },
     }),
   ])
 
-  console.log(`Shops search: ${Math.round(performance.now() - start)}ms`)
+  console.log(`Agencys search: ${Math.round(performance.now() - start)}ms`)
 
-  return { shops, total, page, perPage }
+  return { agencys, total, page, perPage }
 }
 
-export const findShopSlugs = async ({ where, orderBy, ...args }: Prisma.ShopFindManyArgs) => {
+export const findAgencySlugs = async ({ where, orderBy, ...args }: Prisma.AgencyFindManyArgs) => {
   "use cache"
 
-  cacheTag("shops")
+  cacheTag("agencys")
   cacheLife("infinite")
 
-  return db.shop.findMany({
+  return db.agency.findMany({
     ...args,
     orderBy: orderBy ?? { name: "asc" },
     where: where,
@@ -71,15 +71,15 @@ export const findShopSlugs = async ({ where, orderBy, ...args }: Prisma.ShopFind
   })
 }
 
-export const findShop = async ({ where, ...args }: Prisma.ShopFindFirstArgs = {}) => {
+export const findAgency = async ({ where, ...args }: Prisma.AgencyFindFirstArgs = {}) => {
   "use cache"
 
-  cacheTag("shop", `shop-${where?.slug}`)
+  cacheTag("agency", `agency-${where?.slug}`)
   cacheLife("infinite")
 
-  return db.shop.findFirst({
+  return db.agency.findFirst({
     ...args,
     where,
-    select: shopOnePayload,
+    select: agencyOnePayload,
   })
 }

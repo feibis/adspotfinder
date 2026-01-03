@@ -1,38 +1,38 @@
 import type { SearchParams } from "nuqs"
 import type { Prisma } from "~/.generated/prisma/client"
 import type { PaginationProps } from "~/components/web/pagination"
-import type { ShopListProps } from "~/components/web/shops/shop-list"
-import { ShopListing, type ShopListingProps } from "~/components/web/shops/shop-listing"
-import { searchShops } from "~/server/web/shops/queries"
-import { type ShopsFilterParams, shopsSearchParamsCache } from "~/server/web/shops/schema"
+import type { AgencyListProps } from "~/components/web/agencys/agency-list"
+import { AgencyListing, type AgencyListingProps } from "~/components/web/agencys/agency-listing"
+import { searchAgencys } from "~/server/web/agencys/queries"
+import { type AgencysFilterParams, agencysSearchParamsCache } from "~/server/web/agencys/schema"
 
-type ShopQueryProps = Omit<ShopListingProps, "list" | "pagination"> & {
+type AgencyQueryProps = Omit<AgencyListingProps, "list" | "pagination"> & {
   searchParams: Promise<SearchParams>
-  overrideParams?: Partial<ShopsFilterParams>
-  where?: Prisma.ShopWhereInput
-  list?: Partial<Omit<ShopListProps, "shops">>
+  overrideParams?: Partial<AgencysFilterParams>
+  where?: Prisma.AgencyWhereInput
+  list?: Partial<Omit<AgencyListProps, "agencys">>
   pagination?: Partial<Omit<PaginationProps, "total" | "pageSize">>
 }
 
-const ShopQuery = async ({
+const AgencyQuery = async ({
   searchParams,
   overrideParams,
   where,
   list,
   pagination,
   ...props
-}: ShopQueryProps) => {
-  const parsedParams = shopsSearchParamsCache.parse(await searchParams)
+}: AgencyQueryProps) => {
+  const parsedParams = agencysSearchParamsCache.parse(await searchParams)
   const params = { ...parsedParams, ...overrideParams }
-  const { shops, total, page, perPage } = await searchShops(params, where)
+  const { agencys, total, page, perPage } = await searchAgencys(params, where)
 
   return (
-    <ShopListing
-      list={{ shops, ...list }}
+    <AgencyListing
+      list={{ agencys, ...list }}
       pagination={{ total, perPage, page, ...pagination }}
       {...props}
     />
   )
 }
 
-export { ShopQuery, type ShopQueryProps }
+export { AgencyQuery, type AgencyQueryProps }

@@ -1,10 +1,10 @@
 import { isTruthy } from "@primoui/utils"
 import { endOfDay, startOfDay } from "date-fns"
 import type { Prisma } from "~/.generated/prisma/client"
-import type { ShopsTableSchema } from "~/server/admin/shops/schema"
+import type { AgencysTableSchema } from "~/server/admin/agencys/schema"
 import { db } from "~/services/db"
 
-export const findShops = async (search: ShopsTableSchema, where?: Prisma.ShopWhereInput) => {
+export const findAgencys = async (search: AgencysTableSchema, where?: Prisma.AgencyWhereInput) => {
   const { name, page, perPage, sort, from, to, operator } = search
 
   // Offset to paginate the results
@@ -17,7 +17,7 @@ export const findShops = async (search: ShopsTableSchema, where?: Prisma.ShopWhe
   const fromDate = from ? startOfDay(new Date(from)) : undefined
   const toDate = to ? endOfDay(new Date(to)) : undefined
 
-  const expressions: (Prisma.ShopWhereInput | undefined)[] = [
+  const expressions: (Prisma.AgencyWhereInput | undefined)[] = [
     // Filter by name
     name ? { name: { contains: name, mode: "insensitive" } } : undefined,
 
@@ -25,13 +25,13 @@ export const findShops = async (search: ShopsTableSchema, where?: Prisma.ShopWhe
     fromDate || toDate ? { createdAt: { gte: fromDate, lte: toDate } } : undefined,
   ]
 
-  const whereQuery: Prisma.ShopWhereInput = {
+  const whereQuery: Prisma.AgencyWhereInput = {
     [operator.toUpperCase()]: expressions.filter(isTruthy),
   }
 
   // Transaction is used to ensure both queries are executed in a single transaction
-  const [shops, shopsTotal] = await db.$transaction([
-    db.shop.findMany({
+  const [agencys, agencysTotal] = await db.$transaction([
+    db.agency.findMany({
       where: { ...whereQuery, ...where },
       orderBy: [...orderBy, { createdAt: "asc" }],
       take: perPage,
@@ -57,25 +57,25 @@ export const findShops = async (search: ShopsTableSchema, where?: Prisma.ShopWhe
       },
     }),
 
-    db.shop.count({
+    db.agency.count({
       where: { ...whereQuery, ...where },
     }),
   ])
 
-  const pageCount = Math.ceil(shopsTotal / perPage)
-  return { shops, shopsTotal, pageCount }
+  const pageCount = Math.ceil(agencysTotal / perPage)
+  return { agencys, agencysTotal, pageCount }
 }
 
-export const findShopList = async ({ ...args }: Prisma.ShopFindManyArgs = {}) => {
-  return db.shop.findMany({
+export const findAgencyList = async ({ ...args }: Prisma.AgencyFindManyArgs = {}) => {
+  return db.agency.findMany({
     ...args,
     select: { id: true, name: true },
     orderBy: { name: "asc" },
   })
 }
 
-export const findShopBySlug = async (slug: string) => {
-  return db.shop.findUnique({
+export const findAgencyBySlug = async (slug: string) => {
+  return db.agency.findUnique({
     where: { slug },
     select: {
       id: true,

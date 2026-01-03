@@ -5,23 +5,23 @@ import {
   parseAsStringEnum,
 } from "nuqs/server"
 import * as z from "zod"
-import type { Shop } from "~/.generated/prisma/browser"
+import type { Agency } from "~/.generated/prisma/browser"
 import { getSortingStateParser } from "~/lib/parsers"
 
-export const shopsTableParamsSchema = {
+export const agencysTableParamsSchema = {
   name: parseAsString.withDefault(""),
   page: parseAsInteger.withDefault(1),
   perPage: parseAsInteger.withDefault(25),
-  sort: getSortingStateParser<Shop>().withDefault([{ id: "name", desc: false }]),
+  sort: getSortingStateParser<Agency>().withDefault([{ id: "name", desc: false }]),
   from: parseAsString.withDefault(""),
   to: parseAsString.withDefault(""),
   operator: parseAsStringEnum(["and", "or"]).withDefault("and"),
 }
 
-export const shopsTableParamsCache = createSearchParamsCache(shopsTableParamsSchema)
-export type ShopsTableSchema = Awaited<ReturnType<typeof shopsTableParamsCache.parse>>
+export const agencysTableParamsCache = createSearchParamsCache(agencysTableParamsSchema)
+export type AgencysTableSchema = Awaited<ReturnType<typeof agencysTableParamsCache.parse>>
 
-export const shopSchema = z.object({
+export const agencySchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   slug: z.string().optional(),
@@ -35,4 +35,4 @@ export const shopSchema = z.object({
   categories: z.array(z.string()).optional(),
 })
 
-export type ShopSchema = z.infer<typeof shopSchema>
+export type AgencySchema = z.infer<typeof agencySchema>

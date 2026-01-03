@@ -5,8 +5,8 @@ import { usePathname, useRouter } from "next/navigation"
 import { useAction } from "next-safe-action/hooks"
 import type { ComponentProps } from "react"
 import { toast } from "sonner"
-import type { Shop } from "~/.generated/prisma/browser"
-import { ShopsDeleteDialog } from "~/app/admin/shops/_components/shops-delete-dialog"
+import type { Agency } from "~/.generated/prisma/browser"
+import { AgencysDeleteDialog } from "~/app/admin/agencys/_components/agencys-delete-dialog"
 import { Button } from "~/components/common/button"
 import {
   DropdownMenu,
@@ -18,23 +18,23 @@ import {
 import { Link } from "~/components/common/link"
 import { Stack } from "~/components/common/stack"
 import { cx } from "~/lib/utils"
-import { duplicateShop } from "~/server/admin/shops/actions"
+import { duplicateAgency } from "~/server/admin/agencys/actions"
 
-type ShopActionsProps = ComponentProps<typeof Button> & {
-  shop: Shop
+type AgencyActionsProps = ComponentProps<typeof Button> & {
+  agency: Agency
 }
 
-export const ShopActions = ({ shop, className, ...props }: ShopActionsProps) => {
+export const AgencyActions = ({ agency, className, ...props }: AgencyActionsProps) => {
   const pathname = usePathname()
   const router = useRouter()
 
-  const shopPath = `/admin/shops/${shop.slug}`
-  const isShopPage = pathname === shopPath
+  const agencyPath = `/admin/agencys/${agency.slug}`
+  const isAgencyPage = pathname === agencyPath
 
-  const { executeAsync } = useAction(duplicateShop, {
+  const { executeAsync } = useAction(duplicateAgency, {
     onSuccess: ({ data }) => {
-      if (isShopPage) {
-        router.push(`/admin/shops/${data.slug}`)
+      if (isAgencyPage) {
+        router.push(`/admin/agencys/${data.slug}`)
       }
     },
   })
@@ -42,16 +42,16 @@ export const ShopActions = ({ shop, className, ...props }: ShopActionsProps) => 
   const handleDuplicate = () => {
     toast.promise(
       async () => {
-        const { serverError } = await executeAsync({ id: shop.id })
+        const { serverError } = await executeAsync({ id: agency.id })
 
         if (serverError) {
           throw new Error(serverError)
         }
       },
       {
-        loading: "Duplicating shop...",
-        success: "Shop duplicated successfully",
-        error: err => `Failed to duplicate shop: ${err.message}`,
+        loading: "Duplicating agency...",
+        success: "Agency duplicated successfully",
+        error: err => `Failed to duplicate agency: ${err.message}`,
       },
     )
   }
@@ -71,14 +71,14 @@ export const ShopActions = ({ shop, className, ...props }: ShopActionsProps) => 
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" sideOffset={8}>
-          {!isShopPage && (
+          {!isAgencyPage && (
             <DropdownMenuItem asChild>
-              <Link href={shopPath}>Edit</Link>
+              <Link href={agencyPath}>Edit</Link>
             </DropdownMenuItem>
           )}
 
           <DropdownMenuItem asChild>
-            <Link href={`/shops/${shop.slug}`} target="_blank">
+            <Link href={`/agencys/${agency.slug}`} target="_blank">
               View
             </Link>
           </DropdownMenuItem>
@@ -92,7 +92,7 @@ export const ShopActions = ({ shop, className, ...props }: ShopActionsProps) => 
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <ShopsDeleteDialog shops={[shop]} onExecute={() => router.push("/admin/shops")}>
+      <AgencysDeleteDialog agencys={[agency]} onExecute={() => router.push("/admin/agencys")}>
         <Button
           variant="secondary"
           size="sm"
@@ -100,7 +100,7 @@ export const ShopActions = ({ shop, className, ...props }: ShopActionsProps) => 
           className="text-red-500"
           {...props}
         />
-      </ShopsDeleteDialog>
+      </AgencysDeleteDialog>
     </Stack>
   )
 }

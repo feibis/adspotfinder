@@ -3,37 +3,37 @@
 import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
 import { EmptyList } from "~/components/web/empty-list"
-import { ShopCard, ShopCardSkeleton } from "~/components/web/shops/shop-card"
+import { AgencyCard, AgencyCardSkeleton } from "~/components/web/agencys/agency-card"
 import { Grid } from "~/components/web/ui/grid"
 import { cx } from "~/lib/utils"
-import type { ShopMany } from "~/server/web/shops/payloads"
+import type { AgencyMany } from "~/server/web/agencys/payloads"
 
-type ShopListProps = ComponentProps<typeof Grid> & {
-  shops: ShopMany[]
+type AgencyListProps = ComponentProps<typeof Grid> & {
+  agencys: AgencyMany[]
 }
 
-const ShopList = ({ shops, className, ...props }: ShopListProps) => {
+const AgencyList = ({ agencys, className, ...props }: AgencyListProps) => {
   const t = useTranslations()
 
   return (
     <Grid className={cx("gap-x-8", className)} {...props}>
-      {shops.map(shop => (
-        <ShopCard key={shop.slug} shop={shop} />
+      {agencys.map(agency => (
+        <AgencyCard key={agency.slug} agency={agency} />
       ))}
 
-      {!shops.length && <EmptyList>{t("shops.no_shops")}</EmptyList>}
+      {!agencys.length && <EmptyList>{t("agencys.no_agencys")}</EmptyList>}
     </Grid>
   )
 }
 
-const ShopListSkeleton = () => {
+const AgencyListSkeleton = () => {
   return (
     <Grid className="gap-x-8">
       {[...Array(24)].map((_, index) => (
-        <ShopCardSkeleton key={index} />
+        <AgencyCardSkeleton key={index} />
       ))}
     </Grid>
   )
 }
 
-export { ShopList, ShopListSkeleton, type ShopListProps }
+export { AgencyList, AgencyListSkeleton, type AgencyListProps }

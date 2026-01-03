@@ -4,10 +4,10 @@ import type { ComponentProps } from "react"
 import { Button } from "~/components/common/button"
 import { useFilters } from "~/contexts/filter-context"
 import { cx } from "~/lib/utils"
-import type { ShopsFilterSchema } from "~/server/web/shops/schema"
+import type { AgencysFilterSchema } from "~/server/web/agencys/schema"
 
-export const ShopFilters = ({ className, ...props }: ComponentProps<"div">) => {
-  const { filters, updateFilters } = useFilters<ShopsFilterSchema>()
+export const AgencyFilters = ({ className, ...props }: ComponentProps<"div">) => {
+  const { filters, updateFilters } = useFilters<AgencysFilterSchema>()
   const alphabet = "abcdefghijklmnopqrstuvwxyz&"
 
   return (

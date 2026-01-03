@@ -5,7 +5,7 @@ import {
   parseAsString,
 } from "nuqs/server"
 
-export const shopsSearchParams = {
+export const agencysSearchParams = {
   q: parseAsString.withDefault(""),
   sort: parseAsString.withDefault(""),
   page: parseAsInteger.withDefault(1),
@@ -13,7 +13,7 @@ export const shopsSearchParams = {
   letter: parseAsString.withDefault(""),
 }
 
-export const shopsSearchParamsCache = createSearchParamsCache(shopsSearchParams)
+export const agencysSearchParamsCache = createSearchParamsCache(agencysSearchParams)
 
-export type ShopsFilterSchema = typeof shopsSearchParams
-export type ShopsFilterParams = inferParserType<typeof shopsSearchParams>
+export type AgencysFilterSchema = typeof agencysSearchParams
+export type AgencysFilterParams = inferParserType<typeof agencysSearchParams>

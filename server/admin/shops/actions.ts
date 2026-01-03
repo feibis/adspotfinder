@@ -3,16 +3,16 @@
 import { after } from "next/server"
 import { adminActionClient } from "~/lib/safe-actions"
 import { idSchema, idsSchema } from "~/server/admin/shared/schema"
-import { shopSchema } from "~/server/admin/shops/schema"
+import { agencySchema } from "~/server/admin/agencys/schema"
 
-export const upsertShop = adminActionClient
-  .inputSchema(shopSchema)
+export const upsertAgency = adminActionClient
+  .inputSchema(agencySchema)
   .action(async ({ parsedInput: { id, locations, categories, ...input }, ctx: { db, revalidate } }) => {
     const locationIds = locations?.map(id => ({ id }))
     const categoryIds = categories?.map(id => ({ id }))
 
-    const shop = id
-      ? await db.shop.update({
+    const agency = id
+      ? await db.agency.update({
           where: { id },
           data: {
             ...input,
@@ -21,7 +21,7 @@ export const upsertShop = adminActionClient
             categories: { set: categoryIds },
           },
         })
-      : await db.shop.create({
+      : await db.agency.create({
           data: {
             ...input,
             slug: input.slug || "",
@@ -32,18 +32,18 @@ export const upsertShop = adminActionClient
 
     after(async () => {
       revalidate({
-        paths: ["/admin/shops"],
-        tags: ["shops", `shop-${shop.slug}`],
+        paths: ["/admin/agencys"],
+        tags: ["agencys", `agency-${agency.slug}`],
       })
     })
 
-    return shop
+    return agency
   })
 
-export const duplicateShop = adminActionClient
+export const duplicateAgency = adminActionClient
   .inputSchema(idSchema)
   .action(async ({ parsedInput: { id }, ctx: { db, revalidate } }) => {
-    const originalShop = await db.shop.findUnique({
+    const originalAgency = await db.agency.findUnique({
       where: { id },
       include: {
         locations: { select: { id: true } },
@@ -51,39 +51,39 @@ export const duplicateShop = adminActionClient
       },
     })
 
-    if (!originalShop) {
-      throw new Error("Shop not found")
+    if (!originalAgency) {
+      throw new Error("Agency not found")
     }
 
-    const newName = `${originalShop.name} (Copy)`
+    const newName = `${originalAgency.name} (Copy)`
 
-    const duplicatedShop = await db.shop.create({
+    const duplicatedAgency = await db.agency.create({
       data: {
         name: newName,
         slug: "", // Slug will be auto-generated
-        locations: { connect: originalShop.locations },
-        categories: { connect: originalShop.categories },
+        locations: { connect: originalAgency.locations },
+        categories: { connect: originalAgency.categories },
       },
     })
 
     revalidate({
-      paths: ["/admin/shops"],
-      tags: ["shops"],
+      paths: ["/admin/agencys"],
+      tags: ["agencys"],
     })
 
-    return duplicatedShop
+    return duplicatedAgency
   })
 
-export const deleteShops = adminActionClient
+export const deleteAgencys = adminActionClient
   .inputSchema(idsSchema)
   .action(async ({ parsedInput: { ids }, ctx: { db, revalidate } }) => {
-    await db.shop.deleteMany({
+    await db.agency.deleteMany({
       where: { id: { in: ids } },
     })
 
     revalidate({
-      paths: ["/admin/shops"],
-      tags: ["shops"],
+      paths: ["/admin/agencys"],
+      tags: ["agencys"],
     })
 
     return true

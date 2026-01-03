@@ -10,43 +10,43 @@ import { Intro, IntroTitle } from "~/components/web/ui/intro"
 import { siteConfig } from "~/config/site"
 import { getPageData, getPageMetadata } from "~/lib/pages"
 import { generateCollectionPage } from "~/lib/structured-data"
-import { findShop, findShopSlugs } from "~/server/web/shops/queries"
+import { findAgency, findAgencySlugs } from "~/server/web/agencys/queries"
 
 export const dynamicParams = false
 
-type Props = PageProps<"/shops/[slug]">
+type Props = PageProps<"/agencys/[slug]">
 
 // I18n page namespace
-const namespace = "pages.shop"
+const namespace = "pages.agency"
 
 // Get page data
 const getData = cache(async ({ params }: Props) => {
   const { slug } = await params
-  const shop = await findShop({ where: { slug } })
+  const agency = await findAgency({ where: { slug } })
 
-  if (!shop) {
+  if (!agency) {
     notFound()
   }
 
   const t = await getTranslations()
-  const url = `/shops/${shop.slug}`
-  const title = t(`${namespace}.title`, { name: shop.name })
-  const description = t(`${namespace}.description`, { name: shop.name, siteName: siteConfig.name })
+  const url = `/agencys/${agency.slug}`
+  const title = t(`${namespace}.title`, { name: agency.name })
+  const description = t(`${namespace}.description`, { name: agency.name, siteName: siteConfig.name })
 
   const data = getPageData(url, title, description, {
     breadcrumbs: [
-      { url: "/shops", title: t("navigation.shops") },
-      { url, title: shop.name },
+      { url: "/agencys", title: t("navigation.agencys") },
+      { url, title: agency.name },
     ],
     structuredData: [generateCollectionPage(url, title, description)],
   })
 
-  return { shop, ...data }
+  return { agency, ...data }
 })
 
 export const generateStaticParams = async () => {
-  const shops = await findShopSlugs({})
-  return shops.map(({ slug }: { slug: string }) => ({ slug }))
+  const agencys = await findAgencySlugs({})
+  return agencys.map(({ slug }: { slug: string }) => ({ slug }))
 }
 
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
@@ -55,9 +55,9 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
 }
 
 export default async function (props: Props) {
-  const { shop, metadata, breadcrumbs, structuredData } = await getData(props)
+  const { agency, metadata, breadcrumbs, structuredData } = await getData(props)
   const t = await getTranslations()
-  const placeholder = t(`${namespace}.search.placeholder`, { name: shop.name.toLowerCase() })
+  const placeholder = t(`${namespace}.search.placeholder`, { name: agency.name.toLowerCase() })
 
   return (
     <>
@@ -70,7 +70,7 @@ export default async function (props: Props) {
       <Suspense fallback={<ToolListingSkeleton />}>
         <ToolQuery
           searchParams={props.searchParams}
-          where={{ categories: { some: { shops: { some: { slug: shop.slug } } } } }}
+          where={{ categories: { some: { agencys: { some: { slug: agency.slug } } } } }}
           search={{ placeholder }}
           ad="Tools"
         />
