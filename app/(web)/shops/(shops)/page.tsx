@@ -1,11 +1,11 @@
 import type { Metadata } from "next"
 import { getTranslations } from "next-intl/server"
 import { cache, Suspense } from "react"
+import { AgencyHero } from "~/app/(web)/shops/(shops)/agency-hero"
 import { StructuredData } from "~/components/web/structured-data"
 import { ShopListSkeleton } from "~/components/web/shops/shop-list"
 import { ShopQuery } from "~/components/web/shops/shop-query"
 import { Breadcrumbs } from "~/components/web/ui/breadcrumbs"
-import { Intro, IntroTitle } from "~/components/web/ui/intro"
 import { siteConfig } from "~/config/site"
 import { getPageData, getPageMetadata } from "~/lib/pages"
 import { generateCollectionPage } from "~/lib/structured-data"
@@ -38,9 +38,7 @@ export default async function (props: PageProps<"/shops">) {
     <>
       <Breadcrumbs items={breadcrumbs} />
 
-      <Intro>
-        <IntroTitle>{metadata.title}</IntroTitle>
-      </Intro>
+      <AgencyHero />
 
       <Suspense fallback={<ShopListSkeleton />}>
         <ShopQuery searchParams={props.searchParams} options={{ enableFilters: true }} />

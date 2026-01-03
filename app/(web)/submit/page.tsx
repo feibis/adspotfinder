@@ -32,13 +32,13 @@ export default async function () {
 
   return (
     <>
-      <Intro>
-        <IntroTitle>{metadata.title}</IntroTitle>
-        <IntroDescription>{metadata.description}</IntroDescription>
-      </Intro>
-
       <Section>
         <Section.Content>
+          <Intro alignment="center">
+            <IntroTitle>{metadata.title}</IntroTitle>
+            <IntroDescription>{metadata.description}</IntroDescription>
+          </Intro>
+
           <SubmitForm />
         </Section.Content>
       </Section>

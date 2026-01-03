@@ -42,7 +42,8 @@ export default async function () {
         <IntroDescription>{metadata.description}</IntroDescription>
       </Intro>
 
-      <Prose>
+      <div className="mx-auto max-w-4xl">
+        <Prose>
         <h2>What is {siteConfig.name}?</h2>
 
         <p>
@@ -71,7 +72,8 @@ export default async function () {
             Fabian Likam
           </ExternalLink>
         </p>
-      </Prose>
+        </Prose>
+      </div>
 
       <StructuredData data={structuredData} />
     </>

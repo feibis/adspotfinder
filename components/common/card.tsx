@@ -55,7 +55,7 @@ const Card = ({
   return (
     <Comp
       className={cx(
-        boxVariants({ hover, focus }),
+        "border-0", // Remove all borders
         cardVariants({ hover, isRevealed, isHighlighted, className }),
       )}
       {...props}
