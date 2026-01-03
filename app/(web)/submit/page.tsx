@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server"
 import { cache } from "react"
 import { SubmitForm } from "~/app/(web)/submit/form"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
-import { Section } from "~/components/web/ui/section"
+import { CenteredSection } from "~/components/web/ui/section"
 import { siteConfig } from "~/config/site"
 import { getPageData, getPageMetadata } from "~/lib/pages"
 
@@ -32,16 +32,16 @@ export default async function () {
 
   return (
     <>
-      <Section>
-        <Section.Content>
+      <CenteredSection>
+        <CenteredSection.Content>
           <Intro alignment="center">
             <IntroTitle>{metadata.title}</IntroTitle>
             <IntroDescription>{metadata.description}</IntroDescription>
           </Intro>
 
           <SubmitForm />
-        </Section.Content>
-      </Section>
+        </CenteredSection.Content>
+      </CenteredSection>
     </>
   )
 }

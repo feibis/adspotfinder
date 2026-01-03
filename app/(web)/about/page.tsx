@@ -6,6 +6,7 @@ import { Prose } from "~/components/common/prose"
 import { ExternalLink } from "~/components/web/external-link"
 import { StructuredData } from "~/components/web/structured-data"
 import { Intro, IntroDescription, IntroTitle } from "~/components/web/ui/intro"
+import { CenteredSection } from "~/components/web/ui/section"
 import { linksConfig } from "~/config/links"
 import { siteConfig } from "~/config/site"
 import { getPageData, getPageMetadata } from "~/lib/pages"
@@ -37,43 +38,47 @@ export default async function () {
 
   return (
     <>
-      <Intro>
-        <IntroTitle>{metadata.title}</IntroTitle>
-        <IntroDescription>{metadata.description}</IntroDescription>
-      </Intro>
+      <CenteredSection>
+        <CenteredSection.Content>
+          <Intro alignment="center">
+            <IntroTitle>{metadata.title}</IntroTitle>
+            <IntroDescription>{metadata.description}</IntroDescription>
+          </Intro>
 
-      <div className="mx-auto max-w-4xl">
-        <Prose>
-        <h2>What is {siteConfig.name}?</h2>
+          <div className="max-w-4xl">
+            <Prose>
+            <h2>What is {siteConfig.name}?</h2>
 
-        <p>
-          <Link href="/">{siteConfig.name}</Link> is a community driven list of{" "}
-          <strong>tools and resources for developers</strong>. The goal of the site is to be your
-          first stop when researching for a new tool or resource to help you grow your business. It
-          will help you find alternatives and reviews of the products you already use.
-        </p>
+            <p>
+              <Link href="/">{siteConfig.name}</Link> is a community driven list of{" "}
+              <strong>tools and resources for developers</strong>. The goal of the site is to be your
+              first stop when researching for a new tool or resource to help you grow your business. It
+              will help you find alternatives and reviews of the products you already use.
+            </p>
 
-        <h2>About the Author</h2>
+            <h2>About the Author</h2>
 
-        <p>
-          I'm a software developer and entrepreneur. I've been building web applications for over 15
-          years. I'm passionate about software development and I love to contribute to the community
-          in any way I can.
-        </p>
+            <p>
+              I'm a software developer and entrepreneur. I've been building web applications for over 15
+              years. I'm passionate about software development and I love to contribute to the community
+              in any way I can.
+            </p>
 
-        <p>
-          I'm always looking for new projects to work on and new people to collaborate with. Feel
-          free to reach out to me if you have any questions or suggestions.
-        </p>
+            <p>
+              I'm always looking for new projects to work on and new people to collaborate with. Feel
+              free to reach out to me if you have any questions or suggestions.
+            </p>
 
-        <p>
-          –{" "}
-          <ExternalLink href={linksConfig.author} doFollow>
-            Fabian Likam
-          </ExternalLink>
-        </p>
-        </Prose>
-      </div>
+            <p>
+              –{" "}
+              <ExternalLink href={linksConfig.author} doFollow>
+                Fabian Likam
+              </ExternalLink>
+            </p>
+            </Prose>
+          </div>
+        </CenteredSection.Content>
+      </CenteredSection>
 
       <StructuredData data={structuredData} />
     </>
